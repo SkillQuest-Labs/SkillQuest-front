@@ -1,15 +1,20 @@
 {
-  "name": "front",
+  "name": "skill-quest-front",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "prettier": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json}\"",
+    "prettier:fix": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json}\"",
+    "pre-commit": "npm run prettier:fix && npm run prettier && npm run lint",
+    "lint": "tsc --noEmit && eslint \"src/**/*.{ts,tsx}\"",
+    "preview": "vite preview",
+    "prepare": "husky"
   },
   "dependencies": {
+    "husky": "^9.1.7",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
