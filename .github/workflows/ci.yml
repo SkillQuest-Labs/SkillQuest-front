@@ -10,7 +10,7 @@ env:
   NODE_VERSION: "20.x"
 
 jobs:
-  build_and_ci:
+  react-ts-ci:
     runs-on: ubuntu-latest
 
     steps:
