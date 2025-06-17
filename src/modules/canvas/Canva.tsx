@@ -18,15 +18,15 @@ import { skillConfigMockData } from "./canvas.const";
 
 export const SkillsCanva = () => {
   const [cursorMode, setCursorMode] = useState<CursorModeType>("normal");
-  const [viewMode, setViewMode] = useState<ViewModeType>("canvas");
+  const [, setViewMode] = useState<ViewModeType>("canvas");
   const [skillConfig, setSkillConfig] =
     useState<SkillConfigType>(skillConfigMockData);
 
   // Initialize edges and nodes
 
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [edges] = useEdgesState([]);
 
-  const [nodes, setNodes, onNodesChange] = useNodesState([
+  const [nodes] = useNodesState([
     {
       id: "skill-block",
       type: "skill",
@@ -43,12 +43,7 @@ export const SkillsCanva = () => {
 
   return (
     <div className="h-screen bg-gray-50 relative">
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-      >
+      <ReactFlow nodes={nodes} edges={edges}>
         <Background color="#aaa" gap={20} size={1} />
 
         <Controls position="bottom-right" />
