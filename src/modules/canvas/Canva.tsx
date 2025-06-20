@@ -24,7 +24,7 @@ const nodeTypes = {
   skill: SkillNode,
 };
 
-export const SkillsCanva = () => {
+export const Canva = () => {
   const [cursorMode, setCursorMode] = useState<CursorModeType>("normal");
   const [, setViewMode] = useState<ViewModeType>("canvas");
   const [skillConfig, setSkillConfig] =
