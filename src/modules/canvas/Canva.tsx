@@ -2,6 +2,7 @@ import { useState } from "react";
 import type {
   CursorModeType,
   SkillConfigType,
+  SkillNodeData,
   ViewModeType,
 } from "./canva.type";
 import {
@@ -11,10 +12,17 @@ import {
   ReactFlow,
   useEdgesState,
   useNodesState,
+  type Node,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { FloatingToolbox } from "./components/FloatingToolbox";
 import { skillConfigMockData } from "./canvas.const";
+
+import SkillNode from "./components/SkillNode";
+
+const nodeTypes = {
+  skill: SkillNode,
+};
 
 export const SkillsCanva = () => {
   const [cursorMode, setCursorMode] = useState<CursorModeType>("normal");
@@ -24,26 +32,28 @@ export const SkillsCanva = () => {
 
   // Initialize edges and nodes
 
-  const [edges] = useEdgesState([]);
-
-  const [nodes] = useNodesState([
+  const initialNodes: Node<SkillNodeData>[] = [
+    // later we need to retrieve the real data from the modal that we open
     {
       id: "skill-block",
       type: "skill",
       position: { x: 400, y: 50 },
       data: {
         config: skillConfig,
-        onUpdate: (field: string, value: any) => {
-          setSkillConfig((prev) => ({ ...prev, [field]: value }));
-        },
+        onUpdate: (field: string, value: any) =>
+          setSkillConfig((prev) => ({ ...prev, [field]: value })),
       },
       draggable: true,
     },
-  ]);
+  ];
+
+  const [edges] = useEdgesState([]);
+
+  const [nodes] = useNodesState(initialNodes);
 
   return (
     <div className="h-screen bg-gray-50 relative">
-      <ReactFlow nodes={nodes} edges={edges}>
+      <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes}>
         <Background color="#aaa" gap={20} size={1} />
 
         <Controls position="bottom-right" />
