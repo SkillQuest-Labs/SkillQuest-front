@@ -19,6 +19,8 @@ import { FloatingToolbox } from "./components/FloatingToolbox";
 import { skillConfigMockData } from "./canvas.const";
 
 import SkillNode from "./components/SkillNode";
+import ShootingStars from "./components/ShootingStars";
+import "./../../styles/canvas.css";
 
 const nodeTypes = {
   skill: SkillNode,
@@ -53,8 +55,14 @@ export const Canva = () => {
 
   return (
     <div className="h-screen bg-gray-50 relative">
-      <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes}>
-        <Background color="#aaa" gap={20} size={1} />
+      <ShootingStars />
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        nodeTypes={nodeTypes}
+        className="custom-canvas"
+      >
+        <Background color="#aaa" gap={30} size={0.5} />
 
         <Controls position="bottom-right" />
 
