@@ -13,3 +13,15 @@ export type SkillConfigType = {
   icon: string;
   color: string;
 };
+
+export type SkillConfig = {
+  title: string;
+  description: string;
+  icon: string;
+  color: string;
+};
+
+export type SkillNodeData = {
+  config: SkillConfig;
+  onUpdate: (field: string, value: any) => void;
+};
