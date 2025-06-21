@@ -1,4 +1,4 @@
-import { BaseEdge, EdgeLabelRenderer, getBezierPath } from '@xyflow/react';
+import { BaseEdge, EdgeLabelRenderer, getBezierPath } from "@xyflow/react";
 
 export interface CustomEdgeProps {
   id: string;
@@ -10,7 +10,15 @@ export interface CustomEdgeProps {
   markerEnd?: string;
 }
 
-export function CustomEdge({ id, sourceX, sourceY, targetX, targetY, style, markerEnd }: CustomEdgeProps) {
+export function CustomEdge({
+  id,
+  sourceX,
+  sourceY,
+  targetX,
+  targetY,
+  style,
+  markerEnd,
+}: CustomEdgeProps) {
   const [edgePath] = getBezierPath({ sourceX, sourceY, targetX, targetY });
 
   return (
@@ -19,9 +27,9 @@ export function CustomEdge({ id, sourceX, sourceY, targetX, targetY, style, mark
         id={id}
         path={edgePath}
         style={{
-          stroke: '#00ffff',
+          stroke: "#00ffff",
           strokeWidth: 4,
-          strokeDasharray: '4 2',
+          strokeDasharray: "4 2",
           ...style,
         }}
         markerEnd={markerEnd}
@@ -30,9 +38,9 @@ export function CustomEdge({ id, sourceX, sourceY, targetX, targetY, style, mark
       <EdgeLabelRenderer>
         <div
           style={{
-            position: 'absolute',
+            position: "absolute",
             transform: `translate(${(sourceX + targetX) / 2}px, ${(sourceY + targetY) / 2}px)`,
-            pointerEvents: 'all',
+            pointerEvents: "all",
           }}
           className="text-cyan-300 text-lg ml-5 font-semibold"
         >

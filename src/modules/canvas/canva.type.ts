@@ -1,5 +1,5 @@
-export type CursorModeType = 'normal' | 'create' | 'connect';
-export type ViewModeType = 'canvas' | 'timeline';
+export type CursorModeType = "normal" | "create" | "connect";
+export type ViewModeType = "canvas" | "timeline";
 
 export type FloatingToolboxProps = {
   cursorMode: CursorModeType;
@@ -26,9 +26,9 @@ export type SkillNodeData = {
   onUpdate: (field: string, value: any) => void;
 };
 
-export type ProgressStatus = 'not-started' | 'in-progress' | 'completed';
-export type QuestType = 'main' | 'side' | 'challenge' | 'reward';
-export type QuestDifficulty = 'Easy' | 'Medium' | 'Hard';
+export type ProgressStatus = "not-started" | "in-progress" | "completed";
+export type QuestType = "main" | "side" | "challenge" | "reward";
+export type QuestDifficulty = "Easy" | "Medium" | "Hard";
 
 export type QuestData = {
   title: string;
