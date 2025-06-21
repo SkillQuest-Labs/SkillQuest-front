@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import type {
   CursorModeType,
+  QuestData,
   SkillConfigType,
   SkillNodeData,
   ViewModeType,
@@ -12,6 +13,7 @@ import {
   ReactFlow,
   useEdgesState,
   useNodesState,
+  useReactFlow,
   type Node,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
@@ -40,7 +42,7 @@ export const Canva = () => {
 
   // Initialize edges and nodes
 
-  const initialNodes: Node<SkillNodeData>[] = [
+  const initialNodes: Node<SkillNodeData | QuestData>[] = [
     // later we need to retrieve the real data from the modal that we open
     {
       id: "skill-block",
@@ -77,7 +79,7 @@ export const Canva = () => {
     },
   ];
 
-  const [edges, setEdges, onEdgesChange] = useEdgesState([
+  const [edges] = useEdgesState([
     // Initial edges connecting the nodes
 
     {
@@ -89,26 +91,36 @@ export const Canva = () => {
     },
   ]);
 
-  setEdges((eds) => [
-    ...eds,
-    { id: "", source: "", target: "", type: "", animated: true },
-  ]);
-
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
 
-  setNodes((nds) => [
-    ...nds,
-    {
-      id: "",
-      type: "",
-      position: { x: 0, y: 0 },
-      data: {
-        config: skillConfig,
-        onUpdate: (field: string, value: any) =>
-          setSkillConfig((prev) => ({ ...prev, [field]: value })),
-      },
+  const { screenToFlowPosition } = useReactFlow();
+
+  const onPaneClick = useCallback(
+    (event: React.MouseEvent) => {
+      const position = screenToFlowPosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+
+      const newNodeId = `quest-${Date.now()}`;
+      const newNode: Node<QuestData> = {
+        id: newNodeId,
+        type: "quest1",
+        position,
+        data: {
+          title: "New Quest",
+          xp: 100,
+          difficulty: "Medium",
+          description: "Quest description...",
+          status: "not-started",
+          type: "side",
+        },
+      };
+
+      setNodes((nds) => nds.concat(newNode));
     },
-  ]);
+    [setNodes]
+  );
 
   return (
     <div className="h-screen bg-gray-50 relative ">
@@ -118,7 +130,7 @@ export const Canva = () => {
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
+        onPaneClick={onPaneClick}
         className="custom-canvas"
       >
         <Background color="#aaa" gap={20} size={1} />
