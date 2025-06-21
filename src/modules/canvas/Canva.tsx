@@ -72,7 +72,22 @@ export const Canva = () => {
     },
   ]);
 
+  setEdges((eds) => [...eds, { id: '', source: '', target: '', type: '', animated: true }]);
+
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+
+  setNodes((nds) => [
+    ...nds,
+    {
+      id: '',
+      type: '',
+      position: { x: 0, y: 0 },
+      data: {
+        config: skillConfig,
+        onUpdate: (field: string, value: any) => setSkillConfig((prev) => ({ ...prev, [field]: value })),
+      },
+    },
+  ]);
 
   return (
     <div className="h-screen bg-gray-50 relative ">
