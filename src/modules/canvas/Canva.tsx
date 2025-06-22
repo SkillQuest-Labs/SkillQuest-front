@@ -92,7 +92,7 @@ export const Canva = () => {
   setEdges((eds) => [
     ...eds,
     { id: "", source: "", target: "", type: "", animated: true },
-  ]); 
+  ]);
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
 

@@ -1,14 +1,7 @@
-import { ReactFlowProvider } from "@xyflow/react";
-import { Canva } from "./modules/canvas/Canva";
+import AppRouter from "./routes/router";
 
 function App() {
-  return (
-    <>
-      <ReactFlowProvider>
-        <Canva />
-      </ReactFlowProvider>
-    </>
-  );
+  return <AppRouter />;
 }
 
 export default App;
