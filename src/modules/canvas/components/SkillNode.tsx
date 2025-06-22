@@ -4,7 +4,7 @@ import { Textarea } from "@/shared/components/ui/textarea";
 import { Card, CardHeader } from "@/shared/components/ui/card";
 import { Input } from "@/shared/components/ui/input";
 
-export default function SkillNode({ data }: NodeProps<Node<SkillNodeData>>) {
+export const SkillNode = ({ data }: NodeProps<Node<SkillNodeData>>) => {
   return (
     <Card
       className={`w-96 bg-gradient-to-r ${data.config.color} text-white border-2 border-white shadow-lg`}
@@ -34,4 +34,4 @@ export default function SkillNode({ data }: NodeProps<Node<SkillNodeData>>) {
       </CardHeader>
     </Card>
   );
-}
+};

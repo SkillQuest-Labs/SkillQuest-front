@@ -17,14 +17,22 @@ import {
 import "@xyflow/react/dist/style.css";
 import { FloatingToolbox } from "./components/FloatingToolbox";
 import { skillConfigMockData } from "./canvas.const";
-
-import SkillNode from "./components/SkillNode";
+import { SkillNode } from "./components/SkillNode";
+import { QuestNode, QuestNode2 } from "./components/QuestNode";
+import "./../../styles/canvas.css";
+import { CustomEdge } from "./components/CustomEdge";
 
 const nodeTypes = {
   skill: SkillNode,
+  quest1: QuestNode,
+  quest2: QuestNode2,
 };
 
-export const SkillsCanva = () => {
+const edgeTypes = {
+  custom: CustomEdge,
+};
+
+export const Canva = () => {
   const [cursorMode, setCursorMode] = useState<CursorModeType>("normal");
   const [, setViewMode] = useState<ViewModeType>("canvas");
   const [skillConfig, setSkillConfig] =
@@ -45,15 +53,74 @@ export const SkillsCanva = () => {
       },
       draggable: true,
     },
+    {
+      id: "quest-block1",
+      type: "quest1",
+      position: { x: 500, y: 400 },
+      data: {
+        config: skillConfig,
+        onUpdate: (field: string, value: any) =>
+          setSkillConfig((prev) => ({ ...prev, [field]: value })),
+      },
+      draggable: true,
+    },
+    {
+      id: "quest-block2",
+      type: "quest2",
+      position: { x: 500, y: 200 },
+      data: {
+        config: skillConfig,
+        onUpdate: (field: string, value: any) =>
+          setSkillConfig((prev) => ({ ...prev, [field]: value })),
+      },
+      draggable: true,
+    },
   ];
 
-  const [edges] = useEdgesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([
+    // Initial edges connecting the nodes
 
-  const [nodes] = useNodesState(initialNodes);
+    {
+      id: "e1-3",
+      source: "skill-block",
+      target: "quest-block1",
+      type: "custom",
+      animated: true,
+    },
+  ]);
+
+  setEdges((eds) => [
+    ...eds,
+    { id: "", source: "", target: "", type: "", animated: true },
+  ]);
+
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+
+  setNodes((nds) => [
+    ...nds,
+    {
+      id: "",
+      type: "",
+      position: { x: 0, y: 0 },
+      data: {
+        config: skillConfig,
+        onUpdate: (field: string, value: any) =>
+          setSkillConfig((prev) => ({ ...prev, [field]: value })),
+      },
+    },
+  ]);
 
   return (
-    <div className="h-screen bg-gray-50 relative">
-      <ReactFlow nodes={nodes} edges={edges} nodeTypes={nodeTypes}>
+    <div className="h-screen bg-gray-50 relative ">
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        className="custom-canvas"
+      >
         <Background color="#aaa" gap={20} size={1} />
 
         <Controls position="bottom-right" />
