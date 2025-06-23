@@ -11,10 +11,42 @@ import {
 } from "@/shared/components/ui/select";
 import { Textarea } from "@/shared/components/ui/textarea";
 import type { QuestData } from "../canva.type";
+import { motion } from "framer-motion";
+import { useState } from "react";
 
-export const QuestNode = ({ data }: NodeProps<Node<QuestData>>) => {
+export const QuestNode = ({ id, data }: NodeProps<Node<QuestData>>) => {
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDelete = () => {
+    setIsDeleting(true);
+    setTimeout(() => data.onDelete?.(id), 300); // delete after animation
+  };
+
   return (
-    <div className={cn("relative w-96")}>
+    <motion.div
+      initial={{ opacity: 1, scale: 1 }}
+      animate={
+        isDeleting
+          ? {
+              opacity: 0,
+              scale: 0.8,
+              filter: "blur(4px)",
+              rotate: -5,
+              y: -20,
+              transition: {
+                duration: 0.6,
+                ease: "easeInOut",
+              },
+            }
+          : {
+              opacity: 1,
+              scale: 1,
+              filter: "blur(0px)",
+              rotate: 0,
+              y: 0,
+            }
+      }
+    >
       <div className="relative rounded-3xl p-8 shadow-[0_0_40px_rgba(0,255,255,0.25)] border-2 border-cyan-400/60 z-10 ring-4 ring-cyan-300/10 bg-cover max-h-[560px]">
         <Handle
           type="target"
@@ -53,7 +85,13 @@ export const QuestNode = ({ data }: NodeProps<Node<QuestData>>) => {
 
         {/* Bouton X */}
         <div className="absolute top-4 right-4 z-10">
-          <div className="w-11 h-11 rounded-full bg-gradient-to-br from-red-500 via-red-400 to-pink-500 flex items-center justify-center shadow-lg cursor-pointer border-2 border-white/40 hover:scale-105 transition-transform">
+          <div
+            className="w-11 h-11 rounded-full bg-gradient-to-br from-red-500 via-red-400 to-pink-500 flex items-center justify-center shadow-lg cursor-pointer border-2 border-white/40 hover:scale-105 transition-transform"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDelete();
+            }}
+          >
             <X className="w-5 h-5 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]" />
           </div>
         </div>
@@ -74,7 +112,7 @@ export const QuestNode = ({ data }: NodeProps<Node<QuestData>>) => {
                 "max-h-24 min-h-10 px-2 py-1",
                 "overflow-x-auto overflow-y-auto",
                 "break-words",
-                "w-[95%]",
+                "w-[95%]"
               )}
               onClick={(e) => e.stopPropagation()}
               maxLength={120}
@@ -140,6 +178,6 @@ export const QuestNode = ({ data }: NodeProps<Node<QuestData>>) => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };

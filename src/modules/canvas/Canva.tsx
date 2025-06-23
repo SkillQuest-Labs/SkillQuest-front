@@ -62,8 +62,11 @@ export const Canva = () => {
       position: { x: 500, y: 400 },
       data: {
         config: skillConfig,
-        onUpdate: (field: string, value: any) =>
-          setSkillConfig((prev) => ({ ...prev, [field]: value })),
+        onUpdate: (field: string, value: any) => {
+          setSkillConfig((prev) => ({ ...prev, [field]: value })); // change to create state to update quest
+        },
+        onDelete: (id: string) =>
+          setNodes((prev) => prev.filter((n) => n.id !== id)),
       },
       draggable: true,
     },
@@ -105,6 +108,8 @@ export const Canva = () => {
             description: "Quest description...",
             status: "not-started",
             type: "side",
+            onDelete: (id: string) =>
+              setNodes((prev) => prev.filter((n) => n.id !== id)),
           },
         };
 
