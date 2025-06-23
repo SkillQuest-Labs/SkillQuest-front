@@ -20,14 +20,13 @@ import "@xyflow/react/dist/style.css";
 import { FloatingToolbox } from "./components/FloatingToolbox";
 import { skillConfigMockData } from "./canvas.const";
 import { SkillNode } from "./components/SkillNode";
-import { QuestNode, QuestNode2 } from "./components/QuestNode";
+import { QuestNode } from "./components/QuestNode";
 import "./../../styles/canvas.css";
 import { CustomEdge } from "./components/CustomEdge";
 
 const nodeTypes = {
   skill: SkillNode,
   quest1: QuestNode,
-  quest2: QuestNode2,
 };
 
 const edgeTypes = {
@@ -66,17 +65,6 @@ export const Canva = () => {
       },
       draggable: true,
     },
-    {
-      id: "quest-block2",
-      type: "quest2",
-      position: { x: 500, y: 200 },
-      data: {
-        config: skillConfig,
-        onUpdate: (field: string, value: any) =>
-          setSkillConfig((prev) => ({ ...prev, [field]: value })),
-      },
-      draggable: true,
-    },
   ];
 
   const [edges] = useEdgesState([
@@ -97,29 +85,31 @@ export const Canva = () => {
 
   const onPaneClick = useCallback(
     (event: React.MouseEvent) => {
-      const position = screenToFlowPosition({
-        x: event.clientX,
-        y: event.clientY,
-      });
+      if (cursorMode === "create") {
+        const position = screenToFlowPosition({
+          x: event.clientX,
+          y: event.clientY,
+        });
 
-      const newNodeId = `quest-${Date.now()}`;
-      const newNode: Node<QuestData> = {
-        id: newNodeId,
-        type: "quest1",
-        position,
-        data: {
-          title: "New Quest",
-          xp: 100,
-          difficulty: "Medium",
-          description: "Quest description...",
-          status: "not-started",
-          type: "side",
-        },
-      };
+        const newNodeId = `quest-${Date.now()}`;
+        const newNode: Node<QuestData> = {
+          id: newNodeId,
+          type: "quest1",
+          position,
+          data: {
+            title: "New Quest",
+            xp: 100,
+            difficulty: "Medium",
+            description: "Quest description...",
+            status: "not-started",
+            type: "side",
+          },
+        };
 
-      setNodes((nds) => nds.concat(newNode));
+        setNodes((nds) => nds.concat(newNode));
+      }
     },
-    [setNodes]
+    [cursorMode, setNodes],
   );
 
   return (
