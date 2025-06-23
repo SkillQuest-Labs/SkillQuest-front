@@ -23,6 +23,8 @@ import { SkillNode } from "./components/SkillNode";
 import { QuestNode } from "./components/QuestNode";
 import "./../../styles/canvas.css";
 import { CustomEdge } from "./components/CustomEdge";
+import ShootingStars from "./components/ShootingStars";
+import "./../../styles/canvas.css";
 
 const nodeTypes = {
   skill: SkillNode,
@@ -109,21 +111,22 @@ export const Canva = () => {
         setNodes((nds) => nds.concat(newNode));
       }
     },
-    [cursorMode, setNodes],
+    [cursorMode, setNodes]
   );
 
   return (
     <div className="h-screen bg-gray-50 relative ">
+      <ShootingStars />
       <ReactFlow
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
+        className="custom-canvas"
         edgeTypes={edgeTypes}
         onNodesChange={onNodesChange}
         onPaneClick={onPaneClick}
-        className="custom-canvas"
       >
-        <Background color="#aaa" gap={20} size={1} />
+        <Background color="#aaa" gap={30} size={0.5} />
 
         <Controls position="bottom-right" />
 
