@@ -33,7 +33,7 @@ export const generateAndAnimateParticles = (
 ) => {
   if (!container) return;
 
-  const particles = Array.from({ length: 50 }).map((_, i) => {
+  const particles = Array.from({ length: 50 }).map(() => {
     const p = document.createElement("div");
     p.className =
       "absolute w-2 h-2 bg-gradient-to-r from-cyan-400 to-yellow-300 rounded-full pointer-events-none z-50";

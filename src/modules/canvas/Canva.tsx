@@ -23,7 +23,7 @@ import { SkillNode } from "./components/SkillNode";
 import { QuestNode } from "./components/QuestNode";
 import "./../../styles/canvas.css";
 import { CustomEdge } from "./components/CustomEdge";
-import ShootingStars from "./components/ShootingStars";
+import ShootingStars from "./components/animations/ShootingStars";
 import "./../../styles/canvas.css";
 
 const nodeTypes = {
@@ -116,7 +116,7 @@ export const Canva = () => {
         setNodes((nds) => nds.concat(newNode));
       }
     },
-    [cursorMode, setNodes]
+    [cursorMode, setNodes],
   );
 
   return (
