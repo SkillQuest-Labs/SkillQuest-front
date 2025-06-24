@@ -1,13 +1,21 @@
-import { Button } from "./shared/components/ui/button";
+import { Navbar } from "./component/Navbar";
+import { DashboardUser } from "./pages/DashboardUser";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Skills } from "./pages/Skills";
+import { Profil } from "./pages/Profil";
 
 function App() {
   return (
-    <>
-      <div className="flex flex-col items-center justify-center min-h-screen gap-4">
-        <div className="text-red-500"></div>
-        <Button>Button</Button>
+    <BrowserRouter>
+      <Navbar />
+      <div>
+        <Routes>
+          <Route path="/" element={<DashboardUser />} />
+          <Route path="/skills" element={<Skills />} />
+          <Route path="/profil" element={<Profil />} />
+        </Routes>
       </div>
-    </>
+    </BrowserRouter>
   );
 }
 
