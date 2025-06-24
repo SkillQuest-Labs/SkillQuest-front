@@ -20,7 +20,6 @@
     "@xyflow/react": "^12.7.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "framer-motion": "^12.19.1",
     "gsap": "^3.13.0",
     "husky": "^9.1.7",
     "lucide-react": "^0.514.0",
