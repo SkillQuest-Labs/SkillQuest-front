@@ -116,7 +116,7 @@ export const Canva = () => {
         setNodes((nds) => nds.concat(newNode));
       }
     },
-    [cursorMode, setNodes],
+    [cursorMode, setNodes, screenToFlowPosition]
   );
 
   return (
