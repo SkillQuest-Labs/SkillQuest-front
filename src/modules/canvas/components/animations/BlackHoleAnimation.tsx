@@ -1,3 +1,5 @@
+import gsap from "gsap";
+
 // Makes the black hole appear and grow
 export const animateBlackHole = (
   tl: gsap.core.Timeline,
