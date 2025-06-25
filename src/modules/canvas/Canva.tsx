@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import type {
   CursorModeType,
   QuestData,
@@ -130,6 +130,8 @@ export const Canva = () => {
         edgeTypes={edgeTypes}
         onNodesChange={onNodesChange}
         onPaneClick={onPaneClick}
+        zoomOnScroll={false}
+        panOnScroll={true}
         minZoom={0.2}
         maxZoom={2}
       >
