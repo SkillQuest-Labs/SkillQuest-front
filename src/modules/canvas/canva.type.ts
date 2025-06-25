@@ -42,4 +42,12 @@ export type QuestData = {
   isCollapsed?: boolean;
   childCount?: number;
   onUpdate?: (field: string, value: any) => void;
+  onDelete?: (id: string) => void;
+};
+
+export type QuestCardProps = {
+  data: QuestData;
+  onDelete: () => void;
+  targetHandle?: React.ReactNode;
+  sourceHandle?: React.ReactNode;
 };

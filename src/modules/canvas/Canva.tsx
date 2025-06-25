@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import type {
   CursorModeType,
+  QuestData,
   SkillConfigType,
   SkillNodeData,
   ViewModeType,
@@ -12,20 +13,22 @@ import {
   ReactFlow,
   useEdgesState,
   useNodesState,
+  useReactFlow,
   type Node,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { FloatingToolbox } from "./components/FloatingToolbox";
 import { skillConfigMockData } from "./canvas.const";
 import { SkillNode } from "./components/SkillNode";
-import { QuestNode, QuestNode2 } from "./components/QuestNode";
+import { QuestNode } from "./components/QuestNode";
 import "./../../styles/canvas.css";
 import { CustomEdge } from "./components/CustomEdge";
+import ShootingStars from "./components/animations/ShootingStars";
+import "./../../styles/canvas.css";
 
 const nodeTypes = {
   skill: SkillNode,
   quest1: QuestNode,
-  quest2: QuestNode2,
 };
 
 const edgeTypes = {
@@ -40,7 +43,7 @@ export const Canva = () => {
 
   // Initialize edges and nodes
 
-  const initialNodes: Node<SkillNodeData>[] = [
+  const initialNodes: Node<SkillNodeData | QuestData>[] = [
     // later we need to retrieve the real data from the modal that we open
     {
       id: "skill-block",
@@ -59,25 +62,17 @@ export const Canva = () => {
       position: { x: 500, y: 400 },
       data: {
         config: skillConfig,
-        onUpdate: (field: string, value: any) =>
-          setSkillConfig((prev) => ({ ...prev, [field]: value })),
-      },
-      draggable: true,
-    },
-    {
-      id: "quest-block2",
-      type: "quest2",
-      position: { x: 500, y: 200 },
-      data: {
-        config: skillConfig,
-        onUpdate: (field: string, value: any) =>
-          setSkillConfig((prev) => ({ ...prev, [field]: value })),
+        onUpdate: (field: string, value: any) => {
+          setSkillConfig((prev) => ({ ...prev, [field]: value })); // change to create state to update quest
+        },
+        onDelete: (id: string) =>
+          setNodes((prev) => prev.filter((n) => n.id !== id)),
       },
       draggable: true,
     },
   ];
 
-  const [edges, setEdges, onEdgesChange] = useEdgesState([
+  const [edges] = useEdgesState([
     // Initial edges connecting the nodes
 
     {
@@ -89,39 +84,58 @@ export const Canva = () => {
     },
   ]);
 
-  setEdges((eds) => [
-    ...eds,
-    { id: "", source: "", target: "", type: "", animated: true },
-  ]);
-
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
 
-  setNodes((nds) => [
-    ...nds,
-    {
-      id: "",
-      type: "",
-      position: { x: 0, y: 0 },
-      data: {
-        config: skillConfig,
-        onUpdate: (field: string, value: any) =>
-          setSkillConfig((prev) => ({ ...prev, [field]: value })),
-      },
+  const { screenToFlowPosition } = useReactFlow();
+
+  const onPaneClick = useCallback(
+    (event: React.MouseEvent) => {
+      if (cursorMode === "create") {
+        const position = screenToFlowPosition({
+          x: event.clientX,
+          y: event.clientY,
+        });
+
+        const newNodeId = `quest-${Date.now()}`;
+        const newNode: Node<QuestData> = {
+          id: newNodeId,
+          type: "quest1",
+          position,
+          data: {
+            title: "New Quest",
+            xp: 100,
+            difficulty: "Medium",
+            description: "Quest description...",
+            status: "not-started",
+            type: "side",
+            onDelete: (id: string) =>
+              setNodes((prev) => prev.filter((n) => n.id !== id)),
+          },
+        };
+
+        setNodes((nds) => nds.concat(newNode));
+      }
     },
-  ]);
+    [cursorMode, setNodes, screenToFlowPosition]
+  );
 
   return (
     <div className="h-screen bg-gray-50 relative ">
+      <ShootingStars />
       <ReactFlow
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
+        className="custom-canvas"
         edgeTypes={edgeTypes}
         onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        className="custom-canvas"
+        onPaneClick={onPaneClick}
+        zoomOnScroll={false}
+        panOnScroll={true}
+        minZoom={0.2}
+        maxZoom={2}
       >
-        <Background color="#aaa" gap={20} size={1} />
+        <Background color="#aaa" gap={30} size={0.5} />
 
         <Controls position="bottom-right" />
 
