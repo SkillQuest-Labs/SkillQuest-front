@@ -3,7 +3,7 @@ import gsap from "gsap";
 // Makes the black hole appear and grow
 export const animateBlackHole = (
   tl: gsap.core.Timeline,
-  element: HTMLDivElement
+  element: HTMLDivElement,
 ) => {
   tl.set(element, { opacity: 1, scale: 0 });
   tl.to(element, { scale: 1.0, duration: 0.9, ease: "back.out(2)" }, 0.1);
@@ -12,7 +12,7 @@ export const animateBlackHole = (
 //  Rotates, shrinks, and makes the node disappear.
 export const animateNodeAbsorption = (
   tl: gsap.core.Timeline,
-  element: HTMLDivElement
+  element: HTMLDivElement,
 ) => {
   tl.to(
     element,
@@ -26,12 +26,12 @@ export const animateNodeAbsorption = (
       duration: 1.7,
       ease: "power4.inOut",
     },
-    0.2
+    0.2,
   );
 };
 
 export const generateAndAnimateParticles = (
-  container: HTMLDivElement | null
+  container: HTMLDivElement | null,
 ) => {
   if (!container) return;
 
