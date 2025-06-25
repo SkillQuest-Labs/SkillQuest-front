@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type {
   CursorModeType,
   QuestData,
@@ -116,7 +116,7 @@ export const Canva = () => {
         setNodes((nds) => nds.concat(newNode));
       }
     },
-    [cursorMode, setNodes, screenToFlowPosition],
+    [cursorMode, setNodes, screenToFlowPosition]
   );
 
   return (
@@ -130,6 +130,8 @@ export const Canva = () => {
         edgeTypes={edgeTypes}
         onNodesChange={onNodesChange}
         onPaneClick={onPaneClick}
+        minZoom={0.2}
+        maxZoom={2}
       >
         <Background color="#aaa" gap={30} size={0.5} />
 
