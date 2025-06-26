@@ -2,7 +2,7 @@ import { useState } from "react";
 import { SidebarHeader } from "./SidebarHeader";
 import { SidebarBody } from "./SidebarBody";
 
-export const Navbar = () => {
+export const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
 
   return (
