@@ -2,13 +2,6 @@ import { Handle, Position, type Node, type NodeProps } from "@xyflow/react";
 
 import type { QuestData } from "../canva.type";
 import { useRef } from "react";
-import gsap from "gsap";
-import {
-  animateBlackHole,
-  animateNodeAbsorption,
-  BlackHoleVisual,
-  generateAndAnimateParticles,
-} from "./animations/BlackHoleAnimation";
 import { QuestCard } from "./QuestCard";
 
 export const QuestNode = ({ id, data }: NodeProps<Node<QuestData>>) => {
@@ -17,26 +10,11 @@ export const QuestNode = ({ id, data }: NodeProps<Node<QuestData>>) => {
 
   const handleDelete = () => {
     if (!nodeRef.current || !blackHoleRef.current) return;
-    const deleteTimeline = gsap.timeline({
-      onComplete: () => {
-        data.onDelete?.(id);
-      },
-    });
-
-    // A black hole appears
-    animateBlackHole(deleteTimeline, blackHoleRef.current);
-
-    // Node absorption vortex
-    animateNodeAbsorption(deleteTimeline, nodeRef.current);
-
-    // animate disintegration particles
-    generateAndAnimateParticles(nodeRef.current);
+    data.onDelete?.(id);
   };
 
   return (
     <div ref={blackHoleRef}>
-      {/* Black hole */}
-      <BlackHoleVisual />
       <div
         ref={nodeRef}
         className="relative rounded-3xl p-8 shadow-[0_0_40px_rgba(0,255,255,0.25)] border-2 border-cyan-400/60 z-10 ring-4 ring-cyan-300/10 bg-cover max-h-[560px]"
