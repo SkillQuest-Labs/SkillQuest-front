@@ -1,6 +1,6 @@
 import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
 import { Home, Star, User } from "lucide-react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export const SidebarBody = () => {
   const { isCollapsed } = useSidebarStore();
@@ -9,43 +9,49 @@ export const SidebarBody = () => {
     <nav className="mt-6">
       <ul className="flex flex-col gap-1">
         <li>
-          <Link
+          <NavLink
             to="/"
-            className={`px-6 py-3 hover:bg-gray-700 flex items-center ${
-              isCollapsed ? "justify-center" : "gap-3"
-            }`}
+            className={({ isActive }) =>
+              `px-6 py-3 flex items-center ${
+                isCollapsed ? "justify-center" : "gap-3"
+              } hover:bg-gray-700 ${isActive ? "bg-gray-700 font-bold" : ""}`
+            }
           >
             <Home size={20} />
             {!isCollapsed && (
               <span className="text-sm font-medium">Accueil</span>
             )}
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link
+          <NavLink
             to="/skills"
-            className={`px-6 py-3 hover:bg-gray-700 flex items-center ${
-              isCollapsed ? "justify-center" : "gap-3"
-            }`}
+            className={({ isActive }) =>
+              `px-6 py-3 flex items-center ${
+                isCollapsed ? "justify-center" : "gap-3"
+              } hover:bg-gray-700 ${isActive ? "bg-gray-700 font-bold" : ""}`
+            }
           >
             <Star size={20} />
             {!isCollapsed && (
               <span className="text-sm font-medium">Skills</span>
             )}
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link
+          <NavLink
             to="/profil"
-            className={`px-6 py-3 hover:bg-gray-700 flex items-center ${
-              isCollapsed ? "justify-center" : "gap-3"
-            }`}
+            className={({ isActive }) =>
+              `px-6 py-3 flex items-center ${
+                isCollapsed ? "justify-center" : "gap-3"
+              } hover:bg-gray-700 ${isActive ? "bg-gray-700 font-bold" : ""}`
+            }
           >
             <User size={20} />
             {!isCollapsed && (
               <span className="text-sm font-medium">Profil</span>
             )}
-          </Link>
+          </NavLink>
         </li>
       </ul>
     </nav>

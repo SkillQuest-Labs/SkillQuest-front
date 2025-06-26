@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
-import { PanelRightClose, PanelRightOpen } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
 
 export const SidebarHeader = () => {
@@ -34,11 +34,7 @@ export const SidebarHeader = () => {
           isCollapsed ? "" : "ml-auto"
         } hover:bg-gray-700 p-2 rounded`}
       >
-        {isCollapsed ? (
-          <PanelRightClose size={20} />
-        ) : (
-          <PanelRightOpen size={20} />
-        )}
+        {!isCollapsed ? <X size={20} /> : <Menu size={20} />}
       </button>
     </div>
   );
