@@ -23,7 +23,6 @@ import { SkillNode } from "./components/SkillNode";
 import { QuestNode } from "./components/QuestNode";
 import "./../../styles/canvas.css";
 import { CustomEdge } from "./components/CustomEdge";
-import ShootingStars from "./components/animations/ShootingStars";
 import "./../../styles/canvas.css";
 
 const nodeTypes = {
@@ -121,7 +120,6 @@ export const Canva = () => {
 
   return (
     <div className="h-screen bg-gray-50 relative ">
-      <ShootingStars />
       <ReactFlow
         nodes={nodes}
         edges={edges}
