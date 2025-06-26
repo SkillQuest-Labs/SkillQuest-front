@@ -1,9 +1,9 @@
-import { useState } from "react";
 import { SidebarHeader } from "./SidebarHeader";
 import { SidebarBody } from "./SidebarBody";
+import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
 
 export const Sidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+  const { isCollapsed } = useSidebarStore();
 
   return (
     <div className="flex">
@@ -12,12 +12,9 @@ export const Sidebar = () => {
           isCollapsed ? "w-20" : "w-65"
         } h-screen bg-slate-900 text-white fixed shadow-lg transition-all duration-300`}
       >
-        <SidebarHeader
-          isCollapsed={isCollapsed}
-          setIsCollapsed={setIsCollapsed}
-        />
+        <SidebarHeader />
         <hr className="border-gray-700 mx-6 mb-4" />
-        <SidebarBody isCollapsed={isCollapsed} />
+        <SidebarBody />
       </div>
     </div>
   );

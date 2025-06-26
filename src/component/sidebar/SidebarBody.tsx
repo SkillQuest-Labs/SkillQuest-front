@@ -1,11 +1,10 @@
+import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
 import { Home, Star, User } from "lucide-react";
 import { Link } from "react-router-dom";
 
-type SidebarBodyProps = {
-  isCollapsed: boolean;
-};
+export const SidebarBody = () => {
+  const { isCollapsed } = useSidebarStore();
 
-export const SidebarBody = ({ isCollapsed }: SidebarBodyProps) => {
   return (
     <nav className="mt-6">
       <ul className="flex flex-col gap-1">

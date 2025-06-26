@@ -1,16 +1,11 @@
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { PanelRightClose, PanelRightOpen } from "lucide-react";
+import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
 
-export type SidebarHeaderProps = {
-  isCollapsed: boolean;
-  setIsCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
-};
+export const SidebarHeader = () => {
+  const { isCollapsed, toggleCollapse } = useSidebarStore();
 
-export const SidebarHeader = ({
-  isCollapsed,
-  setIsCollapsed,
-}: SidebarHeaderProps) => {
   return (
     <div
       className={`flex ${
@@ -34,7 +29,7 @@ export const SidebarHeader = ({
       </Link>
 
       <button
-        onClick={() => setIsCollapsed(!isCollapsed)}
+        onClick={() => toggleCollapse()}
         className={`${
           isCollapsed ? "" : "ml-auto"
         } hover:bg-gray-700 p-2 rounded`}
