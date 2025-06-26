@@ -1,4 +1,4 @@
-import { Navbar } from "./component/Navbar";
+import { Navbar } from "./component/sidebar/Sidebar";
 import { DashboardUser } from "./pages/DashboardUser";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Skills } from "./pages/Skills";
