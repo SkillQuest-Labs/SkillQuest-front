@@ -6,7 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/components/ui/select";
-import type { QuestDifficulty } from "../../canva.type";
+import type { QuestDifficulty } from "../../canvas.type";
 
 type DifficultySelectorProps = {
   value: QuestDifficulty;

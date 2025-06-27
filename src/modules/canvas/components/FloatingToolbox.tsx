@@ -1,6 +1,6 @@
 import { Button } from "@/shared/components/ui/button";
 import { Link, MinusSquare, Plus, PlusSquare, Target, Map } from "lucide-react";
-import type { FloatingToolboxProps } from "../canva.type";
+import type { FloatingToolboxProps } from "../canvas.type";
 
 export const FloatingToolbox = ({
   cursorMode,

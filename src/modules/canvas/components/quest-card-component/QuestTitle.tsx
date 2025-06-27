@@ -1,5 +1,5 @@
+import { cn } from "@/shared/utils/helpers";
 import { Zap } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 type QuestTitleProps = {
   title: string;
