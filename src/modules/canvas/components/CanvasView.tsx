@@ -65,8 +65,8 @@ export const CanvasView = ({
     onPaneClick={onPaneClick}
     onNodeClick={onNodeClick}
     onConnect={onConnect}
-    zoomOnScroll={true}
-    panOnScroll={false}
+    zoomOnScroll={false}
+    panOnScroll={true}
     minZoom={0.2}
     maxZoom={2}
   >
