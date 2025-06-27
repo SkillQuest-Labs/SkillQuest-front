@@ -1,4 +1,4 @@
-import type { QuestCardProps } from "../canva.type";
+import type { QuestCardProps } from "../canvas.type";
 import { QuestCardBorderSVG } from "./animations/QuestCardBorderSVG";
 import {
   QuestDifficultySelector,

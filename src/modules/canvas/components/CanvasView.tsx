@@ -1,4 +1,7 @@
 import {
+  Background,
+  Controls,
+  MiniMap,
   ReactFlow,
   type Connection,
   type Edge,
@@ -15,6 +18,7 @@ import type {
 import { SkillNode } from "./SkillNode";
 import { QuestNode } from "./QuestNode";
 import { CustomEdge } from "./CustomEdge";
+import { FloatingToolbox } from "./FloatingToolbox";
 
 type CanvasViewProps = {
   nodes: Node<QuestNodeData | SkillNodeData>[];
@@ -46,19 +50,56 @@ export const CanvasView = ({
   onPaneClick,
   onNodeClick,
   onConnect,
-//   cursorMode,
-//   setCursorMode,
-//   setViewMode,
+  cursorMode,
+  setCursorMode,
+  setViewMode,
 }: CanvasViewProps) => (
   <ReactFlow
     nodes={nodes}
     edges={edges}
     nodeTypes={nodeTypes}
+    className="custom-canvas"
     edgeTypes={edgeTypes}
     onNodesChange={onNodesChange}
     onEdgesChange={onEdgesChange}
     onPaneClick={onPaneClick}
     onNodeClick={onNodeClick}
     onConnect={onConnect}
-  ></ReactFlow>
+    zoomOnScroll={true}
+    panOnScroll={false}
+    minZoom={0.2}
+    maxZoom={2}
+  >
+    <Background color="#aaa" gap={30} size={0.5} />
+
+    <Controls position="bottom-right" />
+
+    <MiniMap
+      nodeStrokeWidth={1}
+      position="bottom-left"
+      nodeColor={(node) => {
+        return node.type === "skill" ? "#ff0000" : "#aaa";
+      }}
+    />
+
+    {/* Mode Indicators */}
+    {cursorMode === "create" && (
+      <div className="absolute top-4 left-4 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium z-10 animate-pulse">
+        ➕ Click anywhere to create a quest
+      </div>
+    )}
+
+    {cursorMode === "connect" && (
+      <div className="absolute top-4 left-4 bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium z-10 animate-pulse">
+        🔗 Click quests to connect them
+        {/* {connectionStart && <span className="ml-2 text-purple-600">→ Select target quest</span>} */}
+      </div>
+    )}
+
+    <FloatingToolbox
+      cursorMode={cursorMode}
+      setCursorMode={setCursorMode}
+      setViewMode={setViewMode}
+    />
+  </ReactFlow>
 );

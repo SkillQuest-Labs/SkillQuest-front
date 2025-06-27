@@ -1,5 +1,5 @@
 import { Handle, Position, type NodeProps, type Node } from "@xyflow/react";
-import type { SkillNodeData } from "../canva.type";
+import type { SkillNodeData } from "../canvas.type";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { Card, CardHeader } from "@/shared/components/ui/card";
 import { Input } from "@/shared/components/ui/input";
