@@ -6,6 +6,8 @@ export const FloatingToolbox = ({
   cursorMode,
   setCursorMode,
   setViewMode,
+  collapseAll,
+  expandAll,
 }: FloatingToolboxProps) => (
   <div className="absolute top-6 right-6 z-20 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50 p-2 flex flex-col gap-1">
     {/* Quest Creation Tool */}
@@ -75,6 +77,7 @@ export const FloatingToolbox = ({
     {/* Collapse/Expand quest Tools */}
     <div className="group relative">
       <Button
+        onClick={collapseAll}
         variant="ghost"
         size="sm"
         className="w-10 h-10 p-0 rounded-lg hover:bg-gray-100 transition-all duration-200"
@@ -88,6 +91,7 @@ export const FloatingToolbox = ({
 
     <div className="group relative">
       <Button
+        onClick={expandAll}
         variant="ghost"
         size="sm"
         className="w-10 h-10 p-0 rounded-lg hover:bg-gray-100 transition-all duration-200"

@@ -5,6 +5,8 @@ export type FloatingToolboxProps = {
   cursorMode: CursorModeType;
   setCursorMode: (mode: CursorModeType) => void;
   setViewMode: (mode: ViewModeType) => void;
+  collapseAll: () => void;
+  expandAll: () => void;
 };
 
 export type SkillConfigType = {

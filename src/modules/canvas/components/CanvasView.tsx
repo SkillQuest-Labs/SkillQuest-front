@@ -31,6 +31,8 @@ type CanvasViewProps = {
   cursorMode: CursorModeType;
   setCursorMode: (mode: CursorModeType) => void;
   setViewMode: React.Dispatch<React.SetStateAction<ViewModeType>>;
+  collapseAll: () => void;
+  expandAll: () => void;
 };
 
 const nodeTypes = {
@@ -53,6 +55,8 @@ export const CanvasView = ({
   cursorMode,
   setCursorMode,
   setViewMode,
+  collapseAll,
+  expandAll,
 }: CanvasViewProps) => (
   <ReactFlow
     nodes={nodes}
@@ -100,6 +104,8 @@ export const CanvasView = ({
       cursorMode={cursorMode}
       setCursorMode={setCursorMode}
       setViewMode={setViewMode}
+      collapseAll={collapseAll}
+      expandAll={expandAll}
     />
   </ReactFlow>
 );

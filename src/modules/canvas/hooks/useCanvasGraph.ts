@@ -15,6 +15,16 @@ export const useCanvasGraph = () => {
   const [nodes, setNodes, onNodesChange] =
     useNodesState<Node<QuestNodeData | SkillNodeData>>(initialNodes);
 
+  const updateNodeData = (id: string, field: string, value: any) => {
+    setNodes((prev) =>
+      prev.map((n) =>
+        n.id === id
+          ? { ...n, data: { ...(n.data as any), [field]: value } }
+          : n,
+      ),
+    );
+  };
+
   const addQuestNode = (position: XYPosition) => {
     const id = `quest-${Date.now()}`; // to change
 
@@ -29,8 +39,11 @@ export const useCanvasGraph = () => {
         description: "Quest description...",
         status: "not-started",
         type: "side",
+        isCollapsed: false,
         onDelete: (id: string) =>
           setNodes((prev) => prev.filter((n) => n.id !== id)),
+        onUpdate: (field: string, value: any) =>
+          updateNodeData(id, field, value),
       },
     };
 
@@ -39,6 +52,26 @@ export const useCanvasGraph = () => {
 
   const deleteNode = (id: string) => {
     setNodes((prev) => prev.filter((n) => n.id !== id));
+  };
+
+  const collapseAll = () => {
+    setNodes((prev) =>
+      prev.map((n) =>
+        n.type === "quest1"
+          ? { ...n, data: { ...(n.data as any), isCollapsed: true } }
+          : n,
+      ),
+    );
+  };
+
+  const expandAll = () => {
+    setNodes((prev) =>
+      prev.map((n) =>
+        n.type === "quest1"
+          ? { ...n, data: { ...(n.data as any), isCollapsed: false } }
+          : n,
+      ),
+    );
   };
 
   return {
@@ -50,5 +83,7 @@ export const useCanvasGraph = () => {
     onEdgesChange,
     addQuestNode,
     deleteNode,
+    collapseAll,
+    expandAll,
   };
 };
