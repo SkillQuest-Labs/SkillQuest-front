@@ -1,13 +1,20 @@
-import { Button } from "./shared/components/ui/button";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { DashboardUser } from "@/pages/dashboard/DashboardUser";
+import { Skills } from "@/pages/dashboard/Skills";
+import { Profil } from "@/pages/dashboard/Profil";
+import { DashboardLayout } from "@/pages/dashboard/DashboardLayout";
 
 function App() {
   return (
-    <>
-      <div className="flex flex-col items-center justify-center min-h-screen gap-4">
-        <div className="text-red-500"></div>
-        <Button>Button</Button>
-      </div>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<DashboardLayout />}>
+          <Route index element={<DashboardUser />} />
+          <Route path="skills" element={<Skills />} />
+          <Route path="profil" element={<Profil />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
