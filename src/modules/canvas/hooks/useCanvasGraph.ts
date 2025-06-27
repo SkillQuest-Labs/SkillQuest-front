@@ -29,7 +29,7 @@ export const useCanvasGraph = () => {
           };
         }
         return node;
-      })
+      }),
     );
   };
 
@@ -67,8 +67,8 @@ export const useCanvasGraph = () => {
       prev.map((node) =>
         node.type === "quest1"
           ? { ...node, data: { ...node.data, isCollapsed: true } }
-          : node
-      )
+          : node,
+      ),
     );
   };
 
@@ -77,8 +77,8 @@ export const useCanvasGraph = () => {
       prev.map((node) =>
         node.type === "quest1"
           ? { ...node, data: { ...node.data, isCollapsed: false } }
-          : node
-      )
+          : node,
+      ),
     );
   };
 
