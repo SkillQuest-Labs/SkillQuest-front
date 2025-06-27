@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { DashboardLayout } from "@/pages/dashboard/DashboardLayout";
-import { DashboardUser } from "@/pages/DashboardUser";
-import { Skills } from "@/pages/Skills";
-import { Profil } from "@/pages/Profil";
+import { DashboardUser } from "@/pages/dashboard/DashboardUser";
+import { Skills } from "@/pages/dashboard/Skills";
+import { Profil } from "@/pages/dashboard/Profil";
 
 function App() {
   return (
