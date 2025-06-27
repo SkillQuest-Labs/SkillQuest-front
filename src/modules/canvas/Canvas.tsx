@@ -23,6 +23,8 @@ export const Canvas = () => {
     setEdges,
     onEdgesChange,
     addQuestNode,
+    collapseAll,
+    expandAll,
   } = useCanvasGraph(); // This hook can be used to manage nodes and edges if needed
 
   const onConnect = useConnectionHandler(setEdges);
@@ -50,7 +52,7 @@ export const Canvas = () => {
         });
       }
     },
-    [cursorMode, connectionStart, onConnect, setConnectionStart],
+    [cursorMode, connectionStart, onConnect, setConnectionStart]
   );
 
   return (
@@ -66,6 +68,8 @@ export const Canvas = () => {
         cursorMode={cursorMode}
         setCursorMode={setCursorMode}
         setViewMode={setViewMode}
+        collapseAll={collapseAll}
+        expandAll={expandAll}
       />
     </div>
   );

@@ -22,6 +22,7 @@ export const QuestNode = ({ id, data }: NodeProps<Node<QuestNodeData>>) => {
         <QuestCard
           data={data}
           onDelete={handleDelete}
+          isCollapsed={data.isCollapsed}
           sourceHandle={
             <Handle
               type="target"

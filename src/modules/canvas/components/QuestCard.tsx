@@ -13,6 +13,7 @@ export const QuestCard = ({
   onDelete,
   sourceHandle,
   targetHandle,
+  isCollapsed = false,
 }: QuestCardProps) => {
   return (
     <>
@@ -27,16 +28,23 @@ export const QuestCard = ({
         title={data.title}
         onChange={(value) => data.onUpdate?.("title", value)}
       />
-      <QuestXp xp={data.xp} />
 
-      <QuestDifficultySelector
-        value={data.difficulty}
-        onChange={(value) => data.onUpdate?.("difficulty", value)}
-      />
-      <QuestDescription
-        description={data.description}
-        onChange={(value) => data.onUpdate?.("description", value)}
-      />
+      <div
+        className={`transition-all duration-300 overflow-hidden ${
+          isCollapsed ? "max-h-0 opacity-0" : "max-h-96 opacity-100"
+        }`}
+      >
+        <QuestXp xp={data.xp} />
+
+        <QuestDifficultySelector
+          value={data.difficulty}
+          onChange={(value) => data.onUpdate?.("difficulty", value)}
+        />
+        <QuestDescription
+          description={data.description}
+          onChange={(value) => data.onUpdate?.("description", value)}
+        />
+      </div>
     </>
   );
 };
