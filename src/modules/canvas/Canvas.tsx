@@ -50,7 +50,7 @@ export const Canvas = () => {
         });
       }
     },
-    [cursorMode, connectionStart, onConnect, setConnectionStart]
+    [cursorMode, connectionStart, onConnect, setConnectionStart],
   );
 
   return (

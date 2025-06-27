@@ -28,7 +28,7 @@ export const QuestTitle = ({ title, onChange }: QuestTitleProps) => (
             "max-h-24 min-h-10 px-2 py-1",
             "overflow-x-auto overflow-y-auto",
             "break-words",
-            "w-[95%]"
+            "w-[95%]",
           )}
           onClick={(e) => e.stopPropagation()}
           maxLength={120}
