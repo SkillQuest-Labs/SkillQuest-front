@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import {
   Background,
   Controls,
@@ -31,6 +32,7 @@ type CanvasViewProps = {
   cursorMode: CursorModeType;
   setCursorMode: (mode: CursorModeType) => void;
   setViewMode: React.Dispatch<React.SetStateAction<ViewModeType>>;
+  className?: string;
 };
 
 const nodeTypes = {
@@ -51,6 +53,7 @@ export const CanvasView = ({
   onNodeClick,
   onConnect,
   cursorMode,
+  className,
   setCursorMode,
   setViewMode,
 }: CanvasViewProps) => (
@@ -58,7 +61,7 @@ export const CanvasView = ({
     nodes={nodes}
     edges={edges}
     nodeTypes={nodeTypes}
-    className="custom-canvas"
+    className={clsx("custom-canvas", className)}
     edgeTypes={edgeTypes}
     onNodesChange={onNodesChange}
     onEdgesChange={onEdgesChange}
@@ -69,6 +72,7 @@ export const CanvasView = ({
     panOnScroll={true}
     minZoom={0.2}
     maxZoom={2}
+    fitView
   >
     <Background color="#aaa" gap={30} size={0.5} />
 

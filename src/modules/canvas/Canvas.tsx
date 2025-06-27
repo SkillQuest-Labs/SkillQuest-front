@@ -50,7 +50,7 @@ export const Canvas = () => {
         });
       }
     },
-    [cursorMode, connectionStart, onConnect, setConnectionStart],
+    [cursorMode, connectionStart, onConnect, setConnectionStart]
   );
 
   return (
@@ -66,7 +66,7 @@ export const Canvas = () => {
         cursorMode={cursorMode}
         setCursorMode={setCursorMode}
         setViewMode={setViewMode}
-      ></CanvasView>
+      />
     </div>
   );
 };
