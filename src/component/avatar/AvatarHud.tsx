@@ -1,13 +1,13 @@
-import type { AvatarProps } from "./avatar.types";
+import type { AvatarHudProps } from "./avatarHud.types";
 
-export const Avatar = ({
+export const AvatarHud = ({
   username,
   role,
   avatarUrl,
   level,
   xpUser,
   xpMax,
-}: AvatarProps) => {
+}: AvatarHudProps) => {
   const xpPercent = Math.min((xpUser / xpMax) * 100, 100);
 
   return (

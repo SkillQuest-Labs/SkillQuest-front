@@ -1,4 +1,4 @@
-export type AvatarProps = {
+export type AvatarHudProps = {
   username: string;
   role: string;
   avatarUrl: string;
