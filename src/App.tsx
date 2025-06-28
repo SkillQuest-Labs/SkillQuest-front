@@ -4,6 +4,7 @@ import { Skills } from "@/pages/dashboard/Skills";
 import { Profil } from "@/pages/dashboard/Profil";
 import { DashboardLayout } from "@/pages/dashboard/DashboardLayout";
 import { CanvasPage } from "./pages/dashboard/CanvasPage";
+import { Store } from "./pages/dashboard/Store";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="skills" element={<Skills />} />
           <Route path="profil" element={<Profil />} />
           <Route path="canvas" element={<CanvasPage />} />
+          <Route path="store" element={<Store />} />
         </Route>
       </Routes>
     </BrowserRouter>
