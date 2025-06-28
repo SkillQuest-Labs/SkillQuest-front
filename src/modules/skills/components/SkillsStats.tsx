@@ -64,15 +64,15 @@ export function SkillsStats({ skills, className }: SkillsStatsProps) {
   return (
     <div
       className={cn(
-        "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4",
+        "grid grid-cols-3 md:grid-cols-6 gap-2",
         className,
       )}
     >
       {statCards.map((stat, index) => (
-        <div key={index} className="text-center p-4 rounded-lg border bg-card">
-          <div className={cn("text-2xl mb-2", stat.color)}>{stat.icon}</div>
-          <div className="text-xl font-bold text-foreground">{stat.value}</div>
-          <div className="text-xs text-muted-foreground mt-1">{stat.title}</div>
+        <div key={index} className="text-center p-2 rounded-md border bg-card/50">
+          <div className={cn("text-sm mb-1", stat.color)}>{stat.icon}</div>
+          <div className="text-sm font-semibold text-foreground">{stat.value}</div>
+          <div className="text-xs text-muted-foreground">{stat.title}</div>
         </div>
       ))}
     </div>
