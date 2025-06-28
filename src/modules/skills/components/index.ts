@@ -1,6 +1,6 @@
-export { SkillsList } from "./SkillsList";
-export { SkillCard } from "./SkillCard";
 export { SkillsStats } from "./SkillsStats";
-export { DifficultyBadge } from "./DifficultyBadge";
+export { SkillCard } from "./SkillCard";
 export { StatusBadge } from "./StatusBadge";
+export { DifficultyBadge } from "./DifficultyBadge";
 export { ProgressBar } from "./ProgressBar";
+export { SkillsList } from "./SkillsList";
