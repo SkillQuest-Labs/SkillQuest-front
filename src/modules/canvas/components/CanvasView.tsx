@@ -20,6 +20,8 @@ import { SkillNode } from "./SkillNode";
 import { QuestNode } from "./QuestNode";
 import { CustomEdge } from "./CustomEdge";
 import { FloatingToolbox } from "./floating-toolbox/FloatingToolbox";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/shared/components/ui/button";
 
 type CanvasViewProps = {
   nodes: Node<QuestNodeData | SkillNodeData>[];
@@ -60,56 +62,72 @@ export const CanvasView = ({
   setViewMode,
   collapseAll,
   expandAll,
-}: CanvasViewProps) => (
-  <ReactFlow
-    nodes={nodes}
-    edges={edges}
-    nodeTypes={nodeTypes}
-    className={clsx("custom-canvas", className)}
-    edgeTypes={edgeTypes}
-    onNodesChange={onNodesChange}
-    onEdgesChange={onEdgesChange}
-    onPaneClick={onPaneClick}
-    onNodeClick={onNodeClick}
-    onConnect={onConnect}
-    zoomOnScroll={false}
-    panOnScroll={true}
-    minZoom={0.2}
-    maxZoom={2}
-    fitView
-  >
-    <Background color="#aaa" gap={30} size={0.5} />
+}: CanvasViewProps) => {
+  const navigate = useNavigate();
 
-    <Controls position="bottom-right" />
+  return (
+    <ReactFlow
+      nodes={nodes}
+      edges={edges}
+      nodeTypes={nodeTypes}
+      className={clsx("custom-canvas", className)}
+      edgeTypes={edgeTypes}
+      onNodesChange={onNodesChange}
+      onEdgesChange={onEdgesChange}
+      onPaneClick={onPaneClick}
+      onNodeClick={onNodeClick}
+      onConnect={onConnect}
+      zoomOnScroll={false}
+      panOnScroll={true}
+      minZoom={0.2}
+      maxZoom={2}
+      fitView
+    >
+      <Background color="#aaa" gap={30} size={0.5} />
 
-    <MiniMap
-      nodeStrokeWidth={1}
-      position="bottom-left"
-      nodeColor={(node) => {
-        return node.type === "skill" ? "#ff0000" : "#aaa";
-      }}
-    />
+      <Controls position="bottom-right" />
 
-    {/* Mode Indicators */}
-    {cursorMode === "create" && (
-      <div className="absolute top-4 left-4 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium z-10 animate-pulse">
-        ➕ Click anywhere to create a quest
+      <MiniMap
+        nodeStrokeWidth={1}
+        position="bottom-left"
+        nodeColor={(node) => {
+          return node.type === "skill" ? "#ff0000" : "#aaa";
+        }}
+      />
+
+      <div className="absolute top-4 left-4 z-20">
+        <Button
+          variant="outline"
+          size="sm"
+          aria-label="Retour au tableau de bord"
+          onClick={() => navigate("/")}
+          className="bg-[#0C0821] hover:bg-gray-700 text-white hover:text-white px-4 py-2 rounded-lg shadow-lg transition-colors cursor-pointer duration-200 flex items-center gap-2"
+        >
+          Retour
+        </Button>
       </div>
-    )}
 
-    {cursorMode === "connect" && (
-      <div className="absolute top-4 left-4 bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium z-10 animate-pulse">
-        🔗 Click quests to connect them
-        {/* {connectionStart && <span className="ml-2 text-purple-600">→ Select target quest</span>} */}
-      </div>
-    )}
+      {/* Mode Indicators */}
+      {cursorMode === "create" && (
+        <div className="absolute top-4 left-20 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium z-10 animate-pulse">
+          ➕ Click anywhere to create a quest
+        </div>
+      )}
 
-    <FloatingToolbox
-      cursorMode={cursorMode}
-      setCursorMode={setCursorMode}
-      setViewMode={setViewMode}
-      collapseAll={collapseAll}
-      expandAll={expandAll}
-    />
-  </ReactFlow>
-);
+      {cursorMode === "connect" && (
+        <div className="absolute top-4 left-20 bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium z-10 animate-pulse">
+          🔗 Click quests to connect them
+          {/* {connectionStart && <span className="ml-2 text-purple-600">→ Select target quest</span>} */}
+        </div>
+      )}
+
+      <FloatingToolbox
+        cursorMode={cursorMode}
+        setCursorMode={setCursorMode}
+        setViewMode={setViewMode}
+        collapseAll={collapseAll}
+        expandAll={expandAll}
+      />
+    </ReactFlow>
+  );
+};
