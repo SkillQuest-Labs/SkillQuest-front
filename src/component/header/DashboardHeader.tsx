@@ -12,7 +12,7 @@ export const DashboardHeader = ({ coins }: DashboardHeaderProps) => {
           <span className="text-black font-bold">{coins}</span>
         </div>
         <Link
-          to="/store"
+          to="/dashboard/store"
           className="flex items-center gap-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 hover:scale-105 text-white text-sm font-medium rounded-lg shadow-md transition-all duration-200 transform"
         >
           <Store size={18} />
