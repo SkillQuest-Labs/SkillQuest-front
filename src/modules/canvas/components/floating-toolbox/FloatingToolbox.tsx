@@ -20,26 +20,5 @@ export const FloatingToolbox = ({
         expandAll={expandAll}
       />
     ))}
-
-    {/* Divider */}
-    <div className="h-px bg-gray-200 my-1" />
-
-    {/* Generate Roadmap Tool */}
-    {/* <div className="group relative">
-      <Button
-        onClick={() => {
-          setViewMode("timeline");
-          setCursorMode("normal");
-        }}
-        variant="ghost"
-        size="sm"
-        className="w-10 h-10 p-0 rounded-lg hover:bg-green-100 hover:text-green-700 transition-all duration-200"
-      >
-        <Map className="w-5 h-5" />
-      </Button>
-      <div className="absolute right-12 top-1/2 -translate-y-1/2 bg-gray-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
-        Generate Roadmap
-      </div>
-    </div> */}
   </div>
 );
