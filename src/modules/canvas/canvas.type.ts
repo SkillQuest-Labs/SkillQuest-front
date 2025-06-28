@@ -1,4 +1,9 @@
-export type CursorModeType = "normal" | "create" | "connect";
+export type CursorModeType =
+  | "normal"
+  | "create"
+  | "connect"
+  | "collapse"
+  | "expand";
 export type ViewModeType = "canvas" | "timeline";
 
 export type FloatingToolboxProps = {

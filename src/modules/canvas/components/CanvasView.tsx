@@ -19,7 +19,7 @@ import type {
 import { SkillNode } from "./SkillNode";
 import { QuestNode } from "./QuestNode";
 import { CustomEdge } from "./CustomEdge";
-import { FloatingToolbox } from "./FloatingToolbox";
+import { FloatingToolbox } from "./floating-toolbox/FloatingToolbox";
 
 type CanvasViewProps = {
   nodes: Node<QuestNodeData | SkillNodeData>[];
