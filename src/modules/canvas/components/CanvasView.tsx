@@ -109,13 +109,13 @@ export const CanvasView = ({
 
       {/* Mode Indicators */}
       {cursorMode === "create" && (
-        <div className="absolute top-4 left-20 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium z-10 animate-pulse">
+        <div className="absolute top-5 left-30 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium z-10 animate-pulse">
           ➕ Click anywhere to create a quest
         </div>
       )}
 
       {cursorMode === "connect" && (
-        <div className="absolute top-4 left-20 bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium z-10 animate-pulse">
+        <div className="absolute top-5 left-30 bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium z-10 animate-pulse">
           🔗 Click quests to connect them
           {/* {connectionStart && <span className="ml-2 text-purple-600">→ Select target quest</span>} */}
         </div>

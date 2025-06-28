@@ -21,7 +21,7 @@ export type ToolBoxItem = {
       collapseAll?: () => void;
       expandAll?: () => void;
       setViewMode?: (mode: ViewModeType) => void;
-    }
+    },
   ) => void;
 };
 
