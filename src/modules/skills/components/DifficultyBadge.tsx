@@ -1,5 +1,5 @@
 import { Badge } from "@/shared/components/ui/badge";
-import { cn } from "@/shared/lib/utils";
+import { cn } from "../../../shared/utils/helpers";
 
 interface DifficultyBadgeProps {
   difficulty: "Facile" | "Moyen" | "Difficile";

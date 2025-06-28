@@ -23,14 +23,14 @@ export type SkillConfig = {
 
 export type SkillNodeData = {
   config: SkillConfig;
-  onUpdate: (field: string, value: any) => void;
+  onUpdate?: (field: string, value: any) => void;
 };
 
 export type ProgressStatus = "not-started" | "in-progress" | "completed";
 export type QuestType = "main" | "side" | "challenge" | "reward";
 export type QuestDifficulty = "Easy" | "Medium" | "Hard";
 
-export type QuestData = {
+export type QuestNodeData = {
   title: string;
   xp: number;
   difficulty: QuestDifficulty;
@@ -42,4 +42,12 @@ export type QuestData = {
   isCollapsed?: boolean;
   childCount?: number;
   onUpdate?: (field: string, value: any) => void;
+  onDelete?: (id: string) => void;
+};
+
+export type QuestCardProps = {
+  data: QuestNodeData;
+  onDelete: () => void;
+  targetHandle?: React.ReactNode;
+  sourceHandle?: React.ReactNode;
 };

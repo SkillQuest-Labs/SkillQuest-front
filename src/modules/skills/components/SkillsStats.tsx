@@ -1,4 +1,4 @@
-import { cn } from "@/shared/lib/utils";
+import { cn } from "../../../shared/utils/helpers";
 import type { Skill } from "../skills.type";
 
 interface SkillsStatsProps {
