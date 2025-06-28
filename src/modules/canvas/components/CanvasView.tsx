@@ -100,7 +100,7 @@ export const CanvasView = ({
           variant="outline"
           size="sm"
           aria-label="Retour au tableau de bord"
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/dashboard")}
           className="bg-[#0C0821] hover:bg-gray-700 text-white hover:text-white px-4 py-2 rounded-lg shadow-lg transition-colors cursor-pointer duration-200 flex items-center gap-2"
         >
           Retour

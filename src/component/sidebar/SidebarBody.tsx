@@ -10,7 +10,7 @@ export const SidebarBody = () => {
       <ul className="flex flex-col gap-1">
         <li>
           <NavLink
-            to="/"
+            to="/dashboard"
             className={({ isActive }) =>
               `px-6 py-3 flex items-center ${
                 isCollapsed ? "justify-center" : "gap-3"
@@ -25,7 +25,7 @@ export const SidebarBody = () => {
         </li>
         <li>
           <NavLink
-            to="/skills"
+            to="/dashboard/skills"
             className={({ isActive }) =>
               `px-6 py-3 flex items-center ${
                 isCollapsed ? "justify-center" : "gap-3"
@@ -40,7 +40,7 @@ export const SidebarBody = () => {
         </li>
         <li>
           <NavLink
-            to="/profil"
+            to="/dashboard/profil"
             className={({ isActive }) =>
               `px-6 py-3 flex items-center ${
                 isCollapsed ? "justify-center" : "gap-3"
@@ -55,7 +55,7 @@ export const SidebarBody = () => {
         </li>
         <li>
           <NavLink
-            to="/canvas"
+            to="/dashboard/canvas"
             className={({ isActive }) =>
               `px-6 py-3 flex items-center ${
                 isCollapsed ? "justify-center" : "gap-3"

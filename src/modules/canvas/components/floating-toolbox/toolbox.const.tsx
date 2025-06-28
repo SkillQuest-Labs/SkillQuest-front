@@ -1,4 +1,11 @@
-import { ChevronDown, ChevronUp, Link, Plus, Target, Map } from "lucide-react";
+import {
+  Link,
+  Plus,
+  Target,
+  Map,
+  ChevronsDownUp,
+  Maximize2,
+} from "lucide-react";
 import type { CursorModeType, ViewModeType } from "../../canvas.type";
 
 export type ToolBoxItem = {
@@ -49,7 +56,7 @@ export const tools: ToolboxList = [
   },
   {
     id: "collapse",
-    icon: <ChevronUp className="w-5 h-5" />,
+    icon: <ChevronsDownUp className="w-5 h-5" />,
     tooltip: "Collapse All Quests",
     activeColor: "bg-gray-600 hover:bg-gray-700 text-white",
     isActive: (mode) => mode === "collapse",
@@ -60,7 +67,7 @@ export const tools: ToolboxList = [
   },
   {
     id: "expand",
-    icon: <ChevronDown className="w-5 h-5 transform rotate-180" />,
+    icon: <Maximize2 className="w-5 h-5 transform rotate-180" />,
     tooltip: "Expand All Quests",
     activeColor: "bg-gray-600 hover:bg-gray-700 text-white",
     isActive: (mode) => mode === "expand",
