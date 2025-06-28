@@ -62,16 +62,16 @@ export function SkillsStats({ skills, className }: SkillsStatsProps) {
   ];
 
   return (
-    <div
-      className={cn(
-        "grid grid-cols-3 md:grid-cols-6 gap-2",
-        className,
-      )}
-    >
+    <div className={cn("grid grid-cols-3 md:grid-cols-6 gap-2", className)}>
       {statCards.map((stat, index) => (
-        <div key={index} className="text-center p-2 rounded-md border bg-card/50">
+        <div
+          key={index}
+          className="text-center p-2 rounded-md border bg-card/50"
+        >
           <div className={cn("text-sm mb-1", stat.color)}>{stat.icon}</div>
-          <div className="text-sm font-semibold text-foreground">{stat.value}</div>
+          <div className="text-sm font-semibold text-foreground">
+            {stat.value}
+          </div>
           <div className="text-xs text-muted-foreground">{stat.title}</div>
         </div>
       ))}

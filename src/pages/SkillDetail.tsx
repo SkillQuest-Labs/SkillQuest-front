@@ -8,6 +8,7 @@ import { StatusBadge } from "@/modules/skills/components/StatusBadge";
 import { ProgressBar } from "@/modules/skills/components/ProgressBar";
 import { ArrowLeft, Edit, Play, Calendar, Clock, Tag } from "lucide-react";
 
+
 export default function SkillDetail() {
   const { skillId } = useParams<{ skillId: string }>();
   const { skills } = useSkills();
@@ -110,12 +111,15 @@ export default function SkillDetail() {
             <div className="flex flex-col gap-3">
               <Button
                 onClick={() => navigate(`/canvas?skillId=${skill.id}`)}
-                className="bg-primary hover:bg-primary/90"
+                className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white shadow-lg transition-all duration-300 transform hover:scale-105"
               >
-                <Edit className="h-4 w-4 mr-2" />
-                Modifier
+                <Edit className="h-4 w-4 mr-2 relative z-10" />
+                <span className="relative z-10">Modifier</span>
               </Button>
-              <Button variant="outline">
+              <Button
+                variant="outline"
+                className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white border-0 shadow-lg transition-all duration-300 transform hover:scale-105"
+              >
                 <Play className="h-4 w-4 mr-2" />
                 Commencer
               </Button>

@@ -12,6 +12,7 @@ import {
 import { SkillCard } from "./SkillCard";
 import { SkillsStats } from "./SkillsStats";
 import { useNavigate } from "react-router-dom";
+import { SparkleParticles } from "./SparkleParticles";
 
 type FilterStatus =
   | "all"
@@ -83,25 +84,20 @@ export function SkillsList() {
     <div className="bg-background">
       <div className="container mx-auto px-6 py-8 space-y-8">
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          <div className="space-y-2">
-            <h1 className="text-3xl font-bold text-foreground">
-              🎯 Mes Skills
-            </h1>
-            <p className="text-muted-foreground">
-              Organisez votre apprentissage avec des arbres de compétences
-              ludiques
-            </p>
+        <div className="flex flex-row items-center justify-between gap-4 flex-wrap">
+          <h1 className="text-3xl font-bold text-foreground flex items-center">
+            🎯 Mes Skills
+          </h1>
+          <div className="relative w-[180px]">
+            <SparkleParticles />
+            <Button
+              onClick={handleCreateSkill}
+              size="sm"
+              className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-white shadow-lg transition-all duration-300 transform hover:scale-105 w-full flex justify-center items-center text-base font-semibold"
+            >
+              <span className="relative z-10">Créer un skill</span>
+            </Button>
           </div>
-
-          <Button
-            onClick={handleCreateSkill}
-            size="lg"
-            className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm"
-          >
-            <span className="mr-2">✨</span>
-            Créer un skill
-          </Button>
         </div>
 
         {/* Stats Section */}
