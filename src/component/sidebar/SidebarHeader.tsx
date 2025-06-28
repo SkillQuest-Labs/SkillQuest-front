@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { Menu, X } from "lucide-react";
 import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
+import { Button } from "@/shared/components/ui/button";
 
 export const SidebarHeader = () => {
   const { isCollapsed, toggleCollapse } = useSidebarStore();
@@ -28,14 +29,19 @@ export const SidebarHeader = () => {
         )}
       </Link>
 
-      <button
+      <Button
+        variant="ghost"
         onClick={() => toggleCollapse()}
-        className={`${
+        className={`cursor-pointer ${
           isCollapsed ? "" : "ml-auto"
         } hover:bg-gray-700 p-2 rounded`}
       >
-        {!isCollapsed ? <X size={20} /> : <Menu size={20} />}
-      </button>
+        {!isCollapsed ? (
+          <X size={20} color="white" />
+        ) : (
+          <Menu size={20} color="white" />
+        )}
+      </Button>
     </div>
   );
 };
