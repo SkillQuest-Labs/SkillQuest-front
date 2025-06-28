@@ -8,7 +8,6 @@ import { StatusBadge } from "@/modules/skills/components/StatusBadge";
 import { ProgressBar } from "@/modules/skills/components/ProgressBar";
 import { ArrowLeft, Edit, Play, Calendar, Clock, Tag } from "lucide-react";
 
-
 export default function SkillDetail() {
   const { skillId } = useParams<{ skillId: string }>();
   const { skills } = useSkills();
