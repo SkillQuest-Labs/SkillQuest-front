@@ -75,7 +75,7 @@ export const tools: ToolboxList = [
     tooltip: "Generate Roadmap",
     activeColor: "bg-green-600 hover:bg-green-700 text-white",
     isActive: () => false, // Always inactive, handled separately
-    handleToolClick: (setCursorMode, current, ctx) => {
+    handleToolClick: (setCursorMode, _, ctx) => {
       ctx?.setViewMode?.("timeline");
       setCursorMode("normal");
     },
