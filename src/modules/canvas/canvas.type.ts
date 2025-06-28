@@ -1,10 +1,17 @@
-export type CursorModeType = "normal" | "create" | "connect";
+export type CursorModeType =
+  | "normal"
+  | "create"
+  | "connect"
+  | "collapse"
+  | "expand";
 export type ViewModeType = "canvas" | "timeline";
 
 export type FloatingToolboxProps = {
   cursorMode: CursorModeType;
   setCursorMode: (mode: CursorModeType) => void;
   setViewMode: (mode: ViewModeType) => void;
+  collapseAll: () => void;
+  expandAll: () => void;
 };
 
 export type SkillConfigType = {
@@ -50,4 +57,5 @@ export type QuestCardProps = {
   onDelete: () => void;
   targetHandle?: React.ReactNode;
   sourceHandle?: React.ReactNode;
+  isCollapsed?: boolean;
 };
