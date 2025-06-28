@@ -1,7 +1,10 @@
+import { useSkills } from "@/modules/skills/hooks/use-skills";
 import { useParams, useNavigate } from "react-router-dom";
-import { useSkills } from "@/modules/skills/hooks/use.Skills";
 import { Button } from "@/shared/components/ui/button";
-import { Card } from "@/shared/components/ui/card";
+import {
+  Card,
+} from "@/shared/components/ui/card";
+
 import { DifficultyBadge } from "@/modules/skills/components/DifficultyBadge";
 import { StatusBadge } from "@/modules/skills/components/StatusBadge";
 import { ProgressBar } from "@/modules/skills/components/ProgressBar";

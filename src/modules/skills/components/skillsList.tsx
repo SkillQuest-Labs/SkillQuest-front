@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useSkills } from "../hooks/use.Skills";
+import { useSkills } from "../hooks/use-skills";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import {
