@@ -10,6 +10,9 @@ export interface IRoutes {
   store: IRoute;
   canvas: IRoute;
   notfound: IRoute;
+  signIn: IRoute;
+  signUp: IRoute;
+  unauthorized: IRoute;
 }
 
 export const routes: IRoutes = {
@@ -33,8 +36,20 @@ export const routes: IRoutes = {
     path: "/canvas",
     display: "Canvas",
   },
+  signIn: {
+    path: "/sign-in",
+    display: "Sign In",
+  },
+  signUp: {
+    path: "/sign-up",
+    display: "Sign Up",
+  },
   notfound: {
     path: "*",
     display: "Not found",
+  },
+  unauthorized: {
+    path: "/unauthorized",
+    display: "Unauthorized",
   },
 };
