@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import { MiddleWare } from "./middleware";
+import { ProtectedRoute } from "./protected-route";
 import { routes } from "./router.const";
 import { DashboardLayout } from "@/pages/dashboard/DashboardLayout";
 import { DashboardUser } from "@/pages/dashboard/DashboardUser";
@@ -11,7 +11,7 @@ import { NotFoundPage } from "@/pages/404";
 
 export const router = createBrowserRouter([
   {
-    element: <MiddleWare />, // Middleware component to verify auth permission
+    element: <ProtectedRoute />, // Middleware component to verify auth permission
     children: [
       {
         path: routes.dashboard.path,
