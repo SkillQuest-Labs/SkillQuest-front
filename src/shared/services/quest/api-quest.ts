@@ -1,11 +1,11 @@
-import { ConstantsApi } from "@/shared/constante/constante";
+import { Constants } from "@/shared/constante/api-constante";
 import type { GetQuestResponse } from "./api-quest.type";
 import { useApi } from "../useApi";
 
 export const useGetQuests = (skillId: string) => {
   const options = {
     method: "GET",
-    url: `${ConstantsApi.API_BASE_URL}/quests/${skillId}`,
+    url: `${Constants.API_BASE_URL}/quests/${skillId}`,
   };
 
   const { data, isLoading: loading, error } = useApi<GetQuestResponse>(options, ["quests"]); // add the userId to the cache key

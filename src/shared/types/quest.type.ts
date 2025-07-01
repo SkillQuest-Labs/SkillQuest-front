@@ -1,4 +1,4 @@
-import type { Difficulty } from "../enums/quest-difficulty.enum";
+export type Difficulty = "Easy" | "Medium" | "Hard";
 
 export type Quest = {
   id?: string;
