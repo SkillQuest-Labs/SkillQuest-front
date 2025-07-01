@@ -22,7 +22,7 @@ import { CustomEdge } from "./CustomEdge";
 import { FloatingToolbox } from "./floating-toolbox/FloatingToolbox";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/shared/components/ui/button";
-import { Save } from "lucide-react";
+import { ChevronLeft, Save } from "lucide-react";
 import { useState } from "react";
 import { SaveLoader } from "@/component/icons/save-loader";
 
@@ -103,14 +103,22 @@ export const CanvasView = ({
       <Controls position="bottom-right" />
 
       <MiniMap
-        nodeStrokeWidth={1}
+        nodeStrokeWidth={2}
         position="bottom-left"
         nodeColor={(node) => {
-          return node.type === "skill" ? "#ff0000" : "#aaa";
+          return node.type === "skill" ? "#3b82f6" : "#10b981";
         }}
+        style={{
+          backgroundColor: "rgba(12, 8, 33, 0.8)",
+          border: "2px solid rgba(59, 130, 246, 0.3)",
+          borderRadius: "12px",
+          backdropFilter: "blur(8px)",
+        }}
+        maskColor="rgba(12, 8, 33, 0.4)"
+        className="shadow-2xl"
       />
 
-      <div className="absolute top-4 left-4 z-20">
+      <div className="absolute top-6 left-4 z-20">
         <Button
           variant="outline"
           size="sm"
@@ -118,6 +126,7 @@ export const CanvasView = ({
           onClick={() => navigate("/dashboard")}
           className="bg-[#0C0821] hover:bg-gray-700 text-white hover:text-white px-4 py-2 rounded-lg shadow-lg transition-colors cursor-pointer duration-200 flex items-center gap-2"
         >
+          <ChevronLeft className="w-5 h-5" />
           Retour
         </Button>
       </div>
@@ -126,7 +135,7 @@ export const CanvasView = ({
         <Button
           variant={isSaving ? "outline" : "default"}
           size="sm"
-          aria-label="Save Creation"
+          aria-label="Save"
           disabled={isSaving}
           onClick={handleSave}
           className={clsx(
@@ -142,13 +151,21 @@ export const CanvasView = ({
               </>
             ) : (
               <>
-                <span className="font-bold text-sm">Save Creation</span>
+                <span className="font-bold text-sm">Save</span>
                 <Save className="w-6 h-6" />
               </>
             )}
           </span>
         </Button>
       </div>
+
+      <FloatingToolbox
+        cursorMode={cursorMode}
+        setCursorMode={setCursorMode}
+        setViewMode={setViewMode}
+        collapseAll={collapseAll}
+        expandAll={expandAll}
+      />
 
       {/* Mode Indicators */}
       {cursorMode === "create" && (
@@ -163,14 +180,6 @@ export const CanvasView = ({
           {/* {connectionStart && <span className="ml-2 text-purple-600">→ Select target quest</span>} */}
         </div>
       )}
-
-      <FloatingToolbox
-        cursorMode={cursorMode}
-        setCursorMode={setCursorMode}
-        setViewMode={setViewMode}
-        collapseAll={collapseAll}
-        expandAll={expandAll}
-      />
     </ReactFlow>
   );
 };
