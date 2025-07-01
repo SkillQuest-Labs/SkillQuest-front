@@ -22,6 +22,9 @@ import { CustomEdge } from "./CustomEdge";
 import { FloatingToolbox } from "./floating-toolbox/FloatingToolbox";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/shared/components/ui/button";
+import { Save } from "lucide-react";
+import { useState } from "react";
+import { SaveLoader } from "@/component/icons/save-loader";
 
 type CanvasViewProps = {
   nodes: Node<QuestNodeData | SkillNodeData>[];
@@ -65,6 +68,18 @@ export const CanvasView = ({
 }: CanvasViewProps) => {
   const navigate = useNavigate();
 
+  const [isSaving, setSaving] = useState(false);
+
+  const handleSave = () => {
+    setSaving(true);
+    // Simulate save operation
+    setTimeout(() => {
+      setSaving(false);
+      // Here you would typically handle the save logic, e.g., API call
+      console.log("Canvas saved!");
+    }, 2000); // Simulating a 2-second save operation
+  };
+
   return (
     <ReactFlow
       nodes={nodes}
@@ -104,6 +119,34 @@ export const CanvasView = ({
           className="bg-[#0C0821] hover:bg-gray-700 text-white hover:text-white px-4 py-2 rounded-lg shadow-lg transition-colors cursor-pointer duration-200 flex items-center gap-2"
         >
           Retour
+        </Button>
+      </div>
+
+      <div className="absolute top-6 right-32 z-20">
+        <Button
+          variant={isSaving ? "outline" : "default"}
+          size="sm"
+          aria-label="Save Creation"
+          disabled={isSaving}
+          onClick={handleSave}
+          className={clsx(
+            "bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-5 py-2 rounded-xl cursor-pointer shadow-xl transition-all duration-200 flex items-center gap-2 border-2 border-white/80",
+            isSaving && "opacity-60 cursor-not-allowed"
+          )}
+        >
+          <span className="font-semibold tracking-wide flex items-center gap-2">
+            {isSaving ? (
+              <>
+                <span className="font-bold text-sm">Saving...</span>
+                <SaveLoader />
+              </>
+            ) : (
+              <>
+                <span className="font-bold text-sm">Save Creation</span>
+                <Save className="w-6 h-6" />
+              </>
+            )}
+          </span>
         </Button>
       </div>
 
