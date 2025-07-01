@@ -1,4 +1,1 @@
-
-export const useGetQuests = () => {
-    
-}
+export const useGetQuests = () => {};
