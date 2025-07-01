@@ -10,15 +10,7 @@ export interface CustomEdgeProps {
   markerEnd?: string;
 }
 
-export function CustomEdge({
-  id,
-  sourceX,
-  sourceY,
-  targetX,
-  targetY,
-  style,
-  markerEnd,
-}: CustomEdgeProps) {
+export function CustomEdge({ id, sourceX, sourceY, targetX, targetY, style, markerEnd }: CustomEdgeProps) {
   const [edgePath] = getBezierPath({ sourceX, sourceY, targetX, targetY });
 
   return (
