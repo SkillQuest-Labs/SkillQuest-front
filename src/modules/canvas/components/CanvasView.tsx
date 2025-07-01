@@ -72,12 +72,9 @@ export const CanvasView = ({
 
   const handleSave = () => {
     setSaving(true);
-    // Simulate save operation
     setTimeout(() => {
       setSaving(false);
-      // Here you would typically handle the save logic, e.g., API call
-      console.log("Canvas saved!");
-    }, 2000); // Simulating a 2-second save operation
+    }, 2000);
   };
 
   return (
