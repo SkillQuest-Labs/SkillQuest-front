@@ -1,11 +1,4 @@
-import {
-  Link,
-  Plus,
-  Target,
-  Map,
-  ChevronsDownUp,
-  Maximize2,
-} from "lucide-react";
+import { Link, Plus, Target, Map, ChevronsDownUp, Maximize2 } from "lucide-react";
 import type { CursorModeType, ViewModeType } from "../../canvas.type";
 
 export type ToolBoxItem = {
@@ -34,8 +27,7 @@ export const tools: ToolboxList = [
     tooltip: "Create Quest",
     activeColor: "bg-blue-600 hover:bg-blue-700 text-white",
     isActive: (mode) => mode === "create",
-    handleToolClick: (setCursorMode, current) =>
-      setCursorMode(current === "create" ? "normal" : "create"),
+    handleToolClick: (setCursorMode, current) => setCursorMode(current === "create" ? "normal" : "create"),
   },
   {
     id: "connect",
@@ -43,8 +35,7 @@ export const tools: ToolboxList = [
     tooltip: "Link Quests",
     activeColor: "bg-purple-600 hover:bg-purple-700 text-white",
     isActive: (mode) => mode === "connect",
-    handleToolClick: (setCursorMode, current) =>
-      setCursorMode(current === "connect" ? "normal" : "connect"),
+    handleToolClick: (setCursorMode, current) => setCursorMode(current === "connect" ? "normal" : "connect"),
   },
   {
     id: "select",

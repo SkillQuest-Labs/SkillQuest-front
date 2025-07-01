@@ -19,9 +19,7 @@ export const SidebarBody = () => {
             }
           >
             <Home size={20} />
-            {!isCollapsed && (
-              <span className="text-sm font-medium">Accueil</span>
-            )}
+            {!isCollapsed && <span className="text-sm font-medium">Accueil</span>}
           </NavLink>
         </li>
         <li>
@@ -34,9 +32,7 @@ export const SidebarBody = () => {
             }
           >
             <Star size={20} />
-            {!isCollapsed && (
-              <span className="text-sm font-medium">Skills</span>
-            )}
+            {!isCollapsed && <span className="text-sm font-medium">Skills</span>}
           </NavLink>
         </li>
         <li>
@@ -49,9 +45,7 @@ export const SidebarBody = () => {
             }
           >
             <User size={20} />
-            {!isCollapsed && (
-              <span className="text-sm font-medium">Profil</span>
-            )}
+            {!isCollapsed && <span className="text-sm font-medium">Profil</span>}
           </NavLink>
         </li>
         <li>
@@ -64,9 +58,7 @@ export const SidebarBody = () => {
             }
           >
             <LayoutTemplate size={20} />
-            {!isCollapsed && (
-              <span className="text-sm font-medium">Canvas</span>
-            )}
+            {!isCollapsed && <span className="text-sm font-medium">Canvas</span>}
           </NavLink>
         </li>
       </ul>

@@ -1,13 +1,6 @@
 import type { AvatarHudProps } from "./avatarHud.types";
 
-export const AvatarHud = ({
-  username,
-  role,
-  avatarUrl,
-  level,
-  xpUser,
-  xpMax,
-}: AvatarHudProps) => {
+export const AvatarHud = ({ username, role, avatarUrl, level, xpUser, xpMax }: AvatarHudProps) => {
   const xpPercent = Math.min((xpUser / xpMax) * 100, 100);
 
   return (
@@ -38,9 +31,7 @@ export const AvatarHud = ({
             </div>
             <div className="flex justify-between mt-1 px-1 text-[0.75rem] font-medium text-slate-300">
               <span className="hover:text-slate-100 transition-colors duration-200">{`${xpUser} / ${xpMax} XP`}</span>
-              <span className="hover:text-slate-100 transition-colors duration-200">
-                LVL {level}
-              </span>
+              <span className="hover:text-slate-100 transition-colors duration-200">LVL {level}</span>
             </div>
           </div>
         </div>

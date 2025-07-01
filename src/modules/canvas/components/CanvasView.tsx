@@ -10,12 +10,7 @@ import {
   type OnEdgesChange,
   type OnNodesChange,
 } from "@xyflow/react";
-import type {
-  CursorModeType,
-  QuestNodeData,
-  SkillNodeData,
-  ViewModeType,
-} from "../canvas.type";
+import type { CursorModeType, QuestNodeData, SkillNodeData, ViewModeType } from "../canvas.type";
 import { SkillNode } from "./SkillNode";
 import { QuestNode } from "./QuestNode";
 import { CustomEdge } from "./CustomEdge";
