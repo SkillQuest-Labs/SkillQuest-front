@@ -10,12 +10,7 @@ import {
   type OnEdgesChange,
   type OnNodesChange,
 } from "@xyflow/react";
-import type {
-  CursorModeType,
-  QuestNodeData,
-  SkillNodeData,
-  ViewModeType,
-} from "../canvas.type";
+import type { CursorModeType, QuestNodeData, SkillNodeData, ViewModeType } from "../canvas.type";
 import { SkillNode } from "./SkillNode";
 import { QuestNode } from "./QuestNode";
 import { CustomEdge } from "./CustomEdge";
@@ -79,6 +74,12 @@ export const CanvasView = ({
 
   return (
     <ReactFlow
+      onInit={(reactFlowInstance) => {
+        reactFlowInstance.setViewport(
+          { x: 0, y: 0, zoom: 0.75 },
+          { duration: 800 }
+        );
+      }}
       nodes={nodes}
       edges={edges}
       nodeTypes={nodeTypes}
