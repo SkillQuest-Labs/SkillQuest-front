@@ -67,6 +67,12 @@ export const CanvasView = ({
 
   return (
     <ReactFlow
+      onInit={(reactFlowInstance) => {
+        reactFlowInstance.setViewport(
+          { x: 0, y: 0, zoom: 0.75 },
+          { duration: 800 }
+        );
+      }}
       nodes={nodes}
       edges={edges}
       nodeTypes={nodeTypes}
