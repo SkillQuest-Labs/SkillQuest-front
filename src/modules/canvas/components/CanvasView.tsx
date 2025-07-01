@@ -141,7 +141,7 @@ export const CanvasView = ({
           <span className="font-semibold tracking-wide flex items-center gap-2">
             {isSaving ? (
               <>
-                <span className="font-bold text-sm">Saving...</span>
+                <span className="font-bold text-sm">Saving</span>
                 <SaveLoader />
               </>
             ) : (
