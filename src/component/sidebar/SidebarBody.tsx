@@ -10,62 +10,55 @@ export const SidebarBody = () => {
       <ul className="flex flex-col gap-1">
         <li>
           <NavLink
-            to="/"
+            to="/dashboard"
+            end
             className={({ isActive }) =>
-              `px-6 py-3 flex items-center ${
+              `px-4 py-2 flex items-center transition-all duration-300 ease-in-out transform hover:scale-96  ${
                 isCollapsed ? "justify-center" : "gap-3"
-              } hover:bg-gray-700 ${isActive ? "bg-gray-700 font-bold" : ""}`
+              } hover:bg-gray-700 hover:shadow-lg ${isActive ? "bg-gray-700 shadow-lg scale-100" : ""}`
             }
           >
             <Home size={20} />
-            {!isCollapsed && (
-              <span className="text-sm font-medium">Accueil</span>
-            )}
+            {!isCollapsed && <span className="text-sm font-medium">Accueil</span>}
           </NavLink>
         </li>
         <li>
           <NavLink
-            to="/skills"
+            to="/dashboard/skills"
             className={({ isActive }) =>
-              `px-6 py-3 flex items-center ${
+              `px-4 py-2 flex items-center transition-all duration-300 ease-in-out transform hover:scale-96 ${
                 isCollapsed ? "justify-center" : "gap-3"
-              } hover:bg-gray-700 ${isActive ? "bg-gray-700 font-bold" : ""}`
+              } hover:bg-gray-700 hover:shadow-lg ${isActive ? "bg-gray-700 shadow-lg scale-100" : ""}`
             }
           >
             <Star size={20} />
-            {!isCollapsed && (
-              <span className="text-sm font-medium">Skills</span>
-            )}
+            {!isCollapsed && <span className="text-sm font-medium">Skills</span>}
           </NavLink>
         </li>
         <li>
           <NavLink
-            to="/profil"
+            to="/dashboard/profil"
             className={({ isActive }) =>
-              `px-6 py-3 flex items-center ${
+              `px-4 py-2 flex items-center transition-all duration-300 ease-in-out transform hover:scale-96 ${
                 isCollapsed ? "justify-center" : "gap-3"
-              } hover:bg-gray-700 ${isActive ? "bg-gray-700 font-bold" : ""}`
+              } hover:bg-gray-700 hover:shadow-lg ${isActive ? "bg-gray-700 shadow-lg scale-100" : ""}`
             }
           >
             <User size={20} />
-            {!isCollapsed && (
-              <span className="text-sm font-medium">Profil</span>
-            )}
+            {!isCollapsed && <span className="text-sm font-medium">Profil</span>}
           </NavLink>
         </li>
         <li>
           <NavLink
             to="/canvas"
             className={({ isActive }) =>
-              `px-6 py-3 flex items-center ${
+              `px-4 py-2 flex items-center transition-all duration-300 ease-in-out transform hover:scale-96 ${
                 isCollapsed ? "justify-center" : "gap-3"
-              } hover:bg-gray-700 ${isActive ? "bg-gray-700 font-bold" : ""}`
+              } hover:bg-gray-700 hover:shadow-lg ${isActive ? "bg-gray-700 shadow-lg scale-100" : ""}`
             }
           >
             <LayoutTemplate size={20} />
-            {!isCollapsed && (
-              <span className="text-sm font-medium">Canvas</span>
-            )}
+            {!isCollapsed && <span className="text-sm font-medium">Canvas</span>}
           </NavLink>
         </li>
       </ul>

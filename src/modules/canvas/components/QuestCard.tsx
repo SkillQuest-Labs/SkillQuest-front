@@ -1,19 +1,8 @@
 import type { QuestCardProps } from "../canvas.type";
 import { QuestCardBorderSVG } from "./animations/QuestCardBorderSVG";
-import {
-  QuestDifficultySelector,
-  QuestDescription,
-  QuestXp,
-  QuestTitle,
-  DeleteButton,
-} from "./quest-card-component";
+import { QuestDifficultySelector, QuestDescription, QuestXp, QuestTitle, DeleteButton } from "./quest-card-component";
 
-export const QuestCard = ({
-  data,
-  onDelete,
-  sourceHandle,
-  targetHandle,
-}: QuestCardProps) => {
+export const QuestCard = ({ data, onDelete, sourceHandle, targetHandle, isCollapsed = false }: QuestCardProps) => {
   return (
     <>
       {sourceHandle}
@@ -23,20 +12,18 @@ export const QuestCard = ({
 
       <DeleteButton onDelete={onDelete} />
 
-      <QuestTitle
-        title={data.title}
-        onChange={(value) => data.onUpdate?.("title", value)}
-      />
-      <QuestXp xp={data.xp} />
+      <QuestTitle title={data.title} onChange={(value) => data.onUpdate?.("title", value)} />
 
-      <QuestDifficultySelector
-        value={data.difficulty}
-        onChange={(value) => data.onUpdate?.("difficulty", value)}
-      />
-      <QuestDescription
-        description={data.description}
-        onChange={(value) => data.onUpdate?.("description", value)}
-      />
+      <div
+        className={`transition-all duration-300 overflow-hidden ${
+          isCollapsed ? "max-h-0 opacity-0" : "max-h-96 opacity-100"
+        }`}
+      >
+        <QuestXp xp={data.xp} />
+
+        <QuestDifficultySelector value={data.difficulty} onChange={(value) => data.onUpdate?.("difficulty", value)} />
+        <QuestDescription description={data.description} onChange={(value) => data.onUpdate?.("description", value)} />
+      </div>
     </>
   );
 };
