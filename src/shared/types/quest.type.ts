@@ -1,16 +1,22 @@
-export type Difficulty = "Easy" | "Medium" | "Hard";
+export type QuestDifficulty = "EASY" | "MEDIUM" | "HARD";
+
+export type QuestStatus = "LOCKED" | "UNLOCKED" | "COMPLETED";
+
+export type QuestPosition = {
+  x: number;
+  y: number;
+};
 
 export type Quest = {
   id?: string;
   title: string;
   description: string;
-  difficulty: Difficulty;
-  degree: number;
-  isUnlocked: boolean;
-  isCompleted: boolean;
+  difficulty: QuestDifficulty;
+  xp: number;
+  degree?: number;
+  status: QuestStatus;
   isSubSkill: boolean;
   completionTime: string; // ISO format (e.g., 2025-07-01T12:34:56Z)
-  positionX: number;
-  positionY: number;
+  position: QuestPosition;
   skillId: string;
 };
