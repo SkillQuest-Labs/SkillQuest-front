@@ -35,6 +35,7 @@ type CanvasViewProps = {
   className?: string;
   collapseAll: () => void;
   expandAll: () => void;
+  onSaveCanvas: () => void;
 };
 
 const nodeTypes = {
@@ -60,22 +61,16 @@ export const CanvasView = ({
   setViewMode,
   collapseAll,
   expandAll,
+  onSaveCanvas,
 }: CanvasViewProps) => {
   const navigate = useNavigate();
 
   const [isSaving, setSaving] = useState(false);
 
-  const handleSave = () => {
-    setSaving(true);
-    setTimeout(() => {
-      setSaving(false);
-    }, 2000);
-  };
-
   return (
     <ReactFlow
       onInit={(reactFlowInstance) => {
-        reactFlowInstance.setViewport({ x: 0, y: 0, zoom: 0.75 }, { duration: 800 });
+        reactFlowInstance.setViewport({ x: 0, y: 0, zoom: 0.5 }, { duration: 800 });
       }}
       nodes={nodes}
       edges={edges}
@@ -132,7 +127,7 @@ export const CanvasView = ({
           size="sm"
           aria-label="Save"
           disabled={isSaving}
-          onClick={handleSave}
+          onClick={() => onSaveCanvas()}
           className={clsx(
             "bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-5 py-2 rounded-xl cursor-pointer shadow-xl transition-all duration-200 flex items-center gap-2 border-2 border-white/80",
             isSaving && "opacity-60 cursor-not-allowed",
