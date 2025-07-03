@@ -65,7 +65,7 @@ export const CanvasView = ({
 }: CanvasViewProps) => {
   const navigate = useNavigate();
 
-  const [isSaving, setSaving] = useState(false);
+  const [isSaving] = useState(false);
 
   return (
     <ReactFlow
