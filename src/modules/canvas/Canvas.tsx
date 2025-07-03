@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import type { CursorModeType, ViewModeType } from "./canvas.type";
+import type { CursorModeType,ViewModeType } from "./canvas.type";
 import { useReactFlow, type Node } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import "./../../styles/canvas.css";
@@ -7,7 +7,7 @@ import { useCanvasGraph } from "./hooks/useCanvasGraph";
 import { usePaneInteraction } from "./hooks/usePaneInteraction";
 import { useConnectionHandler } from "./hooks/useConnectionHandler";
 import { CanvasView } from "./components/CanvasView";
-import { useCanvas } from "./hooks/useCanvas";
+import { useQuestsCreation } from "./hooks/useCanvas";
 
 export const Canvas = () => {
   const [cursorMode, setCursorMode] = useState<CursorModeType>("normal");
@@ -16,7 +16,7 @@ export const Canvas = () => {
 
   const { screenToFlowPosition } = useReactFlow();
 
-  const { saveCanvas } = useCanvas();
+  const { saveCanvas } = useQuestsCreation();
 
   const {
     nodes,

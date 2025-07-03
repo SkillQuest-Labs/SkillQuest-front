@@ -9,6 +9,7 @@ export type QuestPosition = {
 
 export type Quest = {
   id?: string;
+  questId: string;
   title: string;
   description: string;
   difficulty: QuestDifficulty;

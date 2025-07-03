@@ -18,7 +18,7 @@ export const useGetQuests = (skillId: string) => {
   };
 };
 
-export const useCreateQuest = () => {
+export const useCreateQuests = () => {
   const options = {
     method: "POST",
     url: `${Constants.API_BASE_URL}/quests`,
@@ -31,7 +31,7 @@ export const useCreateQuest = () => {
     mutateAsync: createQuest,
     isPending: loading,
     error,
-  } = useApiAsync<CreateQuestsResponse, CreateQuestInput>(options, ["quests"]);
+  } = useApiAsync<CreateQuestsResponse, CreateQuestInput[]>(options, ["quests"]);
 
   return {
     createQuest,
