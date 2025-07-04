@@ -40,7 +40,7 @@ type CanvasViewProps = {
 
 const nodeTypes = {
   skill: SkillNode,
-  quest1: QuestNode,
+  questNode: QuestNode,
 };
 
 const edgeTypes = {

@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import type { CursorModeType,ViewModeType } from "./canvas.type";
+import type { CursorModeType, ViewModeType } from "./canvas.type";
 import { useReactFlow, type Node } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import "./../../styles/canvas.css";
@@ -7,7 +7,7 @@ import { useCanvasGraph } from "./hooks/useCanvasGraph";
 import { usePaneInteraction } from "./hooks/usePaneInteraction";
 import { useConnectionHandler } from "./hooks/useConnectionHandler";
 import { CanvasView } from "./components/CanvasView";
-import { useQuestsCreation } from "./hooks/useCanvas";
+import { useSaveCanvas, useQuestsLoader } from "./hooks/useSaveCanvas";
 
 export const Canvas = () => {
   const [cursorMode, setCursorMode] = useState<CursorModeType>("normal");
@@ -16,7 +16,8 @@ export const Canvas = () => {
 
   const { screenToFlowPosition } = useReactFlow();
 
-  const { saveCanvas } = useQuestsCreation();
+  const { saveCanvas } = useSaveCanvas();
+  useQuestsLoader("uuid-skill-1234-5678-9012-345678901234"); // replace with actual skill ID
 
   const {
     nodes,
@@ -73,7 +74,7 @@ export const Canvas = () => {
         setViewMode={setViewMode}
         collapseAll={collapseAll}
         expandAll={expandAll}
-        onSaveCanvas={() => saveCanvas(nodes)}
+        onSaveCanvas={() => saveCanvas()}
       />
     </div>
   );

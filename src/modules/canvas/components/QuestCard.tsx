@@ -3,7 +3,7 @@ import { QuestCardBorderSVG } from "./animations/QuestCardBorderSVG";
 import { QuestDifficultySelector, QuestDescription, QuestXp, QuestTitle, DeleteButton } from "./quest-card-component";
 
 export const QuestCard = ({ data, onDelete, sourceHandle, targetHandle, isCollapsed = false }: QuestCardProps) => {
-  return (
+    return (
     <>
       {sourceHandle}
       {targetHandle}

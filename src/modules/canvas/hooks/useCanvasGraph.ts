@@ -16,8 +16,20 @@ export const useCanvasGraph = () => {
   const setNodes = useCanvasStore((state) => state.setNodes);
   const edges = useCanvasStore((state) => state.edges);
   const setEdges = useCanvasStore((state) => state.setEdges);
-  const addNode = useCanvasStore((s) => s.addNode);
-  const removeNode = useCanvasStore((s) => s.removeNode);
+  const addNode = useCanvasStore((state) => state.addNode);
+  const removeNode = useCanvasStore((state) => state.removeNode);
+  const markModifiedNode = useCanvasStore((state) => state.markModifiedNode);
+  const markNew = useCanvasStore((state) => state.markNew);
+
+  const updateNodeData = useCallback(
+    (id: string, field: string, value: any) => {
+      const current = useCanvasStore.getState().nodes;
+      const updated = current.map((n) => (n.id === id ? { ...n, data: { ...n.data, [field]: value } } : n));
+      setNodes(updated);
+      markModifiedNode(id);
+    },
+    [setNodes, markModifiedNode],
+  );
 
   const onNodesChange: OnNodesChange<Node<QuestNodeData | SkillNodeData>> = useCallback(
     (changes) => {
@@ -35,22 +47,12 @@ export const useCanvasGraph = () => {
     [edges, setEdges],
   );
 
-  // This function updates a specific field in the data of a node by its ID.
-  const updateNodeData = useCallback(
-    (id: string, field: string, value: any) => {
-      const current = useCanvasStore.getState().nodes;
-      const updated = current.map((n) => (n.id === id ? { ...n, data: { ...n.data, [field]: value } } : n));
-      setNodes(updated);
-    },
-    [setNodes],
-  );
-
   const addQuestNode = (position: XYPosition) => {
     const id = `quest-${Date.now()}`; // to change
 
     const newNode: Node<QuestNodeData> = {
       id: id,
-      type: "quest1", // to change type name
+      type: "questNode", // to change type name
       position,
       data: {
         kind: "quest",
@@ -66,17 +68,18 @@ export const useCanvasGraph = () => {
     };
 
     addNode(newNode);
+    markNew(id);
   };
 
   const collapseAll = useCallback(() => {
     setNodes(
-      nodes.map((node) => (node.id === "quest1" ? { ...node, data: { ...node.data, isCollapsed: true } } : node)),
+      nodes.map((node) => (node.id === "questNode" ? { ...node, data: { ...node.data, isCollapsed: true } } : node)),
     );
   }, [setNodes, nodes]);
 
   const expandAll = useCallback(() => {
     setNodes(
-      nodes.map((node) => (node.id === "quest1" ? { ...node, data: { ...node.data, isCollapsed: false } } : node)),
+      nodes.map((node) => (node.id === "questNode" ? { ...node, data: { ...node.data, isCollapsed: false } } : node)),
     );
   }, [setNodes, nodes]);
 
