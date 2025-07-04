@@ -5,10 +5,13 @@ import { useCreateQuests, useGetQuests } from "@/shared/services/quest/api-quest
 import { useCallback, useEffect } from "react";
 import { useCanvasStore } from "@/stores/quest/canvas-store";
 import { initialNodes } from "../canvas.const";
+import { useLoadingStore } from "@/stores/loading-store";
+import { showToast } from "@/component/notification/show-toast";
 
 export const useSaveCanvas = () => {
   const { createQuest } = useCreateQuests();
   const { nodes, newIds, modifiedNodesIds, clearFlags } = useCanvasStore();
+  const { setLoading } = useLoadingStore();
 
   // type guard to check if a node is a QuestNode
   const isQuestNode = (node: Node<QuestNodeData | SkillNodeData>): node is Node<QuestNodeData> =>
@@ -51,14 +54,20 @@ export const useSaveCanvas = () => {
       }));
 
     try {
+      setLoading(true, "spinner");
       if (toCreate.length > 0) {
-        const response = await createQuest(toCreate);
-        return response;
+        await createQuest(toCreate);
+        showToast({
+          title: "Quête créée avec succès !",
+          description: `${toCreate.length} quête${toCreate.length > 1 ? "s" : ""} ajoutée${toCreate.length > 1 ? "s" : ""} à votre canvas.`,
+          duration: 4000,
+          status: "error",
+        });
       }
       if (toUpdate.length > 0) {
         return "Update functionality not implemented yet";
       }
-
+      setLoading(false);
       clearFlags();
     } catch (error) {
       return error;
