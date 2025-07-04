@@ -7,7 +7,7 @@ import {
   type XYPosition,
 } from "@xyflow/react";
 import type { QuestNodeData, SkillNodeData } from "../canvas.type";
-import { useCanvasStore } from "@/stores/quest/use-canvas-store";
+import { useCanvasStore } from "@/stores/quest/canvas-store";
 import { useCallback } from "react";
 
 // This hook manages the state of nodes and edges in the canvas graph.

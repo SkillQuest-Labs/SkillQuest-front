@@ -3,7 +3,7 @@ import { type Node } from "@xyflow/react";
 import type { QuestNodeData, SkillNodeData } from "../canvas.type";
 import { useCreateQuests, useGetQuests } from "@/shared/services/quest/api-quest";
 import { useCallback, useEffect } from "react";
-import { useCanvasStore } from "@/stores/quest/use-canvas-store";
+import { useCanvasStore } from "@/stores/quest/canvas-store";
 import { initialNodes } from "../canvas.const";
 
 export const useSaveCanvas = () => {
