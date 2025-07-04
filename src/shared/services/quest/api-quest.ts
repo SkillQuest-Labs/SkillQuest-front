@@ -13,7 +13,7 @@ export const useGetQuests = (skillId: string) => {
   return {
     quests: data?.quests,
     total: data?.total,
-    isLoading: loading,
+    loading,
     error: error,
   };
 };
