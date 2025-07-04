@@ -72,14 +72,17 @@ export const useCanvasGraph = () => {
   };
 
   const collapseAll = useCallback(() => {
+    const storeNodes = useCanvasStore.getState().nodes;
     setNodes(
-      nodes.map((node) => (node.id === "questNode" ? { ...node, data: { ...node.data, isCollapsed: true } } : node)),
+      storeNodes.map((node) =>
+        node.type === "questNode" ? { ...node, data: { ...node.data, isCollapsed: true } } : node,
+      ),
     );
-  }, [setNodes, nodes]);
+  }, [setNodes]);
 
   const expandAll = useCallback(() => {
     setNodes(
-      nodes.map((node) => (node.id === "questNode" ? { ...node, data: { ...node.data, isCollapsed: false } } : node)),
+      nodes.map((node) => (node.type === "questNode" ? { ...node, data: { ...node.data, isCollapsed: false } } : node)),
     );
   }, [setNodes, nodes]);
 
