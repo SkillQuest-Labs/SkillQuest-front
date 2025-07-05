@@ -14,7 +14,7 @@ export interface IRoutes {
 
 export const routes: IRoutes = {
   dashboard: {
-    path: "/dashboard",
+    path: "/",
     display: "Dashboard",
   },
   skills: {
