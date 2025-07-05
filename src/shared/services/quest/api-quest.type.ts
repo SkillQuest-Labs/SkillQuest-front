@@ -18,3 +18,8 @@ export type UpdateQuestsResponse = {
   quests: Quest[];
   total: number;
 };
+
+export type DeleteQuestId = {
+  id: string;
+  questId: string;
+};

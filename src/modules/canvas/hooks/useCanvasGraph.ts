@@ -52,7 +52,7 @@ export const useCanvasGraph = () => {
 
     const newNode: Node<QuestNodeData> = {
       id: id,
-      type: "questNode", // to change type name
+      type: "questNode",
       position,
       data: {
         kind: "quest",

@@ -2,6 +2,7 @@ import { Constants } from "@/shared/constante/api-constante";
 import type {
   CreateQuestInput,
   CreateQuestsResponse,
+  DeleteQuestId,
   GetQuestsResponse,
   UpdateQuestInput,
   UpdateQuestsResponse,
@@ -63,6 +64,26 @@ export const useUpdateQuests = () => {
 
   return {
     updateQuest,
+    loading,
+    error,
+  };
+};
+
+export const useDeleteQuests = () => {
+  const options = {
+    method: "DELETE",
+    url: `${Constants.API_BASE_URL}/quests`,
+    headers: {
+      "Content-Type": "application/json; charset=UTF-8",
+    },
+  };
+  const {
+    mutateAsync: deleteQuest,
+    isPending: loading,
+    error,
+  } = useApiAsync<void, DeleteQuestId[]>(options, ["quests"]);
+  return {
+    deleteQuest,
     loading,
     error,
   };
