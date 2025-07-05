@@ -17,7 +17,7 @@ export const usePaneInteraction = ({ mode, addQuestNode, screenToFlowPosition }:
           x: event.clientX,
           y: event.clientY,
         });
-        addQuestNode(position);
+        addQuestNode(position); // Adds a new quest node at the clicked position
       }
     },
     [mode, addQuestNode, screenToFlowPosition],

@@ -7,6 +7,7 @@ import { useCanvasGraph } from "./hooks/useCanvasGraph";
 import { usePaneInteraction } from "./hooks/usePaneInteraction";
 import { useConnectionHandler } from "./hooks/useConnectionHandler";
 import { CanvasView } from "./components/CanvasView";
+import { useSaveCanvas, useQuestsLoader } from "./hooks/useSaveCanvas";
 
 export const Canvas = () => {
   const [cursorMode, setCursorMode] = useState<CursorModeType>("normal");
@@ -14,6 +15,9 @@ export const Canvas = () => {
   const [, setViewMode] = useState<ViewModeType>("canvas");
 
   const { screenToFlowPosition } = useReactFlow();
+
+  const { saveCanvas } = useSaveCanvas();
+  useQuestsLoader("uuid-skill-1234-5678-9012-345678901234"); // replace with actual skill ID
 
   const {
     nodes,
@@ -27,7 +31,7 @@ export const Canvas = () => {
     expandAll,
   } = useCanvasGraph(); // This hook can be used to manage nodes and edges if needed
 
-  const onConnect = useConnectionHandler(setEdges);
+  const onConnect = useConnectionHandler(edges, setEdges);
   const onPaneClick = usePaneInteraction({
     mode: cursorMode,
     addQuestNode,
@@ -70,6 +74,7 @@ export const Canvas = () => {
         setViewMode={setViewMode}
         collapseAll={collapseAll}
         expandAll={expandAll}
+        onSaveCanvas={() => saveCanvas()}
       />
     </div>
   );

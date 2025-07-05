@@ -1,6 +1,6 @@
 import { Constants } from "@/shared/constante/api-constante";
-import type { GetQuestResponse } from "./api-quest.type";
-import { useApi } from "../useApi";
+import type { CreateQuestInput, CreateQuestsResponse, GetQuestsResponse } from "./api-quest.type";
+import { useApi, useApiAsync } from "../useApi";
 
 export const useGetQuests = (skillId: string) => {
   const options = {
@@ -8,12 +8,34 @@ export const useGetQuests = (skillId: string) => {
     url: `${Constants.API_BASE_URL}/quests/${skillId}`,
   };
 
-  const { data, isLoading: loading, error } = useApi<GetQuestResponse>(options, ["quests"]); // add the userId to the cache key
+  const { data, isLoading: loading, error } = useApi<GetQuestsResponse>(options, ["quests", skillId]); // add the userId to the cache key
 
   return {
     quests: data?.quests,
     total: data?.total,
-    isLoading: loading,
+    loading,
     error: error,
+  };
+};
+
+export const useCreateQuests = () => {
+  const options = {
+    method: "POST",
+    url: `${Constants.API_BASE_URL}/quests`,
+    headers: {
+      "Content-Type": "application/json; charset=UTF-8",
+    },
+  };
+
+  const {
+    mutateAsync: createQuest,
+    isPending: loading,
+    error,
+  } = useApiAsync<CreateQuestsResponse, CreateQuestInput[]>(options, ["quests"]);
+
+  return {
+    createQuest,
+    loading,
+    error,
   };
 };

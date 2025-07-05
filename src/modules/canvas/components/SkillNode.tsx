@@ -6,24 +6,28 @@ import { Input } from "@/shared/components/ui/input";
 
 export const SkillNode = ({ data }: NodeProps<Node<SkillNodeData>>) => {
   return (
-    <Card className={`w-96 bg-gradient-to-r ${data.config.color} text-white border-2 border-white shadow-lg`}>
-      <Handle type="source" position={Position.Bottom} className="w-4 h-4 bg-white" />
+    <Card
+      className={`w-[36rem] min-h-[14rem] bg-gradient-to-r ${data.config.color} text-white border-2 border-white shadow-lg`}
+    >
+      <Handle type="source" position={Position.Bottom} className="w-6 h-6 bg-white" />
       <CardHeader>
-        <div className="flex items-center gap-3 mb-2">
-          <span className="text-2xl">{data.config.icon}</span>
+        <div className="flex items-center gap-5 mb-4">
+          <span className="text-4xl">{data.config.icon}</span>
           <Input
             value={data.config.title}
             onChange={(e) => data.onUpdate?.("title", e.target.value)}
-            className="text-xl font-bold bg-transparent border-none text-white placeholder-white/70 p-0 h-auto focus-visible:ring-0"
+            className="text-3xl font-bold bg-transparent border-none text-white placeholder-white/70 p-0 h-auto focus-visible:ring-0"
             placeholder="Skill Title"
+            style={{ fontSize: "2rem", minHeight: "3rem" }}
           />
         </div>
         <Textarea
           value={data.config.description}
           onChange={(e) => data.onUpdate?.("description", e.target.value)}
-          className="text-sm bg-white/20 border-white/30 text-white placeholder-white/70 resize-none"
-          placeholder="Skill description..."
-          rows={2}
+          className="text-xl bg-white/20 border-white/30 text-white placeholder-white/70 resize-none"
+          placeholder="Décrivez cette compétence en détail..."
+          rows={8}
+          style={{ fontSize: "1.5rem", minHeight: "7rem" }}
         />
       </CardHeader>
     </Card>
