@@ -21,6 +21,7 @@ type CanvasStore = {
   addNode: (node: Node<QuestNodeData | SkillNodeData>) => void;
   removeNode: (id: string) => void;
   removeAllQuests: () => void;
+  reset: () => void;
 };
 
 export const useCanvasStore = create<CanvasStore>((set) => ({
