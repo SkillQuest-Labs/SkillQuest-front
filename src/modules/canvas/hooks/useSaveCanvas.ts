@@ -57,23 +57,26 @@ export const useSaveCanvas = () => {
     try {
       setLoading(true, "spinner");
       if (toCreate.length > 0) {
-        await createQuest(toCreate);
-        showToast({
-          title: "Quête créée avec succès !",
-          description: `${toCreate.length} quête${toCreate.length > 1 ? "s" : ""} ajoutée${toCreate.length > 1 ? "s" : ""} à votre canvas.`,
-          duration: 4000,
-          status: "error",
-        });
+        const result = await createQuest(toCreate);
+        if (result.total > 0) {
+          showToast({
+            title: "Quête(s) créée(s) avec succès !",
+            description: `${toCreate.length} quête${toCreate.length > 1 ? "s" : ""} créée${toCreate.length > 1 ? "s" : ""} dans votre canvas.`,
+            duration: 4000,
+            status: "success",
+          });
+        }
       }
       if (toUpdate.length > 0) {
         const result = await updateQuest(toUpdate);
-        console.log("Updated quests:", result);
-        showToast({
-          title: "Quête(s) mise(s) à jour avec succès !",
-          description: `${toUpdate.length} quête${toUpdate.length > 1 ? "s" : ""} modifiée${toUpdate.length > 1 ? "s" : ""} dans votre canvas.`,
-          duration: 4000,
-          status: "success",
-        });
+        if (result.total > 0) {
+          showToast({
+            title: "Quête(s) mise(s) à jour avec succès !",
+            description: `${toUpdate.length} quête${toUpdate.length > 1 ? "s" : ""} modifiée${toUpdate.length > 1 ? "s" : ""} dans votre canvas.`,
+            duration: 4000,
+            status: "success",
+          });
+        }
       }
       setLoading(false);
       clearFlags();
