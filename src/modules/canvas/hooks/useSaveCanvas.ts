@@ -1,7 +1,7 @@
 import { type Node } from "@xyflow/react";
 
 import type { QuestNodeData, SkillNodeData } from "../canvas.type";
-import { useCreateQuests, useGetQuests } from "@/shared/services/quest/api-quest";
+import { useCreateQuests, useGetQuests, useUpdateQuests } from "@/shared/services/quest/api-quest";
 import { useCallback, useEffect } from "react";
 import { useCanvasStore } from "@/stores/quest/canvas-store";
 import { initialNodes } from "../canvas.const";
@@ -10,6 +10,7 @@ import { showToast } from "@/component/notification/show-toast";
 
 export const useSaveCanvas = () => {
   const { createQuest } = useCreateQuests();
+  const { updateQuest } = useUpdateQuests();
   const { nodes, newIds, modifiedNodesIds, clearFlags } = useCanvasStore();
   const { setLoading } = useLoadingStore();
 
@@ -65,7 +66,14 @@ export const useSaveCanvas = () => {
         });
       }
       if (toUpdate.length > 0) {
-        return "Update functionality not implemented yet";
+        const result = await updateQuest(toUpdate);
+        console.log("Updated quests:", result);
+        showToast({
+          title: "Quête(s) mise(s) à jour avec succès !",
+          description: `${toUpdate.length} quête${toUpdate.length > 1 ? "s" : ""} modifiée${toUpdate.length > 1 ? "s" : ""} dans votre canvas.`,
+          duration: 4000,
+          status: "success",
+        });
       }
       setLoading(false);
       clearFlags();
