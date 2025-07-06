@@ -1,16 +1,16 @@
 import { cn } from "../../../shared/utils/helpers";
 
-interface ProgressBarProps {
+type ProgressBarProps = {
   progress: number;
   className?: string;
   showLabel?: boolean;
-}
+};
 
-export function ProgressBar({
+const ProgressBar = ({
   progress,
   className,
   showLabel = true,
-}: ProgressBarProps) {
+}: ProgressBarProps) => {
   const clampedProgress = Math.max(0, Math.min(100, progress));
 
   const getProgressColor = (progress: number) => {
@@ -41,4 +41,6 @@ export function ProgressBar({
       </div>
     </div>
   );
-}
+};
+
+export { ProgressBar };
