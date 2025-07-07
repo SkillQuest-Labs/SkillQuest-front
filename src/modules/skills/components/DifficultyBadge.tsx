@@ -13,11 +13,7 @@ const DifficultyBadge = ({ difficulty, className }: DifficultyBadgeProps) => {
   return (
     <Badge
       variant="outline"
-      className={cn(
-        "flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium",
-        config.className,
-        className,
-      )}
+      className={cn("flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium", config.className, className)}
     >
       <span className="text-sm">{config.icon}</span>
       {difficulty}

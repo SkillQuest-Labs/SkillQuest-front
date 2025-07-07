@@ -6,13 +6,9 @@ type SparkleParticlesProps = {
   className?: string;
 };
 
-const randomBetween = (min: number, max: number) =>
-  Math.random() * (max - min) + min;
+const randomBetween = (min: number, max: number) => Math.random() * (max - min) + min;
 
-export const SparkleParticles: React.FC<SparkleParticlesProps> = ({
-  count = 16,
-  className,
-}) => {
+export const SparkleParticles: React.FC<SparkleParticlesProps> = ({ count = 16, className }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -49,10 +45,7 @@ export const SparkleParticles: React.FC<SparkleParticlesProps> = ({
   return (
     <div
       ref={containerRef}
-      className={
-        "pointer-events-none absolute left-0 right-0 top-[-32px] h-8 w-full z-20 " +
-        (className || "")
-      }
+      className={"pointer-events-none absolute left-0 right-0 top-[-32px] h-8 w-full z-20 " + (className || "")}
       aria-hidden
     />
   );

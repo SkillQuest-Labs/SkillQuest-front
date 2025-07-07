@@ -3,11 +3,7 @@ import { Button } from "@/shared/components/ui/button";
 import { DifficultyBadge } from "./DifficultyBadge";
 import { StatusBadge } from "./StatusBadge";
 import { ProgressBar } from "./ProgressBar";
-import {
-  cn,
-  formatSkillDuration,
-  formatSkillDate,
-} from "../../../shared/utils/helpers";
+import { cn, formatSkillDuration, formatSkillDate } from "../../../shared/utils/helpers";
 import type { Skill } from "../skills.type";
 
 type SkillCardProps = {
@@ -17,18 +13,10 @@ type SkillCardProps = {
   style?: React.CSSProperties;
 };
 
-export function SkillCard({
-  skill,
-  onClick,
-  className,
-  style,
-}: SkillCardProps) {
+export function SkillCard({ skill, onClick, className, style }: SkillCardProps) {
   return (
     <Card
-      className={cn(
-        "group relative transition-all duration-200 hover:shadow-md cursor-pointer",
-        className,
-      )}
+      className={cn("group relative transition-all duration-200 hover:shadow-md cursor-pointer", className)}
       onClick={onClick}
       style={style}
     >
@@ -40,9 +28,7 @@ export function SkillCard({
               {skill.title}
             </h3>
             {skill.description && (
-              <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
-                {skill.description}
-              </p>
+              <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{skill.description}</p>
             )}
           </div>
           <div className="flex flex-col items-end gap-2 ml-4">
@@ -82,9 +68,7 @@ export function SkillCard({
             )}
           </div>
 
-          <div className="text-xs text-muted-foreground">
-            Updated on {formatSkillDate(skill.updatedAt)}
-          </div>
+          <div className="text-xs text-muted-foreground">Updated on {formatSkillDate(skill.updatedAt)}</div>
         </div>
 
         {/* Hover effect button */}

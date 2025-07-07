@@ -3,13 +3,7 @@ import { useSkills } from "../hooks/use-skills";
 import { useFilteredSkills } from "../hooks/use-filtered-skills";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shared/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { SkillCard } from "./SkillCard";
 import { SkillsStats } from "./SkillsStats";
 import { useNavigate } from "react-router-dom";
@@ -44,25 +38,15 @@ export function SkillsList() {
 
   // Filters state
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<FilterStatus>(
-    FilterStatus.All,
-  );
-  const [difficultyFilter, setDifficultyFilter] = useState<FilterDifficulty>(
-    FilterDifficulty.All,
-  );
+  const [statusFilter, setStatusFilter] = useState<FilterStatus>(FilterStatus.All);
+  const [difficultyFilter, setDifficultyFilter] = useState<FilterDifficulty>(FilterDifficulty.All);
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.Updated);
 
   // Utilisation du hook pour filtrer/tri
-  const filteredSkills = useFilteredSkills(
-    skills,
-    searchQuery,
-    statusFilter,
-    difficultyFilter,
-    sortBy,
-  );
+  const filteredSkills = useFilteredSkills(skills, searchQuery, statusFilter, difficultyFilter, sortBy);
 
   const handleSkillClick = (skillId: string) => {
-    navigate(`/skills/${skillId}`);
+    navigate(`${skillId}`);
   };
 
   const handleCreateSkill = () => {
@@ -73,9 +57,7 @@ export function SkillsList() {
     <div className="w-full space-y-8">
       {/* Header Section */}
       <div className="flex flex-row items-center justify-between gap-4 flex-wrap">
-        <h1 className="text-3xl font-bold text-foreground flex items-center">
-          🎯 Mes Skills
-        </h1>
+        <h1 className="text-3xl font-bold text-foreground flex items-center">🎯 Mes Skills</h1>
         <div className="relative w-[180px]">
           <SparkleParticles />
           <Button
@@ -98,9 +80,7 @@ export function SkillsList() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Search */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">
-              Rechercher
-            </label>
+            <label className="text-sm font-medium text-foreground">Rechercher</label>
             <Input
               placeholder="Rechercher un skill..."
               value={searchQuery}
@@ -110,14 +90,10 @@ export function SkillsList() {
 
           {/* Status Filter */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">
-              Statut
-            </label>
+            <label className="text-sm font-medium text-foreground">Statut</label>
             <Select
               value={statusFilter}
-              onValueChange={(value: FilterStatus) =>
-                setStatusFilter(value as FilterStatus)
-              }
+              onValueChange={(value: FilterStatus) => setStatusFilter(value as FilterStatus)}
             >
               <SelectTrigger>
                 <SelectValue />
@@ -134,14 +110,10 @@ export function SkillsList() {
 
           {/* Difficulty Filter */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">
-              Difficulté
-            </label>
+            <label className="text-sm font-medium text-foreground">Difficulté</label>
             <Select
               value={difficultyFilter}
-              onValueChange={(value: FilterDifficulty) =>
-                setDifficultyFilter(value as FilterDifficulty)
-              }
+              onValueChange={(value: FilterDifficulty) => setDifficultyFilter(value as FilterDifficulty)}
             >
               <SelectTrigger>
                 <SelectValue />
@@ -158,13 +130,8 @@ export function SkillsList() {
 
           {/* Sort */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">
-              Trier par
-            </label>
-            <Select
-              value={sortBy}
-              onValueChange={(value: SortBy) => setSortBy(value as SortBy)}
-            >
+            <label className="text-sm font-medium text-foreground">Trier par</label>
+            <Select value={sortBy} onValueChange={(value: SortBy) => setSortBy(value as SortBy)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -183,12 +150,8 @@ export function SkillsList() {
       {/* Results Section */}
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-foreground">
-            Skills ({filteredSkills.length})
-          </h2>
-          {filteredSkills.length === 0 && (
-            <p className="text-muted-foreground">Aucun skill trouvé</p>
-          )}
+          <h2 className="text-xl font-semibold text-foreground">Skills ({filteredSkills.length})</h2>
+          {filteredSkills.length === 0 && <p className="text-muted-foreground">Aucun skill trouvé</p>}
         </div>
 
         {filteredSkills.length > 0 ? (
@@ -206,12 +169,8 @@ export function SkillsList() {
         ) : (
           <div className="text-center py-12 space-y-4">
             <div className="text-6xl">🎯</div>
-            <h3 className="text-xl font-semibold text-foreground">
-              Aucun skill trouvé
-            </h3>
-            <p className="text-muted-foreground">
-              Essayez de modifier vos filtres ou créez votre premier skill !
-            </p>
+            <h3 className="text-xl font-semibold text-foreground">Aucun skill trouvé</h3>
+            <p className="text-muted-foreground">Essayez de modifier vos filtres ou créez votre premier skill !</p>
             <Button onClick={handleCreateSkill} variant="outline">
               Créer mon premier skill
             </Button>

@@ -6,11 +6,7 @@ type ProgressBarProps = {
   showLabel?: boolean;
 };
 
-const ProgressBar = ({
-  progress,
-  className,
-  showLabel = true,
-}: ProgressBarProps) => {
+const ProgressBar = ({ progress, className, showLabel = true }: ProgressBarProps) => {
   const clampedProgress = Math.max(0, Math.min(100, progress));
 
   const getProgressColor = (progress: number) => {
@@ -25,17 +21,12 @@ const ProgressBar = ({
       {showLabel && (
         <div className="flex justify-between items-center mb-1">
           <span className="text-xs text-muted-foreground">Progression</span>
-          <span className="text-xs font-medium text-foreground">
-            {clampedProgress}%
-          </span>
+          <span className="text-xs font-medium text-foreground">{clampedProgress}%</span>
         </div>
       )}
       <div className="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-700">
         <div
-          className={cn(
-            "h-2 rounded-full transition-all duration-300 ease-out",
-            getProgressColor(clampedProgress),
-          )}
+          className={cn("h-2 rounded-full transition-all duration-300 ease-out", getProgressColor(clampedProgress))}
           style={{ width: `${clampedProgress}%` }}
         />
       </div>

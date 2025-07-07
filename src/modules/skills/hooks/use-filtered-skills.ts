@@ -1,9 +1,5 @@
 import { useMemo } from "react";
-import {
-  FilterStatus,
-  FilterDifficulty,
-  SortBy,
-} from "../components/SkillsList";
+import { FilterStatus, FilterDifficulty, SortBy } from "../components/SkillsList";
 import type { Skill } from "../skills.type";
 
 export const useFilteredSkills = (
@@ -32,8 +28,7 @@ export const useFilteredSkills = (
                 ? FilterStatus.Draft
                 : FilterStatus.All;
 
-      const matchesStatus =
-        statusFilter === FilterStatus.All || statusFilter === statusLabel;
+      const matchesStatus = statusFilter === FilterStatus.All || statusFilter === statusLabel;
 
       // Map skill.difficulty to French label for comparison
       const difficultyLabel =
@@ -45,9 +40,7 @@ export const useFilteredSkills = (
               ? FilterDifficulty.Hard
               : FilterDifficulty.All;
 
-      const matchesDifficulty =
-        difficultyFilter === FilterDifficulty.All ||
-        difficultyFilter === difficultyLabel;
+      const matchesDifficulty = difficultyFilter === FilterDifficulty.All || difficultyFilter === difficultyLabel;
 
       return matchesSearch && matchesStatus && matchesDifficulty;
     });
@@ -63,9 +56,7 @@ export const useFilteredSkills = (
           return b.duration - a.duration;
         case SortBy.Updated:
         default:
-          return (
-            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-          );
+          return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime();
       }
     });
 

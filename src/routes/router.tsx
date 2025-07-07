@@ -18,14 +18,32 @@ export const router = createBrowserRouter([
         path: routes.dashboard.path,
         element: <DashboardLayout />,
         children: [
-          { index: true, element: <DashboardUser /> },
-          { path: routes.skills.path, element: <Skills /> },
-          { path: `${routes.skills.path}/:skillId`, element: <SkillDetail /> },
-          { path: routes.profil.path, element: <Profil /> },
-          { path: routes.store.path, element: <Store /> },
+          {
+            index: true,
+            element: <DashboardUser />,
+          },
+          {
+            path: routes.skills.path,
+            element: <Skills />,
+          },
+          {
+            path: `${routes.skills.path}/:skillId`,
+            element: <SkillDetail />,
+          },
+          {
+            path: routes.profil.path,
+            element: <Profil />,
+          },
+          {
+            path: routes.store.path,
+            element: <Store />,
+          },
         ],
       },
-      { path: routes.canvas.path, element: <CanvasPage /> },
+      {
+        path: routes.canvas.path,
+        element: <CanvasPage />,
+      },
     ],
   },
   { path: routes.notfound.path, element: <NotFoundPage /> },

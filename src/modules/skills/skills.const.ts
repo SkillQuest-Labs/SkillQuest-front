@@ -13,8 +13,7 @@ export const difficultyConfig = {
   },
   Difficile: {
     icon: "🔴",
-    className:
-      "bg-red-100 text-red-800 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800",
+    className: "bg-red-100 text-red-800 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800",
   },
 };
 
@@ -22,8 +21,7 @@ export const statusConfig = {
   not_started: {
     icon: "⏳",
     label: "Non commencé",
-    className:
-      "bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700",
+    className: "bg-gray-100 text-gray-700 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700",
   },
   in_progress: {
     icon: "🚀",
@@ -90,8 +88,7 @@ export const mockedSkills: Skill[] = [
   {
     id: "1",
     title: "Apprendre React",
-    description:
-      "Maîtriser les fondamentaux de React et créer des applications modernes",
+    description: "Maîtriser les fondamentaux de React et créer des applications modernes",
     difficulty: "Moyen",
     duration: 120,
     status: "in_progress",
@@ -130,8 +127,7 @@ export const mockedSkills: Skill[] = [
   {
     id: "4",
     title: "Maîtriser les Hooks React",
-    description:
-      "Utiliser efficacement les hooks personnalisés et les hooks natifs",
+    description: "Utiliser efficacement les hooks personnalisés et les hooks natifs",
     difficulty: "Difficile",
     duration: 180,
     status: "draft",
@@ -222,8 +218,7 @@ export const mockedSkills: Skill[] = [
   {
     id: "11",
     title: "Machine Learning avec Python",
-    description:
-      "Introduction au machine learning avec scikit-learn et TensorFlow",
+    description: "Introduction au machine learning avec scikit-learn et TensorFlow",
     difficulty: "Difficile",
     duration: 300,
     status: "not_started",
@@ -236,8 +231,7 @@ export const mockedSkills: Skill[] = [
   {
     id: "12",
     title: "Cybersécurité Web",
-    description:
-      "Sécuriser les applications web contre les vulnérabilités courantes",
+    description: "Sécuriser les applications web contre les vulnérabilités courantes",
     difficulty: "Moyen",
     duration: 160,
     status: "in_progress",
