@@ -1,5 +1,5 @@
 import type { AvatarHudProps } from "./avatarHud.types";
-import { XPProgressBar } from "./XpProgressBar";
+import { XpProgressBar } from "./XpProgressBar";
 
 export const AvatarHud = ({ username, role, avatarUrl, level, xpUser, xpMax }: AvatarHudProps) => {
   return (
@@ -21,7 +21,7 @@ export const AvatarHud = ({ username, role, avatarUrl, level, xpUser, xpMax }: A
               {role}
             </span>
           </div>
-          <XPProgressBar xpUser={xpUser} xpMax={xpMax} level={level} />
+          <XpProgressBar xpUser={xpUser} xpMax={xpMax} level={level} />
         </div>
       </div>
     </div>

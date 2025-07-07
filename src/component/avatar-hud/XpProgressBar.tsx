@@ -4,7 +4,7 @@ interface XpProgressBarProps {
   level: number;
 }
 
-export const XPProgressBar = ({ xpUser, xpMax, level }: XpProgressBarProps) => {
+export const XpProgressBar = ({ xpUser, xpMax, level }: XpProgressBarProps) => {
   const xpPercent = Math.min((xpUser / xpMax) * 100, 100);
 
   return (

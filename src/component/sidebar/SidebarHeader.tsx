@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
-import { Menu, X, MousePointerClick } from "lucide-react";
+import { MousePointerClick } from "lucide-react";
 import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
 import { Button } from "@/shared/components/ui/button";
 
 export const SidebarHeader = () => {
-  const { isCollapsed, toggleCollapse, mode, setMode } = useSidebarStore();
+  const { isCollapsed, mode, setMode } = useSidebarStore();
   const isAuto = mode === "auto";
 
   return (
@@ -27,20 +27,11 @@ export const SidebarHeader = () => {
       >
         <Button
           variant="ghost"
-          onClick={toggleCollapse}
-          className="hover:bg-gray-700 p-2 rounded"
-          title={`${isCollapsed ? "Ouvrir menu" : "Fermer menu"}`}
-        >
-          {!isCollapsed ? <X size={20} color="white" /> : <Menu size={20} color="white" />}
-        </Button>
-
-        <Button
-          variant="ghost"
           onClick={() => setMode(isAuto ? "manual" : "auto")}
           className="hover:bg-gray-700 p-2 rounded"
           title="Mode auto"
         >
-          <MousePointerClick size={20} color={isAuto ? "orange" : "white"} />
+          <MousePointerClick size={20} className={isAuto ? "text-orange-500" : "text-white"} />
         </Button>
       </div>
     </div>
