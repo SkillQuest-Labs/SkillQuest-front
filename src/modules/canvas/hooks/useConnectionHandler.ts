@@ -1,9 +1,7 @@
 import { addEdge, MarkerType, type Connection, type Edge } from "@xyflow/react";
 import { useCallback } from "react";
 
-export const useConnectionHandler = (
-  setEdges: React.Dispatch<React.SetStateAction<Edge[]>>,
-) => {
+export const useConnectionHandler = (edges: Edge[], setEdges: (edges: Edge[]) => void) => {
   return useCallback(
     (params: Connection) => {
       const newEdge: Edge = {
@@ -18,8 +16,9 @@ export const useConnectionHandler = (
         },
       };
 
-      setEdges((eds: Edge[]) => addEdge(newEdge, eds));
+      const updated = addEdge(newEdge, edges);
+      setEdges(updated);
     },
-    [setEdges],
+    [edges, setEdges],
   );
 };

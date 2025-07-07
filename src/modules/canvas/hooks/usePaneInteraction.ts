@@ -9,11 +9,7 @@ type PaneInteraction = {
 };
 
 /// This hook handles interactions in the canvas pane, such as creating new quest nodes.
-export const usePaneInteraction = ({
-  mode,
-  addQuestNode,
-  screenToFlowPosition,
-}: PaneInteraction) => {
+export const usePaneInteraction = ({ mode, addQuestNode, screenToFlowPosition }: PaneInteraction) => {
   return useCallback(
     (event: React.MouseEvent) => {
       if (mode === "create") {
@@ -21,7 +17,7 @@ export const usePaneInteraction = ({
           x: event.clientX,
           y: event.clientY,
         });
-        addQuestNode(position);
+        addQuestNode(position); // Adds a new quest node at the clicked position
       }
     },
     [mode, addQuestNode, screenToFlowPosition],

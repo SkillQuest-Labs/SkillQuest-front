@@ -1,9 +1,6 @@
-export type CursorModeType =
-  | "normal"
-  | "create"
-  | "connect"
-  | "collapse"
-  | "expand";
+import type { QuestDifficulty, QuestStatus } from "@/shared/types/quest.type";
+
+export type CursorModeType = "normal" | "create" | "connect" | "collapse" | "expand";
 export type ViewModeType = "canvas" | "timeline";
 
 export type FloatingToolboxProps = {
@@ -29,24 +26,22 @@ export type SkillConfig = {
 };
 
 export type SkillNodeData = {
+  kind: "skill";
   config: SkillConfig;
   onUpdate?: (field: string, value: any) => void;
 };
 
-export type ProgressStatus = "not-started" | "in-progress" | "completed";
-export type QuestType = "main" | "side" | "challenge" | "reward";
-export type QuestDifficulty = "Easy" | "Medium" | "Hard";
-
 export type QuestNodeData = {
+  kind: "quest";
   title: string;
   xp: number;
   difficulty: QuestDifficulty;
   description: string;
   isStarting?: boolean;
-  status: ProgressStatus;
+  status: QuestStatus;
   questNumber?: number;
-  type?: QuestType;
   isCollapsed?: boolean;
+  isSubSkill?: boolean;
   childCount?: number;
   onUpdate?: (field: string, value: any) => void;
   onDelete?: (id: string) => void;

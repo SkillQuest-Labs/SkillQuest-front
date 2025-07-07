@@ -10,13 +10,7 @@ type ToolButtonProps = {
   expandAll?: () => void;
 };
 
-export const ToolButton = ({
-  tool,
-  cursorMode,
-  setCursorMode,
-  colllapseAll,
-  expandAll,
-}: ToolButtonProps) => {
+export const ToolButton = ({ tool, cursorMode, setCursorMode, colllapseAll, expandAll }: ToolButtonProps) => {
   const active = tool.isActive(cursorMode);
 
   return (

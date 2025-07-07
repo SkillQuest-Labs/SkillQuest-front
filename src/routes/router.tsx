@@ -12,7 +12,7 @@ import SkillDetail from "@/pages/SkillDetail";
 
 export const router = createBrowserRouter([
   {
-    element: <ProtectedRoute />,
+    element: <ProtectedRoute />, // Middleware component to verify auth permission
     children: [
       {
         path: routes.dashboard.path,
