@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { DashboardUser } from "@/pages/dashboard/DashboardUser";
-import { Skills } from "@/pages/dashboard/Skills";
+import SkillsPage from "@/pages/Skills";
 import { Profil } from "@/pages/dashboard/Profil";
 import { DashboardLayout } from "@/pages/dashboard/DashboardLayout";
 import { CanvasPage } from "./pages/CanvasPage";
@@ -12,7 +12,7 @@ function App() {
       <Routes>
         <Route path="/dashboard" element={<DashboardLayout />}>
           <Route index element={<DashboardUser />} />
-          <Route path="skills" element={<Skills />} />
+          <Route path="skills" element={<SkillsPage />} />
           <Route path="profil" element={<Profil />} />
           <Route path="store" element={<Store />} />
         </Route>
