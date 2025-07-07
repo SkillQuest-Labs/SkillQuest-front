@@ -23,7 +23,7 @@ export type ToolboxList = ToolBoxItem[];
 export const tools: ToolboxList = [
   {
     id: "create",
-    icon: <Plus className="w-5 h-5" />,
+    icon: <Plus className="w-5 h-5" color="white" />,
     tooltip: "Create Quest",
     activeColor: "bg-blue-600 hover:bg-blue-700 text-white",
     isActive: (mode) => mode === "create",
@@ -31,7 +31,7 @@ export const tools: ToolboxList = [
   },
   {
     id: "connect",
-    icon: <Link className="w-5 h-5" />,
+    icon: <Link className="w-5 h-5" color="white" />,
     tooltip: "Link Quests",
     activeColor: "bg-purple-600 hover:bg-purple-700 text-white",
     isActive: (mode) => mode === "connect",
@@ -39,7 +39,7 @@ export const tools: ToolboxList = [
   },
   {
     id: "select",
-    icon: <Target className="w-5 h-5" />,
+    icon: <Target className="w-5 h-5" color="white" />,
     tooltip: "Select Mode",
     activeColor: "bg-gray-600 hover:bg-gray-700 text-white",
     isActive: (mode) => mode === "normal",
@@ -47,7 +47,7 @@ export const tools: ToolboxList = [
   },
   {
     id: "collapse",
-    icon: <ChevronsDownUp className="w-5 h-5" />,
+    icon: <ChevronsDownUp className="w-5 h-5" color="white" />,
     tooltip: "Collapse All Quests",
     activeColor: "bg-gray-600 hover:bg-gray-700 text-white",
     isActive: (mode) => mode === "collapse",
@@ -58,7 +58,7 @@ export const tools: ToolboxList = [
   },
   {
     id: "expand",
-    icon: <Maximize2 className="w-5 h-5 transform rotate-180" />,
+    icon: <Maximize2 className="w-5 h-5 transform rotate-180" color="white" />,
     tooltip: "Expand All Quests",
     activeColor: "bg-gray-600 hover:bg-gray-700 text-white",
     isActive: (mode) => mode === "expand",
@@ -69,7 +69,7 @@ export const tools: ToolboxList = [
   },
   {
     id: "roadmap",
-    icon: <Map className="w-5 h-5" />,
+    icon: <Map className="w-5 h-5" color="white" />,
     tooltip: "Generate Roadmap",
     activeColor: "bg-green-600 hover:bg-green-700 text-white",
     isActive: () => false, // Always inactive, handled separately

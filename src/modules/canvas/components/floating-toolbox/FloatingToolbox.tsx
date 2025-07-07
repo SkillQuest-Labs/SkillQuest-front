@@ -9,7 +9,7 @@ export const FloatingToolbox = ({
   collapseAll,
   expandAll,
 }: FloatingToolboxProps) => (
-  <div className="absolute top-6 right-6 z-20 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50 p-2 flex flex-col gap-1">
+  <div className="absolute top-6 right-6 z-20 rounded-xl shadow-lg border p-2 flex flex-col gap-1 bg-[rgba(15,10,40,0.85)] border-2 border-[rgba(59,130,246,0.4)] backdrop-blur-md">
     {tools.map((tool) => (
       <ToolButton
         key={tool.id}

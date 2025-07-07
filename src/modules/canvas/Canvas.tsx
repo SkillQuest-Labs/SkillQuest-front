@@ -8,6 +8,7 @@ import { usePaneInteraction } from "./hooks/usePaneInteraction";
 import { useConnectionHandler } from "./hooks/useConnectionHandler";
 import { CanvasView } from "./components/CanvasView";
 import { useSaveCanvas, useQuestsLoader } from "./hooks/useSaveCanvas";
+import { Toaster } from "@/shared/components/ui/sonner";
 
 export const Canvas = () => {
   const [cursorMode, setCursorMode] = useState<CursorModeType>("normal");
@@ -76,6 +77,8 @@ export const Canvas = () => {
         expandAll={expandAll}
         onSaveCanvas={() => saveCanvas()}
       />
+
+      <Toaster position="bottom-right" />
     </div>
   );
 };
