@@ -9,7 +9,7 @@ export const Sidebar = () => {
     <div className="flex">
       <div
         className={`${
-          isCollapsed ? "w-20" : "w-65"
+          isCollapsed ? "w-20" : "w-64"
         } h-screen bg-slate-900 text-white fixed shadow-lg transition-all duration-300`}
       >
         <SidebarHeader />

@@ -18,7 +18,7 @@ const SkillDetail = () => {
 
   if (!skill) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8">
+      <div className="flex items-center justify-center p-8 min-h-screen">
         <div className="text-center space-y-4">
           <div className="text-6xl">😕</div>
           <h1 className="text-2xl font-bold">Skill non trouvé</h1>
@@ -30,7 +30,7 @@ const SkillDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8">
+    <div className="p-8 space-y-6">
       {/* Header */}
       <div className="flex items-center gap-4 mb-6">
         <Button

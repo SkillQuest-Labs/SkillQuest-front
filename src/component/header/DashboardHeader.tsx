@@ -5,7 +5,7 @@ import { Button } from "@/shared/components/ui/button";
 
 export const DashboardHeader = ({ coins }: DashboardHeaderProps) => {
   return (
-    <header className="ml-20 flex justify-end items-center px-6 py-4 border-b border-slate-700 shadow-lg bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <header className="flex justify-end items-center px-6 py-4 border-b border-slate-700 shadow-lg bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <nav className="flex items-center gap-4">
         <div className="flex items-center cursor-pointer gap-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-400 hover:scale-105 text-black text-sm font-semibold rounded-lg transition-all duration-200 transform shadow-md">
           <Coins size={18} color="black" />
