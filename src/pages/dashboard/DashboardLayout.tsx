@@ -4,9 +4,9 @@ import { Outlet } from "react-router-dom";
 
 export const DashboardLayout = () => {
   return (
-    <div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <Sidebar />
-      <DashboardHeader coins="500" />
+      <DashboardHeader />
       <Outlet />
     </div>
   );
