@@ -1,9 +1,11 @@
 import avatarImage from "@/assets/avatar.svg";
 import { AvatarHud } from "@/component/avatar-hud/AvatarHud";
+import { DashboardHeader } from "@/component/header/DashboardHeader";
 
 export const DashboardUser = () => {
   return (
     <div>
+      <DashboardHeader />
       <div className="flex items-center justify-center h-screen">
         <h1 className="text-3xl font-bold text-white">Dashboard user</h1>
       </div>
