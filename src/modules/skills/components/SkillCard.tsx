@@ -3,7 +3,11 @@ import { Button } from "@/shared/components/ui/button";
 import { DifficultyBadge } from "./DifficultyBadge";
 import { StatusBadge } from "./StatusBadge";
 import { ProgressBar } from "./ProgressBar";
-import { cn, formatSkillDuration, formatSkillDate } from "../../../shared/utils/helpers";
+import {
+  cn,
+  formatSkillDuration,
+  formatSkillDate,
+} from "../../../shared/utils/helpers";
 import type { Skill } from "../skills.type";
 
 type SkillCardProps = {

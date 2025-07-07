@@ -6,7 +6,8 @@ type SparkleParticlesProps = {
   className?: string;
 };
 
-const randomBetween = (min: number, max: number) => Math.random() * (max - min) + min;
+const randomBetween = (min: number, max: number) =>
+  Math.random() * (max - min) + min;
 
 export const SparkleParticles: React.FC<SparkleParticlesProps> = ({
   count = 16,
@@ -56,4 +57,3 @@ export const SparkleParticles: React.FC<SparkleParticlesProps> = ({
     />
   );
 };
-

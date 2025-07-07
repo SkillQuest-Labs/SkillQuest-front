@@ -1,10 +1,23 @@
+export enum Difficulty {
+  Facile = "Facile",
+  Moyen = "Moyen",
+  Difficile = "Difficile",
+}
+
+export enum Status {
+  NotStarted = "not_started",
+  InProgress = "in_progress",
+  Completed = "completed",
+  Draft = "draft",
+}
+
 export type Skill = {
   id: string;
   title: string;
   description?: string;
-  difficulty: "Facile" | "Moyen" | "Difficile";
+  difficulty: Difficulty;
   duration: number; // in minutes
-  status: "not_started" | "in_progress" | "completed" | "draft";
+  status: Status;
   category?: string;
   createdAt: string;
   updatedAt: string;

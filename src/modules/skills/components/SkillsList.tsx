@@ -44,8 +44,12 @@ export function SkillsList() {
 
   // Filters state
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<FilterStatus>(FilterStatus.All);
-  const [difficultyFilter, setDifficultyFilter] = useState<FilterDifficulty>(FilterDifficulty.All);
+  const [statusFilter, setStatusFilter] = useState<FilterStatus>(
+    FilterStatus.All,
+  );
+  const [difficultyFilter, setDifficultyFilter] = useState<FilterDifficulty>(
+    FilterDifficulty.All,
+  );
   const [sortBy, setSortBy] = useState<SortBy>(SortBy.Updated);
 
   // Utilisation du hook pour filtrer/tri
@@ -54,7 +58,7 @@ export function SkillsList() {
     searchQuery,
     statusFilter,
     difficultyFilter,
-    sortBy
+    sortBy,
   );
 
   const handleSkillClick = (skillId: string) => {
@@ -112,14 +116,18 @@ export function SkillsList() {
               </label>
               <Select
                 value={statusFilter}
-                onValueChange={(value: FilterStatus) => setStatusFilter(value as FilterStatus)}
+                onValueChange={(value: FilterStatus) =>
+                  setStatusFilter(value as FilterStatus)
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   {Object.values(FilterStatus).map((label) => (
-                    <SelectItem key={label} value={label}>{label}</SelectItem>
+                    <SelectItem key={label} value={label}>
+                      {label}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -132,14 +140,18 @@ export function SkillsList() {
               </label>
               <Select
                 value={difficultyFilter}
-                onValueChange={(value: FilterDifficulty) => setDifficultyFilter(value as FilterDifficulty)}
+                onValueChange={(value: FilterDifficulty) =>
+                  setDifficultyFilter(value as FilterDifficulty)
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   {Object.values(FilterDifficulty).map((label) => (
-                    <SelectItem key={label} value={label}>{label}</SelectItem>
+                    <SelectItem key={label} value={label}>
+                      {label}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -159,7 +171,9 @@ export function SkillsList() {
                 </SelectTrigger>
                 <SelectContent>
                   {Object.values(SortBy).map((label) => (
-                    <SelectItem key={label} value={label}>{label}</SelectItem>
+                    <SelectItem key={label} value={label}>
+                      {label}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>

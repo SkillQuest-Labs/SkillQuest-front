@@ -7,8 +7,9 @@ import { DifficultyBadge } from "@/modules/skills/components/DifficultyBadge";
 import { StatusBadge } from "@/modules/skills/components/StatusBadge";
 import { ProgressBar } from "@/modules/skills/components/ProgressBar";
 import { ArrowLeft, Edit, Play, Calendar, Clock, Tag } from "lucide-react";
+import { formatSkillDuration, formatSkillDate } from "@/shared/utils/helpers";
 
-export default function SkillDetail() {
+const SkillDetail = () => {
   const { skillId } = useParams<{ skillId: string }>();
   const { skills } = useSkills();
   const navigate = useNavigate();
@@ -29,25 +30,6 @@ export default function SkillDetail() {
       </div>
     );
   }
-
-  const formatDuration = (minutes: number) => {
-    if (minutes < 60) return `${minutes} minutes`;
-    const hours = Math.floor(minutes / 60);
-    const remainingMinutes = minutes % 60;
-    return remainingMinutes > 0
-      ? `${hours}h ${remainingMinutes}min`
-      : `${hours} heures`;
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("fr-FR", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
 
   return (
     <div className="bg-background">
@@ -137,7 +119,7 @@ export default function SkillDetail() {
               <div>
                 <h3 className="font-semibold">Durée estimée</h3>
                 <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                  {formatDuration(skill.duration)}
+                  {formatSkillDuration(skill.duration)}
                 </p>
               </div>
             </div>
@@ -169,7 +151,7 @@ export default function SkillDetail() {
               <div>
                 <h3 className="font-semibold">Créé le</h3>
                 <p className="text-sm text-muted-foreground">
-                  {formatDate(skill.createdAt)}
+                  {formatSkillDate(skill.createdAt)}
                 </p>
               </div>
             </div>
@@ -185,7 +167,7 @@ export default function SkillDetail() {
             <div>
               <span className="font-medium">Dernière modification :</span>
               <p className="text-muted-foreground">
-                {formatDate(skill.updatedAt)}
+                {formatSkillDate(skill.updatedAt)}
               </p>
             </div>
             <div>
@@ -197,4 +179,6 @@ export default function SkillDetail() {
       </div>
     </div>
   );
-}
+};
+
+export default SkillDetail;

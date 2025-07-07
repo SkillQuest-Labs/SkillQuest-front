@@ -2,7 +2,13 @@ import { cn } from "../../../shared/utils/helpers";
 import type { Skill } from "../skills.type";
 import { statCards } from "../skills.const";
 
-type StatsKeys = "total" | "completed" | "inProgress" | "notStarted" | "draft" | "averageProgress";
+type StatsKeys =
+  | "total"
+  | "completed"
+  | "inProgress"
+  | "notStarted"
+  | "draft"
+  | "averageProgress";
 
 type SkillsStatsProps = {
   skills: Skill[];

@@ -1,5 +1,9 @@
 import { useMemo } from "react";
-import { FilterStatus, FilterDifficulty, SortBy } from "../components/SkillsList";
+import {
+  FilterStatus,
+  FilterDifficulty,
+  SortBy,
+} from "../components/SkillsList";
 import type { Skill } from "../skills.type";
 
 export const useFilteredSkills = (
@@ -7,7 +11,7 @@ export const useFilteredSkills = (
   searchQuery: string,
   statusFilter: FilterStatus,
   difficultyFilter: FilterDifficulty,
-  sortBy: SortBy
+  sortBy: SortBy,
 ) => {
   return useMemo(() => {
     const filtered = skills.filter((skill) => {
@@ -21,12 +25,12 @@ export const useFilteredSkills = (
         skill.status === "not_started"
           ? FilterStatus.NotStarted
           : skill.status === "in_progress"
-          ? FilterStatus.InProgress
-          : skill.status === "completed"
-          ? FilterStatus.Completed
-          : skill.status === "draft"
-          ? FilterStatus.Draft
-          : FilterStatus.All;
+            ? FilterStatus.InProgress
+            : skill.status === "completed"
+              ? FilterStatus.Completed
+              : skill.status === "draft"
+                ? FilterStatus.Draft
+                : FilterStatus.All;
 
       const matchesStatus =
         statusFilter === FilterStatus.All || statusFilter === statusLabel;
@@ -36,13 +40,14 @@ export const useFilteredSkills = (
         skill.difficulty === "Facile"
           ? FilterDifficulty.Easy
           : skill.difficulty === "Moyen"
-          ? FilterDifficulty.Medium
-          : skill.difficulty === "Difficile"
-          ? FilterDifficulty.Hard
-          : FilterDifficulty.All;
+            ? FilterDifficulty.Medium
+            : skill.difficulty === "Difficile"
+              ? FilterDifficulty.Hard
+              : FilterDifficulty.All;
 
       const matchesDifficulty =
-        difficultyFilter === FilterDifficulty.All || difficultyFilter === difficultyLabel;
+        difficultyFilter === FilterDifficulty.All ||
+        difficultyFilter === difficultyLabel;
 
       return matchesSearch && matchesStatus && matchesDifficulty;
     });
@@ -66,4 +71,4 @@ export const useFilteredSkills = (
 
     return sorted;
   }, [skills, searchQuery, statusFilter, difficultyFilter, sortBy]);
-}; 
+};
