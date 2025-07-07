@@ -28,7 +28,7 @@ export const FloatingToolbox = ({
   const collapseExpandTool = areNodesCollapsed
     ? {
         id: "collapse",
-        icon: <ChevronsDownUp className="w-5 h-5" />,
+        icon: <ChevronsDownUp className="w-5 h-5 text-white group-hover:text-black transition-colors" />,
         tooltip: "Collapse All Quests",
         activeColor: "bg-gray-600 hover:bg-gray-700 text-white",
         isActive: (mode: CursorModeType) => mode === "collapse",
@@ -38,7 +38,9 @@ export const FloatingToolbox = ({
       }
     : {
         id: "expand",
-        icon: <Maximize2 className="w-5 h-5 transform rotate-180" />,
+        icon: (
+          <Maximize2 className="w-5 h-5 transform rotate-180 text-white group-hover:text-black transition-colors" />
+        ),
         tooltip: "Expand All Quests",
         activeColor: "bg-gray-600 hover:bg-gray-700 text-white",
         isActive: (mode: CursorModeType) => mode === "expand",
@@ -50,7 +52,7 @@ export const FloatingToolbox = ({
   const allTools = [...tools, collapseExpandTool];
 
   return (
-    <div className="absolute top-6 right-6 z-20 bg-white/90 backdrop-blur-sm rounded-xl shadow-lg border border-gray-200/50 p-2 flex flex-col gap-1">
+    <div className="absolute top-6 right-6 z-20 rounded-xl shadow-lg border p-2 flex flex-col gap-1 bg-[rgba(15,10,40,0.85)] border-2 border-[rgba(59,130,246,0.4)] backdrop-blur-md">
       {allTools.map((tool) => (
         <ToolButton
           key={tool.id}

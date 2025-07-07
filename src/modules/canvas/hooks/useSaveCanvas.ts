@@ -1,14 +1,19 @@
 import { type Node } from "@xyflow/react";
 
 import type { QuestNodeData, SkillNodeData } from "../canvas.type";
-import { useCreateQuests, useGetQuests } from "@/shared/services/quest/api-quest";
+import { useCreateQuests, useDeleteQuests, useGetQuests, useUpdateQuests } from "@/shared/services/quest/api-quest";
 import { useCallback, useEffect } from "react";
 import { useCanvasStore } from "@/stores/quest/canvas-store";
 import { initialNodes } from "../canvas.const";
+import { useLoadingStore } from "@/stores/loading-store";
+import { showToast } from "@/component/notification/show-toast";
 
 export const useSaveCanvas = () => {
   const { createQuest } = useCreateQuests();
-  const { nodes, newIds, modifiedNodesIds, clearFlags } = useCanvasStore();
+  const { updateQuest } = useUpdateQuests();
+  const { deleteQuest } = useDeleteQuests();
+  const { nodes, newIds, modifiedNodesIds, deletedNodesIds, clearFlags } = useCanvasStore();
+  const { setLoading } = useLoadingStore();
 
   // type guard to check if a node is a QuestNode
   const isQuestNode = (node: Node<QuestNodeData | SkillNodeData>): node is Node<QuestNodeData> =>
@@ -50,15 +55,47 @@ export const useSaveCanvas = () => {
         position: { x: node.position.x, y: node.position.y },
       }));
 
+    const toDelete = deletedNodesIds
+      .filter((deletedId) => !newIds.includes(deletedId))
+      .map((deletedId) => ({
+        id: deletedId,
+        questId: deletedId,
+      }));
+
     try {
+      setLoading(true, "spinner");
       if (toCreate.length > 0) {
-        const response = await createQuest(toCreate);
-        return response;
+        const result = await createQuest(toCreate);
+        if (result.total > 0) {
+          showToast({
+            title: "Quête(s) créée(s) avec succès !",
+            description: `${toCreate.length} quête${toCreate.length > 1 ? "s" : ""} créée${toCreate.length > 1 ? "s" : ""} dans votre canvas.`,
+            duration: 4000,
+            status: "success",
+          });
+        }
       }
       if (toUpdate.length > 0) {
-        return "Update functionality not implemented yet";
+        const result = await updateQuest(toUpdate);
+        if (result.total > 0) {
+          showToast({
+            title: "Quête(s) mise(s) à jour avec succès !",
+            description: `${toUpdate.length} quête${toUpdate.length > 1 ? "s" : ""} modifiée${toUpdate.length > 1 ? "s" : ""} dans votre canvas.`,
+            duration: 4000,
+            status: "success",
+          });
+        }
       }
-
+      if (toDelete.length > 0) {
+        await deleteQuest(toDelete);
+        showToast({
+          title: "Quête(s) supprimée(s) avec succès !",
+          description: `${toDelete.length} quête${toDelete.length > 1 ? "s" : ""} supprimée${toDelete.length > 1 ? "s" : ""} de votre canvas.`,
+          duration: 4000,
+          status: "success",
+        });
+      }
+      setLoading(false);
       clearFlags();
     } catch (error) {
       return error;
