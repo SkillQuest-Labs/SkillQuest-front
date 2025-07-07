@@ -7,7 +7,7 @@ export const useConnectionHandler = (edges: Edge[], setEdges: (edges: Edge[]) =>
       const newEdge: Edge = {
         id: `e${params.source}-${params.target}`,
         ...params,
-        type: "smoothstep",
+        type: "custom",
         animated: true,
         style: { stroke: "#fde68a", strokeWidth: 3 },
         markerEnd: {
