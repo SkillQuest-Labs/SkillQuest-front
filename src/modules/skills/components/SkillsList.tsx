@@ -9,28 +9,33 @@ import { SkillsStats } from "./SkillsStats";
 import { useNavigate } from "react-router-dom";
 import { SparkleParticles } from "./SparkleParticles";
 
-// Enums for filter values and labels in French
-export enum FilterStatus {
-  All = "Tous",
-  NotStarted = "Non commencé",
-  InProgress = "En cours",
-  Completed = "Terminé",
-  Draft = "Brouillon",
-}
+// FilterStatus
+export const FilterStatus = {
+  All: "Tous",
+  NotStarted: "Non commencé",
+  InProgress: "En cours",
+  Completed: "Terminé",
+  Draft: "Brouillon",
+} as const;
+export type FilterStatus = (typeof FilterStatus)[keyof typeof FilterStatus];
 
-export enum FilterDifficulty {
-  All = "Tous",
-  Easy = "Facile",
-  Medium = "Moyen",
-  Hard = "Difficile",
-}
+// FilterDifficulty
+export const FilterDifficulty = {
+  All: "Tous",
+  Easy: "Facile",
+  Medium: "Moyen",
+  Hard: "Difficile",
+} as const;
+export type FilterDifficulty = (typeof FilterDifficulty)[keyof typeof FilterDifficulty];
 
-export enum SortBy {
-  Updated = "Plus récents",
-  Name = "Nom",
-  Progress = "Progression",
-  Duration = "Durée",
-}
+// SortBy
+export const SortBy = {
+  Updated: "Plus récents",
+  Name: "Nom",
+  Progress: "Progression",
+  Duration: "Durée",
+} as const;
+export type SortBy = (typeof SortBy)[keyof typeof SortBy];
 
 export function SkillsList() {
   const { skills } = useSkills();
