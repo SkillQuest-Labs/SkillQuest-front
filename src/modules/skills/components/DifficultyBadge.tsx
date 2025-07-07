@@ -1,9 +1,10 @@
 import { Badge } from "@/shared/components/ui/badge";
 import { cn } from "../../../shared/utils/helpers";
 import { difficultyConfig } from "../skills.const";
+import type { Difficulty } from "../skills.type";
 
 interface DifficultyBadgeProps {
-  difficulty: "Facile" | "Moyen" | "Difficile";
+  difficulty: Difficulty;
   className?: string;
 }
 

@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { FilterStatus, FilterDifficulty, SortBy } from "../components/SkillsList";
 import type { Skill } from "../skills.type";
+import { Difficulty, Status } from "../skills.type";
 
 export const useFilteredSkills = (
   skills: Skill[],
@@ -18,13 +19,13 @@ export const useFilteredSkills = (
 
       // Map skill.status to French label for comparison
       const statusLabel =
-        skill.status === "not_started"
+        skill.status === Status.NotStarted
           ? FilterStatus.NotStarted
-          : skill.status === "in_progress"
+          : skill.status === Status.InProgress
             ? FilterStatus.InProgress
-            : skill.status === "completed"
+            : skill.status === Status.Completed
               ? FilterStatus.Completed
-              : skill.status === "draft"
+              : skill.status === Status.Draft
                 ? FilterStatus.Draft
                 : FilterStatus.All;
 
@@ -32,11 +33,11 @@ export const useFilteredSkills = (
 
       // Map skill.difficulty to French label for comparison
       const difficultyLabel =
-        skill.difficulty === "Facile"
+        skill.difficulty === Difficulty.Facile
           ? FilterDifficulty.Easy
-          : skill.difficulty === "Moyen"
+          : skill.difficulty === Difficulty.Moyen
             ? FilterDifficulty.Medium
-            : skill.difficulty === "Difficile"
+            : skill.difficulty === Difficulty.Difficile
               ? FilterDifficulty.Hard
               : FilterDifficulty.All;
 

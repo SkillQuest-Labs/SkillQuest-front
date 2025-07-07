@@ -8,6 +8,7 @@ import { SkillCard } from "./SkillCard";
 import { SkillsStats } from "./SkillsStats";
 import { useNavigate } from "react-router-dom";
 import { SparkleParticles } from "./SparkleParticles";
+import { Difficulty, Status } from "../skills.type";
 
 // Enums for filter values and labels in French
 export enum FilterStatus {

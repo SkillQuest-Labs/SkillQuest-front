@@ -1,13 +1,7 @@
 import { Badge } from "@/shared/components/ui/badge";
 import { cn } from "../../../shared/utils/helpers";
 import { statusConfig } from "../skills.const";
-
-export enum Status {
-  NotStarted = "not_started",
-  InProgress = "in_progress",
-  Completed = "completed",
-  Draft = "draft",
-}
+import type { Status } from "../skills.type";
 
 type StatusBadgeProps = {
   status: Status;
