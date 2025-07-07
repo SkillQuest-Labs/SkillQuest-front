@@ -1,13 +1,16 @@
 import { cn } from "../../../shared/utils/helpers";
 import type { Skill } from "../skills.type";
+import { statCards } from "../skills.const";
 
-interface SkillsStatsProps {
+type StatsKeys = "total" | "completed" | "inProgress" | "notStarted" | "draft" | "averageProgress";
+
+type SkillsStatsProps = {
   skills: Skill[];
   className?: string;
-}
+};
 
 export function SkillsStats({ skills, className }: SkillsStatsProps) {
-  const stats = {
+  const stats: Record<StatsKeys, number> = {
     total: skills.length,
     completed: skills.filter((s) => s.status === "completed").length,
     inProgress: skills.filter((s) => s.status === "in_progress").length,
@@ -22,45 +25,6 @@ export function SkillsStats({ skills, className }: SkillsStatsProps) {
         : 0,
   };
 
-  const statCards = [
-    {
-      title: "Total",
-      value: stats.total,
-      icon: "🎯",
-      color: "text-blue-600",
-    },
-    {
-      title: "Terminés",
-      value: stats.completed,
-      icon: "✅",
-      color: "text-green-600",
-    },
-    {
-      title: "En cours",
-      value: stats.inProgress,
-      icon: "🚀",
-      color: "text-purple-600",
-    },
-    {
-      title: "Non commencés",
-      value: stats.notStarted,
-      icon: "⏳",
-      color: "text-gray-600",
-    },
-    {
-      title: "Brouillons",
-      value: stats.draft,
-      icon: "📝",
-      color: "text-orange-600",
-    },
-    {
-      title: "Progression moy.",
-      value: `${stats.averageProgress}%`,
-      icon: "📊",
-      color: "text-indigo-600",
-    },
-  ];
-
   return (
     <div className={cn("grid grid-cols-3 md:grid-cols-6 gap-2", className)}>
       {statCards.map((stat, index) => (
@@ -70,7 +34,9 @@ export function SkillsStats({ skills, className }: SkillsStatsProps) {
         >
           <div className={cn("text-sm mb-1", stat.color)}>{stat.icon}</div>
           <div className="text-sm font-semibold text-foreground">
-            {stat.value}
+            {stat.key === "averageProgress"
+              ? `${stats[stat.key as StatsKeys]}%`
+              : stats[stat.key as StatsKeys]}
           </div>
           <div className="text-xs text-muted-foreground">{stat.title}</div>
         </div>

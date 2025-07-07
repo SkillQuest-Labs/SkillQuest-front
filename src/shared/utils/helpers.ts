@@ -5,7 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const formatDuration = (minutes: number) => {
+export const formatSkillDuration = (minutes: number) => {
   if (minutes < 60) return `${minutes} min`;
   const hours = Math.floor(minutes / 60);
   const remainingMinutes = minutes % 60;
@@ -14,8 +14,8 @@ export const formatDuration = (minutes: number) => {
     : `${hours}h`;
 };
 
-export const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString("fr-FR", {
+export const formatSkillDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString("en-GB", {
     day: "numeric",
     month: "short",
     year: "numeric",

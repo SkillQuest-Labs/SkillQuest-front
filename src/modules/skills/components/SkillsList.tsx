@@ -1,5 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useSkills } from "../hooks/use-skills";
+import { useFilteredSkills } from "../hooks/use-filtered-skills";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import {
@@ -14,13 +15,28 @@ import { SkillsStats } from "./SkillsStats";
 import { useNavigate } from "react-router-dom";
 import { SparkleParticles } from "./SparkleParticles";
 
-type FilterStatus =
-  | "all"
-  | "not_started"
-  | "in_progress"
-  | "completed"
-  | "draft";
-type FilterDifficulty = "all" | "Facile" | "Moyen" | "Difficile";
+// Enums for filter values and labels in French
+export enum FilterStatus {
+  All = "Tous",
+  NotStarted = "Non commencé",
+  InProgress = "En cours",
+  Completed = "Terminé",
+  Draft = "Brouillon",
+}
+
+export enum FilterDifficulty {
+  All = "Tous",
+  Easy = "Facile",
+  Medium = "Moyen",
+  Hard = "Difficile",
+}
+
+export enum SortBy {
+  Updated = "Plus récents",
+  Name = "Nom",
+  Progress = "Progression",
+  Duration = "Durée",
+}
 
 export function SkillsList() {
   const { skills } = useSkills();
@@ -28,49 +44,18 @@ export function SkillsList() {
 
   // Filters state
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<FilterStatus>("all");
-  const [difficultyFilter, setDifficultyFilter] =
-    useState<FilterDifficulty>("all");
-  const [sortBy, setSortBy] = useState<
-    "name" | "progress" | "duration" | "updated"
-  >("updated");
+  const [statusFilter, setStatusFilter] = useState<FilterStatus>(FilterStatus.All);
+  const [difficultyFilter, setDifficultyFilter] = useState<FilterDifficulty>(FilterDifficulty.All);
+  const [sortBy, setSortBy] = useState<SortBy>(SortBy.Updated);
 
-  // Filter and sort skills
-  const filteredSkills = useMemo(() => {
-    const filtered = skills.filter((skill) => {
-      const matchesSearch =
-        skill.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        skill.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        skill.category?.toLowerCase().includes(searchQuery.toLowerCase());
-
-      const matchesStatus =
-        statusFilter === "all" || skill.status === statusFilter;
-      const matchesDifficulty =
-        difficultyFilter === "all" || skill.difficulty === difficultyFilter;
-
-      return matchesSearch && matchesStatus && matchesDifficulty;
-    });
-
-    // Sort skills
-    const sorted = [...filtered].sort((a, b) => {
-      switch (sortBy) {
-        case "name":
-          return a.title.localeCompare(b.title);
-        case "progress":
-          return (b.progress || 0) - (a.progress || 0);
-        case "duration":
-          return b.duration - a.duration;
-        case "updated":
-          return (
-            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-          );
-        default:
-          return 0;
-      }
-    });
-
-    return sorted;
-  }, [skills, searchQuery, statusFilter, difficultyFilter, sortBy]);
+  // Utilisation du hook pour filtrer/tri
+  const filteredSkills = useFilteredSkills(
+    skills,
+    searchQuery,
+    statusFilter,
+    difficultyFilter,
+    sortBy
+  );
 
   const handleSkillClick = (skillId: string) => {
     navigate(`/skills/${skillId}`);
@@ -127,17 +112,15 @@ export function SkillsList() {
               </label>
               <Select
                 value={statusFilter}
-                onValueChange={(value: FilterStatus) => setStatusFilter(value)}
+                onValueChange={(value: FilterStatus) => setStatusFilter(value as FilterStatus)}
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Tous les statuts</SelectItem>
-                  <SelectItem value="not_started">Non commencés</SelectItem>
-                  <SelectItem value="in_progress">En cours</SelectItem>
-                  <SelectItem value="completed">Terminés</SelectItem>
-                  <SelectItem value="draft">Brouillons</SelectItem>
+                  {Object.values(FilterStatus).map((label) => (
+                    <SelectItem key={label} value={label}>{label}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -149,18 +132,15 @@ export function SkillsList() {
               </label>
               <Select
                 value={difficultyFilter}
-                onValueChange={(value: FilterDifficulty) =>
-                  setDifficultyFilter(value)
-                }
+                onValueChange={(value: FilterDifficulty) => setDifficultyFilter(value as FilterDifficulty)}
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Toutes les difficultés</SelectItem>
-                  <SelectItem value="Facile">Facile</SelectItem>
-                  <SelectItem value="Moyen">Moyen</SelectItem>
-                  <SelectItem value="Difficile">Difficile</SelectItem>
+                  {Object.values(FilterDifficulty).map((label) => (
+                    <SelectItem key={label} value={label}>{label}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
@@ -172,18 +152,15 @@ export function SkillsList() {
               </label>
               <Select
                 value={sortBy}
-                onValueChange={(
-                  value: "name" | "progress" | "duration" | "updated",
-                ) => setSortBy(value)}
+                onValueChange={(value: SortBy) => setSortBy(value as SortBy)}
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="updated">Plus récents</SelectItem>
-                  <SelectItem value="name">Nom</SelectItem>
-                  <SelectItem value="progress">Progression</SelectItem>
-                  <SelectItem value="duration">Durée</SelectItem>
+                  {Object.values(SortBy).map((label) => (
+                    <SelectItem key={label} value={label}>{label}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

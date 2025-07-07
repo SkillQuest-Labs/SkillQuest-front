@@ -1,15 +1,12 @@
 import React, { useEffect, useRef } from "react";
+import { COLORS } from "../skills.const";
 
-interface SparkleParticlesProps {
+type SparkleParticlesProps = {
   count?: number;
   className?: string;
-}
+};
 
-const COLORS = ["#fff", "#facc15", "#a78bfa"];
-
-function randomBetween(min: number, max: number) {
-  return Math.random() * (max - min) + min;
-}
+const randomBetween = (min: number, max: number) => Math.random() * (max - min) + min;
 
 export const SparkleParticles: React.FC<SparkleParticlesProps> = ({
   count = 16,
@@ -60,20 +57,3 @@ export const SparkleParticles: React.FC<SparkleParticlesProps> = ({
   );
 };
 
-// Animation CSS à ajouter dans le global ou dans le composant :
-// @keyframes sparkle-float {
-//   0% {
-//     opacity: 0;
-//     transform: translateY(0) scale(1);
-//   }
-//   10% {
-//     opacity: 1;
-//   }
-//   80% {
-//     opacity: 0.8;
-//   }
-//   100% {
-//     opacity: 0;
-//     transform: translateY(-32px) scale(0.7);
-//   }
-// }
