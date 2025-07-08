@@ -37,15 +37,21 @@ export const SkillGrid: React.FC<SkillGridProps> = ({ skills }) => {
           aria-label="Page précédente"
         >
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M13 15L8 10L13 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path
+              d="M13 15L8 10L13 5"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </button>
         {pageNumbers.map((num) => (
           <button
             key={num}
-            className={`skill-pagination-btn${num === page ? ' selected' : ''}`}
+            className={`skill-pagination-btn${num === page ? " selected" : ""}`}
             onClick={() => goToPage(num)}
-            aria-current={num === page ? 'page' : undefined}
+            aria-current={num === page ? "page" : undefined}
             aria-label={`Page ${num}`}
           >
             {num}
@@ -58,7 +64,13 @@ export const SkillGrid: React.FC<SkillGridProps> = ({ skills }) => {
           aria-label="Page suivante"
         >
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M7 5L12 10L7 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path
+              d="M7 5L12 10L7 15"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </button>
       </div>
