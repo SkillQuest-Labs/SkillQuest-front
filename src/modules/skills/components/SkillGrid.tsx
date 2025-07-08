@@ -33,7 +33,9 @@ export const SkillGrid: React.FC<SkillGridProps> = ({ skills }) => {
         >
           ←
         </button>
-        <span className="text-sm">Page {page} / {totalPages}</span>
+        <span className="text-sm">
+          Page {page} / {totalPages}
+        </span>
         <button
           className="px-2 py-1 rounded hover:bg-gray-200 disabled:opacity-50"
           onClick={() => goToPage(page + 1)}

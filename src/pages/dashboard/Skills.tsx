@@ -34,8 +34,8 @@ export const Skills = () => {
   }, [filters]);
 
   return (
-    <div className="p-6 md:p-10 bg-gray-50 min-h-screen">
-      <h1 className="text-2xl font-bold mb-6">Mes Skills</h1>
+    <div className="p-6 md:p-10 min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <h1 className="text-2xl font-bold mb-6 text-white">Mes Skills</h1>
       <SkillFilters
         difficulty={filters.difficulty}
         sort={filters.sort}
