@@ -5,11 +5,27 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.10);
   background: #1e293b; /* bg-slate-800 */
   color: #f1f5f9; /* text-slate-100 */
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition: box-shadow 0.2s, transform 0.2s, border 0.2s;
+  border: 2px solid rgba(100,116,139,0.15); /* slate-500/20 */
+  position: relative;
+  overflow: hidden;
+}
+.skill-card-custom::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  pointer-events: none;
+  box-shadow: 0 0 0 0 rgba(255,255,255,0.0), 0 0 0 0 rgba(255,255,255,0.0);
+  transition: box-shadow 0.3s;
 }
 .skill-card-custom:hover {
-  box-shadow: 0 8px 32px rgba(30,41,59,0.25);
+  box-shadow: 0 8px 24px rgba(30,41,59,0.18), 0 0 8px 1px #f1f5f9cc;
+  border: 2px solid #f1f5f9cc; /* blanc très clair */
   transform: translateY(-4px) scale(1.03);
+}
+.skill-card-custom:hover::before {
+  box-shadow: 0 0 10px 2px #f1f5f9cc, 0 0 18px 4px #f1f5f9aa;
 }
 
 .skill-grid-custom {
@@ -36,4 +52,38 @@
   color: #94a3b8 !important; /* text-slate-400 */
 }
 
-/* Ajoute ici d'autres styles spécifiques au module skills si besoin */ 
+/* Pagination améliorée */
+.skill-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.skill-pagination-btn {
+  background: #334155;
+  color: #f1f5f9;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.4rem 1.1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 1px 4px rgba(30,41,59,0.10);
+  cursor: pointer;
+}
+.skill-pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.skill-pagination-btn:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+.skill-pagination-page {
+  color: #f1f5f9;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+}
+

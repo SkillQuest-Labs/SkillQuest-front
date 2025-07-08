@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import type { Skill } from "../skills.types";
 import { SkillCard } from "./SkillCard";
+import '../skills.css';
 
 interface SkillGridProps {
   skills: Skill[];
@@ -25,19 +26,19 @@ export const SkillGrid: React.FC<SkillGridProps> = ({ skills }) => {
           <SkillCard key={skill.id} skill={skill} />
         ))}
       </div>
-      <div className="flex justify-center items-center gap-4 mt-4">
+      <div className="skill-pagination">
         <button
-          className="px-2 py-1 rounded hover:bg-gray-200 disabled:opacity-50"
+          className="skill-pagination-btn"
           onClick={() => goToPage(page - 1)}
           disabled={page === 1}
         >
           ←
         </button>
-        <span className="text-sm">
+        <span className="skill-pagination-page">
           Page {page} / {totalPages}
         </span>
         <button
-          className="px-2 py-1 rounded hover:bg-gray-200 disabled:opacity-50"
+          className="skill-pagination-btn"
           onClick={() => goToPage(page + 1)}
           disabled={page === totalPages}
         >
