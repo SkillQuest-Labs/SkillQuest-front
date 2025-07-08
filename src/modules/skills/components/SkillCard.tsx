@@ -29,19 +29,19 @@ const statusLabels = {
 
 export const SkillCard: React.FC<SkillCardProps> = ({ skill }) => (
   <div className="skill-card-custom group transition-all duration-200 hover:shadow-lg hover:-translate-y-1 flex flex-col min-h-[220px] p-5">
-    <div className="flex items-start justify-between mb-2">
+    <div className="flex items-start justify-between mb-2 min-w-0">
       <h3 className="font-semibold text-lg truncate max-w-[70%]" title={skill.title}>
         {skill.title}
       </h3>
-      <div className="flex flex-col items-end gap-2">
-        <span className={`skill-badge-difficulty ${difficultyColors[skill.difficulty]}`}>
-          {skill.difficulty === SkillDifficulty.Easy
+      <div className="flex flex-col items-end gap-2 min-w-0">
+        <span className={`skill-badge-difficulty ${difficultyColors[skill.difficulty]} whitespace-nowrap`}>{
+          skill.difficulty === SkillDifficulty.Easy
             ? "Facile"
             : skill.difficulty === SkillDifficulty.Medium
               ? "Moyen"
               : "Difficile"}
         </span>
-        <span className={`skill-badge-difficulty ${statusColors[skill.status]}`}>{statusLabels[skill.status]}</span>
+        <span className={`skill-badge-difficulty ${statusColors[skill.status]} whitespace-nowrap`}>{statusLabels[skill.status]}</span>
       </div>
     </div>
     <div className="text-sm text-gray-600 mb-3 line-clamp-3" title={skill.description}>

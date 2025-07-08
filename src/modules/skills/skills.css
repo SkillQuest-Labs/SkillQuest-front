@@ -20,12 +20,12 @@
   transition: box-shadow 0.3s;
 }
 .skill-card-custom:hover {
-  box-shadow: 0 8px 24px rgba(30,41,59,0.18), 0 0 8px 1px #f1f5f9cc;
-  border: 2px solid #f1f5f9cc; /* blanc très clair */
+  box-shadow: 0 4px 12px rgba(30,41,59,0.13), 0 0 2px 1px #f1f5f9bb;
+  border: 1px solid #f1f5f9bb; /* blanc très clair, plus fin */
   transform: translateY(-4px) scale(1.03);
 }
 .skill-card-custom:hover::before {
-  box-shadow: 0 0 10px 2px #f1f5f9cc, 0 0 18px 4px #f1f5f9aa;
+  box-shadow: 0 0 2px 1px #f1f5f9bb, 0 0 4px 1px #f1f5f988;
 }
 
 .skill-grid-custom {
