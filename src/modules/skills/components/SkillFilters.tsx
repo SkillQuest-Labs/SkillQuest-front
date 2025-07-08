@@ -1,10 +1,10 @@
-import React from 'react';
-import { SkillDifficulty } from '../skills.types';
+import React from "react";
+import { SkillDifficulty } from "../skills.types";
 
 interface SkillFiltersProps {
-  difficulty: SkillDifficulty | 'all';
-  sort: 'recent' | 'oldest';
-  onFilterChange: (filters: { difficulty: SkillDifficulty | 'all'; sort: 'recent' | 'oldest' }) => void;
+  difficulty: SkillDifficulty | "all";
+  sort: "recent" | "oldest";
+  onFilterChange: (filters: { difficulty: SkillDifficulty | "all"; sort: "recent" | "oldest" }) => void;
 }
 
 export const SkillFilters: React.FC<SkillFiltersProps> = ({ difficulty, sort, onFilterChange }) => {
@@ -15,7 +15,7 @@ export const SkillFilters: React.FC<SkillFiltersProps> = ({ difficulty, sort, on
         <select
           className="border rounded px-2 py-1"
           value={difficulty}
-          onChange={e => onFilterChange({ difficulty: e.target.value as SkillDifficulty | 'all', sort })}
+          onChange={(e) => onFilterChange({ difficulty: e.target.value as SkillDifficulty | "all", sort })}
         >
           <option value="all">Toutes</option>
           <option value={SkillDifficulty.Easy}>Facile</option>
@@ -28,7 +28,7 @@ export const SkillFilters: React.FC<SkillFiltersProps> = ({ difficulty, sort, on
         <select
           className="border rounded px-2 py-1"
           value={sort}
-          onChange={e => onFilterChange({ difficulty, sort: e.target.value as 'recent' | 'oldest' })}
+          onChange={(e) => onFilterChange({ difficulty, sort: e.target.value as "recent" | "oldest" })}
         >
           <option value="recent">Plus récent</option>
           <option value="oldest">Moins récent</option>
@@ -36,4 +36,4 @@ export const SkillFilters: React.FC<SkillFiltersProps> = ({ difficulty, sort, on
       </div>
     </div>
   );
-}; 
+};

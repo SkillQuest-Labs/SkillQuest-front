@@ -1,7 +1,7 @@
 export enum SkillDifficulty {
-  Easy = 'easy',
-  Medium = 'medium',
-  Hard = 'hard',
+  Easy = "easy",
+  Medium = "medium",
+  Hard = "hard",
 }
 
 export type Skill = {
@@ -11,4 +11,4 @@ export type Skill = {
   category: string;
   difficulty: SkillDifficulty;
   createdAt: string; // ISO date
-}; 
+};
