@@ -6,7 +6,7 @@ interface SkillGridProps {
   skills: Skill[];
 }
 
-const SKILLS_PER_PAGE = 8;
+const SKILLS_PER_PAGE = 16;
 
 export const SkillGrid: React.FC<SkillGridProps> = ({ skills }) => {
   const [page, setPage] = useState(1);
@@ -20,7 +20,7 @@ export const SkillGrid: React.FC<SkillGridProps> = ({ skills }) => {
 
   return (
     <div className="w-full">
-      <div className="grid grid-cols-4 gap-6 mb-6">
+      <div className="grid grid-cols-4 grid-rows-4 gap-6 mb-6">
         {paginatedSkills.map((skill) => (
           <SkillCard key={skill.id} skill={skill} />
         ))}
@@ -33,9 +33,7 @@ export const SkillGrid: React.FC<SkillGridProps> = ({ skills }) => {
         >
           ←
         </button>
-        <span className="text-sm">
-          Page {page} / {totalPages}
-        </span>
+        <span className="text-sm">Page {page} / {totalPages}</span>
         <button
           className="px-2 py-1 rounded hover:bg-gray-200 disabled:opacity-50"
           onClick={() => goToPage(page + 1)}

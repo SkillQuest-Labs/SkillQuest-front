@@ -5,10 +5,10 @@ export enum SkillDifficulty {
 }
 
 export enum SkillStatus {
-  Draft = 'draft',
-  InProgress = 'in_progress',
-  NotStarted = 'not_started',
-  Finished = 'finished',
+  Draft = "draft",
+  InProgress = "in_progress",
+  NotStarted = "not_started",
+  Finished = "finished",
 }
 
 export type Skill = {

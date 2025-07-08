@@ -1,11 +1,15 @@
-import React from 'react';
-import { SkillDifficulty, SkillStatus } from '../skills.types';
+import React from "react";
+import { SkillDifficulty, SkillStatus } from "../skills.types";
 
 interface SkillFiltersProps {
-  difficulty: SkillDifficulty | 'all';
-  sort: 'recent' | 'oldest';
-  status: SkillStatus | 'all';
-  onFilterChange: (filters: { difficulty: SkillDifficulty | 'all'; sort: 'recent' | 'oldest'; status: SkillStatus | 'all' }) => void;
+  difficulty: SkillDifficulty | "all";
+  sort: "recent" | "oldest";
+  status: SkillStatus | "all";
+  onFilterChange: (filters: {
+    difficulty: SkillDifficulty | "all";
+    sort: "recent" | "oldest";
+    status: SkillStatus | "all";
+  }) => void;
 }
 
 export const SkillFilters: React.FC<SkillFiltersProps> = ({ difficulty, sort, status, onFilterChange }) => {
@@ -16,7 +20,7 @@ export const SkillFilters: React.FC<SkillFiltersProps> = ({ difficulty, sort, st
         <select
           className="border rounded px-2 py-1"
           value={difficulty}
-          onChange={e => onFilterChange({ difficulty: e.target.value as SkillDifficulty | 'all', sort, status })}
+          onChange={(e) => onFilterChange({ difficulty: e.target.value as SkillDifficulty | "all", sort, status })}
         >
           <option value="all">Toutes</option>
           <option value={SkillDifficulty.Easy}>Facile</option>
@@ -29,7 +33,7 @@ export const SkillFilters: React.FC<SkillFiltersProps> = ({ difficulty, sort, st
         <select
           className="border rounded px-2 py-1"
           value={status}
-          onChange={e => onFilterChange({ difficulty, sort, status: e.target.value as SkillStatus | 'all' })}
+          onChange={(e) => onFilterChange({ difficulty, sort, status: e.target.value as SkillStatus | "all" })}
         >
           <option value="all">All</option>
           <option value={SkillStatus.Draft}>Draft</option>
@@ -43,7 +47,7 @@ export const SkillFilters: React.FC<SkillFiltersProps> = ({ difficulty, sort, st
         <select
           className="border rounded px-2 py-1"
           value={sort}
-          onChange={e => onFilterChange({ difficulty, sort: e.target.value as 'recent' | 'oldest', status })}
+          onChange={(e) => onFilterChange({ difficulty, sort: e.target.value as "recent" | "oldest", status })}
         >
           <option value="recent">Plus récent</option>
           <option value="oldest">Moins récent</option>
