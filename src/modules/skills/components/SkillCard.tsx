@@ -1,6 +1,6 @@
 import React from "react";
 import type { Skill } from "../skills.types";
-import { SkillDifficulty } from "../skills.types";
+import { SkillDifficulty, SkillStatus } from "../skills.types";
 
 interface SkillCardProps {
   skill: Skill;
@@ -10,6 +10,20 @@ const difficultyColors = {
   [SkillDifficulty.Easy]: "bg-green-100 text-green-800",
   [SkillDifficulty.Medium]: "bg-yellow-100 text-yellow-800",
   [SkillDifficulty.Hard]: "bg-red-100 text-red-800",
+};
+
+const statusColors = {
+  [SkillStatus.Draft]: "bg-gray-200 text-gray-700",
+  [SkillStatus.InProgress]: "bg-blue-100 text-blue-700",
+  [SkillStatus.NotStarted]: "bg-yellow-100 text-yellow-700",
+  [SkillStatus.Finished]: "bg-green-100 text-green-700",
+};
+
+const statusLabels = {
+  [SkillStatus.Draft]: "Draft",
+  [SkillStatus.InProgress]: "In progress",
+  [SkillStatus.NotStarted]: "Not started",
+  [SkillStatus.Finished]: "Finished",
 };
 
 export const SkillCard: React.FC<SkillCardProps> = ({ skill }) => (
@@ -24,6 +38,11 @@ export const SkillCard: React.FC<SkillCardProps> = ({ skill }) => (
           : skill.difficulty === SkillDifficulty.Medium
             ? "Moyen"
             : "Difficile"}
+      </span>
+    </div>
+    <div className="flex items-center gap-2 mb-2">
+      <span className={`px-2 py-0.5 rounded text-xs font-medium ${statusColors[skill.status]}`}>
+        {statusLabels[skill.status]}
       </span>
     </div>
     <div className="text-xs text-gray-500 truncate mb-2" title={skill.description}>

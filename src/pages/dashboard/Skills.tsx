@@ -1,19 +1,27 @@
 import React, { useState, useMemo } from "react";
 import { skillsMock } from "../../modules/skills/skills.const";
-import { SkillDifficulty } from "../../modules/skills/skills.types";
+import { SkillDifficulty, SkillStatus } from "../../modules/skills/skills.types";
 import { SkillFilters } from "../../modules/skills/components/SkillFilters";
 import { SkillGrid } from "../../modules/skills/components/SkillGrid";
 
 export const Skills = () => {
-  const [filters, setFilters] = useState<{ difficulty: SkillDifficulty | "all"; sort: "recent" | "oldest" }>({
+  const [filters, setFilters] = useState<{
+    difficulty: SkillDifficulty | "all";
+    sort: "recent" | "oldest";
+    status: SkillStatus | "all";
+  }>({
     difficulty: "all",
     sort: "recent",
+    status: "all",
   });
 
   const filteredSkills = useMemo(() => {
     let result = [...skillsMock];
     if (filters.difficulty !== "all") {
       result = result.filter((s) => s.difficulty === filters.difficulty);
+    }
+    if (filters.status !== "all") {
+      result = result.filter((s) => s.status === filters.status);
     }
     result.sort((a, b) => {
       if (filters.sort === "recent") {
@@ -28,7 +36,12 @@ export const Skills = () => {
   return (
     <div className="p-6 md:p-10 bg-gray-50 min-h-screen">
       <h1 className="text-2xl font-bold mb-6">Mes Skills</h1>
-      <SkillFilters difficulty={filters.difficulty} sort={filters.sort} onFilterChange={setFilters} />
+      <SkillFilters
+        difficulty={filters.difficulty}
+        sort={filters.sort}
+        status={filters.status}
+        onFilterChange={setFilters}
+      />
       <SkillGrid skills={filteredSkills} />
     </div>
   );
