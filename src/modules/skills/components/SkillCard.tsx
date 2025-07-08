@@ -34,14 +34,16 @@ export const SkillCard: React.FC<SkillCardProps> = ({ skill }) => (
         {skill.title}
       </h3>
       <div className="flex flex-col items-end gap-2 min-w-0">
-        <span className={`skill-badge-difficulty ${difficultyColors[skill.difficulty]} whitespace-nowrap`}>{
-          skill.difficulty === SkillDifficulty.Easy
+        <span className={`skill-badge-difficulty ${difficultyColors[skill.difficulty]} whitespace-nowrap`}>
+          {skill.difficulty === SkillDifficulty.Easy
             ? "Facile"
             : skill.difficulty === SkillDifficulty.Medium
               ? "Moyen"
               : "Difficile"}
         </span>
-        <span className={`skill-badge-difficulty ${statusColors[skill.status]} whitespace-nowrap`}>{statusLabels[skill.status]}</span>
+        <span className={`skill-badge-difficulty ${statusColors[skill.status]} whitespace-nowrap`}>
+          {statusLabels[skill.status]}
+        </span>
       </div>
     </div>
     <div className="text-sm text-gray-600 mb-3 line-clamp-3" title={skill.description}>

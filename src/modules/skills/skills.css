@@ -52,38 +52,67 @@
   color: #94a3b8 !important; /* text-slate-400 */
 }
 
-/* Pagination améliorée */
+/* Pagination moderne et animée */
 .skill-pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: 1.2rem;
   margin-top: 1.5rem;
 }
 .skill-pagination-btn {
-  background: #334155;
-  color: #f1f5f9;
+  background: none;
+  color: #64748b;
   border: none;
-  border-radius: 0.5rem;
-  padding: 0.4rem 1.1rem;
-  font-size: 1rem;
-  font-weight: 600;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-  box-shadow: 0 1px 4px rgba(30,41,59,0.10);
+  border-radius: 0.4rem;
+  padding: 0.05rem 0.45rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.2s, background 0.2s, box-shadow 0.2s;
   cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.7rem;
+  min-height: 1.7rem;
 }
 .skill-pagination-btn:disabled {
-  opacity: 0.4;
+  opacity: 0.3;
   cursor: not-allowed;
 }
-.skill-pagination-btn:hover:not(:disabled) {
-  background: #f1f5f9;
-  color: #1e293b;
-}
-.skill-pagination-page {
-  color: #f1f5f9;
+.skill-pagination-btn.selected {
+  background: #334155; /* bleu doux, moins vif */
+  color: #fff;
   font-weight: 700;
-  font-size: 1.1rem;
-  letter-spacing: 0.02em;
+  border-radius: 0.4rem;
+  transition: background 0.25s, color 0.25s, transform 0.25s, box-shadow 0.25s;
+  transform: scale(1.04);
+  box-shadow: 0 0 6px 1px #33415555;
+}
+.skill-pagination-btn:not(.selected):hover {
+  background: #e2e8f0;
+  color: #334155;
+}
+.skill-pagination-arrow {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.3rem;
+  padding: 0.1rem 0.6rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+  cursor: pointer;
+}
+.skill-pagination-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.skill-pagination-arrow:hover:not(:disabled) {
+  background: #334155;
+  color: #fff;
 }
 
