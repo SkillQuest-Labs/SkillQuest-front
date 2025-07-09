@@ -1,5 +1,5 @@
 import type { Skill } from "../skills.types";
-import "../skills.css";
+import "../../../styles/skills.css";
 import { difficultyColors, statusColors, statusLabels } from "../skills.const";
 
 type SkillCardProps = {

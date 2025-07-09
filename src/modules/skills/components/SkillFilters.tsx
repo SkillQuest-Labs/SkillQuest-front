@@ -1,4 +1,3 @@
-import React from "react";
 import type { SkillDifficulty, SkillSort, SkillStatus } from "../skills.types";
 import { ChevronDown } from "lucide-react";
 
@@ -9,7 +8,7 @@ type SkillFiltersProps = {
   onFilterChange: (filters: { difficulty: SkillDifficulty; sort: SkillSort; status: SkillStatus }) => void;
 };
 
-export const SkillFilters: React.FC<SkillFiltersProps> = ({ difficulty, sort, status, onFilterChange }) => {
+export const SkillFilters = ({ difficulty, sort, status, onFilterChange }: SkillFiltersProps) => {
   return (
     <div className="bg-slate-800 rounded-xl shadow p-3 mb-6">
       <div className="flex gap-2 items-end">

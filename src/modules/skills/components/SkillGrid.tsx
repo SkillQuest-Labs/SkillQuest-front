@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { Skill } from "../skills.types";
 import { SkillCard } from "./SkillCard";
-import "../skills.css";
+import "../../../styles/skills.css";
 import { SKILLS_PER_PAGE } from "../skills.const";
 import { ChevronLeftIcon } from "@/component/icons/chevron-left.icon";
 import { ChevronRightIcon } from "@/component/icons/chevron-right.icon";

@@ -1,14 +1,14 @@
 import { useState, useMemo } from "react";
 import { skillsMock } from "../../modules/skills/skills.const";
-import type { SkillDifficulty, SkillStatus } from "../../modules/skills/skills.types";
+import type { SkillDifficulty, SkillSort, SkillStatus } from "../../modules/skills/skills.types";
 import { SkillFilters } from "../../modules/skills/components/SkillFilters";
 import { SkillGrid } from "../../modules/skills/components/SkillGrid";
 
 export const Skills = () => {
   const [filters, setFilters] = useState<{
-    difficulty: SkillDifficulty | "all";
-    sort: "recent" | "oldest";
-    status: SkillStatus | "all";
+    difficulty: SkillDifficulty;
+    sort: SkillSort;
+    status: SkillStatus;
   }>({
     difficulty: "all",
     sort: "recent",
