@@ -8,7 +8,7 @@ type SkillCardProps = {
 
 export const SkillCard = ({ skill }: SkillCardProps) => (
   <div
-    className="skill-card-custom group relative flex flex-col min-h-[260px] bg-slate-800 rounded-2xl overflow-hidden shadow-sm transition-all duration-200 hover:shadow-xl hover:-translate-y-1 focus-within:ring-2 focus-within:ring-blue-300"
+    className="skill-card-custom skill-card-min group relative flex flex-col bg-slate-800 rounded-2xl overflow-hidden shadow-sm transition-all duration-200 hover:shadow-xl hover:-translate-y-1 focus-within:ring-2 focus-within:ring-blue-300"
     tabIndex={0}
   >
     {/* Overlay lumineux fin autour de la carte */}
