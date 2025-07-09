@@ -11,8 +11,21 @@ import { useSaveCanvas, useQuestsLoader } from "./hooks/useSaveCanvas";
 import { Toaster } from "@/shared/components/ui/sonner";
 import { useAutoSaveCanvas } from "./hooks/useAutoSaveCanvas";
 import { useCanvasStore } from "@/stores/quest/canvas-store";
+import { useLocation, useNavigate } from "react-router-dom";
+import { CreateSkillModal } from "@/component/canvas/CreateSkillModal";
+
 
 export const Canvas = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const params = new URLSearchParams(location.search);
+  const showModal = params.get("modal") === "create-skill";
+
+  const closeModal = () => {
+    navigate("/canvas");
+  };
+
   const [connectionStart, setConnectionStart] = useState<string | null>(null);
   const [, setViewMode] = useState<ViewModeType>("canvas");
 
@@ -66,6 +79,7 @@ export const Canvas = () => {
 
   return (
     <div className="h-screen bg-gray-50 relative ">
+      {showModal && <CreateSkillModal onClose={closeModal} />}
       <CanvasView
         nodes={nodes}
         edges={edges}

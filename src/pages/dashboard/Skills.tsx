@@ -6,6 +6,8 @@ import { SkillGrid, SKILLS_PER_PAGE } from "../../modules/skills/components/Skil
 import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
 import { Plus } from "lucide-react";
 import { Pagination } from "../../modules/skills/components/Pagination";
+import { Button } from "@/shared/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 export const Skills = () => {
   const { isCollapsed } = useSidebarStore();
@@ -19,6 +21,12 @@ export const Skills = () => {
     status: "all",
   });
   const [page, setPage] = useState(1);
+
+  const navigate = useNavigate();
+
+  const handleOpenModal = () => {
+    navigate("/canvas?modal=create-skill");
+  };
 
   const filteredSkills = useMemo(() => {
     let result = [...skillsMock];
@@ -49,13 +57,13 @@ export const Skills = () => {
           <h1 className="text-2xl font-bold text-white">Mes Skills</h1>
           <p className="text-slate-400 text-sm mt-1">{skillsMock.length} skills au total</p>
         </div>
-        <button
+        <Button
           className="flex items-center gap-1 bg-slate-700 hover:bg-slate-600 focus:ring-2 focus:ring-blue-400 text-white font-medium px-3 py-1.5 rounded-md shadow-sm transition-all duration-150 text-sm"
-          type="button"
+          onClick={handleOpenModal}
         >
           <Plus size={18} />
           <span>Create a skill</span>
-        </button>
+        </Button>
       </div>
       <div className="flex-shrink-0">
         <SkillFilters
