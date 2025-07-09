@@ -19,4 +19,5 @@ export type Skill = {
   difficulty: SkillDifficulty;
   status: SkillStatus;
   createdAt: string; // ISO date
+  image?: string;
 };
