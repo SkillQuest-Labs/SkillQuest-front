@@ -24,7 +24,7 @@ export const SkillGrid: React.FC<SkillGridProps> = ({ skills }) => {
 
   return (
     <div className="w-full">
-      <div className="grid grid-cols-4 grid-rows-3 gap-6 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
         {paginatedSkills.map((skill) => (
           <SkillCard key={skill.id} skill={skill} />
         ))}
