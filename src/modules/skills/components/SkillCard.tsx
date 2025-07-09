@@ -7,24 +7,28 @@ type SkillCardProps = {
 };
 
 export const SkillCard = ({ skill }: SkillCardProps) => (
-  <div className="skill-card-custom group transition-all duration-200 hover:shadow-lg hover:-translate-y-1 flex flex-col min-h-[220px] p-0 overflow-hidden">
+  <div className="skill-card-custom group transition-all duration-200 hover:shadow-lg hover:-translate-y-1 flex flex-col min-h-[220px] p-0 overflow-hidden relative">
+    {/* Image spécifique si présente */}
     {skill.image && (
-      <div className="relative w-full h-28">
+      <div className="relative w-full h-28 z-10">
         <img
           src={skill.image}
           alt={skill.title}
-          className="absolute inset-0 w-full h-full object-cover object-center z-0"
+          className="absolute inset-0 w-full h-full object-cover object-center z-10"
           style={{ borderTopLeftRadius: "1rem", borderTopRightRadius: "1rem" }}
         />
         <div
-          className="absolute inset-0 bg-gradient-to-b from-black/60 to-transparent z-10"
+          className="absolute inset-0 bg-gradient-to-b from-black/60 to-transparent z-20"
           style={{ borderTopLeftRadius: "1rem", borderTopRightRadius: "1rem" }}
         />
       </div>
     )}
-    <div className="p-5 flex flex-col flex-1">
+    <div className="p-5 flex flex-col flex-1 relative z-20">
       <div className="flex items-start justify-between mb-2 min-w-0">
-        <h3 className="font-semibold text-lg truncate max-w-[70%]" title={skill.title}>
+        <h3
+          className="font-semibold text-lg leading-tight line-clamp-2 break-words"
+          title={skill.title}
+        >
           {skill.title}
         </h3>
         <div className="flex flex-col items-end gap-2 min-w-0">
