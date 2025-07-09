@@ -28,10 +28,14 @@ export const SkillCard = ({ skill }: SkillCardProps) => (
         />
         {/* Badges sur l'image */}
         <div className="absolute top-3 right-3 flex flex-col items-end gap-2 z-10">
-          <span className={`skill-badge-difficulty ${difficultyColors[skill.difficulty]} rounded-lg px-3 py-0.5 text-xs font-semibold shadow border border-opacity-20 whitespace-nowrap bg-white/80 backdrop-blur-sm`}>
+          <span
+            className={`skill-badge-difficulty ${difficultyColors[skill.difficulty]} rounded-lg px-3 py-0.5 text-xs font-semibold shadow border border-opacity-20 whitespace-nowrap bg-white/80 backdrop-blur-sm`}
+          >
             {skill.difficulty === "easy" ? "Easy" : skill.difficulty === "medium" ? "Medium" : "Hard"}
           </span>
-          <span className={`skill-badge-difficulty ${statusColors[skill.status]} rounded-lg px-3 py-0.5 text-xs font-semibold shadow border border-opacity-20 whitespace-nowrap bg-white/80 backdrop-blur-sm`}>
+          <span
+            className={`skill-badge-difficulty ${statusColors[skill.status]} rounded-lg px-3 py-0.5 text-xs font-semibold shadow border border-opacity-20 whitespace-nowrap bg-white/80 backdrop-blur-sm`}
+          >
             {statusLabels[skill.status]}
           </span>
         </div>
