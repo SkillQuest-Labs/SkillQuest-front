@@ -4,41 +4,8 @@ import type { SkillDifficulty, SkillSort, SkillStatus } from "../../modules/skil
 import { SkillFilters } from "../../modules/skills/components/SkillFilters";
 import { SkillGrid, SKILLS_PER_PAGE } from "../../modules/skills/components/SkillGrid";
 import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
-import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
-
-function Pagination({ page, setPage, totalPages }: { page: number; setPage: (p: number) => void; totalPages: number }) {
-  return (
-    <div className="skill-pagination flex justify-center items-center mt-0 !py-0 !min-h-0 h-auto">
-      <button
-        className="skill-pagination-arrow !w-7 !h-7 !p-0.5"
-        onClick={() => setPage(page - 1)}
-        disabled={page === 1}
-        aria-label="Page précédente"
-      >
-        <ChevronLeft size={18} />
-      </button>
-      {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
-        <button
-          key={num}
-          className={`skill-pagination-btn !text-xs !min-w-[1.5rem] !min-h-[1.5rem] !h-7 !p-0${num === page ? " selected" : ""}`}
-          onClick={() => setPage(num)}
-          aria-current={num === page ? "page" : undefined}
-          aria-label={`Page ${num}`}
-        >
-          {num}
-        </button>
-      ))}
-      <button
-        className="skill-pagination-arrow !w-7 !h-7 !p-0.5"
-        onClick={() => setPage(page + 1)}
-        disabled={page === totalPages}
-        aria-label="Page suivante"
-      >
-        <ChevronRight size={18} />
-      </button>
-    </div>
-  );
-}
+import { Plus } from "lucide-react";
+import { Pagination } from "../../modules/skills/components/Pagination";
 
 export const Skills = () => {
   const { isCollapsed } = useSidebarStore();
