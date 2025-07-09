@@ -12,7 +12,7 @@ import { Toaster } from "@/shared/components/ui/sonner";
 import { useAutoSaveCanvas } from "./hooks/useAutoSaveCanvas";
 import { useCanvasStore } from "@/stores/quest/canvas-store";
 import { useLocation, useNavigate } from "react-router-dom";
-import { CreateSkillModal } from "@/component/canvas/CreateSkillModal";
+import { CreateSkillModal } from "@/modules/canvas/components/modal/CreateSkillModal";
 
 
 export const Canvas = () => {
