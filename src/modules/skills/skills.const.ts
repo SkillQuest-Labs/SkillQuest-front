@@ -217,3 +217,5 @@ export const statusLabels = {
   finished: "Finished",
   all: "All",
 };
+
+export const SKILLS_PER_PAGE = 12;

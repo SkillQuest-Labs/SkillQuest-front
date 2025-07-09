@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import type { Skill } from "../skills.types";
 import { SkillCard } from "./SkillCard";
 import "../skills.css";
+import { SKILLS_PER_PAGE } from "../skills.const";
+import { ChevronLeftIcon } from "@/component/icons/chevron-left.icon";
+import { ChevronRightIcon } from "@/component/icons/chevron-right.icon";
 
-interface SkillGridProps {
+type SkillGridProps = {
   skills: Skill[];
-}
+};
 
-const SKILLS_PER_PAGE = 12;
-
-export const SkillGrid: React.FC<SkillGridProps> = ({ skills }) => {
+export const SkillGrid = ({ skills }: SkillGridProps) => {
   const [page, setPage] = useState(1);
   const totalPages = Math.ceil(skills.length / SKILLS_PER_PAGE);
   const startIdx = (page - 1) * SKILLS_PER_PAGE;
@@ -19,7 +20,7 @@ export const SkillGrid: React.FC<SkillGridProps> = ({ skills }) => {
     if (newPage >= 1 && newPage <= totalPages) setPage(newPage);
   };
 
-  // Générer la liste des pages (1, 2, 3, ...)
+  // Generate the list of pages (1, 2, 3, ...)
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
@@ -36,15 +37,7 @@ export const SkillGrid: React.FC<SkillGridProps> = ({ skills }) => {
           disabled={page === 1}
           aria-label="Page précédente"
         >
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M13 15L8 10L13 5"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <ChevronLeftIcon />
         </button>
         {pageNumbers.map((num) => (
           <button
@@ -63,15 +56,7 @@ export const SkillGrid: React.FC<SkillGridProps> = ({ skills }) => {
           disabled={page === totalPages}
           aria-label="Page suivante"
         >
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M7 5L12 10L7 15"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <ChevronRightIcon />
         </button>
       </div>
     </div>
