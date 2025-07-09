@@ -1,15 +1,6 @@
-export enum SkillDifficulty {
-  Easy = "easy",
-  Medium = "medium",
-  Hard = "hard",
-}
+export type SkillDifficulty = "easy" | "medium" | "hard";
 
-export enum SkillStatus {
-  Draft = "draft",
-  InProgress = "in_progress",
-  NotStarted = "not_started",
-  Finished = "finished",
-}
+export type SkillStatus = "draft" | "in_progress" | "not_started" | "finished";
 
 export type Skill = {
   id: string;

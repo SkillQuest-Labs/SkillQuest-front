@@ -1,5 +1,5 @@
 import React from "react";
-import { SkillDifficulty, SkillStatus } from "../skills.types";
+import type { SkillDifficulty, SkillStatus } from "../skills.types";
 
 interface SkillFiltersProps {
   difficulty: SkillDifficulty | "all";
@@ -31,9 +31,9 @@ export const SkillFilters: React.FC<SkillFiltersProps> = ({ difficulty, sort, st
               onChange={(e) => onFilterChange({ difficulty: e.target.value as SkillDifficulty | "all", sort, status })}
             >
               <option value="all">Toutes</option>
-              <option value={SkillDifficulty.Easy}>Facile</option>
-              <option value={SkillDifficulty.Medium}>Moyen</option>
-              <option value={SkillDifficulty.Hard}>Difficile</option>
+              <option value="easy">Facile</option>
+              <option value="medium">Moyen</option>
+              <option value="hard">Difficile</option>
             </select>
             <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2">
               <ChevronDown />
@@ -49,10 +49,10 @@ export const SkillFilters: React.FC<SkillFiltersProps> = ({ difficulty, sort, st
               onChange={(e) => onFilterChange({ difficulty, sort, status: e.target.value as SkillStatus | "all" })}
             >
               <option value="all">All</option>
-              <option value={SkillStatus.Draft}>Draft</option>
-              <option value={SkillStatus.InProgress}>In progress</option>
-              <option value={SkillStatus.NotStarted}>Not started</option>
-              <option value={SkillStatus.Finished}>Finished</option>
+              <option value="draft">Draft</option>
+              <option value="in_progress">In progress</option>
+              <option value="not_started">Not started</option>
+              <option value="finished">Finished</option>
             </select>
             <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2">
               <ChevronDown />
