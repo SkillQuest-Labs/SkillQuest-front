@@ -58,7 +58,7 @@
   justify-content: center;
   align-items: center;
   gap: 1.2rem;
-  margin-top: 2.5rem;
+  margin-top: 0.5rem;
 
 }
 .skill-pagination-btn {
@@ -115,5 +115,27 @@
 .skill-pagination-arrow:hover:not(:disabled) {
   background: none;
   color: #334155;
+}
+
+/* Scrollbar custom élégante */
+::-webkit-scrollbar {
+  width: 8px;
+  background: #0f172a;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #334155 #0f172a;
+}
+
+.skill-card-min {
+  min-height: 220px;
 }
 

@@ -22,6 +22,7 @@ export const skillsMock: Skill[] = [
     status: "in_progress",
     createdAt: "2024-05-01T10:00:00Z",
     image: img1,
+    progress: 60,
   },
   {
     id: "2",
@@ -32,6 +33,7 @@ export const skillsMock: Skill[] = [
     status: "finished",
     createdAt: "2024-05-02T10:00:00Z",
     image: img2,
+    progress: 100,
   },
   {
     id: "3",
@@ -42,6 +44,7 @@ export const skillsMock: Skill[] = [
     status: "not_started",
     createdAt: "2024-05-03T10:00:00Z",
     image: img3,
+    progress: 0,
   },
   {
     id: "4",
@@ -52,6 +55,7 @@ export const skillsMock: Skill[] = [
     status: "draft",
     createdAt: "2024-05-04T10:00:00Z",
     image: img4,
+    progress: 30,
   },
   {
     id: "5",
@@ -62,6 +66,7 @@ export const skillsMock: Skill[] = [
     status: "in_progress",
     createdAt: "2024-05-05T10:00:00Z",
     image: img5,
+    progress: 70,
   },
   {
     id: "6",
@@ -72,6 +77,7 @@ export const skillsMock: Skill[] = [
     status: "not_started",
     createdAt: "2024-05-06T10:00:00Z",
     image: img6,
+    progress: 0,
   },
   {
     id: "7",
@@ -82,6 +88,7 @@ export const skillsMock: Skill[] = [
     status: "draft",
     createdAt: "2024-05-07T10:00:00Z",
     image: img7,
+    progress: 20,
   },
   {
     id: "8",
@@ -92,6 +99,7 @@ export const skillsMock: Skill[] = [
     status: "finished",
     createdAt: "2024-05-08T10:00:00Z",
     image: img8,
+    progress: 100,
   },
   {
     id: "9",
@@ -102,6 +110,7 @@ export const skillsMock: Skill[] = [
     status: "in_progress",
     createdAt: "2024-05-09T10:00:00Z",
     image: img9,
+    progress: 50,
   },
   {
     id: "10",
@@ -112,6 +121,7 @@ export const skillsMock: Skill[] = [
     status: "draft",
     createdAt: "2024-05-10T10:00:00Z",
     image: img10,
+    progress: 10,
   },
   {
     id: "11",
@@ -122,6 +132,7 @@ export const skillsMock: Skill[] = [
     status: "not_started",
     createdAt: "2024-05-11T10:00:00Z",
     image: img11,
+    progress: 0,
   },
   {
     id: "12",
@@ -132,6 +143,7 @@ export const skillsMock: Skill[] = [
     status: "in_progress",
     createdAt: "2024-05-12T10:00:00Z",
     image: img1,
+    progress: 40,
   },
   {
     id: "13",
@@ -142,6 +154,7 @@ export const skillsMock: Skill[] = [
     status: "finished",
     createdAt: "2024-05-13T10:00:00Z",
     image: img2,
+    progress: 100,
   },
   {
     id: "14",
@@ -152,6 +165,7 @@ export const skillsMock: Skill[] = [
     status: "draft",
     createdAt: "2024-05-14T10:00:00Z",
     image: img3,
+    progress: 10,
   },
   {
     id: "15",
@@ -162,6 +176,7 @@ export const skillsMock: Skill[] = [
     status: "not_started",
     createdAt: "2024-05-15T10:00:00Z",
     image: img4,
+    progress: 0,
   },
   {
     id: "16",
@@ -172,6 +187,7 @@ export const skillsMock: Skill[] = [
     status: "finished",
     createdAt: "2024-05-16T10:00:00Z",
     image: img5,
+    progress: 100,
   },
   {
     id: "17",
@@ -182,6 +198,7 @@ export const skillsMock: Skill[] = [
     status: "in_progress",
     createdAt: "2024-05-17T10:00:00Z",
     image: img6,
+    progress: 80,
   },
   {
     id: "18",
@@ -192,6 +209,7 @@ export const skillsMock: Skill[] = [
     status: "draft",
     createdAt: "2024-05-18T10:00:00Z",
     image: img7,
+    progress: 5,
   },
 ];
 
