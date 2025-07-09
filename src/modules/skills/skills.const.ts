@@ -13,8 +13,6 @@ import img9 from "../../assets/skills/9.png";
 import img10 from "../../assets/skills/10.png";
 import img11 from "../../assets/skills/11.png";
 
-
-
 export const skillsMock: Skill[] = [
   {
     id: "1",
