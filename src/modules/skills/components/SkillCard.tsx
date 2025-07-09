@@ -1,32 +1,12 @@
-import React from "react";
 import type { Skill } from "../skills.types";
 import "../skills.css";
+import { difficultyColors, statusColors, statusLabels } from "../skills.const";
 
-interface SkillCardProps {
+type SkillCardProps = {
   skill: Skill;
-}
-
-const difficultyColors = {
-  easy: "bg-green-100 text-green-800",
-  medium: "bg-yellow-100 text-yellow-800",
-  hard: "bg-red-100 text-red-800",
 };
 
-const statusColors = {
-  draft: "bg-gray-200 text-gray-700",
-  in_progress: "bg-blue-100 text-blue-700",
-  not_started: "bg-yellow-100 text-yellow-700",
-  finished: "bg-green-100 text-green-700",
-};
-
-const statusLabels = {
-  draft: "Draft",
-  in_progress: "In progress",
-  not_started: "Not started",
-  finished: "Finished",
-};
-
-export const SkillCard: React.FC<SkillCardProps> = ({ skill }) => (
+export const SkillCard = ({ skill }: SkillCardProps) => (
   <div className="skill-card-custom group transition-all duration-200 hover:shadow-lg hover:-translate-y-1 flex flex-col min-h-[220px] p-0 overflow-hidden">
     {skill.image && (
       <div className="relative w-full h-28">

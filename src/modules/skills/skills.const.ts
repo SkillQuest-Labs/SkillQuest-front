@@ -194,3 +194,23 @@ export const skillsMock: Skill[] = [
     image: img7,
   },
 ];
+
+export const difficultyColors = {
+  easy: "bg-green-100 text-green-800",
+  medium: "bg-yellow-100 text-yellow-800",
+  hard: "bg-red-100 text-red-800",
+};
+
+export const statusColors = {
+  draft: "bg-gray-200 text-gray-700",
+  in_progress: "bg-blue-100 text-blue-700",
+  not_started: "bg-yellow-100 text-yellow-700",
+  finished: "bg-green-100 text-green-700",
+};
+
+export const statusLabels = {
+  draft: "Draft",
+  in_progress: "In progress",
+  not_started: "Not started",
+  finished: "Finished",
+};
