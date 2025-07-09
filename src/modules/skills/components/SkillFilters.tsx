@@ -20,10 +20,10 @@ export const SkillFilters = ({ difficulty, sort, status, onFilterChange }: Skill
               value={difficulty}
               onChange={(e) => onFilterChange({ difficulty: e.target.value as SkillDifficulty | "all", sort, status })}
             >
-              <option value="all">Toutes</option>
-              <option value="easy">Facile</option>
-              <option value="medium">Moyen</option>
-              <option value="hard">Difficile</option>
+              <option value="all">All</option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
             </select>
             <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2">
               <ChevronDown color="white" />

@@ -25,9 +25,11 @@ export const SkillGrid = ({ skills }: SkillGridProps) => {
 
   return (
     <div className="w-full">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mb-8">
         {paginatedSkills.map((skill) => (
-          <SkillCard key={skill.id} skill={skill} />
+          <div key={skill.id} className="w-full max-w-[420px] mx-auto">
+            <SkillCard skill={skill} />
+          </div>
         ))}
       </div>
       <div className="skill-pagination">
