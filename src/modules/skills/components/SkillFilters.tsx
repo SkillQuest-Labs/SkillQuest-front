@@ -1,22 +1,13 @@
 import React from "react";
-import type { SkillDifficulty, SkillStatus } from "../skills.types";
+import type { SkillDifficulty, SkillSort, SkillStatus } from "../skills.types";
+import { ChevronDown } from "lucide-react";
 
-interface SkillFiltersProps {
-  difficulty: SkillDifficulty | "all";
-  sort: "recent" | "oldest";
-  status: SkillStatus | "all";
-  onFilterChange: (filters: {
-    difficulty: SkillDifficulty | "all";
-    sort: "recent" | "oldest";
-    status: SkillStatus | "all";
-  }) => void;
-}
-
-const ChevronDown = () => (
-  <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M6 8L10 12L14 8" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
+type SkillFiltersProps = {
+  difficulty: SkillDifficulty;
+  sort: SkillSort;
+  status: SkillStatus;
+  onFilterChange: (filters: { difficulty: SkillDifficulty; sort: SkillSort; status: SkillStatus }) => void;
+};
 
 export const SkillFilters: React.FC<SkillFiltersProps> = ({ difficulty, sort, status, onFilterChange }) => {
   return (
@@ -36,7 +27,7 @@ export const SkillFilters: React.FC<SkillFiltersProps> = ({ difficulty, sort, st
               <option value="hard">Difficile</option>
             </select>
             <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2">
-              <ChevronDown />
+              <ChevronDown color="white" />
             </span>
           </div>
         </div>
@@ -46,7 +37,7 @@ export const SkillFilters: React.FC<SkillFiltersProps> = ({ difficulty, sort, st
             <select
               className="appearance-none border border-slate-700 rounded-lg px-3 py-2 bg-slate-900 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-150 pr-8 hover:border-blue-400"
               value={status}
-              onChange={(e) => onFilterChange({ difficulty, sort, status: e.target.value as SkillStatus | "all" })}
+              onChange={(e) => onFilterChange({ difficulty, sort, status: e.target.value as SkillStatus })}
             >
               <option value="all">All</option>
               <option value="draft">Draft</option>
@@ -55,7 +46,7 @@ export const SkillFilters: React.FC<SkillFiltersProps> = ({ difficulty, sort, st
               <option value="finished">Finished</option>
             </select>
             <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2">
-              <ChevronDown />
+              <ChevronDown color="white" />
             </span>
           </div>
         </div>
@@ -65,13 +56,13 @@ export const SkillFilters: React.FC<SkillFiltersProps> = ({ difficulty, sort, st
             <select
               className="appearance-none border border-slate-700 rounded-lg px-3 py-2 bg-slate-900 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-150 pr-8 hover:border-blue-400"
               value={sort}
-              onChange={(e) => onFilterChange({ difficulty, sort: e.target.value as "recent" | "oldest", status })}
+              onChange={(e) => onFilterChange({ difficulty, sort: e.target.value as SkillSort, status })}
             >
               <option value="recent">Plus récent</option>
               <option value="oldest">Moins récent</option>
             </select>
             <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2">
-              <ChevronDown />
+              <ChevronDown color="white" />
             </span>
           </div>
         </div>

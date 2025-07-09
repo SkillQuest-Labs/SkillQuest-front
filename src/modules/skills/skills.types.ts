@@ -1,6 +1,8 @@
-export type SkillDifficulty = "easy" | "medium" | "hard";
+export type SkillDifficulty = "easy" | "medium" | "hard" | "all";
 
-export type SkillStatus = "draft" | "in_progress" | "not_started" | "finished";
+export type SkillStatus = "draft" | "in_progress" | "not_started" | "finished" | "all";
+
+export type SkillSort = "recent" | "oldest";
 
 export type Skill = {
   id: string;

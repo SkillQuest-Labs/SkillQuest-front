@@ -199,6 +199,7 @@ export const difficultyColors = {
   easy: "bg-green-100 text-green-800",
   medium: "bg-yellow-100 text-yellow-800",
   hard: "bg-red-100 text-red-800",
+  all: "bg-gray-100 text-gray-800",
 };
 
 export const statusColors = {
@@ -206,6 +207,7 @@ export const statusColors = {
   in_progress: "bg-blue-100 text-blue-700",
   not_started: "bg-yellow-100 text-yellow-700",
   finished: "bg-green-100 text-green-700",
+  all: "bg-gray-100 text-gray-800",
 };
 
 export const statusLabels = {
@@ -213,4 +215,5 @@ export const statusLabels = {
   in_progress: "In progress",
   not_started: "Not started",
   finished: "Finished",
+  all: "All",
 };
