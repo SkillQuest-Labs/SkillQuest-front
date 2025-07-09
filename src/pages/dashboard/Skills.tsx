@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { skillsMock } from "../../modules/skills/skills.const";
-import { SkillDifficulty, SkillStatus } from "../../modules/skills/skills.types";
+import type { SkillDifficulty, SkillStatus } from "../../modules/skills/skills.types";
 import { SkillFilters } from "../../modules/skills/components/SkillFilters";
 import { SkillGrid } from "../../modules/skills/components/SkillGrid";
 

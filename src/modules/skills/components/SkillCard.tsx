@@ -7,23 +7,23 @@ interface SkillCardProps {
 }
 
 const difficultyColors = {
-  "easy": "bg-green-100 text-green-800",
-  "medium": "bg-yellow-100 text-yellow-800",
-  "hard": "bg-red-100 text-red-800",
+  easy: "bg-green-100 text-green-800",
+  medium: "bg-yellow-100 text-yellow-800",
+  hard: "bg-red-100 text-red-800",
 };
 
 const statusColors = {
-  "draft": "bg-gray-200 text-gray-700",
-  "in_progress": "bg-blue-100 text-blue-700",
-  "not_started": "bg-yellow-100 text-yellow-700",
-  "finished": "bg-green-100 text-green-700",
+  draft: "bg-gray-200 text-gray-700",
+  in_progress: "bg-blue-100 text-blue-700",
+  not_started: "bg-yellow-100 text-yellow-700",
+  finished: "bg-green-100 text-green-700",
 };
 
 const statusLabels = {
-  "draft": "Draft",
-  "in_progress": "In progress",
-  "not_started": "Not started",
-  "finished": "Finished",
+  draft: "Draft",
+  in_progress: "In progress",
+  not_started: "Not started",
+  finished: "Finished",
 };
 
 export const SkillCard: React.FC<SkillCardProps> = ({ skill }) => (
@@ -49,11 +49,7 @@ export const SkillCard: React.FC<SkillCardProps> = ({ skill }) => (
         </h3>
         <div className="flex flex-col items-end gap-2 min-w-0">
           <span className={`skill-badge-difficulty ${difficultyColors[skill.difficulty]} whitespace-nowrap`}>
-            {skill.difficulty === "easy"
-              ? "Facile"
-              : skill.difficulty === "medium"
-                ? "Moyen"
-                : "Difficile"}
+            {skill.difficulty === "easy" ? "Facile" : skill.difficulty === "medium" ? "Moyen" : "Difficile"}
           </span>
           <span className={`skill-badge-difficulty ${statusColors[skill.status]} whitespace-nowrap`}>
             {statusLabels[skill.status]}

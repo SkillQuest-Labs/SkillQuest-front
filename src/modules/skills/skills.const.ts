@@ -1,6 +1,5 @@
 import type { Skill } from "./skills.types";
 
-
 import img1 from "../../assets/skills/1.png";
 import img2 from "../../assets/skills/2.png";
 import img3 from "../../assets/skills/3.png";
