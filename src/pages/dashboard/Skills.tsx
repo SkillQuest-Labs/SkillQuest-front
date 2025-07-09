@@ -37,11 +37,11 @@ export const Skills = () => {
 
   return (
     <div
-      className={`p-4 md:p-8 min-h-screen h-screen overflow-y-auto bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 transition-all duration-300 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-900 ${
+      className={`p-4 md:p-8 min-h-screen h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 transition-all duration-300 ${
         isCollapsed ? "pl-20" : "pl-64"
-      }`}
+      } flex flex-col`}
     >
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-6 flex-shrink-0">
         <h1 className="text-2xl font-bold text-white">Mes Skills</h1>
         <button
           className="flex items-center gap-1 bg-slate-700 hover:bg-slate-600 focus:ring-2 focus:ring-blue-400 text-white font-medium px-3 py-1.5 rounded-md shadow-sm transition-all duration-150 text-sm"
@@ -53,13 +53,17 @@ export const Skills = () => {
           <span>Create a skill</span>
         </button>
       </div>
-      <SkillFilters
-        difficulty={filters.difficulty}
-        sort={filters.sort}
-        status={filters.status}
-        onFilterChange={setFilters}
-      />
-      <SkillGrid skills={filteredSkills} />
+      <div className="flex-shrink-0">
+        <SkillFilters
+          difficulty={filters.difficulty}
+          sort={filters.sort}
+          status={filters.status}
+          onFilterChange={setFilters}
+        />
+      </div>
+      <div className="flex-1 min-h-0 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-900">
+        <SkillGrid skills={filteredSkills} />
+      </div>
     </div>
   );
 };
