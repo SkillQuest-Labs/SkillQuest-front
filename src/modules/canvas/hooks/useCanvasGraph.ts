@@ -34,9 +34,15 @@ export const useCanvasGraph = () => {
   const onNodesChange: OnNodesChange<Node<QuestNodeData | SkillNodeData>> = useCallback(
     (changes) => {
       const updateNode = applyNodeChanges<Node<QuestNodeData | SkillNodeData>>(changes, nodes);
+      changes.forEach((change) => {
+        if (change.type === "position" && change.id) {
+          markModifiedNode(change.id);
+        }
+      });
+
       setNodes(updateNode);
     },
-    [nodes, setNodes],
+    [nodes, setNodes, markModifiedNode],
   );
 
   const onEdgesChange: OnEdgesChange = useCallback(
@@ -52,7 +58,7 @@ export const useCanvasGraph = () => {
 
     const newNode: Node<QuestNodeData> = {
       id: id,
-      type: "questNode", // to change type name
+      type: "questNode",
       position,
       data: {
         kind: "quest",

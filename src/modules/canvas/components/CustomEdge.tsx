@@ -19,8 +19,8 @@ export function CustomEdge({ id, sourceX, sourceY, targetX, targetY, style, mark
         id={id}
         path={edgePath}
         style={{
-          stroke: "#00ffff",
-          strokeWidth: 4,
+          stroke: "#fde68a",
+          strokeWidth: 2,
           strokeDasharray: "4 2",
           ...style,
         }}
@@ -34,7 +34,7 @@ export function CustomEdge({ id, sourceX, sourceY, targetX, targetY, style, mark
             transform: `translate(${(sourceX + targetX) / 2}px, ${(sourceY + targetY) / 2}px)`,
             pointerEvents: "all",
           }}
-          className="text-cyan-300 text-lg ml-5 font-semibold"
+          className="text-[#fde68a] text-lg ml-5 font-semibold"
         >
           Connected
         </div>

@@ -9,6 +9,7 @@ type CanvasStore = {
   nodes: Node<QuestNodeData | SkillNodeData>[];
   newIds: string[];
   modifiedNodesIds: string[];
+  deletedNodesIds: string[];
   edges: Edge[];
 
   setNodes: (nodes: Node<QuestNodeData | SkillNodeData>[]) => void;
@@ -16,6 +17,7 @@ type CanvasStore = {
 
   markModifiedNode: (id: string) => void; // to mark a node as modified
   markNew: (id: string) => void; // to mark a node as new
+  markDeletedNode: (id: string) => void; // to mark a node as deleted
   clearFlags: () => void; // to clear modified and new flags
 
   addNode: (node: Node<QuestNodeData | SkillNodeData>) => void;
@@ -29,6 +31,7 @@ export const useCanvasStore = create<CanvasStore>((set) => ({
   nodes: initialNodes,
   modifiedNodesIds: [],
   newIds: [],
+  deletedNodesIds: [],
   edges: [],
 
   setNodes: (nodes) => set({ nodes }),
@@ -44,7 +47,12 @@ export const useCanvasStore = create<CanvasStore>((set) => ({
       newIds: state.newIds.includes(id) ? state.newIds : [...state.newIds, id],
     })),
 
-  clearFlags: () => set({ modifiedNodesIds: [], newIds: [] }),
+  markDeletedNode: (id: string) =>
+    set((state) => ({
+      deletedNodesIds: state.deletedNodesIds.includes(id) ? state.deletedNodesIds : [...state.deletedNodesIds, id],
+    })),
+
+  clearFlags: () => set({ modifiedNodesIds: [], newIds: [], deletedNodesIds: [] }),
 
   addNode: (node) =>
     set((state) => ({

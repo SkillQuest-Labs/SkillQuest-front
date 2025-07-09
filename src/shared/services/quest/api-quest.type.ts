@@ -11,3 +11,15 @@ export type CreateQuestsResponse = {
   quests: Quest[];
   total: number;
 };
+
+export type UpdateQuestInput = Omit<Quest, "skillId">;
+
+export type UpdateQuestsResponse = {
+  quests: Quest[];
+  total: number;
+};
+
+export type DeleteQuestId = {
+  id: string;
+  questId: string;
+};

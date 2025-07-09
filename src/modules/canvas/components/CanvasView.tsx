@@ -18,8 +18,8 @@ import { FloatingToolbox } from "./floating-toolbox/FloatingToolbox";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/shared/components/ui/button";
 import { ChevronLeft, Save } from "lucide-react";
-import { useState } from "react";
 import { SaveLoader } from "@/component/icons/save-loader";
+import { useLoadingStore } from "@/stores/loading-store";
 
 type CanvasViewProps = {
   nodes: Node<QuestNodeData | SkillNodeData>[];
@@ -65,7 +65,7 @@ export const CanvasView = ({
 }: CanvasViewProps) => {
   const navigate = useNavigate();
 
-  const [isSaving] = useState(false);
+  const { isLoading: isCanvasSaving, loadingType } = useLoadingStore();
 
   return (
     <ReactFlow
@@ -105,7 +105,7 @@ export const CanvasView = ({
           backdropFilter: "blur(8px)",
         }}
         maskColor="rgba(12, 8, 33, 0.4)"
-        className="shadow-2xl"
+        className="shadow-2xl "
       />
 
       <div className="absolute top-6 left-4 z-20">
@@ -123,18 +123,18 @@ export const CanvasView = ({
 
       <div className="absolute top-6 right-32 z-20">
         <Button
-          variant={isSaving ? "outline" : "default"}
+          variant={isCanvasSaving ? "outline" : "default"}
           size="sm"
           aria-label="Save"
-          disabled={isSaving}
+          disabled={isCanvasSaving}
           onClick={() => onSaveCanvas()}
           className={clsx(
             "bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-5 py-2 rounded-xl cursor-pointer shadow-xl transition-all duration-200 flex items-center gap-2 border-2 border-white/80",
-            isSaving && "opacity-60 cursor-not-allowed",
+            isCanvasSaving && "opacity-60 cursor-not-allowed",
           )}
         >
           <span className="font-semibold tracking-wide flex items-center gap-2">
-            {isSaving ? (
+            {isCanvasSaving && loadingType === "spinner" ? (
               <>
                 <span className="font-bold text-sm">Saving</span>
                 <SaveLoader />
