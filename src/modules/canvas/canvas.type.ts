@@ -1,4 +1,5 @@
 import type { QuestDifficulty, QuestStatus } from "@/shared/types/quest.type";
+import type { Skill } from "@/shared/types/skill.type";
 
 export type CursorModeType = "normal" | "create" | "connect" | "collapse" | "expand";
 export type ViewModeType = "canvas" | "timeline";
@@ -18,12 +19,7 @@ export type SkillConfigType = {
   color: string;
 };
 
-export type SkillConfig = {
-  title: string;
-  description: string;
-  icon: string;
-  color: string;
-};
+export type SkillConfig = Skill;
 
 export type SkillNodeData = {
   kind: "skill";

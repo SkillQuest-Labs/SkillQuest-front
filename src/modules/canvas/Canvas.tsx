@@ -13,6 +13,7 @@ import { useAutoSaveCanvas } from "./hooks/useAutoSaveCanvas";
 import { useCanvasStore } from "@/stores/quest/canvas-store";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CreateSkillModal } from "@/modules/canvas/components/modal/CreateSkillModal";
+import { useSkillStore } from "@/stores/skill/skillStore";
 
 
 export const Canvas = () => {
@@ -32,7 +33,8 @@ export const Canvas = () => {
   const { cursorMode, setCursorMode } = useCanvasStore();
   const { screenToFlowPosition } = useReactFlow();
 
-  useQuestsLoader("uuid-skill-1234-5678-9012-345678901234"); // replace with actual skill ID
+  const { skill } = useSkillStore();
+  useQuestsLoader(skill.id); // replace with actual skill ID
 
   const {
     nodes,

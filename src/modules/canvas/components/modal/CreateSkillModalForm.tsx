@@ -1,19 +1,23 @@
 import { useState } from "react";
 import { Button } from "@/shared/components/ui/button";
-import { useCreateSkill } from "../../hooks/useCreateSkill";
 import { difficulties } from "@/const/skill";
+import { useCreateSkill } from "@/shared/services/skill/api-skill";
+import type { QuestDifficulty } from "@/shared/types/quest.type";
+import { useSkillStore } from "@/stores/skill/skillStore";
+import { showToast } from "@/component/notification/show-toast";
 
 type CreateSkillFormProps = {
   onSuccess: () => void;
 };
 
 export const CreateSkillForm = ({ onSuccess }: CreateSkillFormProps) => {
+  const { setSkill } = useSkillStore();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [difficulty, setDifficulty] = useState("EASY");
+  const [difficulty, setDifficulty] = useState<QuestDifficulty>("EASY");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const createSkill = useCreateSkill();
+  const { createSkill } = useCreateSkill();
 
   const handleSubmit = async () => {
     if (!title.trim()) {
@@ -22,14 +26,26 @@ export const CreateSkillForm = ({ onSuccess }: CreateSkillFormProps) => {
     }
 
     setErrorMessage(null);
+    const payload = {
+      title,
+      description,
+      difficulty,
+      userId: "f3f50bc5-bbbd-4f68-82b3-55a2428c16a3", // Remplace dynamiquement selon ton auth
+    };
 
     try {
-      await createSkill.mutateAsync({
-        title,
-        description,
-        difficulty,
-        userId: "f3f50bc5-bbbd-4f68-82b3-55a2428c16a3", // Remplace dynamiquement selon ton auth
-      });
+      const result = await createSkill(payload);
+      if (!result.id) {
+        showToast({
+          title: "Erreur de la creation d'un skill",
+          description: "",
+          duration: 4000,
+          status: "error",
+        });
+        return;
+      }
+
+      setSkill(result);
       onSuccess();
     } catch (err: any) {
       setErrorMessage(err.message);
@@ -60,7 +76,7 @@ export const CreateSkillForm = ({ onSuccess }: CreateSkillFormProps) => {
       />
       <select
         value={difficulty}
-        onChange={(e) => setDifficulty(e.target.value)}
+        onChange={(e) => setDifficulty(e.target.value as QuestDifficulty)}
         className="bg-white/10 border border-white/20 p-2 rounded w-full mb-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
       >
         {difficulties.map((diff) => (
