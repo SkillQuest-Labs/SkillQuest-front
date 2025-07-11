@@ -9,7 +9,7 @@ type SkillCardProps = {
 
 export const SkillCard = ({ skill }: SkillCardProps) => (
   <div
-    className="skill-card-custom skill-card-min group relative flex flex-col bg-slate-800 rounded-2xl overflow-hidden shadow-sm transition-all duration-200 hover:shadow-xl hover:-translate-y-1 focus-within:ring-2 focus-within:ring-blue-300"
+    className="skill-card-custom skill-card-min group relative flex flex-col bg-slate-800 rounded-2xl overflow-hidden shadow-sm transition-all duration-200 hover:shadow-xl hover:-translate-y-1 focus-within:ring-2 focus-within:ring-blue-300 min-h-[340px] h-full"
     tabIndex={0}
   >
     {/* Image de fond */}
@@ -45,7 +45,7 @@ export const SkillCard = ({ skill }: SkillCardProps) => (
       <h3 className="font-extrabold text-lg leading-tight line-clamp-2 mb-1 text-slate-100" title={skill.title}>
         {skill.title}
       </h3>
-      <div className="text-sm text-slate-300 mb-3 line-clamp-2" title={skill.description}>
+      <div className="text-sm text-slate-100 mb-3 line-clamp-2" title={skill.description}>
         {skill.description}
       </div>
       {/* Barre de progression */}
@@ -67,7 +67,7 @@ export const SkillCard = ({ skill }: SkillCardProps) => (
       {/* Footer */}
       <div className="flex items-center justify-between pt-4 border-t border-slate-700/50 text-xs">
         <Badge className="bg-slate-700/50 text-slate-300 font-medium px-2 py-0.5 rounded-md text-xs max-w-[100px] whitespace-nowrap truncate">
-          {skill.category}
+          {skill.category.length > 12 ? skill.category.slice(0, 12) + "…" : skill.category}
         </Badge>
         <span className="text-slate-500">
           {new Date(skill.createdAt).toLocaleDateString("fr-FR", {

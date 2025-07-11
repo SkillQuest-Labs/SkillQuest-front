@@ -6,7 +6,7 @@
   background: #1e293b; /* bg-slate-800 */
   color: #f1f5f9; /* text-slate-100 */
   transition: box-shadow 0.2s, transform 0.2s, border 0.2s;
-  border: 2px solid rgba(100,116,139,0.15); /* slate-500/20 */
+  border: 1px solid rgba(100,116,139,0.15); /* slate-500/20, plus fin */
   position: relative;
   overflow: hidden;
 }
