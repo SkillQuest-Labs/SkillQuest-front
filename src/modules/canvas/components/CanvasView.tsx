@@ -82,6 +82,10 @@ export const CanvasView = ({
       onPaneClick={onPaneClick}
       onNodeClick={onNodeClick}
       onConnect={onConnect}
+      isValidConnection={(connection) => {
+        // Prevent self-connections
+        return connection.source !== connection.target;
+      }}
       zoomOnScroll={false}
       panOnScroll={true}
       minZoom={0.2}
