@@ -1,86 +1,96 @@
 import {
-  useEdgesState,
-  useNodesState,
-  type Edge,
+  applyEdgeChanges,
+  applyNodeChanges,
   type Node,
+  type OnEdgesChange,
+  type OnNodesChange,
   type XYPosition,
 } from "@xyflow/react";
 import type { QuestNodeData, SkillNodeData } from "../canvas.type";
-import { initialNodes } from "../canvas.const";
+import { useCanvasStore } from "@/stores/quest/canvas-store";
+import { useCallback } from "react";
 
 // This hook manages the state of nodes and edges in the canvas graph.
 export const useCanvasGraph = () => {
-  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
+  const nodes = useCanvasStore((state) => state.nodes);
+  const setNodes = useCanvasStore((state) => state.setNodes);
+  const edges = useCanvasStore((state) => state.edges);
+  const setEdges = useCanvasStore((state) => state.setEdges);
+  const addNode = useCanvasStore((state) => state.addNode);
+  const removeNode = useCanvasStore((state) => state.removeNode);
+  const markModifiedNode = useCanvasStore((state) => state.markModifiedNode);
+  const markNew = useCanvasStore((state) => state.markNew);
 
-  const [nodes, setNodes, onNodesChange] =
-    useNodesState<Node<QuestNodeData | SkillNodeData>>(initialNodes);
+  const updateNodeData = useCallback(
+    (id: string, field: string, value: any) => {
+      const current = useCanvasStore.getState().nodes;
+      const updated = current.map((n) => (n.id === id ? { ...n, data: { ...n.data, [field]: value } } : n));
+      setNodes(updated);
+      markModifiedNode(id);
+    },
+    [setNodes, markModifiedNode],
+  );
 
-  // This function updates a specific field in the data of a node by its ID.
-  const updateNodeData = (id: string, field: string, value: any) => {
-    setNodes((prev) =>
-      prev.map((node) => {
-        if (node.id === id) {
-          return {
-            ...node,
-            data: {
-              ...node.data,
-              [field]: value,
-            },
-          };
+  const onNodesChange: OnNodesChange<Node<QuestNodeData | SkillNodeData>> = useCallback(
+    (changes) => {
+      const updateNode = applyNodeChanges<Node<QuestNodeData | SkillNodeData>>(changes, nodes);
+      changes.forEach((change) => {
+        if (change.type === "position" && change.id) {
+          markModifiedNode(change.id);
         }
-        return node;
-      }),
-    );
-  };
+      });
+
+      setNodes(updateNode);
+    },
+    [nodes, setNodes, markModifiedNode],
+  );
+
+  const onEdgesChange: OnEdgesChange = useCallback(
+    (changes) => {
+      const updatedEdges = applyEdgeChanges(changes, edges);
+      setEdges(updatedEdges);
+    },
+    [edges, setEdges],
+  );
 
   const addQuestNode = (position: XYPosition) => {
     const id = `quest-${Date.now()}`; // to change
 
     const newNode: Node<QuestNodeData> = {
       id: id,
-      type: "quest1", // to change type name
+      type: "questNode",
       position,
       data: {
+        kind: "quest",
         title: "New Quest",
         xp: 100,
-        difficulty: "Medium",
+        difficulty: "EASY",
         description: "Quest description...",
-        status: "not-started",
-        type: "side",
+        status: "LOCKED",
         isCollapsed: false,
-        onDelete: (id: string) =>
-          setNodes((prev) => prev.filter((n) => n.id !== id)),
-        onUpdate: (field: string, value: any) =>
-          updateNodeData(id, field, value),
+        onDelete: (nid: string) => removeNode(nid),
+        onUpdate: (field: string, value: any) => updateNodeData(id, field, value),
       },
     };
 
-    setNodes((prev) => [...prev, newNode]);
+    addNode(newNode);
+    markNew(id);
   };
 
-  const deleteNode = (id: string) => {
-    setNodes((prev) => prev.filter((n) => n.id !== id));
-  };
-
-  const collapseAll = () => {
-    setNodes((prev) =>
-      prev.map((node) =>
-        node.type === "quest1"
-          ? { ...node, data: { ...node.data, isCollapsed: true } }
-          : node,
+  const collapseAll = useCallback(() => {
+    const storeNodes = useCanvasStore.getState().nodes;
+    setNodes(
+      storeNodes.map((node) =>
+        node.type === "questNode" ? { ...node, data: { ...node.data, isCollapsed: true } } : node,
       ),
     );
-  };
+  }, [setNodes]);
 
-  const expandAll = () => {
-    setNodes((prev) =>
-      prev.map((node) =>
-        node.type === "quest1"
-          ? { ...node, data: { ...node.data, isCollapsed: false } }
-          : node,
-      ),
+  const expandAll = useCallback(() => {
+    setNodes(
+      nodes.map((node) => (node.type === "questNode" ? { ...node, data: { ...node.data, isCollapsed: false } } : node)),
     );
-  };
+  }, [setNodes, nodes]);
 
   return {
     nodes,
@@ -90,7 +100,7 @@ export const useCanvasGraph = () => {
     setEdges,
     onEdgesChange,
     addQuestNode,
-    deleteNode,
+    deleteNode: removeNode,
     collapseAll,
     expandAll,
   };

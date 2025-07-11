@@ -16,6 +16,7 @@ export const initialNodes: Node<SkillNodeData>[] = [
     type: "skill",
     position: { x: 400, y: 50 },
     data: {
+      kind: "skill",
       config: skillConfigMockData,
       // onUpdate: (field: string, value: any) =>
       //   setSkillConfig((prev) => ({ ...prev, [field]: value })),

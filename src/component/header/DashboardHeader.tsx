@@ -1,47 +1,42 @@
-import { Coins, Store, Pencil } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Pencil } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
-import { UserButton } from "@clerk/clerk-react";
-import type { DashboardHeaderProps } from "./dashboardHeader.type";
-import { userButtonAppearance } from "@/shared/constants/auth.const";
+import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
 
-const buttonBaseClasses =
-  "flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg shadow-md transition-all duration-200 transform hover:scale-105";
+export const DashboardHeader = () => {
+  const [hoveringHeader, setHoveringHeader] = useState(false);
+  const [hoveringTrigger, setHoveringTrigger] = useState(false);
+  const { isCollapsed: sidebarCollapse } = useSidebarStore();
 
-export const DashboardHeader = ({ coins }: DashboardHeaderProps) => {
+  const shouldShow = hoveringHeader || hoveringTrigger;
+
   return (
-    <header className="ml-20 flex justify-end items-center px-6 py-4 border-b border-slate-700 shadow-lg bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      <nav className="flex items-center gap-4">
-        {/* Coins Display */}
-        <div
-          className={`${buttonBaseClasses} bg-yellow-500 hover:bg-yellow-400 text-black font-semibold cursor-pointer`}
-        >
-          <Coins size={18} className="text-white" />
-          <span className="text-white font-bold">{coins}</span>
-        </div>
-
-        {/* Store Link */}
-        <Link
-          to="/dashboard/store"
-          className={`${buttonBaseClasses} bg-slate-700 hover:bg-slate-600 text-white`}
-        >
-          <Store size={18} />
-          Store
-        </Link>
-
-        {/* Edit Dashboard Button */}
-        <Button
-          variant="ghost"
-          type="button"
-          className={`${buttonBaseClasses} bg-slate-700 hover:bg-slate-600 text-white hover:text-white`}
-        >
-          <Pencil size={18} className="text-white" />
-          Edit Dashboard
-        </Button>
-
-        {/* User Profile Button */}
-        <UserButton appearance={userButtonAppearance} />
-      </nav>
-    </header>
+    <>
+      <div
+        onMouseEnter={() => setHoveringTrigger(true)}
+        onMouseLeave={() => setHoveringTrigger(false)}
+        className={`fixed top-0 z-40 h-20 ${
+          sidebarCollapse ? "left-20 w-[calc(100%-5rem)]" : "left-[260px] w-[calc(100%-260px)]"
+        }`}
+      />
+      <header
+        onMouseEnter={() => setHoveringHeader(true)}
+        onMouseLeave={() => setHoveringHeader(false)}
+        className={`fixed top-0 z-50 transition-all duration-300 ease-in-out overflow-hidden ${
+          sidebarCollapse ? "left-20 w-[calc(100%-5rem)]" : "left-[260px] w-[calc(100%-260px)]"
+        } ${shouldShow ? "h-16 opacity-100" : "h-0 opacity-0"}`}
+      >
+        <nav className="flex justify-end items-center gap-4 px-6 py-4 h-full">
+          <Button
+            variant="ghost"
+            type="button"
+            className="flex items-center gap-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white text-sm font-medium rounded-lg shadow-md transition-all duration-200"
+          >
+            <Pencil size={18} color="white" />
+            Edit Dashboard
+          </Button>
+        </nav>
+      </header>
+    </>
   );
 };

@@ -1,19 +1,13 @@
 import gsap from "gsap";
 
 // Makes the black hole appear and grow
-export const animateBlackHole = (
-  tl: gsap.core.Timeline,
-  element: HTMLDivElement,
-) => {
+export const animateBlackHole = (tl: gsap.core.Timeline, element: HTMLDivElement) => {
   tl.set(element, { opacity: 1, scale: 0 });
   tl.to(element, { scale: 1.0, duration: 0.9, ease: "back.out(2)" }, 0.1);
 };
 
 //  Rotates, shrinks, and makes the node disappear.
-export const animateNodeAbsorption = (
-  tl: gsap.core.Timeline,
-  element: HTMLDivElement,
-) => {
+export const animateNodeAbsorption = (tl: gsap.core.Timeline, element: HTMLDivElement) => {
   tl.to(
     element,
     {
@@ -30,15 +24,12 @@ export const animateNodeAbsorption = (
   );
 };
 
-export const generateAndAnimateParticles = (
-  container: HTMLDivElement | null,
-) => {
+export const generateAndAnimateParticles = (container: HTMLDivElement | null) => {
   if (!container) return;
 
   const particles = Array.from({ length: 50 }).map(() => {
     const p = document.createElement("div");
-    p.className =
-      "absolute w-2 h-2 bg-gradient-to-r from-cyan-400 to-yellow-300 rounded-full pointer-events-none z-50";
+    p.className = "absolute w-2 h-2 bg-gradient-to-r from-cyan-400 to-yellow-300 rounded-full pointer-events-none z-50";
     p.style.left = `${Math.random() * 100}%`;
     p.style.top = `${Math.random() * 100}%`;
     container.appendChild(p);
