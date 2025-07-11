@@ -28,7 +28,7 @@ export const useSaveCanvas = () => {
       .map((node) => ({
         id: node.id,
         questId: node.id,
-        title: node.data.title,
+        title: node.data.title || "New Quest",
         difficulty: node.data.difficulty,
         description: node.data.description,
         xp: node.data.xp,
@@ -45,7 +45,7 @@ export const useSaveCanvas = () => {
       .map((node) => ({
         id: node.id,
         questId: node.id,
-        title: node.data.title,
+        title: node.data.title || "New Quest",
         difficulty: node.data.difficulty,
         description: node.data.description,
         xp: node.data.xp,
