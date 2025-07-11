@@ -98,6 +98,13 @@ export const useSaveCanvas = () => {
       setLoading(false);
       clearFlags();
     } catch (error) {
+      setLoading(false);
+      showToast({
+        title: "Erreur",
+        description: "Une erreur inattendue s'est produite lors de la sauvegarde du canvas.",
+        duration: 6000,
+        status: "error",
+      });
       return error;
     }
   };
