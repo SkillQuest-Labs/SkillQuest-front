@@ -1,4 +1,3 @@
 export const LoadingComponent = () => {
-    return <span>Authentication in progress...</span>;
-  };
-  
+  return <span>Authentication in progress...</span>;
+};
