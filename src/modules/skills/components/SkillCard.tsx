@@ -66,7 +66,9 @@ export const SkillCard = ({ skill }: SkillCardProps) => (
       )}
       {/* Footer */}
       <div className="flex items-center justify-between pt-4 border-t border-slate-700/50 text-xs">
-        <Badge className="bg-slate-700/50 text-slate-300 font-medium px-2 py-0.5 rounded-md text-xs max-w-[100px] whitespace-nowrap truncate">{skill.category}</Badge>
+        <Badge className="bg-slate-700/50 text-slate-300 font-medium px-2 py-0.5 rounded-md text-xs max-w-[100px] whitespace-nowrap truncate">
+          {skill.category}
+        </Badge>
         <span className="text-slate-500">
           {new Date(skill.createdAt).toLocaleDateString("fr-FR", {
             day: "numeric",

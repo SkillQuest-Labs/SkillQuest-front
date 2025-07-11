@@ -38,4 +38,4 @@ export function Pagination({ page, setPage, totalPages }: PaginationProps) {
       </button>
     </div>
   );
-} 
+}
