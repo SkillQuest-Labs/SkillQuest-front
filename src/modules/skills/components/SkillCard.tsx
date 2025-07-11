@@ -42,10 +42,10 @@ export const SkillCard = ({ skill }: SkillCardProps) => (
     )}
     {/* Contenu principal */}
     <div className="p-5 flex flex-col flex-1">
-      <h3 className="font-extrabold text-lg leading-tight line-clamp-2 mb-1 text-slate-100" title={skill.title}>
+      <h3 className="font-extrabold text-base leading-tight line-clamp-2 mb-1 text-slate-200" title={skill.title}>
         {skill.title}
       </h3>
-      <div className="text-sm text-slate-100 mb-3 line-clamp-2" title={skill.description}>
+      <div className="text-xs text-slate-400 mb-3 line-clamp-2" title={skill.description}>
         {skill.description}
       </div>
       {/* Barre de progression */}
