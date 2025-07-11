@@ -16,6 +16,7 @@ export const ToolButton = ({ tool, cursorMode, setCursorMode, colllapseAll, expa
   return (
     <div className="group relative">
       <Button
+        data-tour-id={tool.id}
         variant={`${active ? "default" : "ghost"}`}
         onClick={() =>
           tool.handleToolClick(setCursorMode, cursorMode, {

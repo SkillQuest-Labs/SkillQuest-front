@@ -22,6 +22,7 @@ export const QuestNode = ({ id, data }: NodeProps<Node<QuestNodeData>>) => {
     <div ref={blackHoleRef}>
       <div
         ref={nodeRef}
+        data-tour-id="quest-node"
         className="relative rounded-3xl p-8 shadow-[0_0_40px_rgba(0,255,255,0.25)] border-2 border-cyan-400/60 z-10 ring-4 ring-cyan-300/10 bg-cover max-h-[560px]"
       >
         <QuestCard
@@ -32,6 +33,7 @@ export const QuestNode = ({ id, data }: NodeProps<Node<QuestNodeData>>) => {
             <Handle
               type="target"
               position={Position.Top}
+              data-tour-id="handle"
               style={{ width: "20px", height: "20px" }}
               className="bg-gradient-to-r from-purple-700/30 via-yellow-100/20 to-purple-900/30 rounded-xl p-2 border-2 border-yellow-300/40 backdrop-blur-md mb-5 shadow-[0_2px_12px_2px_rgba(128,0,255,0.10)] hover:scale-110 transition-transform z-20"
             />
@@ -40,6 +42,7 @@ export const QuestNode = ({ id, data }: NodeProps<Node<QuestNodeData>>) => {
             <Handle
               type="source"
               position={Position.Bottom}
+              data-tour-id="handle"
               style={{ width: "20px", height: "20px" }}
               className="bg-gradient-to-br from-purple-700/30 via-yellow-100/20 to-purple-900/30 rounded-xl p-2 border-2 border-yellow-300/40 backdrop-blur-md shadow-[0_2px_12px_2px_rgba(128,0,255,0.10)] hover:scale-110 transition-transform z-20"
             />

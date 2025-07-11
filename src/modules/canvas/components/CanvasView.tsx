@@ -123,6 +123,7 @@ export const CanvasView = ({
 
       <div className="absolute top-6 right-32 z-20">
         <Button
+          data-tour-id="save"
           variant={isCanvasSaving ? "outline" : "default"}
           size="sm"
           aria-label="Save"
