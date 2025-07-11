@@ -87,6 +87,9 @@ export const CanvasView = ({
       minZoom={0.2}
       maxZoom={2}
       fitView
+      connectionRadius={200}
+      snapToGrid={true}
+      snapGrid={[30, 30]}
     >
       <Background color="#aaa" gap={30} size={0.5} />
 
