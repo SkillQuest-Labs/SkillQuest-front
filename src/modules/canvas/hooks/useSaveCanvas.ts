@@ -6,7 +6,6 @@ import { useCallback, useEffect } from "react";
 import { useCanvasStore } from "@/stores/quest/canvas-store";
 import { initialNodes } from "../canvas.const";
 import { useLoadingStore } from "@/stores/loading-store";
-import { showToast } from "@/component/notification/show-toast";
 
 export const useSaveCanvas = () => {
   const { createQuest } = useCreateQuests();
@@ -65,35 +64,13 @@ export const useSaveCanvas = () => {
     try {
       setLoading(true, "spinner");
       if (toCreate.length > 0) {
-        const result = await createQuest(toCreate);
-        if (result.total > 0) {
-          showToast({
-            title: "Quête(s) créée(s) avec succès !",
-            description: `${toCreate.length} quête${toCreate.length > 1 ? "s" : ""} créée${toCreate.length > 1 ? "s" : ""} dans votre canvas.`,
-            duration: 4000,
-            status: "success",
-          });
-        }
+        await createQuest(toCreate);
       }
       if (toUpdate.length > 0) {
-        const result = await updateQuest(toUpdate);
-        if (result.total > 0) {
-          showToast({
-            title: "Quête(s) mise(s) à jour avec succès !",
-            description: `${toUpdate.length} quête${toUpdate.length > 1 ? "s" : ""} modifiée${toUpdate.length > 1 ? "s" : ""} dans votre canvas.`,
-            duration: 4000,
-            status: "success",
-          });
-        }
+        await updateQuest(toUpdate);
       }
       if (toDelete.length > 0) {
         await deleteQuest(toDelete);
-        showToast({
-          title: "Quête(s) supprimée(s) avec succès !",
-          description: `${toDelete.length} quête${toDelete.length > 1 ? "s" : ""} supprimée${toDelete.length > 1 ? "s" : ""} de votre canvas.`,
-          duration: 4000,
-          status: "success",
-        });
       }
       setLoading(false);
       clearFlags();
