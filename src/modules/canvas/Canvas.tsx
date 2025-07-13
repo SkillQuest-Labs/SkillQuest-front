@@ -9,6 +9,7 @@ import { useConnectionHandler } from "./hooks/useConnectionHandler";
 import { CanvasView } from "./components/CanvasView";
 import { useSaveCanvas, useQuestsLoader } from "./hooks/useSaveCanvas";
 import { Toaster } from "@/shared/components/ui/sonner";
+import { useAutoSaveCanvas } from "./hooks/useAutoSaveCanvas";
 import { useCanvasStore } from "@/stores/quest/canvas-store";
 
 export const Canvas = () => {
@@ -18,7 +19,6 @@ export const Canvas = () => {
   const { cursorMode, setCursorMode } = useCanvasStore();
   const { screenToFlowPosition } = useReactFlow();
 
-  const { saveCanvas } = useSaveCanvas();
   useQuestsLoader("uuid-skill-1234-5678-9012-345678901234"); // replace with actual skill ID
 
   const {
@@ -39,6 +39,9 @@ export const Canvas = () => {
     addQuestNode,
     screenToFlowPosition,
   });
+
+  const { saveCanvas } = useSaveCanvas();
+  useAutoSaveCanvas(nodes, saveCanvas, 2500);
 
   // - If no start point is selected, stores the clicked node's id.
   // - Otherwise, connects the start node to the clicked node and resets the selection.
@@ -76,7 +79,6 @@ export const Canvas = () => {
         setViewMode={setViewMode}
         collapseAll={collapseAll}
         expandAll={expandAll}
-        onSaveCanvas={() => saveCanvas()}
       />
 
       <Toaster position="bottom-right" />
