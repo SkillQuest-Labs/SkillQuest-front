@@ -5,6 +5,9 @@ import { useCreateSkill } from "@/shared/services/skill/api-skill";
 import type { QuestDifficulty } from "@/shared/types/quest.type";
 import { useSkillStore } from "@/stores/skill/skillStore";
 import { showToast } from "@/component/notification/show-toast";
+import { Input } from "@/shared/components/ui/input";
+import { Textarea } from "@/shared/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 
 type CreateSkillFormProps = {
   onSuccess: () => void;
@@ -54,7 +57,7 @@ export const CreateSkillForm = ({ onSuccess }: CreateSkillFormProps) => {
 
   return (
     <>
-      <input
+      <Input
         type="text"
         placeholder="Titre"
         value={title}
@@ -68,23 +71,24 @@ export const CreateSkillForm = ({ onSuccess }: CreateSkillFormProps) => {
       />
       {errorMessage && <p className="text-red-400 text-sm mb-2">{errorMessage}</p>}
 
-      <textarea
+      <Textarea
         placeholder="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         className="bg-white/10 border border-white/20 p-2 rounded w-full mb-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
-      <select
-        value={difficulty}
-        onChange={(e) => setDifficulty(e.target.value as QuestDifficulty)}
-        className="bg-white/10 border border-white/20 p-2 rounded w-full mb-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-      >
-        {difficulties.map((diff) => (
-          <option key={diff} value={diff} className="text-black">
-            {diff}
-          </option>
-        ))}
-      </select>
+      <Select value={difficulty} onValueChange={(val) => setDifficulty(val as QuestDifficulty)}>
+        <SelectTrigger className="w-full mb-4 bg-white/10 border border-white/20 text-white focus:ring-2 focus:ring-blue-400">
+          <SelectValue placeholder="Choisir une difficulté" />
+        </SelectTrigger>
+        <SelectContent className="text-white bg-slate-900 border-white/10">
+          {difficulties.map((diff) => (
+            <SelectItem key={diff} value={diff} className="capitalize">
+              {diff}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
       <Button
         onClick={handleSubmit}
         className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 mt-2 rounded-md w-full transition"
