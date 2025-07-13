@@ -1,5 +1,5 @@
 import { type Edge, type Node } from "@xyflow/react";
-import type { QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
+import type { CursorModeType, QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
 import type { Quest } from "@/shared/types/quest.type";
 import { create } from "zustand";
 import { initialNodes } from "@/modules/canvas/canvas.const";
@@ -11,9 +11,12 @@ type CanvasStore = {
   modifiedNodesIds: string[];
   deletedNodesIds: string[];
   edges: Edge[];
+  cursorMode: CursorModeType;
 
   setNodes: (nodes: Node<QuestNodeData | SkillNodeData>[]) => void;
   setEdges: (edges: Edge[]) => void;
+
+  setCursorMode: (mode: CursorModeType) => void;
 
   markModifiedNode: (id: string) => void; // to mark a node as modified
   markNew: (id: string) => void; // to mark a node as new
@@ -33,6 +36,9 @@ export const useCanvasStore = create<CanvasStore>((set) => ({
   newIds: [],
   deletedNodesIds: [],
   edges: [],
+
+  cursorMode: "normal",
+  setCursorMode: (mode: CursorModeType) => set({ cursorMode: mode }),
 
   setNodes: (nodes) => set({ nodes }),
   setEdges: (edges) => set({ edges }),

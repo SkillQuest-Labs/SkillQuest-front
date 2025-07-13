@@ -45,7 +45,10 @@ export const Skills = () => {
       } flex flex-col min-h-0`}
     >
       <div className="flex items-center justify-between mb-6 flex-shrink-0">
-        <h1 className="text-2xl font-bold text-white">Mes Skills</h1>
+        <div>
+          <h1 className="text-2xl font-bold text-white">Mes Skills</h1>
+          <p className="text-slate-400 text-sm mt-1">{skillsMock.length} skills au total</p>
+        </div>
         <button
           className="flex items-center gap-1 bg-slate-700 hover:bg-slate-600 focus:ring-2 focus:ring-blue-400 text-white font-medium px-3 py-1.5 rounded-md shadow-sm transition-all duration-150 text-sm"
           type="button"

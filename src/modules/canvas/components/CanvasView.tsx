@@ -82,11 +82,18 @@ export const CanvasView = ({
       onPaneClick={onPaneClick}
       onNodeClick={onNodeClick}
       onConnect={onConnect}
+      isValidConnection={(connection) => {
+        // Prevent self-connections
+        return connection.source !== connection.target;
+      }}
       zoomOnScroll={false}
       panOnScroll={true}
       minZoom={0.2}
       maxZoom={2}
       fitView
+      connectionRadius={200}
+      snapToGrid={true}
+      snapGrid={[30, 30]}
     >
       <Background color="#aaa" gap={30} size={0.5} />
 
