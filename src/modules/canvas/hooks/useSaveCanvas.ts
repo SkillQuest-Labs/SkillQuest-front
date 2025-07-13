@@ -28,7 +28,7 @@ export const useSaveCanvas = () => {
       .map((node) => ({
         id: node.id,
         questId: node.id,
-        title: node.data.title,
+        title: node.data.title || "New Quest",
         difficulty: node.data.difficulty,
         description: node.data.description,
         xp: node.data.xp,
@@ -45,7 +45,7 @@ export const useSaveCanvas = () => {
       .map((node) => ({
         id: node.id,
         questId: node.id,
-        title: node.data.title,
+        title: node.data.title || "New Quest",
         difficulty: node.data.difficulty,
         description: node.data.description,
         xp: node.data.xp,
@@ -98,6 +98,13 @@ export const useSaveCanvas = () => {
       setLoading(false);
       clearFlags();
     } catch (error) {
+      setLoading(false);
+      showToast({
+        title: "Erreur",
+        description: "Une erreur inattendue s'est produite lors de la sauvegarde du canvas.",
+        duration: 6000,
+        status: "error",
+      });
       return error;
     }
   };
