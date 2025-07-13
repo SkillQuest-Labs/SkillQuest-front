@@ -6,13 +6,11 @@ import { Input } from "@/shared/components/ui/input";
 
 export const SkillNode = ({ data }: NodeProps<Node<SkillNodeData>>) => {
   return (
-    <Card
-      className={`w-[36rem] min-h-[14rem] bg-gradient-to-r ${data.config.color} text-white border-2 border-white shadow-lg`}
-    >
+    <Card className="w-[36rem] min-h-[14rem] bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-2 border-white shadow-lg">
       <Handle type="source" position={Position.Bottom} className="w-6 h-6 bg-white" />
       <CardHeader>
         <div className="flex items-center gap-5 mb-4">
-          <span className="text-4xl">{data.config.icon}</span>
+          <span className="text-4xl">💻</span>
           <Input
             value={data.config.title}
             onChange={(e) => data.onUpdate?.("title", e.target.value)}

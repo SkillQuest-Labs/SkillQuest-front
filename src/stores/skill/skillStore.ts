@@ -7,20 +7,25 @@ type skillState = Skill & {
   completionTime: null;
   userId: string;
 };
+
 type SkillStore = {
   skill: skillState;
   setSkill: (skill: skillState) => void;
+  reset: () => void;
+};
+
+const initialSkillState: skillState = {
+  id: "",
+  title: "",
+  description: "",
+  status: "DRAFT",
+  difficulty: "EASY",
+  completionTime: null,
+  userId: "",
 };
 
 export const useSkillStore = create<SkillStore>((set) => ({
-  skill: {
-    id: "",
-    title: "",
-    description: "",
-    status: "DRAFT",
-    difficulty: "EASY",
-    completionTime: null,
-    userId: "",
-  },
+  skill: initialSkillState,
   setSkill: (skill) => set(() => ({ skill })),
+  reset: () => set(() => ({ skill: initialSkillState })),
 }));

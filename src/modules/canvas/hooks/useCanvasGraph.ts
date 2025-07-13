@@ -7,23 +7,23 @@ import {
   type XYPosition,
 } from "@xyflow/react";
 import type { QuestNodeData, SkillNodeData } from "../canvas.type";
-import { useCanvasStore } from "@/stores/quest/canvas-store";
+import { useQuestStore } from "@/stores/quest/quest-store";
 import { useCallback } from "react";
 
 // This hook manages the state of nodes and edges in the canvas graph.
 export const useCanvasGraph = () => {
-  const nodes = useCanvasStore((state) => state.nodes);
-  const setNodes = useCanvasStore((state) => state.setNodes);
-  const edges = useCanvasStore((state) => state.edges);
-  const setEdges = useCanvasStore((state) => state.setEdges);
-  const addNode = useCanvasStore((state) => state.addNode);
-  const removeNode = useCanvasStore((state) => state.removeNode);
-  const markModifiedNode = useCanvasStore((state) => state.markModifiedNode);
-  const markNew = useCanvasStore((state) => state.markNew);
+  const nodes = useQuestStore((state) => state.nodes);
+  const setNodes = useQuestStore((state) => state.setNodes);
+  const edges = useQuestStore((state) => state.edges);
+  const setEdges = useQuestStore((state) => state.setEdges);
+  const addNode = useQuestStore((state) => state.addNode);
+  const removeNode = useQuestStore((state) => state.removeNode);
+  const markModifiedNode = useQuestStore((state) => state.markModifiedNode);
+  const markNew = useQuestStore((state) => state.markNew);
 
   const updateNodeData = useCallback(
     (id: string, field: string, value: any) => {
-      const current = useCanvasStore.getState().nodes;
+      const current = useQuestStore.getState().nodes;
       const updated = current.map((n) => (n.id === id ? { ...n, data: { ...n.data, [field]: value } } : n));
       setNodes(updated);
       markModifiedNode(id);
@@ -78,7 +78,7 @@ export const useCanvasGraph = () => {
   };
 
   const collapseAll = useCallback(() => {
-    const storeNodes = useCanvasStore.getState().nodes;
+    const storeNodes = useQuestStore.getState().nodes;
     setNodes(
       storeNodes.map((node) =>
         node.type === "questNode" ? { ...node, data: { ...node.data, isCollapsed: true } } : node,

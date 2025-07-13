@@ -10,12 +10,13 @@ import type {
 import { useApi, useApiAsync } from "../useApi";
 
 export const useGetQuests = (skillId: string) => {
+  const shouldFetch = !!skillId;
   const options = {
     method: "GET",
     url: `${Constants.API_BASE_URL}/quests/${skillId}`,
   };
 
-  const { data, isLoading: loading, error } = useApi<GetQuestsResponse>(options, ["quests"]); // add the userId to the cache key
+  const { data, isLoading: loading, error } = useApi<GetQuestsResponse>(options, ["quests"], { enabled: shouldFetch }); // add the userId to the cache key
 
   return {
     quests: data?.quests,

@@ -1,4 +1,5 @@
 import { Constants } from "@/shared/constante/api-constante";
+import type { CreateSkillInput, CreateSkillResponse } from "@/shared/services/skill/api-skill.type";
 import { useApiAsync } from "@/shared/services/useApi";
 //import type { CreateSkillPayload } from "./types";
 
@@ -15,7 +16,7 @@ export const useCreateSkill = () => {
     mutateAsync: createSkill,
     isPending: loading,
     error,
-  } = useApiAsync<void, CreateSkillPayload>(options, ["skills"]);
+  } = useApiAsync<CreateSkillResponse, CreateSkillInput>(options, ["skills"]);
 
   return {
     createSkill,

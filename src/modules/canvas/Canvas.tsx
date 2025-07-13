@@ -1,5 +1,5 @@
-import { useCallback, useState } from "react";
-import type { ViewModeType } from "./canvas.type";
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { SkillNodeData, ViewModeType } from "./canvas.type";
 import { useReactFlow, type Node } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import "./../../styles/canvas.css";
@@ -10,15 +10,16 @@ import { CanvasView } from "./components/CanvasView";
 import { useSaveCanvas, useQuestsLoader } from "./hooks/useSaveCanvas";
 import { Toaster } from "@/shared/components/ui/sonner";
 import { useAutoSaveCanvas } from "./hooks/useAutoSaveCanvas";
-import { useCanvasStore } from "@/stores/quest/canvas-store";
+import { useQuestStore } from "@/stores/quest/quest-store";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CreateSkillModal } from "@/modules/canvas/components/modal/CreateSkillModal";
 import { useSkillStore } from "@/stores/skill/skillStore";
-
+import { resetCanvasStore } from "@/stores/canvas/canvas-store";
 
 export const Canvas = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const hasReset = useRef(false);
 
   const params = new URLSearchParams(location.search);
   const showModal = params.get("modal") === "create-skill";
@@ -30,11 +31,11 @@ export const Canvas = () => {
   const [connectionStart, setConnectionStart] = useState<string | null>(null);
   const [, setViewMode] = useState<ViewModeType>("canvas");
 
-  const { cursorMode, setCursorMode } = useCanvasStore();
+  const { cursorMode, setCursorMode } = useQuestStore();
   const { screenToFlowPosition } = useReactFlow();
 
   const { skill } = useSkillStore();
-  useQuestsLoader(skill.id); // replace with actual skill ID
+  useQuestsLoader(skill.id);
 
   const {
     nodes,
@@ -79,11 +80,38 @@ export const Canvas = () => {
     [cursorMode, connectionStart, onConnect, setConnectionStart],
   );
 
+  useEffect(() => {
+    if (!hasReset.current && showModal) {
+      resetCanvasStore();
+      hasReset.current = true;
+    }
+
+    if (!skill.id) return;
+
+    const skillNode: Node<SkillNodeData> = {
+      id: `skill-${skill.id}`,
+      type: "skill",
+      position: { x: 400, y: 50 },
+      data: {
+        kind: "skill",
+        config: {
+          ...skill,
+        },
+      },
+      draggable: true,
+    };
+
+    const exists = nodes.some((n) => n.id === skillNode.id);
+    if (!exists) {
+      useQuestStore.getState().setNodes([skillNode, ...nodes]);
+    }
+  }, [skill, nodes, showModal]);
+
   return (
     <div className="h-screen bg-gray-50 relative ">
       {showModal && <CreateSkillModal onClose={closeModal} />}
       <CanvasView
-        nodes={nodes}
+        nodes={!skill.id ? [] : nodes}
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
