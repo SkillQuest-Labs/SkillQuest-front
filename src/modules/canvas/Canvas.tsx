@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import type { CursorModeType, ViewModeType } from "./canvas.type";
+import type { ViewModeType } from "./canvas.type";
 import { useReactFlow, type Node } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import "./../../styles/canvas.css";
@@ -10,12 +10,13 @@ import { CanvasView } from "./components/CanvasView";
 import { useSaveCanvas, useQuestsLoader } from "./hooks/useSaveCanvas";
 import { Toaster } from "@/shared/components/ui/sonner";
 import { useAutoSaveCanvas } from "./hooks/useAutoSaveCanvas";
+import { useCanvasStore } from "@/stores/quest/canvas-store";
 
 export const Canvas = () => {
-  const [cursorMode, setCursorMode] = useState<CursorModeType>("normal");
   const [connectionStart, setConnectionStart] = useState<string | null>(null);
   const [, setViewMode] = useState<ViewModeType>("canvas");
 
+  const { cursorMode, setCursorMode } = useCanvasStore();
   const { screenToFlowPosition } = useReactFlow();
 
   useQuestsLoader("uuid-skill-1234-5678-9012-345678901234"); // replace with actual skill ID
