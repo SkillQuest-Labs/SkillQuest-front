@@ -10,7 +10,7 @@ import { CanvasView } from "./components/CanvasView";
 import { useSaveCanvas, useQuestsLoader } from "./hooks/useSaveCanvas";
 import { Toaster } from "@/shared/components/ui/sonner";
 import { useAutoSaveCanvas } from "./hooks/useAutoSaveCanvas";
-import { useQuestStore } from "@/stores/quest/quest-store";
+import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import { useNavigate } from "react-router-dom";
 import { CreateSkillModal } from "@/modules/canvas/components/modal/CreateSkillModal";
 import { useSkillStore } from "@/stores/skill/skillStore";
@@ -27,7 +27,7 @@ export const Canvas = () => {
   const [connectionStart, setConnectionStart] = useState<string | null>(null);
   const [, setViewMode] = useState<ViewModeType>("canvas");
 
-  const { cursorMode, setCursorMode } = useQuestStore();
+  const { cursorMode, setCursorMode } = useCanvasStore();
   const { screenToFlowPosition } = useReactFlow();
 
   const { skill } = useSkillStore();

@@ -3,7 +3,7 @@ import { type Node } from "@xyflow/react";
 import type { QuestNodeData, SkillNodeData } from "../canvas.type";
 import { useCreateQuests, useDeleteQuests, useGetQuests, useUpdateQuests } from "@/shared/services/quest/api-quest";
 import { useCallback, useEffect } from "react";
-import { useQuestStore } from "@/stores/quest/quest-store";
+import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import { initialNodes } from "../canvas.const";
 import { showToast } from "@/component/notification/show-toast";
 import { useSkillStore } from "@/stores/skill/skillStore";
@@ -12,7 +12,7 @@ export const useSaveCanvas = () => {
   const { createQuest } = useCreateQuests();
   const { updateQuest } = useUpdateQuests();
   const { deleteQuest } = useDeleteQuests();
-  const { nodes, newIds, modifiedNodesIds, deletedNodesIds, clearFlags } = useQuestStore();
+  const { nodes, newIds, modifiedNodesIds, deletedNodesIds, clearFlags } = useCanvasStore();
   const { skill } = useSkillStore();
 
   // type guard to check if a node is a QuestNode
@@ -91,13 +91,13 @@ export const useSaveCanvas = () => {
 
 export const useQuestsLoader = (skillId: string) => {
   const { quests, loading, error } = useGetQuests(skillId);
-  const setNodes = useQuestStore((state) => state.setNodes);
-  const removeNode = useQuestStore((state) => state.removeNode);
-  const markModifiedNode = useQuestStore((state) => state.markModifiedNode);
+  const setNodes = useCanvasStore((state) => state.setNodes);
+  const removeNode = useCanvasStore((state) => state.removeNode);
+  const markModifiedNode = useCanvasStore((state) => state.markModifiedNode);
 
   const updateNodeData = useCallback(
     (id: string, field: string, value: any) => {
-      const current = useQuestStore.getState().nodes;
+      const current = useCanvasStore.getState().nodes;
       const updated = current.map((n) => (n.id === id ? { ...n, data: { ...n.data, [field]: value } } : n));
       setNodes(updated);
       markModifiedNode(id);
