@@ -5,10 +5,12 @@ import { SkillFilters } from "../../modules/skills/components/SkillFilters";
 import { SkillGrid, SKILLS_PER_PAGE } from "../../modules/skills/components/SkillGrid";
 import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
 import { Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Pagination } from "../../modules/skills/components/Pagination";
 
 export const Skills = () => {
   const { isCollapsed } = useSidebarStore();
+  const navigate = useNavigate();
   const [filters, setFilters] = useState<{
     difficulty: SkillDifficulty;
     sort: SkillSort;
@@ -52,6 +54,7 @@ export const Skills = () => {
         <button
           className="flex items-center gap-1 bg-slate-700 hover:bg-slate-600 focus:ring-2 focus:ring-blue-400 text-white font-medium px-3 py-1.5 rounded-md shadow-sm transition-all duration-150 text-sm"
           type="button"
+          onClick={() => navigate("/canvas?createSkill=true")}
         >
           <Plus size={18} />
           <span>Create a skill</span>

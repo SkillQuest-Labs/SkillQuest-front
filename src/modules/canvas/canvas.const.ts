@@ -10,17 +10,4 @@ export const skillConfigMockData = {
 };
 
 // Initialize skill block
-export const initialNodes: Node<SkillNodeData>[] = [
-  {
-    id: "skill-block",
-    type: "skill",
-    position: { x: 400, y: 50 },
-    data: {
-      kind: "skill",
-      config: skillConfigMockData,
-      // onUpdate: (field: string, value: any) =>
-      //   setSkillConfig((prev) => ({ ...prev, [field]: value })),
-    },
-    draggable: true,
-  },
-];
+export const initialNodes: Node<SkillNodeData>[] = [];

@@ -3,7 +3,7 @@ import { type Node } from "@xyflow/react";
 import type { QuestNodeData, SkillNodeData } from "../canvas.type";
 import { useCreateQuests, useDeleteQuests, useGetQuests, useUpdateQuests } from "@/shared/services/quest/api-quest";
 import { useCallback, useEffect } from "react";
-import { useCanvasStore } from "@/stores/quest/canvas-store";
+import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import { initialNodes } from "../canvas.const";
 import { useLoadingStore } from "@/stores/loading-store";
 import { showToast } from "@/component/notification/show-toast";

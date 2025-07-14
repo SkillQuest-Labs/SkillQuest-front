@@ -7,7 +7,7 @@ import {
   type XYPosition,
 } from "@xyflow/react";
 import type { QuestNodeData, SkillNodeData } from "../canvas.type";
-import { useCanvasStore } from "@/stores/quest/canvas-store";
+import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import { useCallback } from "react";
 
 // This hook manages the state of nodes and edges in the canvas graph.
@@ -77,6 +77,32 @@ export const useCanvasGraph = () => {
     markNew(id);
   };
 
+  const addSkillNode = (
+    position: XYPosition,
+    config: { title: string; description: string; difficulty: string },
+  ) => {
+    const id = `skill-${Date.now()}`;
+
+    const newNode: Node<SkillNodeData> = {
+      id,
+      type: "skill",
+      position,
+      data: {
+        kind: "skill",
+        config: {
+          title: config.title,
+          description: config.description,
+          icon: "⭐",
+          color: "from-blue-500 to-indigo-600",
+        },
+        onUpdate: (field: string, value: any) => updateNodeData(id, field, value),
+      },
+    };
+
+    addNode(newNode);
+    markNew(id);
+  };
+
   const collapseAll = useCallback(() => {
     const storeNodes = useCanvasStore.getState().nodes;
     setNodes(
@@ -100,6 +126,7 @@ export const useCanvasGraph = () => {
     setEdges,
     onEdgesChange,
     addQuestNode,
+    addSkillNode,
     deleteNode: removeNode,
     collapseAll,
     expandAll,
