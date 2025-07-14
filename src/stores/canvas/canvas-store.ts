@@ -1,8 +1,14 @@
 import { useSkillStore } from "@/stores/skill/skillStore";
 import { useQuestStore } from "../quest/quest-store";
+import { create } from "zustand";
 
-export const resetCanvasStore = () => {
-  useQuestStore.getState().reset();
-  useQuestStore.getState().setNodes([]);
-  useSkillStore.getState().reset();
+type CanvasStore = {
+  resetCanvasStore: () => void;
 };
+
+export const useCanvasStore = create<CanvasStore>(() => ({
+  resetCanvasStore: () => {
+    useQuestStore.getState().reset();
+    useSkillStore.getState().reset();
+  },
+}));

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { SkillNodeData, ViewModeType } from "./canvas.type";
 import { useReactFlow, type Node } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
@@ -14,12 +14,10 @@ import { useQuestStore } from "@/stores/quest/quest-store";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CreateSkillModal } from "@/modules/canvas/components/modal/CreateSkillModal";
 import { useSkillStore } from "@/stores/skill/skillStore";
-import { resetCanvasStore } from "@/stores/canvas/canvas-store";
 
 export const Canvas = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const hasReset = useRef(false);
 
   const params = new URLSearchParams(location.search);
   const showModal = params.get("modal") === "create-skill";
@@ -81,12 +79,7 @@ export const Canvas = () => {
   );
 
   useEffect(() => {
-    if (!hasReset.current && showModal) {
-      resetCanvasStore();
-      hasReset.current = true;
-    }
-
-    if (!skill.id) return;
+    if (!skill.id || showModal) return;
 
     const skillNode: Node<SkillNodeData> = {
       id: `skill-${skill.id}`,
@@ -94,9 +87,7 @@ export const Canvas = () => {
       position: { x: 400, y: 50 },
       data: {
         kind: "skill",
-        config: {
-          ...skill,
-        },
+        config: { ...skill },
       },
       draggable: true,
     };
@@ -111,7 +102,7 @@ export const Canvas = () => {
     <div className="h-screen bg-gray-50 relative ">
       {showModal && <CreateSkillModal onClose={closeModal} />}
       <CanvasView
-        nodes={!skill.id ? [] : nodes}
+        nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}

@@ -111,7 +111,7 @@ export const useQuestsLoader = (skillId: string) => {
   );
 
   useEffect(() => {
-    if (!quests) return;
+    if (!quests || !skillId) return;
 
     const questNodes: Node<QuestNodeData>[] = quests.map((quest) => ({
       id: quest.questId,
@@ -130,8 +130,8 @@ export const useQuestsLoader = (skillId: string) => {
       },
     }));
 
-    setNodes([...initialNodes, ...questNodes]);
-  }, [quests, setNodes, removeNode, updateNodeData]);
+    setNodes([initialNodes(), ...questNodes]);
+  }, [quests, setNodes, removeNode, updateNodeData, skillId]);
 
   return { quests, loading, error };
 };
