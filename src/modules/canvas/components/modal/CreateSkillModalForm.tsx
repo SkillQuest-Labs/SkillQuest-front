@@ -33,7 +33,7 @@ export const CreateSkillForm = ({ onSuccess }: CreateSkillFormProps) => {
       title,
       description,
       difficulty,
-      userId: "f3f50bc5-bbbd-4f68-82b3-55a2428c16a3", // Remplace dynamiquement selon ton auth
+      userId: "uuid-user-1234-5678-9012-345678901234", // Replace dynamically according to your auth
     };
 
     try {
@@ -91,7 +91,7 @@ export const CreateSkillForm = ({ onSuccess }: CreateSkillFormProps) => {
       </Select>
       <Button
         onClick={handleSubmit}
-        className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 mt-2 rounded-md w-full transition"
+        className="bg-blue-500 hover:bg-blue-600 text-white cursor-pointer px-4 py-2 mt-2 rounded-md w-full transition"
       >
         Valider création
       </Button>

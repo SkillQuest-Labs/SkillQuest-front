@@ -7,7 +7,7 @@ import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
 import { Plus } from "lucide-react";
 import { Pagination } from "../../modules/skills/components/Pagination";
 import { Button } from "@/shared/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useCreateSkillModal } from "@/modules/canvas/hooks/useCreateSkillModal";
 
 export const Skills = () => {
   const { isCollapsed } = useSidebarStore();
@@ -22,11 +22,7 @@ export const Skills = () => {
   });
   const [page, setPage] = useState(1);
 
-  const navigate = useNavigate();
-
-  const handleOpenModal = () => {
-    navigate("/canvas?modal=create-skill");
-  };
+  const { openModal: handleOpenModal } = useCreateSkillModal();
 
   const filteredSkills = useMemo(() => {
     let result = [...skillsMock];

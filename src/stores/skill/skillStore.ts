@@ -1,20 +1,13 @@
 import { create } from "zustand";
-import type { Skill, SkillStatus } from "@/shared/types/skill.type";
-
-type skillState = Skill & {
-  id: string;
-  status: SkillStatus;
-  completionTime: null;
-  userId: string;
-};
+import type { Skill } from "@/shared/types/skill.type";
 
 type SkillStore = {
-  skill: skillState;
-  setSkill: (skill: skillState) => void;
+  skill: Skill;
+  setSkill: (skill: Skill) => void;
   reset: () => void;
 };
 
-const initialSkillState: skillState = {
+const initialSkillState: Skill = {
   id: "",
   title: "",
   description: "",

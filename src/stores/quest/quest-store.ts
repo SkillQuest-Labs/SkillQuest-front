@@ -12,7 +12,7 @@ type QuestStore = {
   edges: Edge[];
   cursorMode: CursorModeType;
 
-  setNodes: (nodes: Node<QuestNodeData | SkillNodeData>[]) => void;
+  setNodes: (nodes: Node<QuestNodeData | SkillNodeData>[]) => void; // to set the updated array of nodes in the store
   setEdges: (edges: Edge[]) => void;
 
   setCursorMode: (mode: CursorModeType) => void;
@@ -22,7 +22,7 @@ type QuestStore = {
   markDeletedNode: (id: string) => void; // to mark a node as deleted
   clearFlags: () => void; // to clear modified and new flags
 
-  addNode: (node: Node<QuestNodeData | SkillNodeData>) => void;
+  addNode: (node: Node<QuestNodeData | SkillNodeData>) => void; // to add a new node to the store
   removeNode: (id: string) => void;
   removeAllQuests: () => void;
   reset: () => void;

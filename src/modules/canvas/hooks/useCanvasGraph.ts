@@ -9,6 +9,7 @@ import {
 import type { QuestNodeData, SkillNodeData } from "../canvas.type";
 import { useQuestStore } from "@/stores/quest/quest-store";
 import { useCallback } from "react";
+import type { Skill } from "@/shared/types/skill.type";
 
 // This hook manages the state of nodes and edges in the canvas graph.
 export const useCanvasGraph = () => {
@@ -77,6 +78,22 @@ export const useCanvasGraph = () => {
     markNew(id);
   };
 
+  const addSkillNode = (skill: Skill) => {
+    const newSkillNode: Node<SkillNodeData> = {
+      id: `skill-${skill.id}`,
+      type: "skill",
+      position: { x: 400, y: 50 },
+      data: {
+        kind: "skill",
+        config: { ...skill },
+      },
+      draggable: true,
+    };
+
+    addNode(newSkillNode);
+    markNew(newSkillNode.id);
+  };
+
   const collapseAll = useCallback(() => {
     const storeNodes = useQuestStore.getState().nodes;
     setNodes(
@@ -100,6 +117,7 @@ export const useCanvasGraph = () => {
     setEdges,
     onEdgesChange,
     addQuestNode,
+    addSkillNode,
     deleteNode: removeNode,
     collapseAll,
     expandAll,

@@ -5,7 +5,6 @@ import { useCreateQuests, useDeleteQuests, useGetQuests, useUpdateQuests } from 
 import { useCallback, useEffect } from "react";
 import { useQuestStore } from "@/stores/quest/quest-store";
 import { initialNodes } from "../canvas.const";
-import { useLoadingStore } from "@/stores/loading-store";
 import { showToast } from "@/component/notification/show-toast";
 import { useSkillStore } from "@/stores/skill/skillStore";
 
@@ -14,7 +13,6 @@ export const useSaveCanvas = () => {
   const { updateQuest } = useUpdateQuests();
   const { deleteQuest } = useDeleteQuests();
   const { nodes, newIds, modifiedNodesIds, deletedNodesIds, clearFlags } = useQuestStore();
-  const { setLoading } = useLoadingStore();
   const { skill } = useSkillStore();
 
   // type guard to check if a node is a QuestNode
@@ -38,7 +36,7 @@ export const useSaveCanvas = () => {
         isSubSkill: false,
         completionTime: new Date().toISOString(),
         position: { x: node.position.x, y: node.position.y },
-        skillId: skill.id,
+        skillId: skill.id ?? "",
       }));
 
     const toUpdate = nodes
@@ -65,7 +63,6 @@ export const useSaveCanvas = () => {
       }));
 
     try {
-      setLoading(true, "spinner");
       if (toCreate.length > 0) {
         await createQuest(toCreate);
       }
@@ -75,10 +72,8 @@ export const useSaveCanvas = () => {
       if (toDelete.length > 0) {
         await deleteQuest(toDelete);
       }
-      setLoading(false);
       clearFlags();
     } catch (error) {
-      setLoading(false);
       showToast({
         title: "Erreur",
         description: "Une erreur inattendue s'est produite lors de la sauvegarde du canvas.",
