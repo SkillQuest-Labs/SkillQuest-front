@@ -14,11 +14,13 @@ type CreateSkillModalProps = {
   onBack?: () => void;
 };
 
-export const CreateSkillModal = ({}: CreateSkillModalProps) => {
+export const CreateSkillModal = ({ open }: CreateSkillModalProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [difficulty, setDifficulty] = useState<Skill["difficulty"]>("EASY");
+
+  if (!open) return null;
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
