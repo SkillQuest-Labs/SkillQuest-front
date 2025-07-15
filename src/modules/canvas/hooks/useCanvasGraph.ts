@@ -10,6 +10,7 @@ import type { QuestNodeData, SkillNodeData } from "../canvas.type";
 import { useCanvasStore } from "@/stores/quest/canvas-store";
 import { useCallback } from "react";
 import type { Skill } from "@/shared/types/skill.type";
+import type { Quest } from "@/shared/types/quest.type";
 import { isQuestNode } from "../canvas.const";
 // import { isQuestNode } from "../canvas.const";
 
@@ -81,6 +82,29 @@ export const useCanvasGraph = () => {
     markNew(id);
   };
 
+  const addQuestFromData = (quest: Quest) => {
+    const id = quest.questId || `quest-${crypto.randomUUID()}`;
+    const newNode: Node<QuestNodeData> = {
+      id,
+      type: "questNode",
+      position: quest.position,
+      data: {
+        kind: "quest",
+        title: quest.title,
+        xp: quest.xp,
+        difficulty: quest.difficulty,
+        description: quest.description,
+        status: quest.status,
+        isCollapsed: false,
+        isSubSkill: quest.isSubSkill,
+        onDelete: (nid: string) => removeNode(nid),
+        onUpdate: (field: string, value: any) => updateNodeData(id, field, value),
+      },
+    };
+    addNode(newNode);
+    markNew(id);
+  };
+
   const addSkillNode = (position: XYPosition, skill: Skill) => {
     const id = `skill-${crypto.randomUUID()}`;
     const newNode: Node<SkillNodeData> = {
@@ -133,6 +157,7 @@ export const useCanvasGraph = () => {
     setEdges,
     onEdgesChange,
     addQuestNode,
+    addQuestFromData,
     addSkillNode,
     deleteNode: removeNode,
     collapseAll,

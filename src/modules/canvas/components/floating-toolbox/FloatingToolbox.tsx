@@ -10,6 +10,7 @@ export const FloatingToolbox = ({
   // setViewMode,
   collapseAll,
   expandAll,
+  openAIGenerator,
 }: FloatingToolboxProps) => {
   const [areNodesCollapsed, setAreNodesCollapsed] = useState<boolean>(false);
 
@@ -61,6 +62,7 @@ export const FloatingToolbox = ({
           setCursorMode={setCursorMode}
           colllapseAll={collapseAll}
           expandAll={expandAll}
+          openAIGenerator={openAIGenerator}
         />
       ))}
     </div>

@@ -8,9 +8,10 @@ type ToolButtonProps = {
   setCursorMode: (mode: CursorModeType) => void;
   colllapseAll?: () => void;
   expandAll?: () => void;
+  openAIGenerator?: () => void;
 };
 
-export const ToolButton = ({ tool, cursorMode, setCursorMode, colllapseAll, expandAll }: ToolButtonProps) => {
+export const ToolButton = ({ tool, cursorMode, setCursorMode, colllapseAll, expandAll, openAIGenerator }: ToolButtonProps) => {
   const active = tool.isActive(cursorMode);
 
   return (
@@ -21,6 +22,7 @@ export const ToolButton = ({ tool, cursorMode, setCursorMode, colllapseAll, expa
           tool.handleToolClick(setCursorMode, cursorMode, {
             collapseAll: colllapseAll,
             expandAll: expandAll,
+            openAIGenerator: openAIGenerator,
           })
         }
         size="sm"

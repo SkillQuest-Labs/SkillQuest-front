@@ -33,6 +33,7 @@ type CanvasViewProps = {
   className?: string;
   collapseAll: () => void;
   expandAll: () => void;
+  openAIGenerator: () => void;
 };
 
 const nodeTypes = {
@@ -58,6 +59,7 @@ export const CanvasView = ({
   setViewMode,
   collapseAll,
   expandAll,
+  openAIGenerator,
 }: CanvasViewProps) => {
   const navigate = useNavigate();
 
@@ -128,6 +130,7 @@ export const CanvasView = ({
         setViewMode={setViewMode}
         collapseAll={collapseAll}
         expandAll={expandAll}
+        openAIGenerator={openAIGenerator}
       />
 
       {/* Mode Indicators */}

@@ -13,6 +13,8 @@ import { useAutoSaveCanvas } from "./hooks/useAutoSaveCanvas";
 import { useCanvasStore } from "@/stores/quest/canvas-store";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { CreateSkillModal } from "./components/CreateSkillModal";
+import { AIGenerateModal } from "./components/AIGenerateModal";
+import { generateSkillWithQuests } from "@/shared/services/google-genai.service";
 import type { Skill } from "@/shared/types/skill.type";
 
 export const Canvas = () => {
@@ -23,6 +25,9 @@ export const Canvas = () => {
   const navigate = useNavigate();
   const createSkillParam = searchParams.get("createSkill") === "true";
   const [isModalOpen, setIsModalOpen] = useState(createSkillParam);
+  const [isAIModalOpen, setIsAIModalOpen] = useState(false);
+
+  const openAIGenerator = useCallback(() => setIsAIModalOpen(true), []);
 
   const { cursorMode, setCursorMode } = useCanvasStore();
   const { screenToFlowPosition } = useReactFlow();
@@ -38,6 +43,7 @@ export const Canvas = () => {
     setEdges,
     onEdgesChange,
     addQuestNode,
+    addQuestFromData,
     addSkillNode,
     collapseAll,
     expandAll,
@@ -59,6 +65,36 @@ export const Canvas = () => {
       setSearchParams({});
     },
     [addSkillNode, setSearchParams],
+  );
+
+  const handleAIGenerate = useCallback(
+    async (context: string) => {
+      const { skill, quests } = await generateSkillWithQuests(context);
+      addSkillNode({ x: 400, y: 50 }, skill);
+      const skillNodeId = useCanvasStore
+        .getState()
+        .nodes.find((n) => n.type === "skill")?.id;
+      quests.forEach((q, idx) => {
+        addQuestFromData(q);
+        if (idx === 0 && skillNodeId) {
+          onConnect({
+            source: skillNodeId,
+            target: q.questId,
+            sourceHandle: null,
+            targetHandle: null,
+          });
+        }
+        if (idx > 0) {
+          onConnect({
+            source: quests[idx - 1].questId,
+            target: q.questId,
+            sourceHandle: null,
+            targetHandle: null,
+          });
+        }
+      });
+    },
+    [addSkillNode, addQuestFromData, onConnect],
   );
 
   // - If no start point is selected, stores the clicked node's id.
@@ -101,6 +137,7 @@ export const Canvas = () => {
         setViewMode={setViewMode}
         collapseAll={collapseAll}
         expandAll={expandAll}
+        openAIGenerator={openAIGenerator}
       />
 
       <CreateSkillModal
@@ -111,6 +148,12 @@ export const Canvas = () => {
           setSearchParams({});
           navigate("/canvas");
         }}
+      />
+
+      <AIGenerateModal
+        open={isAIModalOpen}
+        onGenerate={handleAIGenerate}
+        onClose={() => setIsAIModalOpen(false)}
       />
 
       <Toaster position="bottom-right" />
