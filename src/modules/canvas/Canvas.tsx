@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { ViewModeType } from "./canvas.type";
 import { useReactFlow, type Node } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
@@ -11,10 +11,17 @@ import { useSaveCanvas, useQuestsLoader } from "./hooks/useSaveCanvas";
 import { Toaster } from "@/shared/components/ui/sonner";
 import { useAutoSaveCanvas } from "./hooks/useAutoSaveCanvas";
 import { useCanvasStore } from "@/stores/quest/canvas-store";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { CreateSkillModal } from "./components/CreateSkillModal";
 
 export const Canvas = () => {
   const [connectionStart, setConnectionStart] = useState<string | null>(null);
   const [, setViewMode] = useState<ViewModeType>("canvas");
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const createSkillParam = searchParams.get("createSkill") === "true";
+  const [isModalOpen, setIsModalOpen] = useState(createSkillParam);
 
   const { cursorMode, setCursorMode } = useCanvasStore();
   const { screenToFlowPosition } = useReactFlow();
@@ -64,6 +71,10 @@ export const Canvas = () => {
     [cursorMode, connectionStart, onConnect, setConnectionStart],
   );
 
+  useEffect(() => {
+    setIsModalOpen(createSkillParam);
+  }, [createSkillParam]);
+
   return (
     <div className="h-screen bg-gray-50 relative ">
       <CanvasView
@@ -79,6 +90,15 @@ export const Canvas = () => {
         setViewMode={setViewMode}
         collapseAll={collapseAll}
         expandAll={expandAll}
+      />
+
+      <CreateSkillModal
+        open={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSearchParams({});
+          navigate("/canvas");
+        }}
       />
 
       <Toaster position="bottom-right" />

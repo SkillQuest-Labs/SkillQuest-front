@@ -1,0 +1,77 @@
+import { ChevronLeft } from "lucide-react";
+import { Button } from "@/shared/components/ui/button";
+import { Input } from "@/shared/components/ui/input";
+import { Textarea } from "@/shared/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
+import { useState } from "react";
+import type { Skill } from "@/shared/types/skill.type";
+import type { QuestDifficulty } from "@/shared/types/quest.type";
+import { difficulties } from "@/shared/constante/skill.const";
+
+type CreateSkillModalProps = {
+  open: boolean;
+  onClose: () => void;
+  onBack?: () => void;
+};
+
+export const CreateSkillModal = ({}: CreateSkillModalProps) => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [difficulty, setDifficulty] = useState<Skill["difficulty"]>("EASY");
+
+  return (
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+      <div className="backdrop-blur-md bg-white/10 border border-white/20 text-white p-6 rounded-2xl shadow-lg shadow-blue-500/20 w-full max-w-md relative">
+        <Button
+          //   onClick={onBack}
+          variant="ghost"
+          className="absolute top-3 left-3 text-white hover:text-blue-300 bg-transparent hover:bg-transparent"
+        >
+          <ChevronLeft />
+        </Button>
+
+        <h2 className="text-2xl font-semibold mb-6 text-center">Créer un Skill</h2>
+
+        <Input
+          type="text"
+          placeholder="Titre"
+          value={title}
+          onChange={(e) => {
+            setTitle(e.target.value);
+            if (errorMessage) setErrorMessage(null);
+          }}
+          className={`bg-white/10 p-2 rounded w-full mb-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 ${
+            errorMessage ? "border border-red-500 focus:ring-red-500" : "border border-white/20 focus:ring-blue-400"
+          }`}
+        />
+        {errorMessage && <p className="text-red-400 text-sm mb-2">{errorMessage}</p>}
+
+        <Textarea
+          placeholder="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          className="bg-white/10 border border-white/20 p-2 rounded w-full mb-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <Select value={difficulty} onValueChange={(val) => setDifficulty(val as QuestDifficulty)}>
+          <SelectTrigger className="w-full mb-4 bg-white/10 border border-white/20 text-white focus:ring-2 focus:ring-blue-400">
+            <SelectValue placeholder="Choisir une difficulté" />
+          </SelectTrigger>
+          <SelectContent className="text-white bg-slate-900 border-white/10">
+            {difficulties.map((diff) => (
+              <SelectItem key={diff} value={diff} className="capitalize">
+                {diff}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Button
+          //   onClick={handleSubmit}
+          className="bg-blue-500 hover:bg-blue-600 text-white cursor-pointer px-4 py-2 mt-2 rounded-md w-full transition"
+        >
+          Valider création
+        </Button>
+      </div>
+    </div>
+  );
+};
