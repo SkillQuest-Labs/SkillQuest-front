@@ -1,23 +1,21 @@
 import { type Node } from "@xyflow/react";
 
-import type { QuestNodeData, SkillNodeData } from "../canvas.type";
+import type { QuestNodeData } from "../canvas.type";
 import { useCreateQuests, useDeleteQuests, useGetQuests, useUpdateQuests } from "@/shared/services/quest/api-quest";
 import { useCallback, useEffect } from "react";
 import { useCanvasStore } from "@/stores/quest/canvas-store";
-import { initialNodes } from "../canvas.const";
+import { isQuestNode, isSkillNode } from "../canvas.const";
 import { useLoadingStore } from "@/stores/loading-store";
 import { showToast } from "@/component/notification/show-toast";
+import { useCreateSkill } from "@/shared/services/skill/api-skill";
 
 export const useSaveCanvas = () => {
   const { createQuest } = useCreateQuests();
   const { updateQuest } = useUpdateQuests();
   const { deleteQuest } = useDeleteQuests();
+  const { createSkill } = useCreateSkill();
   const { nodes, newIds, modifiedNodesIds, deletedNodesIds, clearFlags } = useCanvasStore();
   const { setLoading } = useLoadingStore();
-
-  // type guard to check if a node is a QuestNode
-  const isQuestNode = (node: Node<QuestNodeData | SkillNodeData>): node is Node<QuestNodeData> =>
-    node.data.kind === "quest";
 
   const saveCanvas = async () => {
     // const skillId = nodes[0].type === "skill" ? nodes[0].id : undefined;
@@ -38,6 +36,18 @@ export const useSaveCanvas = () => {
         position: { x: node.position.x, y: node.position.y },
         skillId: "uuid-skill-1234-5678-9012-345678901234", // replace with actual skill ID
       }));
+
+    const skillNode = nodes.find(isSkillNode);
+    const toCreateSkill = skillNode && {
+      id: skillNode.id,
+      skillId: skillNode.id,
+      title: skillNode.data.config.title || "New Skill",
+      description: skillNode.data.config.description,
+      status: skillNode.data.config.status,
+      difficulty: skillNode.data.config.difficulty,
+      // position: { x: skillNode.position.x, y: skillNode.position.y },
+      userId: "uuid-user-1234-5678-9012-345678901234",
+    };
 
     const toUpdate = nodes
       .filter(isQuestNode)
@@ -63,7 +73,6 @@ export const useSaveCanvas = () => {
       }));
 
     try {
-      setLoading(true, "spinner");
       if (toCreate.length > 0) {
         await createQuest(toCreate);
       }
@@ -72,6 +81,11 @@ export const useSaveCanvas = () => {
       }
       if (toDelete.length > 0) {
         await deleteQuest(toDelete);
+      }
+      if (toCreateSkill) {
+        // console.log("Creating skill:", toCreateSkill);
+        const response = await createSkill(toCreateSkill);
+        console.log("Skill created:", response);
       }
       setLoading(false);
       clearFlags();
@@ -128,7 +142,8 @@ export const useQuestsLoader = (skillId: string) => {
       },
     }));
 
-    setNodes([...initialNodes, ...questNodes]);
+    setNodes([...questNodes]);
+    // setNodes([...initialNodes, ...questNodes]);
   }, [quests, setNodes, removeNode, updateNodeData]);
 
   return { quests, loading, error };

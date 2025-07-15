@@ -1,10 +1,11 @@
 export type SkillStatus = "DRAFT" | "IN_PROGRESS" | "COMPLETED" | "NOT_STARTED";
 
-export type SkillDifficulty = "EASY" | "MEDIUM" | "HARD" | "ALL";
+export type SkillDifficulty = "EASY" | "MEDIUM" | "HARD";
 
 export type Skill = {
   id?: string;
-  userId: string;
+  skillId?: string;
+  userId?: string;
   status?: SkillStatus;
   completionTime?: null;
   title: string;

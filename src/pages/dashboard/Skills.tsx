@@ -7,6 +7,7 @@ import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
 import { Plus } from "lucide-react";
 import { Pagination } from "../../modules/skills/components/Pagination";
 import { useNavigate } from "react-router-dom";
+import { useCanvasStore } from "@/stores/quest/canvas-store";
 
 export const Skills = () => {
   const { isCollapsed } = useSidebarStore();
@@ -40,6 +41,13 @@ export const Skills = () => {
     return result;
   }, [filters]);
 
+  const reset = useCanvasStore((state) => state.reset);
+
+  const handleCreateNewSkill = () => {
+    reset();
+    navigate("/canvas?createSkill=true");
+  };
+
   return (
     <div
       className={`p-4 md:p-8 min-h-screen h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 transition-all duration-300 ${
@@ -54,7 +62,7 @@ export const Skills = () => {
         <button
           className="flex items-center gap-1 bg-slate-700 hover:bg-slate-600 focus:ring-2 focus:ring-blue-400 text-white font-medium px-3 py-1.5 rounded-md shadow-sm transition-all duration-150 text-sm"
           type="button"
-          onClick={() => navigate("/canvas?createSkill=true")}
+          onClick={handleCreateNewSkill}
         >
           <Plus size={18} />
           <span>Create a skill</span>

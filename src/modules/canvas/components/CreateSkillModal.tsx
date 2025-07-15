@@ -4,23 +4,32 @@ import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { useState } from "react";
-import type { Skill } from "@/shared/types/skill.type";
+import type { Skill, SkillDifficulty } from "@/shared/types/skill.type";
 import type { QuestDifficulty } from "@/shared/types/quest.type";
 import { difficulties } from "@/shared/constante/skill.const";
 
 type CreateSkillModalProps = {
   open: boolean;
+  onCreate: (skill: Skill) => void;
   onClose: () => void;
-  onBack?: () => void;
 };
 
-export const CreateSkillModal = ({ open }: CreateSkillModalProps) => {
+export const CreateSkillModal = ({ open, onClose, onCreate }: CreateSkillModalProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [difficulty, setDifficulty] = useState<Skill["difficulty"]>("EASY");
+  const [difficulty, setDifficulty] = useState<SkillDifficulty>("EASY");
 
   if (!open) return null;
+
+  const handleSubmit = () => {
+    if (!title.trim()) {
+      setErrorMessage("Le titre est requis.");
+      return;
+    }
+    onCreate({ title, description, difficulty });
+    onClose();
+  };
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
@@ -28,7 +37,7 @@ export const CreateSkillModal = ({ open }: CreateSkillModalProps) => {
         <Button
           //   onClick={onBack}
           variant="ghost"
-          className="absolute top-3 left-3 text-white hover:text-blue-300 bg-transparent hover:bg-transparent"
+          className="absolute top-3 left-3 cursor-pointer text-white hover:text-blue-300 bg-transparent hover:bg-transparent"
         >
           <ChevronLeft />
         </Button>
@@ -68,7 +77,7 @@ export const CreateSkillModal = ({ open }: CreateSkillModalProps) => {
           </SelectContent>
         </Select>
         <Button
-          //   onClick={handleSubmit}
+          onClick={handleSubmit}
           className="bg-blue-500 hover:bg-blue-600 text-white cursor-pointer px-4 py-2 mt-2 rounded-md w-full transition"
         >
           Valider création

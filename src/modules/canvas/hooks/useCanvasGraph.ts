@@ -9,6 +9,8 @@ import {
 import type { QuestNodeData, SkillNodeData } from "../canvas.type";
 import { useCanvasStore } from "@/stores/quest/canvas-store";
 import { useCallback } from "react";
+import type { Skill } from "@/shared/types/skill.type";
+// import { isQuestNode } from "../canvas.const";
 
 // This hook manages the state of nodes and edges in the canvas graph.
 export const useCanvasGraph = () => {
@@ -54,7 +56,8 @@ export const useCanvasGraph = () => {
   );
 
   const addQuestNode = (position: XYPosition) => {
-    const id = `quest-${Date.now()}`; // to change
+    // Utilise crypto.randomUUID() pour générer un id unique et fiable
+    const id = `quest-${crypto.randomUUID()}`;
 
     const newNode: Node<QuestNodeData> = {
       id: id,
@@ -75,6 +78,37 @@ export const useCanvasGraph = () => {
 
     addNode(newNode);
     markNew(id);
+  };
+
+  const addSkillNode = (position: XYPosition, skill: Skill) => {
+    const id = `skill-${crypto.randomUUID()}`;
+    const newNode: Node<SkillNodeData> = {
+      id: id,
+      type: "skill",
+      position,
+      data: {
+        kind: "skill",
+        config: {
+          title: skill.title || "New Skill",
+          description: skill.description || "Skill description...",
+          status: skill.status || "DRAFT",
+          difficulty: skill.difficulty,
+          color: "from-blue-500 to-indigo-600",
+        },
+        // onUpdate: (field: string, value: any) => updateNodeData(id, field, value),
+      },
+    };
+
+    addNode(newNode);
+    markNew(id);
+    // Retrieve the current nodes
+    // const prevNodes = useCanvasStore.getState().nodes;
+    // const hasSkillNode = prevNodes.some((n) => !isQuestNode(n));
+    // if (hasSkillNode) {
+    //   const newNodes = prevNodes.map((n) => (!isQuestNode(n) ? newNode : n));
+    //   setNodes(newNodes);
+    //   markNew(id);
+    // }
   };
 
   const collapseAll = useCallback(() => {
@@ -100,6 +134,7 @@ export const useCanvasGraph = () => {
     setEdges,
     onEdgesChange,
     addQuestNode,
+    addSkillNode,
     deleteNode: removeNode,
     collapseAll,
     expandAll,

@@ -7,12 +7,13 @@ import { useCanvasGraph } from "./hooks/useCanvasGraph";
 import { usePaneInteraction } from "./hooks/usePaneInteraction";
 import { useConnectionHandler } from "./hooks/useConnectionHandler";
 import { CanvasView } from "./components/CanvasView";
-import { useSaveCanvas, useQuestsLoader } from "./hooks/useSaveCanvas";
+import { useSaveCanvas } from "./hooks/useSaveCanvas";
 import { Toaster } from "@/shared/components/ui/sonner";
 import { useAutoSaveCanvas } from "./hooks/useAutoSaveCanvas";
 import { useCanvasStore } from "@/stores/quest/canvas-store";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { CreateSkillModal } from "./components/CreateSkillModal";
+import type { Skill } from "@/shared/types/skill.type";
 
 export const Canvas = () => {
   const [connectionStart, setConnectionStart] = useState<string | null>(null);
@@ -26,7 +27,7 @@ export const Canvas = () => {
   const { cursorMode, setCursorMode } = useCanvasStore();
   const { screenToFlowPosition } = useReactFlow();
 
-  useQuestsLoader("uuid-skill-1234-5678-9012-345678901234"); // replace with actual skill ID
+  // useQuestsLoader("uuid-skill-1234-5678-9012-345678901234"); // replace with actual skill ID
 
   const {
     nodes,
@@ -36,6 +37,7 @@ export const Canvas = () => {
     setEdges,
     onEdgesChange,
     addQuestNode,
+    addSkillNode,
     collapseAll,
     expandAll,
   } = useCanvasGraph(); // This hook can be used to manage nodes and edges if needed
@@ -49,6 +51,11 @@ export const Canvas = () => {
 
   const { saveCanvas } = useSaveCanvas();
   useAutoSaveCanvas(nodes, saveCanvas, 2500);
+
+  const handleCreateSkill = useCallback((skill: Skill) => {
+    addSkillNode({ x: 400, y: 50 }, skill);
+    setSearchParams({});
+  }, [addSkillNode, setSearchParams]);
 
   // - If no start point is selected, stores the clicked node's id.
   // - Otherwise, connects the start node to the clicked node and resets the selection.
@@ -94,6 +101,7 @@ export const Canvas = () => {
 
       <CreateSkillModal
         open={isModalOpen}
+        onCreate={handleCreateSkill}
         onClose={() => {
           setIsModalOpen(false);
           setSearchParams({});
