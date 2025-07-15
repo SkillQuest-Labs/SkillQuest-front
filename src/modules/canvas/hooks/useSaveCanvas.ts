@@ -1,13 +1,13 @@
 import { type Node } from "@xyflow/react";
 
-import type { QuestNodeData } from "../canvas.type";
+import type { QuestNodeData, SkillNodeData } from "../canvas.type";
 import { useCreateQuests, useDeleteQuests, useGetQuests, useUpdateQuests } from "@/shared/services/quest/api-quest";
 import { useCallback, useEffect } from "react";
 import { useCanvasStore } from "@/stores/quest/canvas-store";
-import { isQuestNode, isSkillNode } from "../canvas.const";
+import { initialNodes, isQuestNode, isSkillNode } from "../canvas.const";
 import { useLoadingStore } from "@/stores/loading-store";
 import { showToast } from "@/component/notification/show-toast";
-import { useCreateSkill } from "@/shared/services/skill/api-skill";
+import { useCreateSkill, useGetSkill } from "@/shared/services/skill/api-skill";
 
 export const useSaveCanvas = () => {
   const { createQuest } = useCreateQuests();
@@ -34,20 +34,21 @@ export const useSaveCanvas = () => {
         isSubSkill: false,
         completionTime: new Date().toISOString(),
         position: { x: node.position.x, y: node.position.y },
-        skillId: "uuid-skill-1234-5678-9012-345678901234", // replace with actual skill ID
+        skillId: "skill-9502e412-0ac7-43f0-adf8-2e739b136770", // replace with actual skill ID
       }));
 
     const skillNode = nodes.find(isSkillNode);
-    const toCreateSkill = skillNode && {
-      id: skillNode.id,
-      skillId: skillNode.id,
-      title: skillNode.data.config.title || "New Skill",
-      description: skillNode.data.config.description,
-      status: skillNode.data.config.status,
-      difficulty: skillNode.data.config.difficulty,
-      // position: { x: skillNode.position.x, y: skillNode.position.y },
-      userId: "uuid-user-1234-5678-9012-345678901234",
-    };
+    const toCreateSkill = skillNode &&
+      newIds.includes(skillNode.id) && {
+        id: skillNode.id,
+        skillId: skillNode.id,
+        title: skillNode.data.config.title || "New Skill",
+        description: skillNode.data.config.description,
+        status: skillNode.data.config.status,
+        difficulty: skillNode.data.config.difficulty,
+        // position: { x: skillNode.position.x, y: skillNode.position.y },
+        userId: "uuid-user-1234-5678-9012-345678901234",
+      };
 
     const toUpdate = nodes
       .filter(isQuestNode)
@@ -83,9 +84,7 @@ export const useSaveCanvas = () => {
         await deleteQuest(toDelete);
       }
       if (toCreateSkill) {
-        // console.log("Creating skill:", toCreateSkill);
-        const response = await createSkill(toCreateSkill);
-        console.log("Skill created:", response);
+        await createSkill(toCreateSkill);
       }
       setLoading(false);
       clearFlags();
@@ -142,9 +141,42 @@ export const useQuestsLoader = (skillId: string) => {
       },
     }));
 
-    setNodes([...questNodes]);
-    // setNodes([...initialNodes, ...questNodes]);
+    setNodes([...initialNodes, ...questNodes]);
   }, [quests, setNodes, removeNode, updateNodeData]);
 
   return { quests, loading, error };
+};
+
+export const useSkillLoader = (skillId: string) => {
+  const { skill, loading, error } = useGetSkill(skillId);
+  const setNodes = useCanvasStore((state) => state.setNodes);
+
+  useEffect(() => {
+    if (!skill) return;
+
+    const skillNode: Node<SkillNodeData> = {
+      id: skill.skillId ?? "",
+      type: "skill",
+      position: { x: 400, y: 50 },
+      data: {
+        kind: "skill",
+        config: {
+          title: skill.title ?? "",
+          description: skill.description ?? "",
+          difficulty: skill.difficulty,
+          status: skill.status,
+          color: "from-blue-500 to-indigo-600",
+        },
+      },
+    };
+
+    const prevNodes = useCanvasStore.getState().nodes;
+    const hasSkillNode = prevNodes.some((n) => !isQuestNode(n));
+    if (hasSkillNode) {
+      const newNodes = prevNodes.map((n) => (!isQuestNode(n) ? skillNode : n));
+      setNodes([...newNodes]);
+    }
+  }, [skill, setNodes]);
+
+  return { skill, loading, error };
 };

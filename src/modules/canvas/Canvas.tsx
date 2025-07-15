@@ -7,7 +7,7 @@ import { useCanvasGraph } from "./hooks/useCanvasGraph";
 import { usePaneInteraction } from "./hooks/usePaneInteraction";
 import { useConnectionHandler } from "./hooks/useConnectionHandler";
 import { CanvasView } from "./components/CanvasView";
-import { useSaveCanvas } from "./hooks/useSaveCanvas";
+import { useQuestsLoader, useSaveCanvas } from "./hooks/useSaveCanvas";
 import { Toaster } from "@/shared/components/ui/sonner";
 import { useAutoSaveCanvas } from "./hooks/useAutoSaveCanvas";
 import { useCanvasStore } from "@/stores/quest/canvas-store";
@@ -27,7 +27,8 @@ export const Canvas = () => {
   const { cursorMode, setCursorMode } = useCanvasStore();
   const { screenToFlowPosition } = useReactFlow();
 
-  // useQuestsLoader("uuid-skill-1234-5678-9012-345678901234"); // replace with actual skill ID
+  // useSkillLoader("skill-9502e412-0ac7-43f0-adf8-2e739b136770");
+  useQuestsLoader("skill-9502e412-0ac7-43f0-adf8-2e739b136770"); // replace with actual skill ID
 
   const {
     nodes,
@@ -52,10 +53,13 @@ export const Canvas = () => {
   const { saveCanvas } = useSaveCanvas();
   useAutoSaveCanvas(nodes, saveCanvas, 2500);
 
-  const handleCreateSkill = useCallback((skill: Skill) => {
-    addSkillNode({ x: 400, y: 50 }, skill);
-    setSearchParams({});
-  }, [addSkillNode, setSearchParams]);
+  const handleCreateSkill = useCallback(
+    (skill: Skill) => {
+      addSkillNode({ x: 400, y: 50 }, skill);
+      setSearchParams({});
+    },
+    [addSkillNode, setSearchParams],
+  );
 
   // - If no start point is selected, stores the clicked node's id.
   // - Otherwise, connects the start node to the clicked node and resets the selection.

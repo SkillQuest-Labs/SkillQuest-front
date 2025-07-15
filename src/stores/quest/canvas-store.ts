@@ -2,6 +2,7 @@ import { type Edge, type Node } from "@xyflow/react";
 import type { CursorModeType, QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
 import type { Quest } from "@/shared/types/quest.type";
 import { create } from "zustand";
+import { initialNodes } from "@/modules/canvas/canvas.const";
 
 type CanvasStore = {
   quests: Quest[];
@@ -30,7 +31,7 @@ type CanvasStore = {
 
 export const useCanvasStore = create<CanvasStore>((set) => ({
   quests: [],
-  nodes: [],
+  nodes: initialNodes,
   modifiedNodesIds: [],
   newIds: [],
   deletedNodesIds: [],
@@ -73,7 +74,7 @@ export const useCanvasStore = create<CanvasStore>((set) => ({
   reset: () =>
     set({
       quests: [],
-      nodes: [],
+      nodes: initialNodes,
       modifiedNodesIds: [],
       newIds: [],
       edges: [],

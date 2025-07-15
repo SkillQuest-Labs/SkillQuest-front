@@ -10,12 +10,14 @@ import type {
 import { useApi, useApiAsync } from "../useApi";
 
 export const useGetQuests = (skillId: string) => {
+  // This line checks if skillId exists and is not an empty string.
+  const enabled = Boolean(skillId && skillId.length > 0);
   const options = {
     method: "GET",
     url: `${Constants.API_BASE_URL}/quests/${skillId}`,
   };
 
-  const { data, isLoading: loading, error } = useApi<GetQuestsResponse>(options, ["quests"]); // add the userId to the cache key
+  const { data, isLoading: loading, error } = useApi<GetQuestsResponse>(options, ["quests"], enabled); // add the userId to the cache key
 
   return {
     quests: data?.quests,
