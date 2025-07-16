@@ -4,7 +4,7 @@ import type { QuestNodeData, SkillNodeData } from "../canvas.type";
 import { useCreateQuests, useDeleteQuests, useGetQuests, useUpdateQuests } from "@/shared/services/quest/api-quest";
 import { useCallback, useEffect } from "react";
 import { useCanvasStore } from "@/stores/quest/canvas-store";
-import { initialNodes, isQuestNode, isSkillNode } from "../canvas.const";
+import { isQuestNode, isSkillNode } from "../canvas.const";
 import { useLoadingStore } from "@/stores/loading-store";
 import { showToast } from "@/component/notification/show-toast";
 import { useCreateSkill, useGetSkill } from "@/shared/services/skill/api-skill";
@@ -34,7 +34,7 @@ export const useSaveCanvas = () => {
         isSubSkill: false,
         completionTime: new Date().toISOString(),
         position: { x: node.position.x, y: node.position.y },
-        skillId: "skill-9502e412-0ac7-43f0-adf8-2e739b136770", // replace with actual skill ID
+        skillId: "skill-1253b907-ef86-45ac-87aa-da23767c7dea", // replace with actual skill ID
       }));
 
     const skillNode = nodes.find(isSkillNode);
@@ -89,7 +89,6 @@ export const useSaveCanvas = () => {
       setLoading(false);
       clearFlags();
     } catch (error) {
-      setLoading(false);
       showToast({
         title: "Erreur",
         description: "Une erreur inattendue s'est produite lors de la sauvegarde du canvas.",
@@ -108,6 +107,7 @@ export const useSaveCanvas = () => {
 export const useQuestsLoader = (skillId: string) => {
   const { quests, loading, error } = useGetQuests(skillId);
   const setNodes = useCanvasStore((state) => state.setNodes);
+  const addNode = useCanvasStore((state) => state.addNode);
   const removeNode = useCanvasStore((state) => state.removeNode);
   const markModifiedNode = useCanvasStore((state) => state.markModifiedNode);
 
@@ -141,7 +141,9 @@ export const useQuestsLoader = (skillId: string) => {
       },
     }));
 
-    setNodes([...initialNodes, ...questNodes]);
+    questNodes.forEach((node) => {
+      addNode(node);
+    });
   }, [quests, setNodes, removeNode, updateNodeData]);
 
   return { quests, loading, error };
@@ -150,6 +152,7 @@ export const useQuestsLoader = (skillId: string) => {
 export const useSkillLoader = (skillId: string) => {
   const { skill, loading, error } = useGetSkill(skillId);
   const setNodes = useCanvasStore((state) => state.setNodes);
+  const addNode = useCanvasStore((state) => state.addNode);
 
   useEffect(() => {
     if (!skill) return;
@@ -170,12 +173,7 @@ export const useSkillLoader = (skillId: string) => {
       },
     };
 
-    const prevNodes = useCanvasStore.getState().nodes;
-    const hasSkillNode = prevNodes.some((n) => !isQuestNode(n));
-    if (hasSkillNode) {
-      const newNodes = prevNodes.map((n) => (!isQuestNode(n) ? skillNode : n));
-      setNodes([...newNodes]);
-    }
+    addNode(skillNode);
   }, [skill, setNodes]);
 
   return { skill, loading, error };

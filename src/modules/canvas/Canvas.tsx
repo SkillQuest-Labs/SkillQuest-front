@@ -7,13 +7,14 @@ import { useCanvasGraph } from "./hooks/useCanvasGraph";
 import { usePaneInteraction } from "./hooks/usePaneInteraction";
 import { useConnectionHandler } from "./hooks/useConnectionHandler";
 import { CanvasView } from "./components/CanvasView";
-import { useQuestsLoader, useSaveCanvas } from "./hooks/useSaveCanvas";
+import { useQuestsLoader, useSaveCanvas, useSkillLoader } from "./hooks/useSaveCanvas";
 import { Toaster } from "@/shared/components/ui/sonner";
 import { useAutoSaveCanvas } from "./hooks/useAutoSaveCanvas";
 import { useCanvasStore } from "@/stores/quest/canvas-store";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { CreateSkillModal } from "./components/CreateSkillModal";
 import type { Skill } from "@/shared/types/skill.type";
+import { initialNodes } from "./canvas.const";
 
 export const Canvas = () => {
   const [connectionStart, setConnectionStart] = useState<string | null>(null);
@@ -27,8 +28,8 @@ export const Canvas = () => {
   const { cursorMode, setCursorMode } = useCanvasStore();
   const { screenToFlowPosition } = useReactFlow();
 
-  // useSkillLoader("skill-9502e412-0ac7-43f0-adf8-2e739b136770");
-  useQuestsLoader("skill-9502e412-0ac7-43f0-adf8-2e739b136770"); // replace with actual skill ID
+  useSkillLoader("skill-1253b907-ef86-45ac-87aa-da23767c7dea");
+  useQuestsLoader("skill-1253b907-ef86-45ac-87aa-da23767c7dea"); // replace with actual skill ID
 
   const {
     nodes,
@@ -89,7 +90,7 @@ export const Canvas = () => {
   return (
     <div className="h-screen bg-gray-50 relative ">
       <CanvasView
-        nodes={nodes}
+        nodes={nodes.length === 0 ? initialNodes : nodes}
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}

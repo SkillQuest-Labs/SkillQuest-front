@@ -28,7 +28,7 @@ export const useGetSkill = (skillId: string) => {
   const enabled = Boolean(skillId && skillId.length > 0);
   const options = {
     method: "GET",
-    url: `${Constants.API_BASE_URL}/skills/skill-9502e412-0ac7-43f0-adf8-2e739b136770`,
+    url: `${Constants.API_BASE_URL}/skills/${skillId}`,
     headers: {
       "Content-Type": "application/json; charset=UTF-8",
     },
