@@ -8,6 +8,7 @@ import { isQuestNode, isSkillNode } from "../canvas.const";
 import { useLoadingStore } from "@/stores/loading-store";
 import { showToast } from "@/component/notification/show-toast";
 import { useCreateSkill, useGetSkill } from "@/shared/services/skill/api-skill";
+import { useSearchParams } from "react-router-dom";
 
 export const useSaveCanvas = () => {
   const { createQuest } = useCreateQuests();
@@ -16,9 +17,10 @@ export const useSaveCanvas = () => {
   const { createSkill } = useCreateSkill();
   const { nodes, newIds, modifiedNodesIds, deletedNodesIds, clearFlags } = useCanvasStore();
   const { setLoading } = useLoadingStore();
+  const [searchParams] = useSearchParams();
 
   const saveCanvas = async () => {
-    // const skillId = nodes[0].type === "skill" ? nodes[0].id : undefined;
+    const skillId = searchParams.get("skillId");
 
     const toCreate = nodes
       .filter(isQuestNode)
@@ -34,7 +36,7 @@ export const useSaveCanvas = () => {
         isSubSkill: false,
         completionTime: new Date().toISOString(),
         position: { x: node.position.x, y: node.position.y },
-        skillId: "skill-1253b907-ef86-45ac-87aa-da23767c7dea", // replace with actual skill ID
+        skillId: skillId ?? "",
       }));
 
     const skillNode = nodes.find(isSkillNode);
@@ -104,8 +106,12 @@ export const useSaveCanvas = () => {
   };
 };
 
-export const useQuestsLoader = (skillId: string) => {
-  const { quests, loading, error } = useGetQuests(skillId);
+export const useQuestsLoader = () => {
+  const [searchParams] = useSearchParams();
+
+  const skillId = searchParams.get("skillId");
+
+  const { quests, loading, error } = useGetQuests(skillId ?? "");
   const setNodes = useCanvasStore((state) => state.setNodes);
   const addNode = useCanvasStore((state) => state.addNode);
   const removeNode = useCanvasStore((state) => state.removeNode);
@@ -149,8 +155,12 @@ export const useQuestsLoader = (skillId: string) => {
   return { quests, loading, error };
 };
 
-export const useSkillLoader = (skillId: string) => {
-  const { skill, loading, error } = useGetSkill(skillId);
+export const useSkillLoader = () => {
+  const [searchParams] = useSearchParams();
+
+  const skillId = searchParams.get("skillId");
+
+  const { skill, loading, error } = useGetSkill(skillId ?? "");
   const setNodes = useCanvasStore((state) => state.setNodes);
   const addNode = useCanvasStore((state) => state.addNode);
 

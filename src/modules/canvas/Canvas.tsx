@@ -24,12 +24,13 @@ export const Canvas = () => {
   const navigate = useNavigate();
   const createSkillParam = searchParams.get("createSkill") === "true";
   const [isModalOpen, setIsModalOpen] = useState(createSkillParam);
+  const setNodes = useCanvasStore((state) => state.setNodes);
 
   const { cursorMode, setCursorMode } = useCanvasStore();
   const { screenToFlowPosition } = useReactFlow();
 
-  useSkillLoader("skill-1253b907-ef86-45ac-87aa-da23767c7dea");
-  useQuestsLoader("skill-1253b907-ef86-45ac-87aa-da23767c7dea"); // replace with actual skill ID
+  useSkillLoader();
+  useQuestsLoader();
 
   const {
     nodes,
@@ -57,9 +58,8 @@ export const Canvas = () => {
   const handleCreateSkill = useCallback(
     (skill: Skill) => {
       addSkillNode({ x: 400, y: 50 }, skill);
-      setSearchParams({});
     },
-    [addSkillNode, setSearchParams],
+    [addSkillNode],
   );
 
   // - If no start point is selected, stores the clicked node's id.
@@ -87,10 +87,16 @@ export const Canvas = () => {
     setIsModalOpen(createSkillParam);
   }, [createSkillParam]);
 
+  useEffect(() => {
+    if (nodes.length === 0) {
+      setNodes(initialNodes);
+    }
+  }, [nodes, setNodes]);
+
   return (
     <div className="h-screen bg-gray-50 relative ">
       <CanvasView
-        nodes={nodes.length === 0 ? initialNodes : nodes}
+        nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}

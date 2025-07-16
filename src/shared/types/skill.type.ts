@@ -6,7 +6,7 @@ export type Skill = {
   id?: string;
   skillId?: string;
   userId?: string;
-  status?: SkillStatus;
+  status: SkillStatus;
   completionTime?: null;
   title: string;
   description?: string;
