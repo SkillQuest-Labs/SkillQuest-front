@@ -4,7 +4,7 @@ import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { useState } from "react";
-import type { Skill, SkillDifficulty } from "@/shared/types/skill.type";
+import type { Skill, SkillDifficulty, SkillStatus } from "@/shared/types/skill.type";
 import type { QuestDifficulty } from "@/shared/types/quest.type";
 import { difficulties } from "@/shared/constante/skill.const";
 
@@ -19,6 +19,7 @@ export const CreateSkillModal = ({ open, onClose, onCreate }: CreateSkillModalPr
   const [description, setDescription] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [difficulty, setDifficulty] = useState<SkillDifficulty>("EASY");
+  const [status, setStatus] = useState<SkillStatus>("DRAFT");
 
   if (!open) return null;
 
@@ -27,7 +28,7 @@ export const CreateSkillModal = ({ open, onClose, onCreate }: CreateSkillModalPr
       setErrorMessage("Le titre est requis.");
       return;
     }
-    onCreate({ title, description, difficulty });
+    onCreate({ title, description, difficulty, status });
     onClose();
   };
 
@@ -74,6 +75,22 @@ export const CreateSkillModal = ({ open, onClose, onCreate }: CreateSkillModalPr
                 {diff}
               </SelectItem>
             ))}
+          </SelectContent>
+        </Select>
+        <Select value={status} onValueChange={(val) => setStatus(val as SkillStatus)}>
+          <SelectTrigger className="w-full mb-4 bg-white/10 border border-white/20 text-white focus:ring-2 focus:ring-blue-400">
+            <SelectValue placeholder="Choisir un status" />
+          </SelectTrigger>
+          <SelectContent className="text-white bg-slate-900 border-white/10">
+            <SelectItem value="DRAFT" className="capitalize">
+              Brouillon
+            </SelectItem>
+            <SelectItem value="IN_PROGRESS" className="capitalize">
+              En cours
+            </SelectItem>
+            <SelectItem value="NOT_STARTED" className="capitalize">
+              Non commencé
+            </SelectItem>
           </SelectContent>
         </Select>
         <Button
