@@ -144,7 +144,7 @@ export const useQuestsLoader = (skillId: string) => {
     questNodes.forEach((node) => {
       addNode(node);
     });
-  }, [quests, setNodes, removeNode, updateNodeData]);
+  }, [quests, setNodes, addNode, removeNode, updateNodeData]);
 
   return { quests, loading, error };
 };
@@ -174,7 +174,7 @@ export const useSkillLoader = (skillId: string) => {
     };
 
     addNode(skillNode);
-  }, [skill, setNodes]);
+  }, [skill, setNodes, addNode]);
 
   return { skill, loading, error };
 };
