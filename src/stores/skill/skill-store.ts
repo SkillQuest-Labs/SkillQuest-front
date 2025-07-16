@@ -9,7 +9,10 @@ export type SkillData = {
 
 export type SkillStore = {
   skill: SkillData;
+  currentSkillId: string;
+
   setSkill: (skill: Partial<SkillData>) => void;
+  setCurrentSkillId: (id: string) => void;
   reset: () => void;
 };
 
@@ -21,6 +24,9 @@ const initialState: SkillData = {
 
 export const useSkillStore = create<SkillStore>((set) => ({
   skill: initialState,
+  currentSkillId: "",
+
+  setCurrentSkillId: (id) => set({ currentSkillId: id }),
   setSkill: (skill) => set((state) => ({ skill: { ...state.skill, ...skill } })),
   reset: () => set({ skill: initialState }),
 }));

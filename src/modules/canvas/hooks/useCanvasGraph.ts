@@ -11,6 +11,7 @@ import { useCanvasStore } from "@/stores/quest/canvas-store";
 import { useCallback } from "react";
 import type { Skill } from "@/shared/types/skill.type";
 import { isQuestNode } from "../canvas.const";
+import { useSkillStore } from "@/stores/skill/skill-store";
 // import { isQuestNode } from "../canvas.const";
 
 // This hook manages the state of nodes and edges in the canvas graph.
@@ -23,6 +24,8 @@ export const useCanvasGraph = () => {
   const removeNode = useCanvasStore((state) => state.removeNode);
   const markModifiedNode = useCanvasStore((state) => state.markModifiedNode);
   const markNew = useCanvasStore((state) => state.markNew);
+
+  const setCurrentSkillId = useSkillStore.getState().setCurrentSkillId;
 
   const updateNodeData = useCallback(
     (id: string, field: string, value: any) => {
@@ -107,6 +110,7 @@ export const useCanvasGraph = () => {
       const newNodes = prevNodes.map((n) => (!isQuestNode(n) ? newNode : n));
       setNodes(newNodes);
       markNew(id);
+      setCurrentSkillId(id);
     }
   };
 

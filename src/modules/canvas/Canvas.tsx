@@ -7,7 +7,7 @@ import { useCanvasGraph } from "./hooks/useCanvasGraph";
 import { usePaneInteraction } from "./hooks/usePaneInteraction";
 import { useConnectionHandler } from "./hooks/useConnectionHandler";
 import { CanvasView } from "./components/CanvasView";
-import { useQuestsLoader, useSaveCanvas, useSkillLoader } from "./hooks/useSaveCanvas";
+import { useCanvasLoader, useSaveCanvas } from "./hooks/useSaveCanvas";
 import { Toaster } from "@/shared/components/ui/sonner";
 import { useAutoSaveCanvas } from "./hooks/useAutoSaveCanvas";
 import { useCanvasStore } from "@/stores/quest/canvas-store";
@@ -29,8 +29,7 @@ export const Canvas = () => {
   const { cursorMode, setCursorMode } = useCanvasStore();
   const { screenToFlowPosition } = useReactFlow();
 
-  useSkillLoader();
-  useQuestsLoader();
+  useCanvasLoader();
 
   const {
     nodes,

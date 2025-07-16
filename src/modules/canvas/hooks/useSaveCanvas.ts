@@ -5,10 +5,10 @@ import { useCreateQuests, useDeleteQuests, useGetQuests, useUpdateQuests } from 
 import { useCallback, useEffect } from "react";
 import { useCanvasStore } from "@/stores/quest/canvas-store";
 import { isQuestNode, isSkillNode } from "../canvas.const";
-import { useLoadingStore } from "@/stores/loading-store";
 import { showToast } from "@/component/notification/show-toast";
 import { useCreateSkill, useGetSkill } from "@/shared/services/skill/api-skill";
 import { useSearchParams } from "react-router-dom";
+import { useSkillStore } from "@/stores/skill/skill-store";
 
 export const useSaveCanvas = () => {
   const { createQuest } = useCreateQuests();
@@ -16,11 +16,13 @@ export const useSaveCanvas = () => {
   const { deleteQuest } = useDeleteQuests();
   const { createSkill } = useCreateSkill();
   const { nodes, newIds, modifiedNodesIds, deletedNodesIds, clearFlags } = useCanvasStore();
-  const { setLoading } = useLoadingStore();
   const [searchParams] = useSearchParams();
+  const currentSkillId = useSkillStore((state) => state.currentSkillId);
 
   const saveCanvas = async () => {
-    const skillId = searchParams.get("skillId");
+    const searchSkillId = searchParams.get("skillId");
+    const skillNode = nodes.find(isSkillNode);
+    const skillId = currentSkillId ?? searchSkillId ?? "";
 
     const toCreate = nodes
       .filter(isQuestNode)
@@ -36,10 +38,9 @@ export const useSaveCanvas = () => {
         isSubSkill: false,
         completionTime: new Date().toISOString(),
         position: { x: node.position.x, y: node.position.y },
-        skillId: skillId ?? "",
+        skillId,
       }));
 
-    const skillNode = nodes.find(isSkillNode);
     const toCreateSkill = skillNode &&
       newIds.includes(skillNode.id) && {
         id: skillNode.id,
@@ -76,7 +77,10 @@ export const useSaveCanvas = () => {
       }));
 
     try {
-      if (toCreate.length > 0) {
+      if (toCreateSkill) {
+        await createSkill(toCreateSkill);
+      }
+      if (toCreate.length > 0 && currentSkillId && currentSkillId !== "") {
         await createQuest(toCreate);
       }
       if (toUpdate.length > 0) {
@@ -85,10 +89,7 @@ export const useSaveCanvas = () => {
       if (toDelete.length > 0) {
         await deleteQuest(toDelete);
       }
-      if (toCreateSkill) {
-        await createSkill(toCreateSkill);
-      }
-      setLoading(false);
+
       clearFlags();
     } catch (error) {
       showToast({
@@ -106,12 +107,14 @@ export const useSaveCanvas = () => {
   };
 };
 
-export const useQuestsLoader = () => {
+export const useCanvasLoader = () => {
   const [searchParams] = useSearchParams();
 
   const skillId = searchParams.get("skillId");
 
-  const { quests, loading, error } = useGetQuests(skillId ?? "");
+  const { quests } = useGetQuests(skillId ?? "");
+  const { skill } = useGetSkill(skillId ?? "");
+
   const setNodes = useCanvasStore((state) => state.setNodes);
   const addNode = useCanvasStore((state) => state.addNode);
   const removeNode = useCanvasStore((state) => state.removeNode);
@@ -128,7 +131,7 @@ export const useQuestsLoader = () => {
   );
 
   useEffect(() => {
-    if (!quests) return;
+    if (!quests || !skill) return;
 
     const questNodes: Node<QuestNodeData>[] = quests.map((quest) => ({
       id: quest.questId,
@@ -147,26 +150,6 @@ export const useQuestsLoader = () => {
       },
     }));
 
-    questNodes.forEach((node) => {
-      addNode(node);
-    });
-  }, [quests, setNodes, addNode, removeNode, updateNodeData]);
-
-  return { quests, loading, error };
-};
-
-export const useSkillLoader = () => {
-  const [searchParams] = useSearchParams();
-
-  const skillId = searchParams.get("skillId");
-
-  const { skill, loading, error } = useGetSkill(skillId ?? "");
-  const setNodes = useCanvasStore((state) => state.setNodes);
-  const addNode = useCanvasStore((state) => state.addNode);
-
-  useEffect(() => {
-    if (!skill) return;
-
     const skillNode: Node<SkillNodeData> = {
       id: skill.skillId ?? "",
       type: "skill",
@@ -183,8 +166,6 @@ export const useSkillLoader = () => {
       },
     };
 
-    addNode(skillNode);
-  }, [skill, setNodes, addNode]);
-
-  return { skill, loading, error };
+    setNodes([...questNodes, skillNode]);
+  }, [skill, quests, setNodes, addNode, removeNode, updateNodeData]);
 };
