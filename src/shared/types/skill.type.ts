@@ -11,4 +11,7 @@ export type Skill = {
   title: string;
   description?: string;
   difficulty: SkillDifficulty;
+  progressValue?: number;
+  imageUrl?: string;
+  createdAt?: string;
 };

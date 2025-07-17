@@ -13,5 +13,5 @@ export type Skill = {
   status: SkillStatus;
   createdAt?: string;
   image?: string;
-  progress?: number; // 0 à 100, pour la barre de progression
+  progressValue?: number; // 0 to 100, for the progress bar
 };

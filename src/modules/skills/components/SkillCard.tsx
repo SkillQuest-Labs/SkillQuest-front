@@ -49,17 +49,17 @@ export const SkillCard = ({ skill }: SkillCardProps) => (
         {skill.description}
       </div>
       {/* Barre de progression */}
-      {typeof skill.progress === "number" && (
+      {typeof skill.progressValue === "number" && (
         <div className="mb-3">
           <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-blue-400 via-sky-400 to-cyan-400 transition-all duration-700 ease-out"
-              style={{ width: `${skill.progress}%` }}
+              style={{ width: `${skill.progressValue}%` }}
             />
           </div>
           <div className="flex justify-between text-xs text-slate-300 mt-1 font-medium">
             <span>Progression</span>
-            <span>{skill.progress}%</span>
+            <span>{skill.progressValue}%</span>
           </div>
           <div className="absolute inset-0 rounded-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5" />
         </div>
