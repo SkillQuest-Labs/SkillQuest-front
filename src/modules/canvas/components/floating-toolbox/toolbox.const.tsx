@@ -1,4 +1,4 @@
-import { Link, Plus, Target } from "lucide-react";
+import { Link, Plus, Sparkles, Target } from "lucide-react";
 import type { CursorModeType, ViewModeType } from "../../canvas.type";
 
 export type ToolBoxItem = {
@@ -44,6 +44,16 @@ export const tools: ToolboxList = [
     activeColor: "bg-gray-600 hover:bg-gray-700 text-white",
     isActive: (mode) => mode === "normal",
     handleToolClick: (setCursorMode) => setCursorMode("normal"),
+  },
+  {
+    id: "ai-generate",
+    icon: <Sparkles className="w-5 h-5 text-white group-hover:text-black transition-colors" />,
+    tooltip: "AI Generate",
+    activeColor: "bg-green-600 hover:bg-green-700 text-white",
+    isActive: () => false,
+    handleToolClick: () => {
+      // ctx?.openAIGenerator?.();
+    },
   },
   // {
   //   id: "roadmap",
