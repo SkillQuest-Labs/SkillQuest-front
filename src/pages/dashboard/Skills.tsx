@@ -26,13 +26,18 @@ export const Skills = () => {
   const [page, setPage] = useState(1);
 
   const filteredSkills = useMemo(() => {
+    if (!skillsData || !Array.isArray(skillsData)) return [];
+
     let result = [...skillsData];
-    if (filters.difficulty !== "ALL") {
+
+    if (filters.difficulty && filters.difficulty.toUpperCase() !== "ALL") {
       result = result.filter((s) => s.difficulty === filters.difficulty);
     }
-    if (filters.status !== "ALL") {
+
+    if (filters.status && filters.status.toUpperCase() !== "ALL") {
       result = result.filter((s) => s.status === filters.status);
     }
+
     // result.sort((a, b) => {
     //   if (filters.sort === "RECENT") {
     //     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
@@ -40,6 +45,7 @@ export const Skills = () => {
     //     return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
     //   }
     // });
+
     return result;
   }, [filters, skillsData]);
 
