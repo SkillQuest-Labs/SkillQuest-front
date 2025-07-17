@@ -18,6 +18,7 @@ import { FloatingToolbox } from "./floating-toolbox/FloatingToolbox";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/shared/components/ui/button";
 import { ChevronLeft } from "lucide-react";
+import { useCanvasStore } from "@/stores/canvas/canvas-store";
 
 type CanvasViewProps = {
   nodes: Node<QuestNodeData | SkillNodeData>[];
@@ -60,6 +61,8 @@ export const CanvasView = ({
   expandAll,
 }: CanvasViewProps) => {
   const navigate = useNavigate();
+
+  const reset = useCanvasStore.getState().reset;
 
   return (
     <ReactFlow
@@ -114,7 +117,10 @@ export const CanvasView = ({
           variant="outline"
           size="sm"
           aria-label="Retour au tableau de bord"
-          onClick={() => navigate("/dashboard")}
+          onClick={() => {
+            reset();
+            navigate("/dashboard");
+          }}
           className="bg-[#0C0821] hover:bg-gray-700 text-white hover:text-white px-4 py-2 rounded-lg shadow-lg transition-colors cursor-pointer duration-200 flex items-center gap-2"
         >
           <ChevronLeft className="w-5 h-5" />

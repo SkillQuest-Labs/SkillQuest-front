@@ -30,7 +30,7 @@ export const SkillCard = ({ skill }: SkillCardProps) => (
           <span
             className={`skill-badge-difficulty ${difficultyColors[skill.difficulty]} rounded-lg px-3 py-0.5 text-xs font-semibold shadow border border-opacity-20 whitespace-nowrap bg-white/80 backdrop-blur-sm`}
           >
-            {skill.difficulty === "easy" ? "Easy" : skill.difficulty === "medium" ? "Medium" : "Hard"}
+            {skill.difficulty === "EASY" ? "Easy" : skill.difficulty === "MEDIUM" ? "Medium" : "Hard"}
           </span>
           <span
             className={`skill-badge-difficulty ${statusColors[skill.status]} rounded-lg px-3 py-0.5 text-xs font-semibold shadow border border-opacity-20 whitespace-nowrap bg-white/80 backdrop-blur-sm`}
@@ -49,17 +49,17 @@ export const SkillCard = ({ skill }: SkillCardProps) => (
         {skill.description}
       </div>
       {/* Barre de progression */}
-      {typeof skill.progress === "number" && (
+      {typeof skill.progressValue === "number" && (
         <div className="mb-3">
           <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-blue-400 via-sky-400 to-cyan-400 transition-all duration-700 ease-out"
-              style={{ width: `${skill.progress}%` }}
+              style={{ width: `${skill.progressValue}%` }}
             />
           </div>
           <div className="flex justify-between text-xs text-slate-300 mt-1 font-medium">
             <span>Progression</span>
-            <span>{skill.progress}%</span>
+            <span>{skill.progressValue}%</span>
           </div>
           <div className="absolute inset-0 rounded-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5" />
         </div>
@@ -67,14 +67,14 @@ export const SkillCard = ({ skill }: SkillCardProps) => (
       {/* Footer */}
       <div className="flex items-center justify-between pt-4 border-t border-slate-700/50 text-xs">
         <Badge className="bg-slate-700/50 text-slate-300 font-medium px-2 py-0.5 rounded-md text-xs max-w-[100px] whitespace-nowrap truncate">
-          {skill.category.length > 12 ? skill.category.slice(0, 12) + "…" : skill.category}
+          {/* {skill.category.length > 12 ? skill.category.slice(0, 12) + "…" : skill.category} */}
         </Badge>
         <span className="text-slate-500">
-          {new Date(skill.createdAt).toLocaleDateString("fr-FR", {
+          {/* {new Date(skill.createdAt).toLocaleDateString("fr-FR", {
             day: "numeric",
             month: "short",
             year: "numeric",
-          })}
+          })} */}
         </span>
       </div>
     </div>

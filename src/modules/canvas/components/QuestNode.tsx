@@ -3,7 +3,7 @@ import { Handle, Position, type Node, type NodeProps } from "@xyflow/react";
 import type { QuestNodeData } from "../canvas.type";
 import { useRef } from "react";
 import { QuestCard } from "./QuestCard";
-import { useCanvasStore } from "@/stores/quest/canvas-store";
+import { useCanvasStore } from "@/stores/canvas/canvas-store";
 
 export const QuestNode = ({ id, data }: NodeProps<Node<QuestNodeData>>) => {
   const nodeRef = useRef<HTMLDivElement>(null);

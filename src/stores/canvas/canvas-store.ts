@@ -2,7 +2,13 @@ import { type Edge, type Node } from "@xyflow/react";
 import type { CursorModeType, QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
 import type { Quest } from "@/shared/types/quest.type";
 import { create } from "zustand";
-import { initialNodes } from "@/modules/canvas/canvas.const";
+
+export type LoadingType = "spinner" | "progress";
+
+export interface ILoading {
+  isLoading: boolean;
+  type: LoadingType;
+}
 
 type CanvasStore = {
   quests: Quest[];
@@ -12,9 +18,12 @@ type CanvasStore = {
   deletedNodesIds: string[];
   edges: Edge[];
   cursorMode: CursorModeType;
+  loading: ILoading;
 
   setNodes: (nodes: Node<QuestNodeData | SkillNodeData>[]) => void;
   setEdges: (edges: Edge[]) => void;
+
+  setLoading: (loading: ILoading) => void;
 
   setCursorMode: (mode: CursorModeType) => void;
 
@@ -31,13 +40,18 @@ type CanvasStore = {
 
 export const useCanvasStore = create<CanvasStore>((set) => ({
   quests: [],
-  nodes: initialNodes,
+  nodes: [],
   modifiedNodesIds: [],
   newIds: [],
   deletedNodesIds: [],
   edges: [],
-
   cursorMode: "normal",
+  loading: {
+    isLoading: false,
+    type: "spinner",
+  },
+
+  setLoading: (loading) => set({ loading }),
   setCursorMode: (mode: CursorModeType) => set({ cursorMode: mode }),
 
   setNodes: (nodes) => set({ nodes }),
@@ -74,7 +88,7 @@ export const useCanvasStore = create<CanvasStore>((set) => ({
   reset: () =>
     set({
       quests: [],
-      nodes: initialNodes,
+      nodes: [],
       modifiedNodesIds: [],
       newIds: [],
       edges: [],
