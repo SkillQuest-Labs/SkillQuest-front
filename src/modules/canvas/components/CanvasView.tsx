@@ -18,7 +18,7 @@ import { FloatingToolbox } from "./floating-toolbox/FloatingToolbox";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/shared/components/ui/button";
 import { ChevronLeft } from "lucide-react";
-import { useCanvasStore } from "@/stores/quest/canvas-store";
+import { useCanvasStore } from "@/stores/canvas/canvas-store";
 
 type CanvasViewProps = {
   nodes: Node<QuestNodeData | SkillNodeData>[];

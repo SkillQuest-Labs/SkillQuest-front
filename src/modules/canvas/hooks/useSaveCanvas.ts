@@ -3,7 +3,7 @@ import { type Node } from "@xyflow/react";
 import type { QuestNodeData, SkillNodeData } from "../canvas.type";
 import { useCreateQuests, useDeleteQuests, useGetQuests, useUpdateQuests } from "@/shared/services/quest/api-quest";
 import { useCallback, useEffect } from "react";
-import { useCanvasStore } from "@/stores/quest/canvas-store";
+import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import { isQuestNode, isSkillNode } from "../canvas.const";
 import { showToast } from "@/component/notification/show-toast";
 import { useCreateSkill, useGetSkill } from "@/shared/services/skill/api-skill";
@@ -11,10 +11,10 @@ import { useSearchParams } from "react-router-dom";
 import { useSkillStore } from "@/stores/skill/skill-store";
 
 export const useSaveCanvas = () => {
-  const { createQuest } = useCreateQuests();
-  const { updateQuest } = useUpdateQuests();
-  const { deleteQuest } = useDeleteQuests();
-  const { createSkill } = useCreateSkill();
+  const { createQuest, error: createQuestError } = useCreateQuests();
+  const { updateQuest, error: updateQuestError } = useUpdateQuests();
+  const { deleteQuest, error: deleteQuestError } = useDeleteQuests();
+  const { createSkill, error: createSkillError } = useCreateSkill();
   const { nodes, newIds, modifiedNodesIds, deletedNodesIds, clearFlags } = useCanvasStore();
   const [searchParams] = useSearchParams();
   const currentSkillId = useSkillStore((state) => state.currentSkillId);
@@ -91,14 +91,13 @@ export const useSaveCanvas = () => {
       }
 
       clearFlags();
-    } catch (error) {
-      showToast({
-        title: "Erreur",
-        description: "Une erreur inattendue s'est produite lors de la sauvegarde du canvas.",
-        duration: 6000,
-        status: "error",
-      });
-      return error;
+    } catch {
+      if (createQuestError || updateQuestError || deleteQuestError || createSkillError) {
+        showToast({
+          status: "error",
+          title: "Failed to save canvas. Please try again.",
+        });
+      }
     }
   };
 

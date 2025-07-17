@@ -3,6 +3,13 @@ import type { CursorModeType, QuestNodeData, SkillNodeData } from "@/modules/can
 import type { Quest } from "@/shared/types/quest.type";
 import { create } from "zustand";
 
+export type LoadingType = "spinner" | "progress";
+
+export interface ILoading {
+  isLoading: boolean;
+  type: LoadingType;
+}
+
 type CanvasStore = {
   quests: Quest[];
   nodes: Node<QuestNodeData | SkillNodeData>[];
@@ -11,9 +18,12 @@ type CanvasStore = {
   deletedNodesIds: string[];
   edges: Edge[];
   cursorMode: CursorModeType;
+  loading: ILoading;
 
   setNodes: (nodes: Node<QuestNodeData | SkillNodeData>[]) => void;
   setEdges: (edges: Edge[]) => void;
+
+  setLoading: (loading: ILoading) => void;
 
   setCursorMode: (mode: CursorModeType) => void;
 
@@ -35,8 +45,13 @@ export const useCanvasStore = create<CanvasStore>((set) => ({
   newIds: [],
   deletedNodesIds: [],
   edges: [],
-
   cursorMode: "normal",
+  loading: {
+    isLoading: false,
+    type: "spinner",
+  },
+
+  setLoading: (loading) => set({ loading }),
   setCursorMode: (mode: CursorModeType) => set({ cursorMode: mode }),
 
   setNodes: (nodes) => set({ nodes }),

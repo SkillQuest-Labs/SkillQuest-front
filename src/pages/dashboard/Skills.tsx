@@ -6,7 +6,7 @@ import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
 import { Plus } from "lucide-react";
 import { Pagination } from "../../modules/skills/components/Pagination";
 import { useNavigate } from "react-router-dom";
-import { useCanvasStore } from "@/stores/quest/canvas-store";
+import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import { useGetSkills } from "@/shared/services/skill/api-skill";
 import { SKILLS_PER_PAGE } from "@/modules/skills/skills.const";
 

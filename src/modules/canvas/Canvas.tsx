@@ -10,7 +10,7 @@ import { CanvasView } from "./components/CanvasView";
 import { useCanvasLoader, useSaveCanvas } from "./hooks/useSaveCanvas";
 import { Toaster } from "@/shared/components/ui/sonner";
 import { useAutoSaveCanvas } from "./hooks/useAutoSaveCanvas";
-import { useCanvasStore } from "@/stores/quest/canvas-store";
+import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { CreateSkillModal } from "./components/CreateSkillModal";
 import type { Skill } from "@/shared/types/skill.type";

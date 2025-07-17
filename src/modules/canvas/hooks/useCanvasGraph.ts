@@ -7,7 +7,7 @@ import {
   type XYPosition,
 } from "@xyflow/react";
 import type { QuestNodeData, SkillNodeData } from "../canvas.type";
-import { useCanvasStore } from "@/stores/quest/canvas-store";
+import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import { useCallback } from "react";
 import type { Skill } from "@/shared/types/skill.type";
 import { isQuestNode } from "../canvas.const";
