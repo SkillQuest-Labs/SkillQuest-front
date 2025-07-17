@@ -5,8 +5,6 @@ import { Textarea } from "@/shared/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { useState } from "react";
 import type { Skill, SkillDifficulty, SkillStatus } from "@/shared/types/skill.type";
-import type { QuestDifficulty } from "@/shared/types/quest.type";
-import { difficulties } from "@/shared/constante/skill.const";
 
 type CreateSkillModalProps = {
   open: boolean;
@@ -65,16 +63,20 @@ export const CreateSkillModal = ({ open, onClose, onCreate }: CreateSkillModalPr
           onChange={(e) => setDescription(e.target.value)}
           className="bg-white/10 border border-white/20 p-2 rounded w-full mb-3 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
-        <Select value={difficulty} onValueChange={(val) => setDifficulty(val as QuestDifficulty)}>
+        <Select value={difficulty} onValueChange={(val) => setDifficulty(val as SkillDifficulty)}>
           <SelectTrigger className="w-full mb-4 bg-white/10 border border-white/20 text-white focus:ring-2 focus:ring-blue-400">
             <SelectValue placeholder="Choisir une difficulté" />
           </SelectTrigger>
           <SelectContent className="text-white bg-slate-900 border-white/10">
-            {difficulties.map((diff) => (
-              <SelectItem key={diff} value={diff} className="capitalize">
-                {diff}
-              </SelectItem>
-            ))}
+            <SelectItem value="EASY" className="capitalize">
+              Facile
+            </SelectItem>
+            <SelectItem value="MEDIUM" className="capitalize">
+              Moyen
+            </SelectItem>
+            <SelectItem value="HARD" className="capitalize">
+              Difficile
+            </SelectItem>
           </SelectContent>
         </Select>
         <Select value={status} onValueChange={(val) => setStatus(val as SkillStatus)}>
