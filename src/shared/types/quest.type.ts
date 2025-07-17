@@ -21,3 +21,10 @@ export type Quest = {
   position: QuestPosition;
   skillId: string;
 };
+
+export type QuestRelation = {
+  id?: string;
+  questRelationId?: string;
+  parentQuestId: string;
+  childQuestId: string;
+};

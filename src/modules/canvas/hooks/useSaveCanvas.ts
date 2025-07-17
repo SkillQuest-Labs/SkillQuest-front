@@ -1,7 +1,14 @@
-import { type Node } from "@xyflow/react";
+import { MarkerType, type Node } from "@xyflow/react";
 
 import type { QuestNodeData, SkillNodeData } from "../canvas.type";
-import { useCreateQuests, useDeleteQuests, useGetQuests, useUpdateQuests } from "@/shared/services/quest/api-quest";
+import {
+  useCreateQuests,
+  useDeleteQuestRelations,
+  useDeleteQuests,
+  useGetQuests,
+  useSaveQuestRelations,
+  useUpdateQuests,
+} from "@/shared/services/quest/api-quest";
 import { useCallback, useEffect } from "react";
 import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import { isQuestNode, isSkillNode } from "../canvas.const";
@@ -15,7 +22,10 @@ export const useSaveCanvas = () => {
   const { updateQuest, error: updateQuestError } = useUpdateQuests();
   const { deleteQuest, error: deleteQuestError } = useDeleteQuests();
   const { createSkill, error: createSkillError } = useCreateSkill();
-  const { nodes, newIds, modifiedNodesIds, deletedNodesIds, clearFlags } = useCanvasStore();
+  const { saveQuestRelations, error: questRelationError } = useSaveQuestRelations();
+  const { deleteQuestRelations, error: deleteQuestRelationsError } = useDeleteQuestRelations();
+  const { nodes, edges, newNodeIds, newEdgeIds, modifiedNodesIds, deletedNodesIds, deletedEdgeIds, clearFlags } =
+    useCanvasStore();
   const [searchParams] = useSearchParams();
   const currentSkillId = useSkillStore((state) => state.currentSkillId);
 
@@ -24,9 +34,9 @@ export const useSaveCanvas = () => {
     const skillNode = nodes.find(isSkillNode);
     const skillId = currentSkillId ?? searchSkillId ?? "";
 
-    const toCreate = nodes
+    const toCreateQuest = nodes
       .filter(isQuestNode)
-      .filter((node) => newIds.includes(node.id))
+      .filter((node) => newNodeIds.includes(node.id))
       .map((node) => ({
         id: node.id,
         questId: node.id,
@@ -42,7 +52,7 @@ export const useSaveCanvas = () => {
       }));
 
     const toCreateSkill = skillNode &&
-      newIds.includes(skillNode.id) && {
+      newNodeIds.includes(skillNode.id) && {
         id: skillNode.id,
         skillId: skillNode.id,
         title: skillNode.data.config.title || "New Skill",
@@ -53,9 +63,17 @@ export const useSaveCanvas = () => {
         userId: "uuid-user-1234-5678-9012-345678901234",
       };
 
-    const toUpdate = nodes
+    const toCreateEdge = edges
+      .filter((edge) => newEdgeIds.includes(edge.id))
+      .map((edge) => ({
+        questRelationId: edge.id,
+        parentQuestId: edge.source,
+        childQuestId: edge.target,
+      }));
+
+    const toUpdateQuest = nodes
       .filter(isQuestNode)
-      .filter((node) => modifiedNodesIds.includes(node.id) && !newIds.includes(node.id))
+      .filter((node) => modifiedNodesIds.includes(node.id) && !newNodeIds.includes(node.id))
       .map((node) => ({
         id: node.id,
         questId: node.id,
@@ -69,30 +87,47 @@ export const useSaveCanvas = () => {
         position: { x: node.position.x, y: node.position.y },
       }));
 
-    const toDelete = deletedNodesIds
-      .filter((deletedId) => !newIds.includes(deletedId))
+    const toDeleteQuest = deletedNodesIds
+      .filter((deletedId) => !newNodeIds.includes(deletedId))
       .map((deletedId) => ({
         id: deletedId,
         questId: deletedId,
       }));
 
+    const toDeleteEdges = deletedEdgeIds
+      .filter((deletedId) => !newEdgeIds.includes(deletedId))
+      .map((questRelationId) => ({ questRelationId }));
+
     try {
       if (toCreateSkill) {
         await createSkill(toCreateSkill);
       }
-      if (toCreate.length > 0 && currentSkillId && currentSkillId !== "") {
-        await createQuest(toCreate);
+      if (toCreateQuest.length > 0 && currentSkillId && currentSkillId !== "") {
+        await createQuest(toCreateQuest);
       }
-      if (toUpdate.length > 0) {
-        await updateQuest(toUpdate);
+      if (toUpdateQuest.length > 0) {
+        await updateQuest(toUpdateQuest);
       }
-      if (toDelete.length > 0) {
-        await deleteQuest(toDelete);
+      if (toDeleteQuest.length > 0) {
+        await deleteQuest(toDeleteQuest);
+      }
+      if (toCreateEdge.length > 0) {
+        await saveQuestRelations(toCreateEdge);
+      }
+      if (toDeleteEdges.length > 0) {
+        await deleteQuestRelations(toDeleteEdges);
       }
 
       clearFlags();
     } catch {
-      if (createQuestError || updateQuestError || deleteQuestError || createSkillError) {
+      if (
+        createQuestError ||
+        updateQuestError ||
+        deleteQuestError ||
+        createSkillError ||
+        questRelationError ||
+        deleteQuestRelationsError
+      ) {
         showToast({
           status: "error",
           title: "Failed to save canvas. Please try again.",
@@ -111,10 +146,11 @@ export const useCanvasLoader = () => {
 
   const skillId = searchParams.get("skillId");
 
-  const { quests } = useGetQuests(skillId ?? "");
+  const { quests, questRelations } = useGetQuests(skillId ?? "");
   const { skill } = useGetSkill(skillId ?? "");
 
   const setNodes = useCanvasStore((state) => state.setNodes);
+  const setEdges = useCanvasStore((state) => state.setEdges);
   const addNode = useCanvasStore((state) => state.addNode);
   const removeNode = useCanvasStore((state) => state.removeNode);
   const markModifiedNode = useCanvasStore((state) => state.markModifiedNode);
@@ -130,7 +166,7 @@ export const useCanvasLoader = () => {
   );
 
   useEffect(() => {
-    if (!quests || !skill) return;
+    if (!quests || !skill || !questRelations) return;
 
     const questNodes: Node<QuestNodeData>[] = quests.map((quest) => ({
       id: quest.questId,
@@ -149,6 +185,19 @@ export const useCanvasLoader = () => {
       },
     }));
 
+    const questEdges = questRelations?.map((r) => ({
+      id: r.questRelationId ?? `edge_${r.parentQuestId}_${r.childQuestId}`,
+      source: r.parentQuestId,
+      target: r.childQuestId,
+      type: "custom",
+      animated: true,
+      style: { stroke: "#fde68a", strokeWidth: 3 },
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+        color: "#6366f1",
+      },
+    }));
+
     const skillNode: Node<SkillNodeData> = {
       id: skill.skillId ?? "",
       type: "skill",
@@ -164,7 +213,7 @@ export const useCanvasLoader = () => {
         },
       },
     };
-
+    setEdges(questEdges);
     setNodes([...questNodes, skillNode]);
-  }, [skill, quests, setNodes, addNode, removeNode, updateNodeData]);
+  }, [skill, quests, questRelations, setNodes, setEdges, addNode, removeNode, updateNodeData]);
 };
