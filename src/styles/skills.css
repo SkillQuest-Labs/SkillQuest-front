@@ -6,7 +6,7 @@
   background: #1e293b; /* bg-slate-800 */
   color: #f1f5f9; /* text-slate-100 */
   transition: box-shadow 0.2s, transform 0.2s, border 0.2s;
-  border: 2px solid rgba(100,116,139,0.15); /* slate-500/20 */
+  border: 1px solid rgba(100,116,139,0.15); /* slate-500/20, plus fin */
   position: relative;
   overflow: hidden;
 }
@@ -20,12 +20,13 @@
   transition: box-shadow 0.3s;
 }
 .skill-card-custom:hover {
-  box-shadow: 0 4px 12px rgba(30,41,59,0.13), 0 0 2px 1px #f1f5f9bb;
-  border: 1px solid #f1f5f9bb; /* blanc très clair, plus fin */
+  box-shadow: 0 4px 12px rgba(30,41,59,0.13);
+  border: 2px solid rgba(100,116,139,0.15); /* slate-500/20, même que l'état normal */
   transform: translateY(-4px) scale(1.03);
 }
 .skill-card-custom:hover::before {
-  box-shadow: 0 0 2px 1px #f1f5f9bb, 0 0 4px 1px #f1f5f988;
+  /* Suppression de l'ombre blanche lumineuse */
+  box-shadow: none;
 }
 
 .skill-grid-custom {
@@ -58,7 +59,7 @@
   justify-content: center;
   align-items: center;
   gap: 1.2rem;
-  margin-top: 2.5rem;
+  margin-top: 0.5rem;
 
 }
 .skill-pagination-btn {
@@ -115,5 +116,27 @@
 .skill-pagination-arrow:hover:not(:disabled) {
   background: none;
   color: #334155;
+}
+
+/* Scrollbar custom élégante */
+::-webkit-scrollbar {
+  width: 8px;
+  background: #0f172a;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #334155 #0f172a;
+}
+
+.skill-card-min {
+  min-height: 220px;
 }
 

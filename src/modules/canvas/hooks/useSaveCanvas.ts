@@ -3,24 +3,26 @@ import { type Node } from "@xyflow/react";
 import type { QuestNodeData, SkillNodeData } from "../canvas.type";
 import { useCreateQuests, useDeleteQuests, useGetQuests, useUpdateQuests } from "@/shared/services/quest/api-quest";
 import { useCallback, useEffect } from "react";
-import { useCanvasStore } from "@/stores/quest/canvas-store";
-import { initialNodes } from "../canvas.const";
-import { useLoadingStore } from "@/stores/loading-store";
+import { useCanvasStore } from "@/stores/canvas/canvas-store";
+import { isQuestNode, isSkillNode } from "../canvas.const";
 import { showToast } from "@/component/notification/show-toast";
+import { useCreateSkill, useGetSkill } from "@/shared/services/skill/api-skill";
+import { useSearchParams } from "react-router-dom";
+import { useSkillStore } from "@/stores/skill/skill-store";
 
 export const useSaveCanvas = () => {
-  const { createQuest } = useCreateQuests();
-  const { updateQuest } = useUpdateQuests();
-  const { deleteQuest } = useDeleteQuests();
+  const { createQuest, error: createQuestError } = useCreateQuests();
+  const { updateQuest, error: updateQuestError } = useUpdateQuests();
+  const { deleteQuest, error: deleteQuestError } = useDeleteQuests();
+  const { createSkill, error: createSkillError } = useCreateSkill();
   const { nodes, newIds, modifiedNodesIds, deletedNodesIds, clearFlags } = useCanvasStore();
-  const { setLoading } = useLoadingStore();
-
-  // type guard to check if a node is a QuestNode
-  const isQuestNode = (node: Node<QuestNodeData | SkillNodeData>): node is Node<QuestNodeData> =>
-    node.data.kind === "quest";
+  const [searchParams] = useSearchParams();
+  const currentSkillId = useSkillStore((state) => state.currentSkillId);
 
   const saveCanvas = async () => {
-    // const skillId = nodes[0].type === "skill" ? nodes[0].id : undefined;
+    const searchSkillId = searchParams.get("skillId");
+    const skillNode = nodes.find(isSkillNode);
+    const skillId = currentSkillId ?? searchSkillId ?? "";
 
     const toCreate = nodes
       .filter(isQuestNode)
@@ -28,7 +30,7 @@ export const useSaveCanvas = () => {
       .map((node) => ({
         id: node.id,
         questId: node.id,
-        title: node.data.title,
+        title: node.data.title || "New Quest",
         difficulty: node.data.difficulty,
         description: node.data.description,
         xp: node.data.xp,
@@ -36,8 +38,20 @@ export const useSaveCanvas = () => {
         isSubSkill: false,
         completionTime: new Date().toISOString(),
         position: { x: node.position.x, y: node.position.y },
-        skillId: "uuid-skill-1234-5678-9012-345678901234", // replace with actual skill ID
+        skillId,
       }));
+
+    const toCreateSkill = skillNode &&
+      newIds.includes(skillNode.id) && {
+        id: skillNode.id,
+        skillId: skillNode.id,
+        title: skillNode.data.config.title || "New Skill",
+        description: skillNode.data.config.description,
+        status: skillNode.data.config.status,
+        difficulty: skillNode.data.config.difficulty,
+        // position: { x: skillNode.position.x, y: skillNode.position.y },
+        userId: "uuid-user-1234-5678-9012-345678901234",
+      };
 
     const toUpdate = nodes
       .filter(isQuestNode)
@@ -45,7 +59,7 @@ export const useSaveCanvas = () => {
       .map((node) => ({
         id: node.id,
         questId: node.id,
-        title: node.data.title,
+        title: node.data.title || "New Quest",
         difficulty: node.data.difficulty,
         description: node.data.description,
         xp: node.data.xp,
@@ -63,42 +77,27 @@ export const useSaveCanvas = () => {
       }));
 
     try {
-      setLoading(true, "spinner");
-      if (toCreate.length > 0) {
-        const result = await createQuest(toCreate);
-        if (result.total > 0) {
-          showToast({
-            title: "Quête(s) créée(s) avec succès !",
-            description: `${toCreate.length} quête${toCreate.length > 1 ? "s" : ""} créée${toCreate.length > 1 ? "s" : ""} dans votre canvas.`,
-            duration: 4000,
-            status: "success",
-          });
-        }
+      if (toCreateSkill) {
+        await createSkill(toCreateSkill);
+      }
+      if (toCreate.length > 0 && currentSkillId && currentSkillId !== "") {
+        await createQuest(toCreate);
       }
       if (toUpdate.length > 0) {
-        const result = await updateQuest(toUpdate);
-        if (result.total > 0) {
-          showToast({
-            title: "Quête(s) mise(s) à jour avec succès !",
-            description: `${toUpdate.length} quête${toUpdate.length > 1 ? "s" : ""} modifiée${toUpdate.length > 1 ? "s" : ""} dans votre canvas.`,
-            duration: 4000,
-            status: "success",
-          });
-        }
+        await updateQuest(toUpdate);
       }
       if (toDelete.length > 0) {
         await deleteQuest(toDelete);
+      }
+
+      clearFlags();
+    } catch {
+      if (createQuestError || updateQuestError || deleteQuestError || createSkillError) {
         showToast({
-          title: "Quête(s) supprimée(s) avec succès !",
-          description: `${toDelete.length} quête${toDelete.length > 1 ? "s" : ""} supprimée${toDelete.length > 1 ? "s" : ""} de votre canvas.`,
-          duration: 4000,
-          status: "success",
+          status: "error",
+          title: "Failed to save canvas. Please try again.",
         });
       }
-      setLoading(false);
-      clearFlags();
-    } catch (error) {
-      return error;
     }
   };
 
@@ -107,9 +106,16 @@ export const useSaveCanvas = () => {
   };
 };
 
-export const useQuestsLoader = (skillId: string) => {
-  const { quests, loading, error } = useGetQuests(skillId);
+export const useCanvasLoader = () => {
+  const [searchParams] = useSearchParams();
+
+  const skillId = searchParams.get("skillId");
+
+  const { quests } = useGetQuests(skillId ?? "");
+  const { skill } = useGetSkill(skillId ?? "");
+
   const setNodes = useCanvasStore((state) => state.setNodes);
+  const addNode = useCanvasStore((state) => state.addNode);
   const removeNode = useCanvasStore((state) => state.removeNode);
   const markModifiedNode = useCanvasStore((state) => state.markModifiedNode);
 
@@ -124,7 +130,7 @@ export const useQuestsLoader = (skillId: string) => {
   );
 
   useEffect(() => {
-    if (!quests) return;
+    if (!quests || !skill) return;
 
     const questNodes: Node<QuestNodeData>[] = quests.map((quest) => ({
       id: quest.questId,
@@ -143,8 +149,22 @@ export const useQuestsLoader = (skillId: string) => {
       },
     }));
 
-    setNodes([...initialNodes, ...questNodes]);
-  }, [quests, setNodes, removeNode, updateNodeData]);
+    const skillNode: Node<SkillNodeData> = {
+      id: skill.skillId ?? "",
+      type: "skill",
+      position: { x: 400, y: 50 },
+      data: {
+        kind: "skill",
+        config: {
+          title: skill.title ?? "",
+          description: skill.description ?? "",
+          difficulty: skill.difficulty,
+          status: skill.status,
+          color: "from-blue-500 to-indigo-600",
+        },
+      },
+    };
 
-  return { quests, loading, error };
+    setNodes([...questNodes, skillNode]);
+  }, [skill, quests, setNodes, addNode, removeNode, updateNodeData]);
 };

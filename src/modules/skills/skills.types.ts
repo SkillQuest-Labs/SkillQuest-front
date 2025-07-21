@@ -1,16 +1,17 @@
-export type SkillDifficulty = "easy" | "medium" | "hard" | "all";
+export type SkillDifficulty = "EASY" | "MEDIUM" | "HARD" | "ALL";
 
-export type SkillStatus = "draft" | "in_progress" | "not_started" | "finished" | "all";
+export type SkillStatus = "DRAFT" | "IN_PROGRESS" | "NOT_STARTED" | "COMPLETED" | "ALL";
 
-export type SkillSort = "recent" | "oldest";
+export type SkillSort = "RECENT" | "OLDEST";
 
 export type Skill = {
-  id: string;
+  id?: string;
+  skillId?: string;
   title: string;
-  description: string;
-  category: string;
+  description?: string;
   difficulty: SkillDifficulty;
   status: SkillStatus;
-  createdAt: string;
+  createdAt?: string;
   image?: string;
+  progressValue?: number; // 0 to 100, for the progress bar
 };

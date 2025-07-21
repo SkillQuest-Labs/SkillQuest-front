@@ -1,63 +1,39 @@
-import { useState } from "react";
-import type { Skill } from "../skills.types";
 import { SkillCard } from "./SkillCard";
+import type { Skill } from "../skills.types";
 import "../../../styles/skills.css";
 import { SKILLS_PER_PAGE } from "../skills.const";
-import { ChevronLeftIcon } from "@/component/icons/chevron-left.icon";
-import { ChevronRightIcon } from "@/component/icons/chevron-right.icon";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
-type SkillGridProps = {
+// Props modifiées : page et setPage sont passés par le parent
+export type SkillGridProps = {
   skills: Skill[];
+  page: number;
+  setPage: (page: number) => void;
 };
 
-export const SkillGrid = ({ skills }: SkillGridProps) => {
-  const [page, setPage] = useState(1);
-  const totalPages = Math.ceil(skills.length / SKILLS_PER_PAGE);
+export const SkillGrid = ({ skills, page }: SkillGridProps) => {
   const startIdx = (page - 1) * SKILLS_PER_PAGE;
   const paginatedSkills = skills.slice(startIdx, startIdx + SKILLS_PER_PAGE);
+  const navigate = useNavigate();
+  const [, setSearchParams] = useSearchParams();
 
-  const goToPage = (newPage: number) => {
-    if (newPage >= 1 && newPage <= totalPages) setPage(newPage);
+  const handleSkill = (skillId: string) => {
+    setSearchParams({ skillId });
+    navigate(`/canvas?skillId=${skillId}`);
   };
-
-  // Generate the list of pages (1, 2, 3, ...)
-  const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
     <div className="w-full">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mb-8 overflow-visible px-2 md:px-4">
         {paginatedSkills.map((skill) => (
-          <SkillCard key={skill.id} skill={skill} />
-        ))}
-      </div>
-      <div className="skill-pagination">
-        <button
-          className="skill-pagination-arrow"
-          onClick={() => goToPage(page - 1)}
-          disabled={page === 1}
-          aria-label="Page précédente"
-        >
-          <ChevronLeftIcon />
-        </button>
-        {pageNumbers.map((num) => (
-          <button
-            key={num}
-            className={`skill-pagination-btn${num === page ? " selected" : ""}`}
-            onClick={() => goToPage(num)}
-            aria-current={num === page ? "page" : undefined}
-            aria-label={`Page ${num}`}
+          <div
+            key={skill.id}
+            className="w-full max-w-[360px] mx-auto"
+            onClick={() => skill.skillId && handleSkill(skill.skillId)}
           >
-            {num}
-          </button>
+            <SkillCard skill={skill} />
+          </div>
         ))}
-        <button
-          className="skill-pagination-arrow"
-          onClick={() => goToPage(page + 1)}
-          disabled={page === totalPages}
-          aria-label="Page suivante"
-        >
-          <ChevronRightIcon />
-        </button>
       </div>
     </div>
   );

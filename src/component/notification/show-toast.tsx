@@ -4,7 +4,7 @@ type ToastStatus = "normal" | "action" | "success" | "info" | "warning" | "error
 
 type ToastOptions = {
   title: string;
-  description: string;
+  description?: string;
   status?: ToastStatus;
   duration?: number;
 };
