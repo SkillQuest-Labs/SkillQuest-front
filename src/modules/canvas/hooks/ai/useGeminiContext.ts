@@ -38,6 +38,7 @@ export const useGeminiContext = (): GeminiContext => {
     },
     instruction:
       "Génère 3 quêtes originales, progressives (de facile à difficile), " +
-      "en respectant l’objectif final et sans doublons avec les quêtes existantes.",
+      "en respectant l’objectif final et sans doublons avec les quêtes existantes." +
+      "la description doit être concise et claire et cours pas plus de 15 characteres",
   };
 };
