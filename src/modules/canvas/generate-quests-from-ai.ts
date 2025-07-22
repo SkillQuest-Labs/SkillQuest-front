@@ -61,8 +61,7 @@ export const generateQuestsFromAI = async (context: GeminiContext): Promise<Ques
         difficulty: item.difficulty,
         prerequisites: Array.isArray(item.prerequisites) ? item.prerequisites : [],
       }));
-  } catch (error) {
-    console.error("Erreur lors de la génération des quêtes depuis l'IA :", error);
+  } catch {
     return [];
   }
 };

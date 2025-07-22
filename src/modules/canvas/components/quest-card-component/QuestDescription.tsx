@@ -1,4 +1,3 @@
-
 type DescriptionTextareaProps = {
   description: string;
   onChange?: (value: string) => void;
