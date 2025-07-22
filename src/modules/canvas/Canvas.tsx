@@ -15,6 +15,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { CreateSkillModal } from "./components/CreateSkillModal";
 import type { Skill } from "@/shared/types/skill.type";
 import { initialNodes } from "./canvas.const";
+import { useGenerateAIContent } from "./hooks/ai/useGenerateAIContent";
 
 export const Canvas = () => {
   const [connectionStart, setConnectionStart] = useState<string | null>(null);
@@ -28,6 +29,8 @@ export const Canvas = () => {
 
   const { cursorMode, setCursorMode } = useCanvasStore();
   const { screenToFlowPosition } = useReactFlow();
+
+  const { generate } = useGenerateAIContent();
 
   useCanvasLoader();
 
@@ -82,6 +85,14 @@ export const Canvas = () => {
     [cursorMode, connectionStart, onConnect, setConnectionStart],
   );
 
+  const openAIGenerator = async () => {
+    const quests = await generate();
+
+    if (quests) {
+      console.log("Generated quests:", quests);
+    }
+  };
+
   useEffect(() => {
     setIsModalOpen(createSkillParam);
   }, [createSkillParam]);
@@ -107,6 +118,7 @@ export const Canvas = () => {
         setViewMode={setViewMode}
         collapseAll={collapseAll}
         expandAll={expandAll}
+        openAIGenerator={openAIGenerator}
       />
 
       <CreateSkillModal
