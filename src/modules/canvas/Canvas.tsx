@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import type { QuestNodeData, ViewModeType } from "./canvas.type";
+import type { ViewModeType } from "./canvas.type";
 import { useReactFlow, type Node } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import "./../../styles/canvas.css";
@@ -14,10 +14,11 @@ import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { CreateSkillModal } from "./components/CreateSkillModal";
 import type { Skill } from "@/shared/types/skill.type";
-import { initialNodes, isQuestNode, isSkillNode } from "./canvas.const";
+import { initialNodes, isSkillNode } from "./canvas.const";
 import { useGenerateAIContent } from "./hooks/ai/useGenerateAIContent";
 import { useLoadingStore } from "@/stores/loading-store";
 import { useSkillStore } from "@/stores/skill/skill-store";
+import { createQuestNode } from "@/shared/utils/quetes/quest-node";
 
 export const Canvas = () => {
   const [connectionStart, setConnectionStart] = useState<string | null>(null);
@@ -90,62 +91,58 @@ export const Canvas = () => {
   const setLoading = useLoadingStore((state) => state.setLoading);
 
   const openAIGenerator = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       const quests = await generate();
-      if (quests) {
-        console.log("Generated quests:", quests);
-        if (quests && quests.length > 0) {
-          const { addNode, markNew, removeNode, setNodes: updateNodes, markModifiedNode } = useCanvasStore.getState();
-          const setCurrentSkillId = useSkillStore.getState().setCurrentSkillId;
+      if (!Array.isArray(quests) || quests.length === 0) return;
 
-          const currentNodes = useCanvasStore.getState().nodes;
-          const questNodes = currentNodes.filter(isQuestNode);
-          const skillNode = currentNodes.find(isSkillNode);
+      const {
+        addNode,
+        markNew,
+        removeNode,
+        setNodes: updateNodes,
+        markModifiedNode,
+        nodes: currentNodes,
+      } = useCanvasStore.getState();
+      const setCurrentSkillId = useSkillStore.getState().setCurrentSkillId;
 
-          // console.log("skillId", skillNode?.id);
+      // Par défaut, la position du skill est { x: 400, y: 50 }
+      // On place les quêtes en dessous du skill, espacées horizontalement pour éviter le chevauchement
+      const skillNode = currentNodes.find(isSkillNode);
+      const skillX = skillNode ? skillNode.position.x : 400;
+      const skillY = skillNode ? skillNode.position.y : 50;
 
-          const baseY =
-            questNodes.length > 0
-              ? Math.max(...questNodes.map((n) => n.position.y)) + 150
-              : (skillNode?.position.y ?? 0) + 150;
-          const baseX = skillNode ? skillNode.position.x - 100 : 300;
+      // Place quests starting from x = skillX - 100, y = skillY + 150
+      const baseY = skillY + 370;
+      const baseX = skillX - 320;
+      const questSpacingX = 470;
 
-          quests.forEach((quest, index) => {
-            const id = `quest-${crypto.randomUUID()}`;
+      quests.forEach((quest, index) => {
+        const id = `quest-${crypto.randomUUID()}`;
+        const position = { x: baseX + index * questSpacingX, y: baseY };
 
-            const newNode: Node<QuestNodeData> = {
-              id,
-              type: "questNode",
-              position: { x: baseX + index * 230, y: baseY },
-              data: {
-                kind: "quest",
-                title: quest.title ?? "New Quest",
-                xp: quest.xp ?? 100,
-                difficulty: quest.difficulty ?? "EASY",
-                description: quest.description ?? "Quest description...",
-                status: "LOCKED",
-                isCollapsed: false,
-                onDelete: (nid: string) => removeNode(nid),
-                onUpdate: (field: string, value: any) => {
-                  const current = useCanvasStore.getState().nodes;
-                  const updated = current.map((n) => (n.id === id ? { ...n, data: { ...n.data, [field]: value } } : n));
-                  updateNodes(updated);
-                  markModifiedNode(id);
-                },
-              },
-            };
+        const handleUpdate = (field: string, value: any) => {
+          const updated = useCanvasStore
+            .getState()
+            .nodes.map((n) => (n.id === id ? { ...n, data: { ...n.data, [field]: value } } : n));
+          updateNodes(updated);
+          markModifiedNode(id);
+        };
 
-            addNode(newNode);
-            markNew(id);
-            if (skillNode?.id) {
-              setCurrentSkillId(skillNode.id);
-            }
-          });
-        }
-      }
+        const newNode = createQuestNode(id, position, removeNode, handleUpdate, {
+          title: quest.title,
+          xp: quest.xp,
+          difficulty: quest.difficulty,
+          description: quest.description,
+          status: "LOCKED",
+        });
+
+        addNode(newNode);
+        markNew(id);
+        if (skillNode?.id) setCurrentSkillId(skillNode.id);
+      });
     } catch (error) {
-      console.error("Error generating AI content:", error);
+      return error;
     } finally {
       setLoading(false);
     }

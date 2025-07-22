@@ -1,11 +1,8 @@
 import { callGeminiApi } from "@/shared/lib/gemini-api";
 import type { GeminiContext, QuestAiType } from "@/shared/types/ai/ai.type";
-// import { useLoadingStore } from "@/stores/loading-store";
 
 export const generateQuestsFromAI = async (context: GeminiContext): Promise<QuestAiType[]> => {
   if (!context.skill) return [];
-
-  // const { setLoading } = useLoadingStore((s) => s);
 
   const prompt = `
     Tu es un générateur intelligent de quêtes d'apprentissage gamifiées.
@@ -38,8 +35,6 @@ export const generateQuestsFromAI = async (context: GeminiContext): Promise<Ques
     `;
 
   try {
-    // setLoading(true);
-
     const rawResponse = await callGeminiApi(prompt);
 
     const jsonMatch = rawResponse?.match(/```json([\s\S]*?)```/i);
@@ -69,7 +64,5 @@ export const generateQuestsFromAI = async (context: GeminiContext): Promise<Ques
   } catch (error) {
     console.error("Erreur lors de la génération des quêtes depuis l'IA :", error);
     return [];
-  } finally {
-    // setLoading(false, "spinner");
   }
 };

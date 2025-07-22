@@ -38,7 +38,14 @@ export const useGeminiContext = (): GeminiContext => {
     },
     instruction:
       "Génère 3 quêtes originales, progressives (de facile à difficile), " +
-      "en respectant l’objectif final et sans doublons avec les quêtes existantes." +
-      "la description doit être concise et claire et cours pas plus de 15 characteres",
+      "en respectant l'objectif final et sans doublons avec les quêtes existantes." +
+      " Chaque quête doit être unique et apporter une valeur ajoutée à l'apprentissage du skill." +
+      "\n\nCritères de qualité :" +
+      "\n- Chaque quête doit avoir un objectif concret et mesurable" +
+      "\n- Les quêtes doivent former une progression logique (bases → intermédiaire → avancé)" +
+      "\n- Inclure des éléments pratiques et applicables dans le monde réel" +
+      "\n- Éviter les quêtes trop théoriques ou abstraites" +
+      "\n- S'assurer que chaque quête développe des compétences spécifiques et identifiables" +
+      "\n- Proposer des défis stimulants mais réalisables pour le niveau indiqué",
   };
 };
