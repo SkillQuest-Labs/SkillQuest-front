@@ -25,6 +25,7 @@ export type Quest = {
 export type QuestRelation = {
   id?: string;
   questRelationId?: string;
-  parentQuestId: string;
+  parentQuestId?: string;
+  parentSkillId?: string;
   childQuestId: string;
 };

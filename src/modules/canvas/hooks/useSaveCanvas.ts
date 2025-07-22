@@ -67,7 +67,7 @@ export const useSaveCanvas = () => {
       .filter((edge) => newEdgeIds.includes(edge.id))
       .map((edge) => ({
         questRelationId: edge.id,
-        parentQuestId: edge.source,
+        ...(edge.source === currentSkillId ? { parentSkillId: edge.source } : { parentQuestId: edge.source }),
         childQuestId: edge.target,
       }));
 
@@ -154,6 +154,7 @@ export const useCanvasLoader = () => {
   const addNode = useCanvasStore((state) => state.addNode);
   const removeNode = useCanvasStore((state) => state.removeNode);
   const markModifiedNode = useCanvasStore((state) => state.markModifiedNode);
+  const setCurrentSkillId = useSkillStore((state) => state.setCurrentSkillId);
 
   const updateNodeData = useCallback(
     (id: string, field: string, value: any) => {
@@ -187,7 +188,7 @@ export const useCanvasLoader = () => {
 
     const questEdges = questRelations?.map((r) => ({
       id: r.questRelationId ?? `edge_${r.parentQuestId}_${r.childQuestId}`,
-      source: r.parentQuestId,
+      source: r.parentQuestId ?? r.parentSkillId ?? "",
       target: r.childQuestId,
       type: "custom",
       animated: true,
@@ -215,5 +216,6 @@ export const useCanvasLoader = () => {
     };
     setEdges(questEdges);
     setNodes([...questNodes, skillNode]);
-  }, [skill, quests, questRelations, setNodes, setEdges, addNode, removeNode, updateNodeData]);
+    setCurrentSkillId(skillNode.id);
+  }, [skill, quests, questRelations, setNodes, setEdges, addNode, removeNode, updateNodeData, setCurrentSkillId]);
 };
