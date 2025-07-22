@@ -15,7 +15,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { CreateSkillModal } from "./components/CreateSkillModal";
 import type { Skill } from "@/shared/types/skill.type";
 import { initialNodes } from "./canvas.const";
-import { useAddAIQuests } from "./hooks/useAddAiQuest";
+import { useAddAIQuests } from "./hooks/useAddAIQuest";
 
 export const Canvas = () => {
   const [connectionStart, setConnectionStart] = useState<string | null>(null);
