@@ -159,7 +159,7 @@
 //   {
 //     id: "14",
 //     title: "Musique",
-//     description: "Apprendre à jouer d’un instrument de musique.",
+//     description: "Apprendre à jouer d'un instrument de musique.",
 //     category: "Créativité",
 //     difficulty: "medium",
 //     status: "draft",
@@ -235,4 +235,32 @@ export const statusLabels = {
   COMPLETED: "COMPLETED",
   ALL: "ALL",
 };
+
+// Constantes pour la page de détail (sans ALL)
+export const difficultyDetailColors = {
+  EASY: "bg-green-500",
+  MEDIUM: "bg-yellow-500",
+  HARD: "bg-red-500",
+} as const;
+
+export const statusDetailColors = {
+  DRAFT: "bg-gray-500",
+  NOT_STARTED: "bg-blue-500",
+  IN_PROGRESS: "bg-yellow-500",
+  COMPLETED: "bg-green-500",
+} as const;
+
+export const statusDetailLabels = {
+  DRAFT: "Brouillon",
+  NOT_STARTED: "Non commencé",
+  IN_PROGRESS: "En cours",
+  COMPLETED: "Terminé",
+} as const;
+
+export const difficultyDetailLabels = {
+  EASY: "Facile",
+  MEDIUM: "Moyen",
+  HARD: "Difficile",
+} as const;
+
 export const SKILLS_PER_PAGE = 12;
