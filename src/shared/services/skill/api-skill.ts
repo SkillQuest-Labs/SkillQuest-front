@@ -1,6 +1,6 @@
 import { Constants } from "@/shared/constante/api-constante";
 import { useApi, useApiAsync } from "@/shared/services/useApi";
-import type { CreateSkillInput, CreateSkillResponse } from "./api-skill.type";
+import type { CreateSkillInput, CreateSkillResponse, UpdateSkillInput, UpdateSkillResponse } from "./api-skill.type";
 import type { Skill } from "@/shared/types/skill.type";
 
 export const useCreateSkill = () => {
@@ -20,6 +20,29 @@ export const useCreateSkill = () => {
 
   return {
     createSkill,
+    loading,
+    error,
+  };
+};
+
+export const useUpdateSkill = () => {
+  const {
+    mutateAsync: updateSkill,
+    isPending: loading,
+    error,
+  } = useApiAsync<UpdateSkillResponse, { skillId: string; data: UpdateSkillInput }>(
+    {
+      method: "PUT",
+      url: `${Constants.API_BASE_URL}/skills`,
+      headers: {
+        "Content-Type": "application/json; charset=UTF-8",
+      },
+    },
+    ["skill"]
+  );
+
+  return {
+    updateSkill,
     loading,
     error,
   };
