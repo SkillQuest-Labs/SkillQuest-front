@@ -64,13 +64,13 @@ export const SkillDetail = () => {
         skillId,
         data: updateData,
       });
-      
+
       showToast({
         title: "Succès",
         description: "Le skill a été mis à jour avec succès",
         status: "success",
       });
-      
+
       setIsEditing(false);
     } catch {
       showToast({
