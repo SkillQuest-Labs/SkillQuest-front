@@ -6,6 +6,7 @@ export interface IRoute {
 export interface IRoutes {
   dashboard: IRoute;
   skills: IRoute;
+  skillDetail: IRoute;
   profil: IRoute;
   store: IRoute;
   canvas: IRoute;
@@ -20,6 +21,10 @@ export const routes: IRoutes = {
   skills: {
     path: "/dashboard/skills",
     display: "Skills",
+  },
+  skillDetail: {
+    path: "/dashboard/skills/:skillId",
+    display: "Skill Detail",
   },
   profil: {
     path: "/dashboard/profil",
