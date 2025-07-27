@@ -23,9 +23,9 @@ export const useCanvasGraph = () => {
   const addNode = useCanvasStore((state) => state.addNode);
   const removeNode = useCanvasStore((state) => state.removeNode);
   const markModifiedNode = useCanvasStore((state) => state.markModifiedNode);
-  const markNew = useCanvasStore((state) => state.markNew);
-
-  const setCurrentSkillId = useSkillStore.getState().setCurrentSkillId;
+  const markNodeNew = useCanvasStore((state) => state.markNodeNew);
+  const markDeleteEdge = useCanvasStore((state) => state.markDeleteEdge);
+  const setCurrentSkillId = useSkillStore((state) => state.setCurrentSkillId);
 
   const updateNodeData = useCallback(
     (id: string, field: string, value: any) => {
@@ -53,10 +53,15 @@ export const useCanvasGraph = () => {
 
   const onEdgesChange: OnEdgesChange = useCallback(
     (changes) => {
+      changes.forEach((change) => {
+        if (change.type === "remove" && change.id) {
+          markDeleteEdge(change.id);
+        }
+      });
       const updatedEdges = applyEdgeChanges(changes, edges);
       setEdges(updatedEdges);
     },
-    [edges, setEdges],
+    [edges, setEdges, markDeleteEdge],
   );
 
   const addQuestNode = (position: XYPosition) => {
@@ -64,7 +69,7 @@ export const useCanvasGraph = () => {
 
     const newNode = createQuestNode(id, position, removeNode, updateNodeData);
     addNode(newNode);
-    markNew(id);
+    markNodeNew(id);
   };
 
   const addSkillNode = (position: XYPosition, skill: Skill) => {
@@ -92,7 +97,7 @@ export const useCanvasGraph = () => {
     if (hasSkillNode) {
       const newNodes = prevNodes.map((n) => (!isQuestNode(n) ? newNode : n));
       setNodes(newNodes);
-      markNew(id);
+      markNodeNew(id);
       setCurrentSkillId(id);
     }
   };
