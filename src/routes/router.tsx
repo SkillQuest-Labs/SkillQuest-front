@@ -8,6 +8,7 @@ import { Skills } from "@/pages/dashboard/Skills";
 import { Profil } from "@/pages/dashboard/Profil";
 import { Store } from "@/pages/dashboard/Store";
 import { NotFoundPage } from "@/pages/404";
+import { WorkSession } from "@/pages/dashboard/WorkSession";
 
 export const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ export const router = createBrowserRouter([
           {
             path: routes.store.path,
             element: <Store />,
+          },
+          {
+            path: routes.workSession.path,
+            element: <WorkSession />,
           },
         ],
       },

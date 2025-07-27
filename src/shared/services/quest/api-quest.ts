@@ -130,13 +130,9 @@ export const useDeleteQuestRelations = () => {
 
   const {
     mutateAsync: deleteQuestRelations,
-    isPending: loading,
-    error,
   } = useApiAsync<void, DeleteQuestRelationIds[]>(options);
 
   return {
     deleteQuestRelations,
-    loading,
-    error,
-  };
+  }
 };
