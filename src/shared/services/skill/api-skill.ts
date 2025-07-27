@@ -38,7 +38,7 @@ export const useUpdateSkill = () => {
         "Content-Type": "application/json; charset=UTF-8",
       },
     },
-    ["skill"]
+    ["skill"],
   );
 
   return {
