@@ -1,7 +1,8 @@
-import type { Quest } from "@/shared/types/quest.type";
+import type { Quest, QuestRelation } from "@/shared/types/quest.type";
 
 export type GetQuestsResponse = {
   quests: Quest[];
+  questRelations: QuestRelation[];
   total: number;
 };
 
@@ -23,3 +24,15 @@ export type DeleteQuestId = {
   id: string;
   questId: string;
 };
+
+export type DeleteQuestRelationIds = {
+  questRelationId: string;
+};
+
+export type CreateQuestRelationInput = QuestRelation;
+
+export type CreateQuestRelationResponse = {
+  relations: QuestRelation[];
+};
+
+export type GetQuestRelationResponse = QuestRelation[];
