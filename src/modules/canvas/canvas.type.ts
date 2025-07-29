@@ -11,6 +11,7 @@ export type FloatingToolboxProps = {
   collapseAll: () => void;
   expandAll: () => void;
   openAIGenerator: () => void;
+  setOpenAiModal: (open: boolean) => void;
 };
 
 export type SkillConfigType = {

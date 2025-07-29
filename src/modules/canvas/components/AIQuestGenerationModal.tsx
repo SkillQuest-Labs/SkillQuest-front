@@ -311,26 +311,6 @@ export const AIQuestGenerationModal = () => {
 
                         <FormField
                           control={form.control}
-                          name="avgQuestDuration"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel className="text-sm font-medium text-gray-200">Durée moyenne/quête</FormLabel>
-                              <FormControl>
-                                <Input
-                                  {...field}
-                                  placeholder="Ex. 1h"
-                                  className="h-12 text-base  border-gray-600 text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500"
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <FormField
-                          control={form.control}
                           name="modality"
                           render={({ field }) => (
                             <FormItem>
@@ -353,7 +333,9 @@ export const AIQuestGenerationModal = () => {
                             </FormItem>
                           )}
                         />
+                      </div>
 
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <FormField
                           control={form.control}
                           name="themeStyle"
@@ -412,29 +394,11 @@ export const AIQuestGenerationModal = () => {
                         name="toolsConstraint"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className="text-sm font-medium text-gray-200">Outils / contraintes</FormLabel>
+                            <FormLabel className="text-sm font-medium text-gray-200">Contexte</FormLabel>
                             <FormControl>
                               <Input
                                 {...field}
                                 placeholder="Ex. VSCode, Internet limité, etc."
-                                className="h-12 text-base  border-gray-600 text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500"
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="rewardPreference"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-sm font-medium text-gray-200">Récompenses préférées</FormLabel>
-                            <FormControl>
-                              <Input
-                                {...field}
-                                placeholder="Ex. XP bonus, trophées, badges"
                                 className="h-12 text-base  border-gray-600 text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500"
                               />
                             </FormControl>
