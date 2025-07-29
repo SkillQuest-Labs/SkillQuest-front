@@ -14,14 +14,18 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Checkbox } from "@/shared/components/ui/checkbox";
+import { Textarea } from "@/shared/components/ui/textarea";
 import { useState } from "react";
 import { ChevronDown, ChevronUp, Sparkles, Target, Settings, Trophy, BookOpen } from "lucide-react";
 import "../../../styles/ai-quest-generation-modal.css";
 
 // Schéma Zod pour la validation du formulaire
-const questContextSchema = z.object({
-  goal: z.string().min(1, "Requis"),
-  description: z.string().optional(),
+const questContextSchema = z
+  .object({
+    manualContext: z.boolean().optional(),
+    contextText: z.string().optional(),
+    goal: z.string().optional(),
+    description: z.string().optional(),
   selfLevel: z.enum(["1", "2", "3", "4", "5"]).optional(),
   weeklyTime: z.string().optional(),
   autoEstimate: z.boolean().optional(),
@@ -30,9 +34,13 @@ const questContextSchema = z.object({
   avgQuestDuration: z.string().optional(),
   modality: z.enum(["Théorique", "Equilibré", "Pratique"]).optional(),
   themeStyle: z.enum(["Médiéval", "High-tech", "Space Opera", "Détective"]).optional(),
-  toolsConstraint: z.string().optional(),
-  rewardPreference: z.string().optional(),
-});
+    toolsConstraint: z.string().optional(),
+    rewardPreference: z.string().optional(),
+  })
+  .refine((data) => data.manualContext || !!data.goal, {
+    message: "Requis",
+    path: ["goal"],
+  });
 
 type QuestContextForm = z.infer<typeof questContextSchema>;
 
@@ -68,7 +76,7 @@ export const AIQuestGenerationModal = () => {
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
   const form = useForm<QuestContextForm>({
     resolver: zodResolver(questContextSchema),
-    defaultValues: { autoEstimate: true },
+    defaultValues: { autoEstimate: true, manualContext: false },
   });
 
   const submit = (data: QuestContextForm) => {
@@ -102,7 +110,56 @@ export const AIQuestGenerationModal = () => {
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(submit)} className="space-y-6">
-            {/* Section Objectif Principal */}
+            {/* Choix du mode de remplissage */}
+            <div className="form-section">
+              <FormField
+                control={form.control}
+                name="manualContext"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        className="data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
+                      />
+                    </FormControl>
+                    <div className="space-y-1">
+                      <FormLabel className="font-medium text-gray-100">
+                        Écrire mon contexte manuellement
+                      </FormLabel>
+                      <p className="text-sm text-gray-400">
+                        Rédige toi-même l'ensemble du contexte
+                      </p>
+                    </div>
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {form.watch("manualContext") ? (
+              <div className="form-section">
+                <FormField
+                  control={form.control}
+                  name="contextText"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-gray-200">Contexte</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          {...field}
+                          placeholder="Décris ici tout ton contexte, objectifs et contraintes"
+                          className="h-40 text-base border-gray-600 text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            ) : (
+              <>
+                {/* Section Objectif Principal */}
             <div className="form-section">
               <div className="flex items-center gap-3 mb-4">
                 <div className="p-2 bg-blue-900/50 rounded-lg">
@@ -429,6 +486,8 @@ export const AIQuestGenerationModal = () => {
                 Générer mes quêtes
               </Button>
             </DialogFooter>
+            </>
+          )}
           </form>
         </Form>
       </DialogContent>
