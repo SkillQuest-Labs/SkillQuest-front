@@ -15,7 +15,7 @@ export const useAddAIQuests = () => {
 
   const {
     addNode,
-    markNew,
+    markNodeNew,
     removeNode,
     setNodes: updateNodes,
     markModifiedNode,
@@ -55,7 +55,7 @@ export const useAddAIQuests = () => {
 
         const newNode = createQuestNode(id, position, removeNode, handleUpdate, quest);
         addNode(newNode);
-        markNew(id);
+        markNodeNew(id);
         if (skillNode?.id) {
           setCurrentSkillId(skillNode.id);
         }
@@ -70,7 +70,7 @@ export const useAddAIQuests = () => {
     currentNodes,
     setLoading,
     addNode,
-    markNew,
+    markNodeNew,
     removeNode,
     updateNodes,
     markModifiedNode,
