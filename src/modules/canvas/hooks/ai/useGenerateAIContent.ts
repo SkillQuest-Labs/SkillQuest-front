@@ -6,6 +6,7 @@ export const useGenerateAIContent = () => {
   const context = useGeminiContext();
 
   const generate = async (): Promise<QuestAiType[]> => {
+    if (!context.instruction.trim()) return [];
     return await generateQuestsFromAI(context);
   };
 

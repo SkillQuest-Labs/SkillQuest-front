@@ -1,18 +1,5 @@
+import type { QuestGenerationForm } from "@/shared/types/ai/ai.type";
 import { create } from "zustand";
-
-export type QuestGenerationForm = {
-  manualContext: boolean;
-  contextText: string;
-  goal: string;
-  goalDescription: string;
-  selfLevel: string;
-  relatedSkill: string;
-  autoEstimate: boolean;
-  numberOfQuests: number;
-  styleApprentissage: "Théorique" | "Equilibré" | "Pratique";
-  ambianceQueteStyle: string;
-  ressourceType: string[];
-};
 
 type QuestGenerationFormStore = {
   form: Partial<QuestGenerationForm>;
