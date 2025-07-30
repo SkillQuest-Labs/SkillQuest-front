@@ -2,7 +2,7 @@ import { callGeminiApi } from "@/shared/lib/gemini-api";
 import type { GeminiContext, QuestAiType } from "@/shared/types/ai/ai.type";
 
 export const generateQuestsFromAI = async (context: GeminiContext): Promise<QuestAiType[]> => {
-  if (!context.skill) return [];
+  if (!context) return [];
 
   const prompt = `
     Tu es un générateur intelligent de quêtes d'apprentissage gamifiées.
@@ -26,7 +26,6 @@ export const generateQuestsFromAI = async (context: GeminiContext): Promise<Ques
       description: "string",
       xp: "number",
       difficulty: "EASY|MEDIUM|HARD",
-      prerequisites: "string[] (optional)",
     }
       ]
     Réponds uniquement avec le JSON.
