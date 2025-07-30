@@ -5,6 +5,7 @@ import { isSkillNode } from "../canvas.const";
 import { useLoadingStore } from "@/stores/loading-store";
 import { useSkillStore } from "@/stores/skill/skill-store";
 import { createQuestNode } from "@/shared/utils/quetes/quest-node";
+import { useQuestGenerationFormStore } from "@/stores/canvas/quest-generation-form-store";
 
 /**
  * Hook that generates quests via AI and adds them to the canvas.
@@ -12,7 +13,7 @@ import { createQuestNode } from "@/shared/utils/quetes/quest-node";
 export const useAddAIQuests = () => {
   const { generate } = useGenerateAIContent();
   const setLoading = useLoadingStore((state) => state.setLoading);
-
+  const resetFormStore = useQuestGenerationFormStore((state) => state.resetFormStore);
   const {
     addNode,
     markNodeNew,
@@ -56,6 +57,7 @@ export const useAddAIQuests = () => {
         const newNode = createQuestNode(id, position, removeNode, handleUpdate, quest);
         addNode(newNode);
         markNodeNew(id);
+        resetFormStore();
         if (skillNode?.id) {
           setCurrentSkillId(skillNode.id);
         }
@@ -75,6 +77,7 @@ export const useAddAIQuests = () => {
     updateNodes,
     markModifiedNode,
     setCurrentSkillId,
+    resetFormStore,
   ]);
 
   return { addGeneratedQuests };

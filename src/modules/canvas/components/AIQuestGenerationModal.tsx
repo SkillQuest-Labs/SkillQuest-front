@@ -475,7 +475,7 @@ export const AIQuestGenerationModal = ({ onGenerate, setOpenAiModal }: AIQuestGe
                                     <PopoverContent className="w-[300px] bg-[#182131] border-gray-600 text-gray-100">
                                       <div className="flex flex-col gap-2">
                                         {[
-                                          "Vidés",
+                                          "Vidéos",
                                           "Article de blog",
                                           "Documentation",
                                           "Exercices intéractifs",

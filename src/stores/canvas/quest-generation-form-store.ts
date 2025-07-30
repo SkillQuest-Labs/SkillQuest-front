@@ -17,11 +17,11 @@ export type QuestGenerationForm = {
 type QuestGenerationFormStore = {
   form: Partial<QuestGenerationForm>;
   setForm: (data: Partial<QuestGenerationForm>) => void;
-  reset: () => void;
+  resetFormStore: () => void;
 };
 
 export const useQuestGenerationFormStore = create<QuestGenerationFormStore>((set) => ({
   form: {},
   setForm: (data) => set((state) => ({ form: { ...state.form, ...data } })),
-  reset: () => set({ form: {} }),
+  resetFormStore: () => set({ form: {} }),
 }));

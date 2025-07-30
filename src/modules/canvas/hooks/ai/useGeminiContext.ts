@@ -44,6 +44,9 @@ export const useGeminiContext = (): GeminiContext => {
     "Respecter les quêtes existantes si on en a pour éviter les doublons",
     "Utiliser un langage clair et précis pour chaque quête",
     "Forme une progression logique avec des tâches distinctes.",
+    "Si un outil ou logiciel est requis (ex: Figma, VSCode, Canva), inclure un lien d’accès ou de téléchargement.",
+    "Si une ressource externe est mentionnée (tutoriel, article, vidéo, etc.), inclure un **lien cliquable** (URL valide) vers une ressource recommandée.",
+    "Si le lien est hypothétique, utiliser un format : [Titre de la ressource](https://exemple.com) pour qu’il soit cliquable.",
   ];
 
   let instruction = [...baseInstructions, "\nCritères de qualité :", ...qualityCriteria.map((c) => `- ${c}`)].join(
