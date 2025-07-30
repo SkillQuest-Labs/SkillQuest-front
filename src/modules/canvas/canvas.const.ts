@@ -31,28 +31,23 @@ export const isSkillNode = (node: Node<QuestNodeData | SkillNodeData>): node is 
 
 export const userLevel = [
   {
-    value: "1",
-    label: "1 - Novice",
+    label: "Novice",
     description: "Je n'y connais absolument rien",
   },
   {
-    value: "2",
-    label: "2 - Initié",
+    label: "Initié",
     description: "J'ai quelques notions de base",
   },
   {
-    value: "3",
-    label: "3 - Intermédiaire",
+    label: "Intermédiaire",
     description: "Je sais déjà faire pas mal de choses",
   },
   {
-    value: "4",
-    label: "4 - Avancé",
+    label: "Avancé",
     description: "Je maîtrise bien le sujet",
   },
   {
-    value: "5",
-    label: "5 - Expert",
+    label: "Expert",
     description: "Je pourrais enseigner ce sujet",
   },
 ];

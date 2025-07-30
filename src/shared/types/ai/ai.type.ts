@@ -13,7 +13,6 @@ export type QuestAiType = Partial<Quest> & {
 };
 
 export type GeminiContext = {
-  skill: SkillAiType;
   existingQuests: QuestAiType[];
   format: Record<
     keyof {

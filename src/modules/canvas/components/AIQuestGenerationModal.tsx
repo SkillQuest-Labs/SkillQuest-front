@@ -31,7 +31,7 @@ const baseSchema = z.object({
   contextText: z.string().optional(),
   goal: z.string().optional(),
   goalDescription: z.string().optional(),
-  selfLevel: z.enum(["1", "2", "3", "4", "5"]).optional(),
+  selfLevel: z.enum(["Novice", "Initié", "Intermédiaire", "Avancé", "Expert"]).optional(),
   relatedSkill: z.string().optional(),
   autoEstimate: z.boolean().optional(),
   numberOfQuests: z.number().min(1),
@@ -275,8 +275,8 @@ export const AIQuestGenerationModal = ({ onGenerate, setOpenAiModal }: AIQuestGe
                               <SelectContent className="border-gray-600 bg-[#182131]">
                                 {userLevel.map((lvl) => (
                                   <SelectItem
-                                    key={lvl.value}
-                                    value={lvl.value}
+                                    key={lvl.label}
+                                    value={lvl.label}
                                     className="cursor-pointer text-gray-100 hover:bg-gray-700 flex items-center gap-2"
                                   >
                                     <span>{lvl.label}</span>

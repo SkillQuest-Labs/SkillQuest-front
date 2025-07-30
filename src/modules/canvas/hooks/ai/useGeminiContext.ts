@@ -1,6 +1,6 @@
 import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import { isQuestNode, isSkillNode } from "../../canvas.const";
-import type { GeminiContext, QuestAiType, SkillAiType } from "@/shared/types/ai/ai.type";
+import type { GeminiContext, QuestAiType } from "@/shared/types/ai/ai.type";
 import { useQuestGenerationFormStore } from "@/stores/canvas/quest-generation-form-store";
 
 export const useGeminiContext = (): GeminiContext => {
@@ -16,73 +16,75 @@ export const useGeminiContext = (): GeminiContext => {
     prerequisites: [],
   }));
 
-  const skillForAi: SkillAiType = {
-    ...skillNode?.data.config,
-    questNumber: form.numberOfQuests ?? 4,
-    level: form.selfLevel ?? "Débutant",
-    goal: form.goal ?? "Atteindre la maîtrise de ce skill via un projet concret",
-    description: skillNode?.data.config.description,
-    goalDescription: form.goalDescription ?? "Développer des compétences pratiques et théoriques dans ce domaine.",
-  };
+  let instruction = "";
 
-  const baseInstructions = [
-    `Génère ${skillForAi.questNumber} quêtes gamifiées pour le skill '${skillForAi.title}'.`,
-    `Objectif final : ${skillForAi.goal}.`,
-    `Description de l'objectif : ${skillForAi.goalDescription}.`,
-    `Description du skill : ${skillForAi.description}.`,
-    `Niveau de base de l'apprenant : ${skillForAi.level}.`,
-  ];
+  if (form && Object.keys(form).length > 0 && skillNode) {
+    if (form.manualContext && form.contextText?.trim()) {
+      instruction = form.contextText.trim();
+    } else {
+      // Build instruction from form data
 
-  const qualityCriteria = [
-    "Objectif concret et mesurable pour chaque quête",
-    "Progression pédagogique logique (bases → intermédiaire → avancé)",
-    "Chaque quête doit être unique et apporter une valeur ajoutée à l'apprentissage du skill.",
-    "Inclure des exercices pratiques applicables dans le monde réel et ressources externes si possible",
-    "Éviter les quêtes trop théoriques ou abstraites",
-    "Chaque quête développe une compétence identifiable",
-    "Proposer des défis stimulants mais réalisables pour le niveau indiqué",
-    "Respecter les quêtes existantes si on en a pour éviter les doublons",
-    "Utiliser un langage clair et précis pour chaque quête",
-    "Forme une progression logique avec des tâches distinctes.",
-    "Si un outil ou logiciel est requis (ex: Figma, VSCode, Canva), inclure un lien d’accès ou de téléchargement.",
-    "Si une ressource externe est mentionnée (tutoriel, article, vidéo, etc.), inclure un **lien cliquable** (URL valide) vers une ressource recommandée.",
-    "Si le lien est hypothétique, utiliser un format : [Titre de la ressource](https://exemple.com) pour qu’il soit cliquable.",
-  ];
+      const baseInstructions = [
+        `Génère ${form.numberOfQuests ?? 4} quêtes gamifiées pour le skill '${skillNode.data.config.title}'.`,
+        `Tu dois générer au minimum ${form.numberOfQuests} quêtes. Tu peux en produire plus si cela améliore la progression, mais jamais moins.`,
+        `Objectif final : ${form.goal}.`,
+        `Description de l'objectif : ${form.goalDescription}.`,
+        `Description du skill : ${skillNode.data.config.description}.`,
+        `Niveau de base de l'apprenant : ${form.selfLevel}.`,
+      ];
 
-  let instruction = [...baseInstructions, "\nCritères de qualité :", ...qualityCriteria.map((c) => `- ${c}`)].join(
-    "\n",
-  );
+      const qualityCriteria = [
+        "Objectif concret et mesurable pour chaque quête",
+        "Progression pédagogique logique (bases → intermédiaire → avancé)",
+        "Chaque quête doit être unique et apporter une valeur ajoutée à l'apprentissage du skill.",
+        "Inclure au moins une ressource externe pertinente (tutoriel, article, vidéo, outil) avec lien cliquable dans chaque quête",
+        "Éviter les quêtes trop théoriques ou abstraites",
+        "Chaque quête développe une compétence identifiable",
+        "Proposer des défis stimulants mais réalisables pour le niveau indiqué",
+        "Respecter les quêtes existantes si on en a pour éviter les doublons",
+        "Utiliser un langage clair et précis pour chaque quête",
+        "Forme une progression logique avec des tâches distinctes.",
+        "Si un outil ou logiciel est requis (ex: Figma, VSCode, Canva), inclure un lien d'accès ou de téléchargement.",
+        "Si une ressource externe est mentionnée (tutoriel, article, vidéo, etc.), inclure un **lien cliquable** (URL valide) vers une ressource recommandée.",
+        "Si le lien est hypothétique, utiliser un format : [Titre de la ressource](https://exemple.com) pour qu'il soit cliquable.",
+      ];
 
-  // Optimisation du prompt pour plus de clarté et de concision
+      const extras = [
+        `Style d'apprentissage : ${form.styleApprentissage === "Equilibré" ? "Équilibré (théoriques et pratiques)" : form.styleApprentissage}`,
+        `Types de ressources : ${form.ressourceType?.length ? form.ressourceType.join(", ") : "Aucun"}`,
+        `Compétence connexe : ${form.relatedSkill || "Aucune"}`,
+        `Ambiance des quêtes : ${form.ambianceQueteStyle}`,
+      ];
 
-  const extras: string[] = [];
+      const descriptionFormatNote = `
+      ⚠️ Toutes les informations (objectifs, étapes, ressources, outils, etc.) doivent être incluses **dans le champ \`description\`**, sous une forme lisible, claire et structurée.
 
-  if (form.manualContext && form.contextText?.trim()) {
-    instruction = form.contextText.trim();
-  } else {
-    if (form.styleApprentissage) {
-      extras.push(
-        form.styleApprentissage === "Equilibré"
-          ? "Style d'apprentissage : Équilibré (théoriques et pratiques)"
-          : `Style d'apprentissage : ${form.styleApprentissage}`,
-      );
-    }
-    if (form.ambianceQueteStyle) {
-      extras.push(`Ambiance des quêtes : ${form.ambianceQueteStyle}`);
-    }
-    if (form.ressourceType && form.ressourceType.length > 0) {
-      extras.push(`Types de ressources : ${form.ressourceType.join(", ")}`);
-    }
-    if (form.relatedSkill) {
-      extras.push(`Compétence connexe : ${form.relatedSkill}`);
-    }
-    if (extras.length) {
-      instruction += "\n\nContexte supplémentaire :\n" + extras.join("\n");
+          Format suggéré (indicatif, pas rigide) :
+          ---
+          **Objectif** : Définir clairement ce que l'apprenant va accomplir.  
+          **Étapes** :  
+          1. Étape 1...  
+          2. Étape 2...  
+          **Ressources** (avec liens cliquables) :  
+          - [Nom de la ressource](https://exemple.com)  
+          **Outils recommandés** :  
+          - [Nom de l'outil](https://exemple.com)  
+
+          Peut inclure d'autres sections utiles si pertinent (ex : Astuce, Pour aller plus loin, etc.).
+          ---
+          `;
+
+      instruction = [
+        ...baseInstructions,
+        "\nCritères de qualité :",
+        ...qualityCriteria.map((c) => `- ${c}`),
+        ...extras,
+        descriptionFormatNote,
+      ].join("\n");
     }
   }
 
   return {
-    skill: skillForAi,
     existingQuests,
     format: {
       title: "string",
@@ -91,6 +93,6 @@ export const useGeminiContext = (): GeminiContext => {
       difficulty: "EASY|MEDIUM|HARD",
       prerequisites: "string[] (optional)",
     },
-    instruction,
+    instruction: instruction,
   };
 };
