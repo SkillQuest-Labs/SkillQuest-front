@@ -6,31 +6,29 @@ export const generateQuestsFromAI = async (context: GeminiContext): Promise<Ques
 
   const prompt = `
     Tu es un générateur intelligent de quêtes d'apprentissage gamifiées.
-    
-    Skill :
-    - Titre : ${context.skill.title}
-    - Description : ${context.skill.description}
-    - Difficulté : ${context.skill.difficulty}
-    
-    Quêtes existantes :
-    ${context.existingQuests
-      .map((q) => `- ${q.title} : ${q.description} (xp: ${q.xp}, difficulté: ${q.difficulty})`)
-      .join("\n")}
+        
+    ${
+      context.existingQuests && context.existingQuests.length > 0
+        ? `Quêtes existantes :
+          ${context.existingQuests
+            .map((q) => `- ${q.title} : ${q.description} (xp: ${q.xp}, difficulté: ${q.difficulty})`)
+            .join("\n")}`
+        : ""
+    }
     
     Instructions :
     ${context.instruction}
-    Forme une progression logique avec des tâches distinctes.
     
     Format JSON attendu :
     [
-      {
-        "title": "string",
-        "description": "string",
-        "xp": number,
-        "difficulty": "EASY" | "MEDIUM" | "HARD",
-        "prerequisites": ["optional titles"]
-      }
-    ]
+    {
+      title: "string",
+      description: "string",
+      xp: "number",
+      difficulty: "EASY|MEDIUM|HARD",
+      prerequisites: "string[] (optional)",
+    }
+      ]
     Réponds uniquement avec le JSON.
     `;
 

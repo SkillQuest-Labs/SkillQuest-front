@@ -11,7 +11,6 @@ export const FloatingToolbox = ({
   // setViewMode,
   collapseAll,
   expandAll,
-  // openAIGenerator,
   setOpenAiModal,
 }: FloatingToolboxProps) => {
   const [areNodesCollapsed, setAreNodesCollapsed] = useState<boolean>(false);
@@ -67,7 +66,6 @@ export const FloatingToolbox = ({
     isActive: () => false,
     handleToolClick: () => {
       setOpenAiModal(true);
-      // openAIGenerator();
     },
   };
 

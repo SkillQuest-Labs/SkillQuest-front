@@ -2,8 +2,10 @@ import type { Quest } from "../quest.type";
 import type { Skill } from "../skill.type";
 
 export type SkillAiType = Partial<Skill> & {
+  questNumber?: number;
   level: string;
   goal: string;
+  goalDescription: string;
 };
 
 export type QuestAiType = Partial<Quest> & {

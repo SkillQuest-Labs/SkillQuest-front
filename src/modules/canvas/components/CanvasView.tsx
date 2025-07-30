@@ -140,11 +140,10 @@ export const CanvasView = ({
         setViewMode={setViewMode}
         collapseAll={collapseAll}
         expandAll={expandAll}
-        openAIGenerator={openAIGenerator}
         setOpenAiModal={setOpenAiModal}
       />
 
-      {ôpenAiModal && <AIQuestGenerationModal />}
+      {ôpenAiModal && <AIQuestGenerationModal onGenerate={openAIGenerator} setOpenAiModal={setOpenAiModal} />}
 
       {/* Mode Indicators */}
       {cursorMode === "create" && (

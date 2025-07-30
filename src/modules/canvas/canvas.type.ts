@@ -10,7 +10,6 @@ export type FloatingToolboxProps = {
   setViewMode: (mode: ViewModeType) => void;
   collapseAll: () => void;
   expandAll: () => void;
-  openAIGenerator: () => void;
   setOpenAiModal: (open: boolean) => void;
 };
 
