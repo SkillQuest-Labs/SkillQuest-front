@@ -34,7 +34,7 @@ const baseSchema = z.object({
   selfLevel: z.enum(["1", "2", "3", "4", "5"]).optional(),
   relatedSkill: z.string().optional(),
   autoEstimate: z.boolean().optional(),
-  numberOfQuests: z.number().min(1).optional(),
+  numberOfQuests: z.number().min(1),
   styleApprentissage: z.enum(["Théorique", "Equilibré", "Pratique"]).default("Equilibré").optional(),
   ambianceQueteStyle: z.enum(["Médiéval", "High-tech", "Space Opera", "Détective"]).optional(),
   ressourceType: z.array(z.string()).optional(),
@@ -376,12 +376,13 @@ export const AIQuestGenerationModal = ({ onGenerate, setOpenAiModal }: AIQuestGe
                                   <FormControl>
                                     <Input
                                       type="number"
-                                      {...field}
+                                      min={1}
+                                      step={1}
+                                      value={field.value ?? ""}
                                       onChange={(e) => {
                                         const value = e.target.value;
-                                        field.onChange(value === "" ? undefined : parseInt(value, 10));
+                                        field.onChange(value === "" ? undefined : Number(value));
                                       }}
-                                      placeholder="Ex. 5"
                                       className=" w-full text-base  border-gray-600 text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500"
                                     />
                                   </FormControl>
