@@ -26,3 +26,17 @@ export type GeminiContext = {
   >;
   instruction: string;
 };
+
+export type QuestGenerationForm = {
+  manualContext: boolean;
+  contextText: string;
+  goal: string;
+  goalDescription: string;
+  selfLevel: string;
+  relatedSkill: string;
+  autoEstimate: boolean;
+  numberOfQuests: number;
+  styleApprentissage: "Théorique" | "Equilibré" | "Pratique";
+  ambianceQueteStyle: string;
+  ressourceType: string[];
+};
