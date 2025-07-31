@@ -9,7 +9,7 @@ import { Profil } from "@/pages/dashboard/Profil";
 import { Store } from "@/pages/dashboard/Store";
 import { NotFoundPage } from "@/pages/404";
 import Login from "@/pages/auth/Login";
-//import SignUp from "@/pages/auth/Singup";
+import Register from "@/pages/auth/Registre";
 import { AuthLayout } from "@/component/AuthLayout";
 import { UnauthorizedPage } from "@/pages/Unauthorized";
 import "../pages/auth/auth.css";
@@ -25,14 +25,14 @@ export const router = createBrowserRouter([
     ),
   },
 
-  //{
-  //path: routes.signUp.path,
-  //element: (
-  //<AuthLayout>
-  //<SignUp />
-  //</AuthLayout>
-  //),
-  //},
+  {
+    path: routes.signUp.path,
+    element: (
+      <AuthLayout>
+        <Register />
+      </AuthLayout>
+    ),
+  },
 
   // Middleware route to protect the dashboard and its children
   {
