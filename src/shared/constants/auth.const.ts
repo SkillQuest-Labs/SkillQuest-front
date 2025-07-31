@@ -1,6 +1,6 @@
 export const authAppearance = {
   elements: {
-    rootBox: "w-full max-w-md mx-auto flex items-center justify-center min-h-screen h-screen",
+    rootBox: "w-full max-w-lg mx-auto flex items-center justify-center min-h-screen h-screen",
     card: "bg-transparent shadow-none",
     headerTitle: "text-white text-xl font-medium text-glow text-center",
     headerSubtitle: "text-gray-400",

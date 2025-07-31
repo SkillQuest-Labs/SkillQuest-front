@@ -8,10 +8,11 @@ import { Skills } from "@/pages/dashboard/Skills";
 import { Profil } from "@/pages/dashboard/Profil";
 import { Store } from "@/pages/dashboard/Store";
 import { NotFoundPage } from "@/pages/404";
-import { SignIn, SignUp } from "@clerk/clerk-react";
-import { authAppearance } from "@/shared/constants/auth.const";
+import Login from "@/pages/auth/Login";
+//import SignUp from "@/pages/auth/Singup";
 import { AuthLayout } from "@/component/AuthLayout";
 import { UnauthorizedPage } from "@/pages/Unauthorized";
+import "../pages/auth/auth.css";
 
 export const router = createBrowserRouter([
   // Public routes for authentication
@@ -19,30 +20,19 @@ export const router = createBrowserRouter([
     path: routes.signIn.path,
     element: (
       <AuthLayout>
-        <SignIn
-          appearance={authAppearance}
-          routing="path"
-          path="/sign-in"
-          signUpUrl="/sign-up"
-          fallbackRedirectUrl="/dashboard"
-        />
+        <Login />
       </AuthLayout>
     ),
   },
-  {
-    path: routes.signUp.path,
-    element: (
-      <AuthLayout>
-        <SignUp
-          appearance={authAppearance}
-          routing="path"
-          path="/sign-up"
-          signInUrl="/sign-in"
-          fallbackRedirectUrl="/dashboard"
-        />
-      </AuthLayout>
-    ),
-  },
+
+  //{
+  //path: routes.signUp.path,
+  //element: (
+  //<AuthLayout>
+  //<SignUp />
+  //</AuthLayout>
+  //),
+  //},
 
   // Middleware route to protect the dashboard and its children
   {
