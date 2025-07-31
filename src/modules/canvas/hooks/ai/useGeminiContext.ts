@@ -75,8 +75,8 @@ const buildInstruction = (
 };
 
 export const useGeminiContext = (): GeminiContext => {
-  const nodes = useCanvasStore((s) => s.nodes);
-  const form = useQuestGenerationFormStore((s) => s.form);
+  const { nodes } = useCanvasStore.getState();
+  const { form } = useQuestGenerationFormStore.getState();
   const skillNode = nodes.find(isSkillNode);
 
   const existingQuests: QuestAiType[] = nodes.filter(isQuestNode).map((node) => ({
@@ -87,10 +87,9 @@ export const useGeminiContext = (): GeminiContext => {
     prerequisites: [],
   }));
 
-  let instruction: string = "";
+  let instruction = "";
 
   if (form && Object.keys(form).length > 0 && skillNode) {
-    console.log("test1", form);
     instruction = buildInstruction(form, skillNode, existingQuests);
   }
 
@@ -104,5 +103,37 @@ export const useGeminiContext = (): GeminiContext => {
       prerequisites: "string[] (optional)",
     },
     instruction: instruction,
+  };
+};
+
+export const getGeminiContext = (): GeminiContext => {
+  const { nodes } = useCanvasStore.getState();
+  const { form } = useQuestGenerationFormStore.getState();
+  const skillNode = nodes.find(isSkillNode);
+
+  const existingQuests: QuestAiType[] = nodes.filter(isQuestNode).map((node) => ({
+    title: node.data.title,
+    description: node.data.description,
+    xp: node.data.xp,
+    difficulty: node.data.difficulty,
+    prerequisites: [],
+  }));
+
+  let instruction = "";
+
+  if (form && Object.keys(form).length > 0 && skillNode) {
+    instruction = buildInstruction(form, skillNode, existingQuests);
+  }
+
+  return {
+    existingQuests,
+    format: {
+      title: "string",
+      description: "string",
+      xp: "number",
+      difficulty: "EASY|MEDIUM|HARD",
+      prerequisites: "string[] (optional)",
+    },
+    instruction,
   };
 };
