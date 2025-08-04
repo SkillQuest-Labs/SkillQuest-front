@@ -68,7 +68,7 @@ export const CanvasView = ({
 
   const reset = useCanvasStore.getState().reset;
 
-  const [ôpenAiModal, setOpenAiModal] = useState(false);
+  const [openAiModal, setOpenAiModal] = useState(false);
 
   return (
     <ReactFlow
@@ -143,7 +143,7 @@ export const CanvasView = ({
         setOpenAiModal={setOpenAiModal}
       />
 
-      {ôpenAiModal && <AIQuestGenerationModal onGenerate={openAIGenerator} setOpenAiModal={setOpenAiModal} />}
+      {openAiModal && <AIQuestGenerationModal onGenerate={openAIGenerator} setOpenAiModal={setOpenAiModal} />}
 
       {/* Mode Indicators */}
       {cursorMode === "create" && (
