@@ -7,6 +7,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import { useEffect, useRef, useState } from "react";
 import "@/styles/calendar.css";
 import { SessionDialog } from "./components/SessionDialog";
+import { useCreateSession } from "@/shared/services/session/api-session";
 
 export const CalendarWorkSession = () => {
   const initFormState = {
@@ -15,6 +16,7 @@ export const CalendarWorkSession = () => {
     startDate: "",
     startTime: "",
     endTime: "",
+    linkedSkill: "",
     linkedQuest: "",
     color: "#3B82F6",
   };
@@ -25,6 +27,7 @@ export const CalendarWorkSession = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const calendarRef = useRef<FullCalendar | null>(null);
+  const { createSession } = useCreateSession();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -50,6 +53,7 @@ export const CalendarWorkSession = () => {
         startDate: session.startDate || session.date,
         startTime: session.startTime || "",
         endTime: session.endTime || "",
+        linkedSkill: session.linkedSkill || "",
         linkedQuest: session.linkedQuest || "",
         color: session.color || "#3B82F6",
       });
@@ -58,25 +62,38 @@ export const CalendarWorkSession = () => {
     }
   };
 
-  const handleSave = () => {
-    if (!form.title.trim() || !form.startDate || !form.startTime || !form.endTime || !form.linkedQuest) return;
+  const handleSave = async () => {
+    const hasMissingFields =
+      !form.title.trim() || !form.startDate || !form.startTime || !form.endTime || !form.linkedQuest;
 
-    const sessionData = {
-      ...form,
-      date: form.startDate, // fullcalendar date
-    };
+    if (hasMissingFields) return;
 
-    if (editingIndex !== null) {
-      const updated = [...sessions];
-      updated[editingIndex] = sessionData;
-      setSessions(updated);
-    } else {
-      setSessions([...sessions, sessionData]);
+    try {
+      const sessionPayload = {
+        startDate: form.startDate,
+        startTime: new Date(`${form.startDate}T${form.startTime}`).toISOString(),
+        endTime: new Date(`${form.startDate}T${form.endTime}`).toISOString(),
+        userId: "uuid-user-1234-5678-9012-345678901234", // replace user id if necessary
+        questId: form.linkedQuest,
+      };
+
+      const createdSession = await createSession(sessionPayload);
+
+      setSessions([
+        ...sessions,
+        {
+          ...form,
+          date: form.startDate,
+          id: createdSession.id,
+        },
+      ]);
+
+      setForm(initFormState);
+      setIsOpen(false);
+      setEditingIndex(null);
+    } catch (err) {
+      console.error("Erreur création session", err); // Temporary, maybe replace with toast error
     }
-
-    setForm(initFormState);
-    setIsOpen(false);
-    setEditingIndex(null);
   };
 
   return (
@@ -96,7 +113,7 @@ export const CalendarWorkSession = () => {
             events={sessions.map((session) => ({
               title: session.title,
               date: session.date,
-              color: session.color, // ✅ appliquer la couleur
+              color: session.color,
             }))}
             height="auto"
           />
@@ -109,6 +126,7 @@ export const CalendarWorkSession = () => {
         setForm={setForm}
         onSave={handleSave}
         isEditing={editingIndex !== null}
+        sessions={sessions.filter((s, i) => i !== editingIndex && s.startDate === form.startDate)}
       />
     </div>
   );

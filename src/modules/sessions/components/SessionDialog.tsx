@@ -2,7 +2,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { Button } from "@/shared/components/ui/button";
-import { useGetQuestsUser } from "@/shared/services/quest/api-quest";
+import { useGetQuests } from "@/shared/services/quest/api-quest";
+import { useGetSkills } from "@/shared/services/skill/api-skill";
 
 interface SessionDialogProps {
   open: boolean;
@@ -13,19 +14,54 @@ interface SessionDialogProps {
     startDate: string;
     startTime: string;
     endTime: string;
+    linkedSkill: string;
     linkedQuest: string;
     color: string;
   };
   setForm: (form: SessionDialogProps["form"]) => void;
   onSave: () => void;
   isEditing: boolean;
+  sessions: { startDate: string; startTime: string; endTime: string }[];
 }
 
-export const SessionDialog = ({ open, onOpenChange, form, setForm, onSave, isEditing }: SessionDialogProps) => {
+export const SessionDialog = ({
+  open,
+  onOpenChange,
+  form,
+  setForm,
+  onSave,
+  isEditing,
+  sessions,
+}: SessionDialogProps) => {
   const isFormValid = form.title.trim() && form.startDate && form.startTime && form.endTime && form.linkedQuest;
 
+  const toMinutes = (t: string) => {
+    const [h, m] = t.split(":").map(Number);
+    return h * 60 + m;
+  };
+
+  const isTimeSlotConflict = (start: string, end: string, otherSessions: { startTime: string; endTime: string }[]) => {
+    const startMin = toMinutes(start);
+    const endMin = toMinutes(end);
+    return otherSessions.some((s) => {
+      const sMin = toMinutes(s.startTime);
+      const eMin = toMinutes(s.endTime);
+      return startMin < eMin && endMin > sMin;
+    });
+  };
+
+  const hasTimeConflict = Boolean(
+    form.startTime && form.endTime && toMinutes(form.endTime) <= toMinutes(form.startTime),
+  );
+
+  const hasSessionConflict = Boolean(
+    form.startTime && form.endTime && isTimeSlotConflict(form.startTime, form.endTime, sessions),
+  );
+
   const userId = "uuid-user-1234-5678-9012-345678901234";
-  const { quests, loading } = useGetQuestsUser(userId);
+
+  const { skills, loading: loadingSkills } = useGetSkills(userId);
+  const { quests, loading: loadingQuestsSkill } = useGetQuests(form.linkedSkill);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -67,8 +103,41 @@ export const SessionDialog = ({ open, onOpenChange, form, setForm, onSave, isEdi
           </div>
           <div>
             <label className="text-sm text-white mb-1 block">Heure de fin</label>
-            <Input type="time" value={form.endTime} onChange={(e) => setForm({ ...form, endTime: e.target.value })} />
+            <Input
+              type="time"
+              value={form.endTime}
+              onChange={(e) => setForm({ ...form, endTime: e.target.value })}
+              min={form.startTime || undefined}
+              disabled={!form.startTime}
+            />
           </div>
+        </div>
+
+        <div className="mb-4">
+          <label className="text-sm text-white mb-1 block">Choisir un skill</label>
+          <select
+            value={form.linkedSkill || ""}
+            onChange={(e) => {
+              const selectedSkill = e.target.value;
+              setForm({
+                ...form,
+                linkedSkill: selectedSkill,
+                linkedQuest: "",
+              });
+            }}
+            className="w-full p-2 rounded bg-slate-800 border border-slate-600 text-white"
+          >
+            <option value="">Aucune</option>
+            {loadingSkills ? (
+              <option disabled>Chargement...</option>
+            ) : (
+              skills?.map((skill) => (
+                <option key={skill.id} value={skill.id}>
+                  {skill.title}
+                </option>
+              ))
+            )}
+          </select>
         </div>
 
         <div className="mb-4">
@@ -76,10 +145,15 @@ export const SessionDialog = ({ open, onOpenChange, form, setForm, onSave, isEdi
           <select
             value={form.linkedQuest || ""}
             onChange={(e) => setForm({ ...form, linkedQuest: e.target.value })}
-            className="w-full p-2 rounded bg-slate-800 border border-slate-600 text-white"
+            className={`w-full p-2 rounded border ${
+              !form.linkedSkill
+                ? "bg-slate-700 border-slate-700 text-slate-400 cursor-not-allowed"
+                : "bg-slate-800 border-slate-600 text-white"
+            }`}
+            disabled={!form.linkedSkill}
           >
             <option value="">Aucune</option>
-            {loading ? (
+            {loadingQuestsSkill ? (
               <option disabled>Chargement...</option>
             ) : (
               quests?.map((quest) => (
@@ -98,7 +172,9 @@ export const SessionDialog = ({ open, onOpenChange, form, setForm, onSave, isEdi
               <button
                 key={color}
                 type="button"
-                className={`w-6 h-6 rounded-full border-2 ${form.color === color ? "border-white" : "border-transparent"}`}
+                className={`w-6 h-6 rounded-full border-2 ${
+                  form.color === color ? "border-white" : "border-transparent"
+                }`}
                 style={{ backgroundColor: color }}
                 onClick={() => setForm({ ...form, color })}
               />
@@ -106,14 +182,24 @@ export const SessionDialog = ({ open, onOpenChange, form, setForm, onSave, isEdi
           </div>
         </div>
 
+        {hasTimeConflict && (
+          <p className="text-red-500 text-sm mt-2">⚠️ L’heure de fin doit être après l’heure de début.</p>
+        )}
+
+        {hasSessionConflict && <p className="text-red-500 text-sm mt-2">⚠️ Ce créneau chevauche une autre session.</p>}
+
         <div className="flex justify-end space-x-2 mt-4">
           <Button variant="ghost" onClick={() => onOpenChange(false)}>
             Annuler
           </Button>
           <Button
             onClick={onSave}
-            disabled={!isFormValid}
-            className={`${isFormValid ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-600 cursor-not-allowed"} text-white`}
+            disabled={!isFormValid || hasTimeConflict || hasSessionConflict}
+            className={`${
+              isFormValid && !hasTimeConflict && !hasSessionConflict
+                ? "bg-blue-600 hover:bg-blue-700"
+                : "bg-gray-600 cursor-not-allowed"
+            } text-white`}
           >
             {isEditing ? "Mettre à jour" : "Enregistrer"}
           </Button>
