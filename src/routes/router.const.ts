@@ -9,6 +9,7 @@ export interface IRoutes {
   profil: IRoute;
   store: IRoute;
   canvas: IRoute;
+  skillsTree: IRoute;
   workSession: IRoute;
   notfound: IRoute;
 }
@@ -33,6 +34,10 @@ export const routes: IRoutes = {
   canvas: {
     path: "/canvas",
     display: "Canvas",
+  },
+  skillsTree: {
+    path: "/skills-tree",
+    display: "Skills Tree",
   },
   workSession: {
     path: "/dashboard/work-session",
