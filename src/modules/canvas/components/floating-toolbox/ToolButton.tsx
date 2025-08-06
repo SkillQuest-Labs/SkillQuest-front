@@ -1,28 +1,27 @@
 import { Button } from "@/shared/components/ui/button";
 import type { ToolBoxItem } from "./toolbox.const";
-import type { CursorModeType } from "../../canvas.type";
+import type { CursorModeType, ViewModeType } from "../../canvas.type";
 
 type ToolButtonProps = {
   tool: ToolBoxItem;
   cursorMode: CursorModeType;
   setCursorMode: (mode: CursorModeType) => void;
-  colllapseAll?: () => void;
-  expandAll?: () => void;
+  context?: {
+    collapseAll?: () => void;
+    expandAll?: () => void;
+    setViewMode?: (mode: ViewModeType) => void;
+    openAIGenerator?: () => void;
+  };
 };
 
-export const ToolButton = ({ tool, cursorMode, setCursorMode, colllapseAll, expandAll }: ToolButtonProps) => {
+export const ToolButton = ({ tool, cursorMode, setCursorMode, context }: ToolButtonProps) => {
   const active = tool.isActive(cursorMode);
 
   return (
     <div className="group relative">
       <Button
         variant={`${active ? "default" : "ghost"}`}
-        onClick={() =>
-          tool.handleToolClick(setCursorMode, cursorMode, {
-            collapseAll: colllapseAll,
-            expandAll: expandAll,
-          })
-        }
+        onClick={() => tool.handleToolClick(setCursorMode, cursorMode, context)}
         size="sm"
         className={`w-10 h-10 p-0 cursor-pointer rounded-lg transition-all duration-200 ${
           active ? tool.activeColor + " shadow-md" : "hover:bg-gray-100"

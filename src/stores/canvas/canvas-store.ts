@@ -119,5 +119,7 @@ export const useCanvasStore = create<CanvasStore>((set) => ({
       edges: [],
       newEdgeIds: [],
       deletedNodesIds: [],
+      cursorMode: "normal",
+      viewMode: "canvas",
     }),
 }));

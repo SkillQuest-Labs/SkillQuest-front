@@ -4,14 +4,15 @@ import { ToolButton } from "./ToolButton";
 import { tools } from "./toolbox.const";
 import { ChevronsDownUp, Loader2, Maximize2, Sparkles } from "lucide-react";
 import { useLoadingStore } from "@/stores/loading-store";
+import clsx from "clsx";
 
 export const FloatingToolbox = ({
   cursorMode,
   setCursorMode,
-  // setViewMode,
   collapseAll,
   expandAll,
   openAIGenerator,
+  className,
 }: FloatingToolboxProps) => {
   const [areNodesCollapsed, setAreNodesCollapsed] = useState<boolean>(false);
   const isLoading = useLoadingStore((state) => state.isLoading);
@@ -72,15 +73,23 @@ export const FloatingToolbox = ({
   const allTools = [...tools, collapseExpandTool, aiGenerationTool];
 
   return (
-    <div className="absolute top-6 right-6 z-20 rounded-xl shadow-lg border p-2 flex flex-col gap-1 bg-[rgba(15,10,40,0.85)] border-2 border-[rgba(59,130,246,0.4)] backdrop-blur-md">
+    <div
+      className={clsx(
+        "rounded-xl shadow-lg border p-2 flex flex-col gap-1 bg-[rgba(15,10,40,0.85)] border-2 border-[rgba(59,130,246,0.4)] backdrop-blur-md",
+        className,
+      )}
+    >
       {allTools.map((tool) => (
         <ToolButton
           key={tool.id}
           tool={tool}
           cursorMode={cursorMode}
           setCursorMode={setCursorMode}
-          colllapseAll={collapseAll}
-          expandAll={expandAll}
+          context={{
+            collapseAll,
+            expandAll,
+            openAIGenerator,
+          }}
         />
       ))}
     </div>

@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/shared/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import { useCanvasStore } from "@/stores/canvas/canvas-store";
+import { RoadmapButton } from "./RoadmapButton";
 
 type CanvasViewProps = {
   nodes: Node<QuestNodeData | SkillNodeData>[];
@@ -130,14 +131,16 @@ export const CanvasView = ({
         </Button>
       </div>
 
-      <FloatingToolbox
-        cursorMode={cursorMode}
-        setCursorMode={setCursorMode}
-        setViewMode={setViewMode}
-        collapseAll={collapseAll}
-        expandAll={expandAll}
-        openAIGenerator={openAIGenerator}
-      />
+      <div className="absolute top-6 right-6 z-20 flex items-start gap-2">
+        <RoadmapButton onClick={() => setViewMode("skillTree")} />
+        <FloatingToolbox
+          cursorMode={cursorMode}
+          setCursorMode={setCursorMode}
+          collapseAll={collapseAll}
+          expandAll={expandAll}
+          openAIGenerator={openAIGenerator}
+        />
+      </div>
 
       {/* Mode Indicators */}
       {cursorMode === "create" && (

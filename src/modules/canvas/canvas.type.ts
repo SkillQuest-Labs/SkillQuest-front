@@ -7,10 +7,10 @@ export type ViewModeType = "canvas" | "skillTree";
 export type FloatingToolboxProps = {
   cursorMode: CursorModeType;
   setCursorMode: (mode: CursorModeType) => void;
-  setViewMode: (mode: ViewModeType) => void;
   collapseAll: () => void;
   expandAll: () => void;
   openAIGenerator: () => void;
+  className?: string;
 };
 
 export type SkillConfigType = {
