@@ -47,8 +47,8 @@ export const router = createBrowserRouter([
       },
       {
         path: routes.skillsTree.path,
-        element: <SkillTreePage />, 
-      }
+        element: <SkillTreePage />,
+      },
     ],
   },
   { path: routes.notfound.path, element: <NotFoundPage /> },
