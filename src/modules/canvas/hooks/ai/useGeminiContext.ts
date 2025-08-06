@@ -20,7 +20,7 @@ const buildInstruction = (
   const roleAndGoal = [
     "## RÔLE ET OBJECTIF",
     "Tu es un ingénieur pédagogique expert en gamification. Ta mission est de créer une série de quêtes d'apprentissage pour aider un utilisateur à maîtriser un nouveau skill.",
-    `Génère exactement ${form.numberOfQuests ?? 4} quêtes pour le skill : '${skill.data.config.title}'.`,
+    `Génère exactement ${form.numberOfQuests} quêtes pour le skill : '${skill.data.config.title}'.`,
     "Les quêtes doivent former une progression pédagogique cohérente, partant du niveau de l'utilisateur pour l'amener vers son objectif final.",
   ];
 

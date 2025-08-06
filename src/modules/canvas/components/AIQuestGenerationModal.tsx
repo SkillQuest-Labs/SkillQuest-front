@@ -34,8 +34,8 @@ const baseSchema = z.object({
   selfLevel: z.enum(["Novice", "Initié", "Intermédiaire", "Avancé", "Expert"]).optional(),
   relatedSkill: z.string().optional(),
   autoEstimate: z.boolean().optional(),
-  numberOfQuests: z.number().min(1),
-  styleApprentissage: z.enum(["Théorique", "Equilibré", "Pratique"]).default("Equilibré").optional(),
+  numberOfQuests: z.number().optional(),
+  styleApprentissage: z.enum(["Théorique", "Equilibré", "Pratique"]).optional(),
   ambianceQueteStyle: z.enum(["Médiéval", "High-tech", "Space Opera", "Détective"]).optional(),
   ressourceType: z.array(z.string()).optional(),
 });
@@ -64,13 +64,6 @@ const questContextSchema = baseSchema.superRefine((data, ctx) => {
         message: "Le niveau est requis",
       });
     }
-    if (!data.ressourceType || data.ressourceType.length === 0) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["ressourceType"],
-        message: "Au moins un type est requis",
-      });
-    }
   }
 });
 
@@ -94,6 +87,14 @@ export const AIQuestGenerationModal = ({ onGenerate, setOpenAiModal }: AIQuestGe
   const skill = useCanvasStore((s) => s.nodes.find(isSkillNode));
 
   const submit = async (data: QuestContextForm) => {
+    // Auto-fill fields if autoEstimate is true
+    if (data.autoEstimate) {
+      data.numberOfQuests = 4;
+      data.styleApprentissage = "Equilibré";
+      data.ambianceQueteStyle = "High-tech";
+      data.ressourceType = ["Vidéos", "Article de blog", "Documentation", "Exercices intéractifs"];
+    }
+
     setForm(data);
     await onGenerate();
     setOpenAiModal(isLoading);
