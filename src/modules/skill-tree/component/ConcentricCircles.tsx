@@ -1,4 +1,4 @@
-import type { SkillTreeOptions } from "../../skill-tree.type";
+import type { SkillTreeOptions } from "../skill-tree.type";
 
 type ConcentricCirclesProps = {
   rings: number[];
