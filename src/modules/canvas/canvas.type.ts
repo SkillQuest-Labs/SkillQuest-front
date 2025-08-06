@@ -2,7 +2,7 @@ import type { QuestDifficulty, QuestStatus } from "@/shared/types/quest.type";
 import type { SkillDifficulty, SkillStatus } from "@/shared/types/skill.type";
 
 export type CursorModeType = "normal" | "create" | "connect" | "collapse" | "expand";
-export type ViewModeType = "canvas" | "timeline";
+export type ViewModeType = "canvas" | "skillTree";
 
 export type FloatingToolboxProps = {
   cursorMode: CursorModeType;

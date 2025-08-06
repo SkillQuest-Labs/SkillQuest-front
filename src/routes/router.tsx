@@ -3,13 +3,13 @@ import { ProtectedRoute } from "./protected-route";
 import { routes } from "./router.const";
 import { DashboardLayout } from "@/pages/dashboard/DashboardLayout";
 import { DashboardUser } from "@/pages/dashboard/DashboardUser";
-import { CanvasPage } from "@/pages/CanvasPage";
+import { CanvasPage } from "@/pages/canvas/CanvasPage";
 import { Skills } from "@/pages/dashboard/Skills";
 import { Profil } from "@/pages/dashboard/Profil";
 import { Store } from "@/pages/dashboard/Store";
 import { NotFoundPage } from "@/pages/404";
 import { WorkSession } from "@/pages/dashboard/WorkSession";
-import { SkillTreePage } from "@/pages/SkillTreePage";
+import { SkillTreePage } from "@/pages/canvas/SkillTreePage";
 
 export const router = createBrowserRouter([
   {

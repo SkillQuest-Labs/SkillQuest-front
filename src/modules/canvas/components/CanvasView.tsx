@@ -30,7 +30,7 @@ type CanvasViewProps = {
   onConnect: (params: Connection) => void;
   cursorMode: CursorModeType;
   setCursorMode: (mode: CursorModeType) => void;
-  setViewMode: React.Dispatch<React.SetStateAction<ViewModeType>>;
+  setViewMode: (mode: ViewModeType) => void;
   className?: string;
   collapseAll: () => void;
   expandAll: () => void;
