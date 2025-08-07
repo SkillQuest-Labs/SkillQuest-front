@@ -2,8 +2,10 @@ import type { Quest } from "../quest.type";
 import type { Skill } from "../skill.type";
 
 export type SkillAiType = Partial<Skill> & {
+  questNumber: number;
   level: string;
   goal: string;
+  goalDescription: string;
 };
 
 export type QuestAiType = Partial<Quest> & {
@@ -11,7 +13,6 @@ export type QuestAiType = Partial<Quest> & {
 };
 
 export type GeminiContext = {
-  skill: SkillAiType;
   existingQuests: QuestAiType[];
   format: Record<
     keyof {
@@ -24,4 +25,18 @@ export type GeminiContext = {
     string
   >;
   instruction: string;
+};
+
+export type QuestGenerationForm = {
+  manualContext: boolean;
+  contextText: string;
+  goal: string;
+  goalDescription: string;
+  selfLevel: string;
+  relatedSkill: string;
+  autoEstimate: boolean;
+  numberOfQuests: number;
+  styleApprentissage: "Théorique" | "Equilibré" | "Pratique";
+  ambianceQueteStyle: string;
+  ressourceType: string[];
 };

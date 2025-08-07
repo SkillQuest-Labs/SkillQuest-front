@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import type { QuestNodeData } from "./canvas.type";
 import { useReactFlow, type Node } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import "./../../styles/canvas.css";
@@ -15,6 +16,7 @@ import { CreateSkillModal } from "./components/CreateSkillModal";
 import type { Skill } from "@/shared/types/skill.type";
 import { initialNodes } from "./canvas.const";
 import { useAddAIQuests } from "./hooks/useAddAIQuest";
+import { QuestDetailsModal } from "./components/floating-toolbox/QuestDetailsModal";
 
 export const Canvas = () => {
   const [connectionStart, setConnectionStart] = useState<string | null>(null);
@@ -24,6 +26,8 @@ export const Canvas = () => {
   const navigate = useNavigate();
   const createSkillParam = searchParams.get("createSkill") === "true";
   const [isModalOpen, setIsModalOpen] = useState(createSkillParam);
+  const [selectedQuest, setSelectedQuest] = useState<QuestNodeData | null>(null);
+  const [isQuestModalOpen, setIsQuestModalOpen] = useState(false);
   const setNodes = useCanvasStore((state) => state.setNodes);
 
   const { cursorMode, setCursorMode } = useCanvasStore();
@@ -67,21 +71,27 @@ export const Canvas = () => {
   // - Otherwise, connects the start node to the clicked node and resets the selection.
   const handleNodeClick = useCallback(
     (event: React.MouseEvent, node: Node) => {
-      if (cursorMode !== "connect") return;
       event.stopPropagation();
 
-      if (!connectionStart) {
-        setConnectionStart(node.id);
-      } else if (connectionStart !== node.id) {
-        onConnect({
-          source: connectionStart,
-          target: node.id,
-          sourceHandle: null,
-          targetHandle: null,
-        });
+      if (cursorMode === "connect") {
+        if (!connectionStart) {
+          setConnectionStart(node.id);
+        } else if (connectionStart !== node.id) {
+          onConnect({
+            source: connectionStart,
+            target: node.id,
+            sourceHandle: null,
+            targetHandle: null,
+          });
+        }
+      }
+
+      if (cursorMode === "normal" && node.type === "questNode") {
+        setSelectedQuest(node.data as QuestNodeData);
+        setIsQuestModalOpen(true);
       }
     },
-    [cursorMode, connectionStart, onConnect, setConnectionStart],
+    [cursorMode, connectionStart, onConnect, setConnectionStart, setSelectedQuest, setIsQuestModalOpen],
   );
 
   useEffect(() => {
@@ -121,6 +131,8 @@ export const Canvas = () => {
           navigate("/canvas");
         }}
       />
+
+      <QuestDetailsModal open={isQuestModalOpen} quest={selectedQuest} onClose={() => setIsQuestModalOpen(false)} />
 
       <Toaster position="bottom-right" />
     </div>
