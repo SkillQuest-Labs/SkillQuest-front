@@ -11,7 +11,7 @@ export const FloatingToolbox = ({
   // setViewMode,
   collapseAll,
   expandAll,
-  openAIGenerator,
+  setOpenAiModal,
 }: FloatingToolboxProps) => {
   const [areNodesCollapsed, setAreNodesCollapsed] = useState<boolean>(false);
   const isLoading = useLoadingStore((state) => state.isLoading);
@@ -65,7 +65,7 @@ export const FloatingToolbox = ({
     activeColor: "bg-green-600 hover:bg-green-700 text-white",
     isActive: () => false,
     handleToolClick: () => {
-      openAIGenerator();
+      setOpenAiModal(true);
     },
   };
 
