@@ -1,8 +1,8 @@
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import type { SessionFormProps } from "../types/session-form.type";
-import { SelectSkill } from "./SelectSkill";
-import { SelectQuest } from "./SelectQuest";
+import { SelectSkillField } from "./SelectSkillField";
+import { SelectQuestField } from "./SelectQuestField";
 import { ColorPicker } from "./ColorPicker";
 
 export const SessionForm = ({ form, setForm, skills, quests, loadingSkills, loadingQuests }: SessionFormProps) => {
@@ -43,8 +43,14 @@ export const SessionForm = ({ form, setForm, skills, quests, loadingSkills, load
         </div>
       </div>
 
-      <SelectSkill form={form} setForm={setForm} skills={skills} loading={loadingSkills} />
-      <SelectQuest form={form} setForm={setForm} quests={quests} loading={loadingQuests} disabled={!form.linkedSkill} />
+      <SelectSkillField form={form} setForm={setForm} skills={skills} loading={loadingSkills} />
+      <SelectQuestField
+        form={form}
+        setForm={setForm}
+        quests={quests}
+        loading={loadingQuests}
+        disabled={!form.linkedSkill}
+      />
       <ColorPicker form={form} setForm={setForm} />
     </>
   );

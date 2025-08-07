@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { SessionFormType } from "../types/session-form.type";
-import { isTimeSlotConflict, toMinutes } from "../utils/session.utils";
+import { isTimeSlotConflict, convertToMinutes } from "../utils/session.utils";
 
 const initialForm: SessionFormType = {
   title: "",
@@ -25,7 +25,7 @@ export const useSessionForm = () => {
   };
 
   const hasTimeConflict = () => {
-    return toMinutes(form.endTime) <= toMinutes(form.startTime);
+    return convertToMinutes(form.endTime) <= convertToMinutes(form.startTime);
   };
 
   const hasSessionConflict = (sessions: { startTime: string; endTime: string }[]) => {

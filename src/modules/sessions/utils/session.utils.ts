@@ -1,6 +1,6 @@
 import type { SessionFormType, SessionPayload } from "../types/session-form.type";
 
-export const toMinutes = (time: string): number => {
+export const convertToMinutes = (time: string): number => {
   const [hours, minutes] = time.split(":").map(Number);
   return hours * 60 + minutes;
 };
@@ -10,11 +10,11 @@ export const isTimeSlotConflict = (
   end: string,
   otherSessions: { startTime: string; endTime: string }[],
 ): boolean => {
-  const startMin = toMinutes(start);
-  const endMin = toMinutes(end);
+  const startMin = convertToMinutes(start);
+  const endMin = convertToMinutes(end);
   return otherSessions.some((s) => {
-    const sMin = toMinutes(s.startTime);
-    const eMin = toMinutes(s.endTime);
+    const sMin = convertToMinutes(s.startTime);
+    const eMin = convertToMinutes(s.endTime);
     return startMin < eMin && endMin > sMin;
   });
 };

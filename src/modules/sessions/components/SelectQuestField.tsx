@@ -8,7 +8,7 @@ interface SelectQuestProps {
   disabled?: boolean;
 }
 
-export const SelectQuest = ({ form, setForm, quests, loading, disabled = false }: SelectQuestProps) => {
+export const SelectQuestField = ({ form, setForm, quests, loading, disabled = false }: SelectQuestProps) => {
   return (
     <div className="mb-4">
       <label className="text-sm text-white mb-1 block">Choisir une quête</label>

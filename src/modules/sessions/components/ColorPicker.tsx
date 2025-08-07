@@ -1,3 +1,4 @@
+import { Button } from "@/shared/components/ui/button";
 import type { SessionFormType } from "../types/session-form.type";
 
 interface ColorPickerProps {
@@ -13,7 +14,7 @@ export const ColorPicker = ({ form, setForm }: ColorPickerProps) => {
       <label className="text-sm text-white mb-1 block">Étiquette</label>
       <div className="flex space-x-2">
         {colors.map((color) => (
-          <button
+          <Button
             key={color}
             type="button"
             className={`w-6 h-6 rounded-full border-2 ${form.color === color ? "border-white" : "border-transparent"}`}

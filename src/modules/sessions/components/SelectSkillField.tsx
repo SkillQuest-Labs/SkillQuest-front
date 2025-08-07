@@ -7,7 +7,7 @@ interface SelectSkillProps {
   loading: boolean;
 }
 
-export const SelectSkill = ({ form, setForm, skills, loading }: SelectSkillProps) => {
+export const SelectSkillField = ({ form, setForm, skills, loading }: SelectSkillProps) => {
   return (
     <div className="mb-4">
       <label className="text-sm text-white mb-1 block">Choisir un skill</label>

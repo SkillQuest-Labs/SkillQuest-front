@@ -4,7 +4,7 @@ import { useGetQuests } from "@/shared/services/quest/api-quest";
 import { useGetSkills } from "@/shared/services/skill/api-skill";
 import type { SessionFormType } from "../types/session-form.type";
 import { SessionForm } from "./SessionForm";
-import { toMinutes, isTimeSlotConflict } from "../utils/session.utils";
+import { convertToMinutes, isTimeSlotConflict } from "../utils/session.utils";
 import { CircleAlert } from "lucide-react";
 
 interface SessionDialogProps {
@@ -29,7 +29,7 @@ export const SessionDialog = ({
   const isFormValid = form.title.trim() && form.startDate && form.startTime && form.endTime && form.linkedQuest;
 
   const hasTimeConflict = Boolean(
-    form.startTime && form.endTime && toMinutes(form.endTime) <= toMinutes(form.startTime),
+    form.startTime && form.endTime && convertToMinutes(form.endTime) <= convertToMinutes(form.startTime),
   );
 
   const hasSessionConflict = Boolean(

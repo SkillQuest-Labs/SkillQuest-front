@@ -96,7 +96,7 @@ export const CalendarWorkSession = () => {
       setIsOpen(false);
       setEditingIndex(null);
     } catch (err) {
-      console.error("Erreur création session", err); // Temporary, maybe replace with toast error
+      return err; // Temporary, maybe replace with toast error
     }
   };
 
