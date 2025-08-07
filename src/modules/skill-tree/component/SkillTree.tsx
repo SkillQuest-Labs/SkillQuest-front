@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { PauseIcon, PlayIcon, ChevronLeft } from "lucide-react";
-import { renderConcentricCircles } from "../render-concentric-circles.const";
+import { renderConcentricCircles } from "./concentric-circles/render-concentric-circles.const";
 
 export type SkillTreeProps = {
   onBack?: () => void;

@@ -10,16 +10,7 @@ type ConcentricCirclesProps = {
 export const ConcentricCircles = ({ rings, centerX, centerY, options }: ConcentricCirclesProps) => {
   return (
     <svg
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        overflow: "visible",
-        pointerEvents: "none",
-        zIndex: 0,
-      }}
+      className="absolute top-0 left-0 w-full h-full overflow-visible pointer-events-none z-0"
       viewBox="0 0 1200 800"
     >
       {/* Define gradients */}
@@ -99,24 +90,24 @@ export const ConcentricCircles = ({ rings, centerX, centerY, options }: Concentr
       ))}
 
       <style>{`
-        @keyframes rotate {
-          from {
-            transform: rotate(0deg);
-          }
-          to {
-            transform: rotate(360deg);
-          }
+      @keyframes rotate {
+        from {
+        transform: rotate(0deg);
         }
+        to {
+        transform: rotate(360deg);
+        }
+      }
 
-        @keyframes pulse {
-          0%,
-          100% {
-            opacity: 0.7;
-          }
-          50% {
-            opacity: 1;
-          }
+      @keyframes pulse {
+        0%,
+        100% {
+        opacity: 0.7;
         }
+        50% {
+        opacity: 1;
+        }
+      }
       `}</style>
     </svg>
   );

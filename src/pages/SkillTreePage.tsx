@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { renderConcentricCircles } from "@/modules/skill-tree/render-concentric-circles";
+import { renderConcentricCircles } from "@/modules/skill-tree/component/concentric-circles/render-concentric-circles";
 import { Button } from "@/shared/components/ui/button";
 import { PauseIcon, PlayIcon } from "lucide-react";
 
