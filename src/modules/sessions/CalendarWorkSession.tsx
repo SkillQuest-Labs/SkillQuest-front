@@ -75,6 +75,10 @@ export const CalendarWorkSession = () => {
         endTime: new Date(`${form.startDate}T${form.endTime}`).toISOString(),
         userId: "uuid-user-1234-5678-9012-345678901234", // replace user id if necessary
         questId: form.linkedQuest,
+        title: form.title,
+        description: form.description,
+        color: form.color,
+        linkedSkillId: form.linkedSkill,
       };
 
       const createdSession = await createSession(sessionPayload);
