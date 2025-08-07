@@ -28,3 +28,26 @@ export const isQuestNode = (node: Node<QuestNodeData | SkillNodeData>): node is 
 
 export const isSkillNode = (node: Node<QuestNodeData | SkillNodeData>): node is Node<SkillNodeData> =>
   node.data.kind === "skill";
+
+export const userLevel = [
+  {
+    label: "Novice",
+    description: "Je n'y connais absolument rien",
+  },
+  {
+    label: "Initié",
+    description: "J'ai quelques notions de base",
+  },
+  {
+    label: "Intermédiaire",
+    description: "Je sais déjà faire pas mal de choses",
+  },
+  {
+    label: "Avancé",
+    description: "Je maîtrise bien le sujet",
+  },
+  {
+    label: "Expert",
+    description: "Je pourrais enseigner ce sujet",
+  },
+];
