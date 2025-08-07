@@ -1,5 +1,5 @@
-import { ConcentricCircles } from "./component/ConcentricCircles";
-import type { CircularSkillNode, SkillTreeOptions } from "./skill-tree.type";
+import { ConcentricCircles } from "./ConcentricCirclesSVG";
+import type { CircularSkillNode, SkillTreeOptions } from "../../skill-tree.type";
 
 type RenderConcentricCirclesProps = {
   skillnodes: CircularSkillNode[];
