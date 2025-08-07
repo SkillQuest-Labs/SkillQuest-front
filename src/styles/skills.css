@@ -1,0 +1,142 @@
+/* Styles personnalisés pour le module Skills */
+
+.skill-card-custom {
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  background: #1e293b; /* bg-slate-800 */
+  color: #f1f5f9; /* text-slate-100 */
+  transition: box-shadow 0.2s, transform 0.2s, border 0.2s;
+  border: 1px solid rgba(100,116,139,0.15); /* slate-500/20, plus fin */
+  position: relative;
+  overflow: hidden;
+}
+.skill-card-custom::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  pointer-events: none;
+  box-shadow: 0 0 0 0 rgba(255,255,255,0.0), 0 0 0 0 rgba(255,255,255,0.0);
+  transition: box-shadow 0.3s;
+}
+.skill-card-custom:hover {
+  box-shadow: 0 4px 12px rgba(30,41,59,0.13);
+  border: 2px solid rgba(100,116,139,0.15); /* slate-500/20, même que l'état normal */
+  transform: translateY(-4px) scale(1.03);
+}
+.skill-card-custom:hover::before {
+  /* Suppression de l'ombre blanche lumineuse */
+  box-shadow: none;
+}
+
+.skill-grid-custom {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.skill-badge-difficulty {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+}
+
+/* Pour les textes secondaires dans la carte */
+.skill-card-custom .text-gray-600,
+.skill-card-custom .text-gray-500,
+.skill-card-custom .text-gray-400 {
+  color: #cbd5e1 !important; /* text-slate-300 */
+}
+
+.skill-card-custom .text-gray-300 {
+  color: #94a3b8 !important; /* text-slate-400 */
+}
+
+/* Pagination moderne et animée */
+.skill-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.2rem;
+  margin-top: 0.5rem;
+
+}
+.skill-pagination-btn {
+  background: none;
+  color: #64748b;
+  border: none;
+  border-radius: 0.4rem;
+  padding: 0.05rem 0.45rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.2s, background 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.7rem;
+  min-height: 1.7rem;
+}
+.skill-pagination-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.skill-pagination-btn.selected {
+  background: #334155; /* bleu doux, moins vif */
+  color: #fff;
+  font-weight: 700;
+  border-radius: 0.4rem;
+  transition: background 0.25s, color 0.25s, transform 0.25s, box-shadow 0.25s;
+  transform: scale(1.04);
+  box-shadow: 0 0 6px 1px #33415555;
+}
+.skill-pagination-btn:not(.selected):hover {
+  background: #e2e8f0;
+  color: #334155;
+}
+.skill-pagination-arrow {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.3rem;
+  padding: 0.1rem 0.2rem;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+  cursor: pointer;
+}
+.skill-pagination-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.skill-pagination-arrow:hover:not(:disabled) {
+  background: none;
+  color: #334155;
+}
+
+/* Scrollbar custom élégante */
+::-webkit-scrollbar {
+  width: 8px;
+  background: #0f172a;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #334155 #0f172a;
+}
+
+.skill-card-min {
+  min-height: 220px;
+}
+

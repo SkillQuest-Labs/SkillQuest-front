@@ -1,0 +1,23 @@
+.fc {
+  --fc-border-color: #000000;
+  --fc-page-bg-color: #0f172a;
+  --fc-neutral-bg-color: #1e293b;
+  --fc-button-bg-color: #334155;
+  --fc-button-border-color: #334155;
+  --fc-button-text-color: #fff;
+  --fc-button-hover-bg-color: #475569;
+  --fc-button-hover-border-color: #475569;
+  --fc-today-bg-color: rgba(255, 255, 255, 0.1);
+  --fc-event-bg-color: #3b82f6;
+  --fc-event-border-color: #3b82f6;
+  --fc-event-text-color: #fff;
+  --fc-daygrid-event-dot-width: 6px;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
