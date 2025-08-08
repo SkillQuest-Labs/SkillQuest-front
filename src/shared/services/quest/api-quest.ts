@@ -138,5 +138,5 @@ export const useDeleteQuestRelations = () => {
     deleteQuestRelations,
     loading,
     error,
-  }
+  };
 };
