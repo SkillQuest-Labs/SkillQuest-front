@@ -75,6 +75,10 @@ export const CalendarWorkSession = () => {
         endTime: new Date(`${form.startDate}T${form.endTime}`).toISOString(),
         userId: "uuid-user-1234-5678-9012-345678901234", // replace user id if necessary
         questId: form.linkedQuest,
+        title: form.title,
+        description: form.description,
+        color: form.color,
+        linkedSkillId: form.linkedSkill,
       };
 
       const createdSession = await createSession(sessionPayload);
@@ -92,7 +96,7 @@ export const CalendarWorkSession = () => {
       setIsOpen(false);
       setEditingIndex(null);
     } catch (err) {
-      console.error("Erreur création session", err); // Temporary, maybe replace with toast error
+      return err; // Temporary, maybe replace with toast error
     }
   };
 
