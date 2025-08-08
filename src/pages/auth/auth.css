@@ -1,12 +1,9 @@
-*,
-*:before,
-*:after{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
+
 body{
    background-color: #000;
+   width: 100%;
+    height: 100%;
+
 }
 .login-container {
   display: flex;
@@ -18,15 +15,19 @@ body{
 
 .login-left {
   flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex
+;
+    justify-content: center;
+    align-items: center;
+    right: 40%;
+    position: relative;
 }
 
 .login-image {
-  width: 150%;
+  width: 400%;
   max-width: 400%;
   border-radius: 20px;
+  background: transparent;
 }
 
 .login-right {
@@ -34,12 +35,20 @@ body{
   display: flex;
   justify-content: center;
   align-items: center;
+  
 }
 
 .login-right form {
   width: 100%;
-  max-width: 400px;
+  max-width: 606px;
   /* Tu peux garder les styles existants */
+  background-image: url(https://static.wixstatic.com/media/b1dccb_12d48da62f0640c6acb828f9965d857d~mv2.gif);
+  background-size: cover;
+  background-position: center;
+  box-shadow: #000 0px 0px 20px;
+
+
+
 }
 
 .shape:first-child{
@@ -62,10 +71,6 @@ body{
 form{
     width: 400px;
     background-color: rgba(255,255,255,0.13);
-    position: absolute;
-    transform: translate(-50%,-50%);
-    top: 50%;
-    left: 70%;
     border-radius: 10px;
     backdrop-filter: blur(10px);
     border: 2px solid rgba(255,255,255,0.1);
