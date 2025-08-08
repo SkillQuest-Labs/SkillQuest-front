@@ -1,9 +1,9 @@
+import type { AiContextType, QuestAiType, QuestGenerationForm } from "@/shared/types/ai/ai.type";
 import { useCanvasStore } from "@/stores/canvas/canvas-store";
-import { isQuestNode, isSkillNode } from "../../canvas.const";
-import type { GeminiContext, QuestAiType, QuestGenerationForm } from "@/shared/types/ai/ai.type";
 import { useQuestGenerationFormStore } from "@/stores/canvas/quest-generation-form-store";
-import type { SkillNodeData } from "../../canvas.type";
 import type { Node } from "@xyflow/react";
+import { isQuestNode, isSkillNode } from "../../canvas.const";
+import type { SkillNodeData } from "../../canvas.type";
 
 const buildInstruction = (
   form?: Partial<QuestGenerationForm>,
@@ -29,6 +29,7 @@ const buildInstruction = (
     "\n## CONTEXTE",
     `- **Skill à apprendre** : ${skill.data.config.title}`,
     `- **Description du skill** : ${skill.data.config.description}`,
+    `- **Domaine d'apprentissage déclaré** : ${form.skillDomain === "Autre" ? form.customDomain : form.skillDomain}`,
     `- **Objectif final de l'utilisateur** : ${form.goal}`,
     `- **Description de l'objectif** : ${form.goalDescription}`,
     `- **Niveau actuel de l'utilisateur** : ${form.selfLevel}. La première quête doit être adaptée à ce niveau.`,
@@ -44,20 +45,33 @@ const buildInstruction = (
     );
   }
 
-  // 3. Règles et Critères de qualité (Clairs et concis)
-  const rules = [
+  // 4. Règles et Critères de qualité (Clairs et concis)
+  const generalRules = [
     "\n## RÈGLES DE GÉNÉRATION",
     "- **Progression logique** : Les quêtes doivent s'enchaîner logiquement (ex: Facile → Moyen → Difficile).",
     "- **Objectifs mesurables** : Chaque quête doit avoir un objectif concret et vérifiable.",
-    "- **Ressources externes** : Chaque quête doit inclure au moins un lien cliquable (format Markdown `[Titre](https://...)`) vers une ressource externe pertinente et de qualité (tutoriel, vidéo, article, documentation).",
-    `- **Types de ressources à privilégier** : Inclus des ressources correspondant à ces types : ${form.ressourceType?.join(", ")}.`,
-    "- **Outils** : Si un outil est nécessaire (ex: Figma, VSCode), mentionne-le et fournis un lien.",
-    // "- **Prérequis** : Pour les quêtes qui ne sont pas les premières, le champ `prerequisites` DOIT contenir le titre d'une ou plusieurs quêtes générées précédemment dans cette même liste. La première quête a un tableau de prérequis vide `[]`.",
+    "- **Cohérence domaine/skill** : VÉRIFIE que le skill corresponde bien au domaine déclaré. Si incohérent, adapte les ressources au skill réel.",
     "- **Unicité** : Chaque quête doit être unique et apporter une nouvelle compétence.",
     "- **Contenu de la description** : Le champ `description` doit contenir TOUTES les informations (objectif, étapes, ressources, etc.) de manière structurée et lisible en Markdown.",
   ];
 
-  // 4. Format de sortie (Impératif et structuré)
+  const resourceRules = [
+    "\n## RÈGLES SPÉCIFIQUES AUX RESSOURCES",
+    "- **Validité ABSOLUE des liens** : PRIORITÉ #1 - Utilise UNIQUEMENT des ressources qui existent réellement. Pour les vidéos, privilégie YouTube en premier, puis d'autres plateformes reconnues. Vérifie que les liens mènent vers des contenus existants et accessibles.",
+    "- **Sources prioritaires par type** :",
+    "  * **Vidéos** : 1) YouTube (chaînes populaires), 2) Vimeo, 3) Plateformes éducatives officielles",
+    "  * **Documentation** : Sites officiels (.org, .edu, .gov), documentation développeur",
+    "  * **Cours** : Plateformes reconnues (Coursera, Udemy, Khan Academy, edX)",
+    "  * **Articles** : Blogs techniques reconnus, Medium avec auteurs vérifiés",
+    "- **Qualité et validité des liens** : Priorise les sources officielles ou reconnues, liens HTTPS uniquement, n'invente JAMAIS d'URL, évite les contenus hors-sujet. En cas de doute sur l'existence d'une ressource, utilise une alternative générale mais sûre.",
+    "- **Adaptation au domaine** : Choisis des ressources adaptées au domaine déclaré. Ex: si 'Cuisine', utilise des sites culinaires reconnus.",
+    "- **Pas de liens morts** : INTERDIT de proposer des pages inexistantes/404. Si une ressource spécifique est introuvable, fournis une alternative officielle/générique existante.",
+    `- **Types de ressources à privilégier** : Inclus des ressources correspondant à ces types : ${form.ressourceType?.join(", ")}.`,
+    "- **Ressources externes** : Chaque quête doit inclure au minimum 1 lien cliquable (Markdown `[Titre](https://...)`) vers des ressources PERTINENTES et de qualité.",
+    "- **Outils** : Si un outil est nécessaire (ex: Figma, VSCode), mentionne-le et fournis un lien officiel.",
+  ];
+
+  // 5. Format de sortie (Impératif et structuré)
   const formatInstructions = [
     "\n## FORMAT DE SORTIE",
     "La sortie doit être un tableau JSON valide. Ne rien inclure avant ou après le tableau. Voici la structure de chaque objet quête :",
@@ -71,10 +85,10 @@ const buildInstruction = (
     "```",
   ];
 
-  return [...roleAndGoal, ...context, ...rules, ...formatInstructions].join("\n");
+  return [...roleAndGoal, ...context, ...generalRules, ...resourceRules, ...formatInstructions].join("\n");
 };
 
-export const useGeminiContext = (): GeminiContext => {
+export const getAiContext = (): AiContextType => {
   const { nodes } = useCanvasStore.getState();
   const { form } = useQuestGenerationFormStore.getState();
   const skillNode = nodes.find(isSkillNode);
@@ -94,38 +108,7 @@ export const useGeminiContext = (): GeminiContext => {
   }
 
   return {
-    existingQuests,
-    format: {
-      title: "string",
-      description: "string",
-      xp: "number",
-      difficulty: "EASY|MEDIUM|HARD",
-      prerequisites: "string[] (optional)",
-    },
-    instruction: instruction,
-  };
-};
-
-export const getGeminiContext = (): GeminiContext => {
-  const { nodes } = useCanvasStore.getState();
-  const { form } = useQuestGenerationFormStore.getState();
-  const skillNode = nodes.find(isSkillNode);
-
-  const existingQuests: QuestAiType[] = nodes.filter(isQuestNode).map((node) => ({
-    title: node.data.title,
-    description: node.data.description,
-    xp: node.data.xp,
-    difficulty: node.data.difficulty,
-    prerequisites: [],
-  }));
-
-  let instruction = "";
-
-  if (form && Object.keys(form).length > 0 && skillNode) {
-    instruction = buildInstruction(form, skillNode, existingQuests);
-  }
-
-  return {
+    aiProvider: form.aiProvider || "openai",
     existingQuests,
     format: {
       title: "string",
