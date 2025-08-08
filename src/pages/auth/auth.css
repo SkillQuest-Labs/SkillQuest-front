@@ -41,7 +41,7 @@ body{
 .login-right form {
   width: 100%;
   max-width: 606px;
-  /* Tu peux garder les styles existants */
+ 
   background-image: url(https://static.wixstatic.com/media/b1dccb_12d48da62f0640c6acb828f9965d857d~mv2.gif);
   background-size: cover;
   background-position: center;

@@ -13,7 +13,6 @@ import Register from "@/pages/auth/Registre";
 import { AuthLayout } from "@/component/AuthLayout";
 import { UnauthorizedPage } from "@/pages/Unauthorized";
 
-
 export const router = createBrowserRouter([
   // Public routes for authentication
   {
