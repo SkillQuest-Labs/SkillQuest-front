@@ -15,8 +15,8 @@ export const QuestCard = ({ data, onDelete, sourceHandle, targetHandle, isCollap
       <QuestTitle title={data.title} onChange={(value) => data.onUpdate?.("title", value)} />
 
       <div
-        className={`transition-all duration-300 overflow-hidden ${
-          isCollapsed ? "max-h-0 opacity-0" : "max-h-96 opacity-100"
+        className={`transition-all duration-300 overflow-y-auto ${
+          isCollapsed ? "max-h-0 opacity-0" : "max-h-[560px] opacity-100"
         }`}
       >
         <QuestXp xp={data.xp} />
