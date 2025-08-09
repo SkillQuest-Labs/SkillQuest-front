@@ -9,6 +9,7 @@ import { Profil } from "@/pages/dashboard/Profil";
 import { Store } from "@/pages/dashboard/Store";
 import { NotFoundPage } from "@/pages/404";
 import { WorkSession } from "@/pages/dashboard/WorkSession";
+import { SkillTreePage } from "@/pages/SkillTreePage";
 
 export const router = createBrowserRouter([
   {
@@ -43,6 +44,10 @@ export const router = createBrowserRouter([
       {
         path: routes.canvas.path,
         element: <CanvasPage />,
+      },
+      {
+        path: routes.skillsTree.path,
+        element: <SkillTreePage />,
       },
     ],
   },
