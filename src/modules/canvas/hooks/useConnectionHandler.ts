@@ -1,11 +1,14 @@
+import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import { addEdge, MarkerType, type Connection, type Edge } from "@xyflow/react";
 import { useCallback } from "react";
 
 export const useConnectionHandler = (edges: Edge[], setEdges: (edges: Edge[]) => void) => {
+  const markNewEdge = useCanvasStore((state) => state.markNewEdge);
+
   return useCallback(
     (params: Connection) => {
       const newEdge: Edge = {
-        id: `e${params.source}-${params.target}`,
+        id: `edge_${params.source}_${params.target}`,
         ...params,
         type: "custom",
         animated: true,
@@ -18,7 +21,8 @@ export const useConnectionHandler = (edges: Edge[], setEdges: (edges: Edge[]) =>
 
       const updated = addEdge(newEdge, edges);
       setEdges(updated);
+      markNewEdge(newEdge.id);
     },
-    [edges, setEdges],
+    [edges, setEdges, markNewEdge],
   );
 };

@@ -13,10 +13,14 @@ export interface ILoading {
 type CanvasStore = {
   quests: Quest[];
   nodes: Node<QuestNodeData | SkillNodeData>[];
-  newIds: string[];
+  newNodeIds: string[];
   modifiedNodesIds: string[];
   deletedNodesIds: string[];
+
   edges: Edge[];
+  newEdgeIds: string[];
+  deletedEdgeIds: string[];
+
   cursorMode: CursorModeType;
   loading: ILoading;
 
@@ -28,8 +32,12 @@ type CanvasStore = {
   setCursorMode: (mode: CursorModeType) => void;
 
   markModifiedNode: (id: string) => void; // to mark a node as modified
-  markNew: (id: string) => void; // to mark a node as new
+  markNodeNew: (id: string) => void; // to mark a node as new
   markDeletedNode: (id: string) => void; // to mark a node as deleted
+
+  markNewEdge: (id: string) => void;
+  markDeleteEdge: (id: string) => void;
+
   clearFlags: () => void; // to clear modified and new flags
 
   addNode: (node: Node<QuestNodeData | SkillNodeData>) => void;
@@ -42,9 +50,11 @@ export const useCanvasStore = create<CanvasStore>((set) => ({
   quests: [],
   nodes: [],
   modifiedNodesIds: [],
-  newIds: [],
+  newNodeIds: [],
   deletedNodesIds: [],
   edges: [],
+  newEdgeIds: [],
+  deletedEdgeIds: [],
   cursorMode: "normal",
   loading: {
     isLoading: false,
@@ -62,9 +72,9 @@ export const useCanvasStore = create<CanvasStore>((set) => ({
       modifiedNodesIds: state.modifiedNodesIds.includes(id) ? state.modifiedNodesIds : [...state.modifiedNodesIds, id],
     })),
 
-  markNew: (id: string) =>
+  markNodeNew: (id: string) =>
     set((state) => ({
-      newIds: state.newIds.includes(id) ? state.newIds : [...state.newIds, id],
+      newNodeIds: state.newNodeIds.includes(id) ? state.newNodeIds : [...state.newNodeIds, id],
     })),
 
   markDeletedNode: (id: string) =>
@@ -72,7 +82,18 @@ export const useCanvasStore = create<CanvasStore>((set) => ({
       deletedNodesIds: state.deletedNodesIds.includes(id) ? state.deletedNodesIds : [...state.deletedNodesIds, id],
     })),
 
-  clearFlags: () => set({ modifiedNodesIds: [], newIds: [], deletedNodesIds: [] }),
+  markNewEdge: (id: string) =>
+    set((state) => ({
+      newEdgeIds: state.newEdgeIds.includes(id) ? state.newEdgeIds : [...state.newEdgeIds, id],
+    })),
+
+  markDeleteEdge: (id: string) =>
+    set((state) => ({
+      deletedEdgeIds: state.deletedEdgeIds.includes(id) ? state.deletedEdgeIds : [...state.deletedEdgeIds, id],
+    })),
+
+  clearFlags: () =>
+    set({ modifiedNodesIds: [], newNodeIds: [], deletedNodesIds: [], newEdgeIds: [], deletedEdgeIds: [] }),
 
   addNode: (node) =>
     set((state) => ({
@@ -90,7 +111,9 @@ export const useCanvasStore = create<CanvasStore>((set) => ({
       quests: [],
       nodes: [],
       modifiedNodesIds: [],
-      newIds: [],
+      newNodeIds: [],
       edges: [],
+      newEdgeIds: [],
+      deletedNodesIds: [],
     }),
 }));
