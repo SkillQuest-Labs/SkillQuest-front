@@ -19,6 +19,8 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/shared/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import { useCanvasStore } from "@/stores/canvas/canvas-store";
+import { useState } from "react";
+import { AIQuestGenerationModal } from "./AIQuestGenerationModal";
 
 type CanvasViewProps = {
   nodes: Node<QuestNodeData | SkillNodeData>[];
@@ -34,6 +36,7 @@ type CanvasViewProps = {
   className?: string;
   collapseAll: () => void;
   expandAll: () => void;
+  openAIGenerator: () => void;
 };
 
 const nodeTypes = {
@@ -59,10 +62,13 @@ export const CanvasView = ({
   setViewMode,
   collapseAll,
   expandAll,
+  openAIGenerator,
 }: CanvasViewProps) => {
   const navigate = useNavigate();
 
   const reset = useCanvasStore.getState().reset;
+
+  const [openAiModal, setOpenAiModal] = useState(false);
 
   return (
     <ReactFlow
@@ -134,7 +140,10 @@ export const CanvasView = ({
         setViewMode={setViewMode}
         collapseAll={collapseAll}
         expandAll={expandAll}
+        setOpenAiModal={setOpenAiModal}
       />
+
+      {openAiModal && <AIQuestGenerationModal onGenerate={openAIGenerator} setOpenAiModal={setOpenAiModal} />}
 
       {/* Mode Indicators */}
       {cursorMode === "create" && (

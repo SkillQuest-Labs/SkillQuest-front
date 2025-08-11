@@ -24,7 +24,7 @@ export const ToolButton = ({ tool, cursorMode, setCursorMode, colllapseAll, expa
           })
         }
         size="sm"
-        className={`w-10 h-10 p-0 rounded-lg transition-all duration-200 ${
+        className={`w-10 h-10 p-0 cursor-pointer rounded-lg transition-all duration-200 ${
           active ? tool.activeColor + " shadow-md" : "hover:bg-gray-100"
         }`}
       >

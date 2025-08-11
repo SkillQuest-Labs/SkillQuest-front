@@ -9,6 +9,8 @@ import { SkillDetail } from "@/modules/skills/components/SkillDetail";
 import { Profil } from "@/pages/dashboard/Profil";
 import { Store } from "@/pages/dashboard/Store";
 import { NotFoundPage } from "@/pages/404";
+import { WorkSession } from "@/pages/dashboard/WorkSession";
+import { SkillTreePage } from "@/pages/SkillTreePage";
 
 export const router = createBrowserRouter([
   {
@@ -38,11 +40,19 @@ export const router = createBrowserRouter([
             path: routes.store.path,
             element: <Store />,
           },
+          {
+            path: routes.workSession.path,
+            element: <WorkSession />,
+          },
         ],
       },
       {
         path: routes.canvas.path,
         element: <CanvasPage />,
+      },
+      {
+        path: routes.skillsTree.path,
+        element: <SkillTreePage />,
       },
     ],
   },

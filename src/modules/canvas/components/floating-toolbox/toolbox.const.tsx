@@ -11,6 +11,7 @@ export type ToolBoxItem = {
     setCursorMode: (mode: CursorModeType) => void,
     current: CursorModeType,
     context?: {
+      openAIGenerator?: () => void;
       collapseAll?: () => void;
       expandAll?: () => void;
       setViewMode?: (mode: ViewModeType) => void;
@@ -45,6 +46,7 @@ export const tools: ToolboxList = [
     isActive: (mode) => mode === "normal",
     handleToolClick: (setCursorMode) => setCursorMode("normal"),
   },
+
   // {
   //   id: "roadmap",
   //   icon: <Map className="w-5 h-5" color="white" />,

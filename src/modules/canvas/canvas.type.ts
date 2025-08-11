@@ -10,6 +10,7 @@ export type FloatingToolboxProps = {
   setViewMode: (mode: ViewModeType) => void;
   collapseAll: () => void;
   expandAll: () => void;
+  setOpenAiModal: (open: boolean) => void;
 };
 
 export type SkillConfigType = {
