@@ -3,7 +3,7 @@ import "../../../styles/skills.css";
 import { statusColors, statusLabels } from "../skills.const";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
-import { Edit3 } from "lucide-react";
+import { Edit3, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 type SkillCardProps = {
@@ -23,9 +23,30 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
     navigate(`/dashboard/skills/${skill.skillId || skill.id}`);
   };
 
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (window.confirm("Êtes-vous sûr de vouloir supprimer ce skill ? Cette action est irréversible.")) {
+      // Appel API pour supprimer le skill
+      fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:3000"}/skills/${skill.skillId || skill.id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then(() => {
+          // Recharger la page ou mettre à jour la liste
+          window.location.reload();
+        })
+        .catch(() => {
+          alert("Erreur lors de la suppression");
+        });
+    }
+  };
+
   return (
     <div
-      className="skill-card-custom skill-card-min group relative flex flex-col bg-slate-800 rounded-2xl overflow-hidden shadow-sm transition-all duration-200 hover:shadow-xl hover:-translate-y-1 focus-within:ring-2 focus-within:ring-blue-300 min-h-[340px] h-full cursor-pointer"
+      className="skill-card-custom skill-card-min group relative flex flex-col bg-slate-800 rounded-2xl shadow-sm transition-all duration-200 hover:shadow-xl hover:-translate-y-1 focus-within:ring-2 focus-within:ring-blue-300 min-h-[340px] h-full cursor-pointer"
       tabIndex={0}
       onClick={handleCardClick}
     >
@@ -95,10 +116,20 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
       <Button
         size="sm"
         variant="ghost"
-        className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-800/80 hover:bg-slate-700/80 text-white z-20 w-8 h-8 p-0"
+        className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-800/80 hover:bg-slate-700/80 text-white z-20 w-8 h-8 p-0"
         onClick={handleEditClick}
       >
         <Edit3 size={12} />
+      </Button>
+
+      {/* Bouton de suppression */}
+      <Button
+        size="sm"
+        variant="ghost"
+        className="absolute -top-3 -right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-white hover:bg-gray-100 text-gray-600 z-40 w-7 h-7 p-0 rounded-full shadow-lg border border-gray-300"
+        onClick={handleDeleteClick}
+      >
+        <X size={12} />
       </Button>
 
       {/* Overlay lumineux fin autour de la carte */}
