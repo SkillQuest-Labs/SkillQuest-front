@@ -60,7 +60,7 @@ export const useSaveCanvas = () => {
         status: skillNode.data.config.status,
         difficulty: skillNode.data.config.difficulty,
         // position: { x: skillNode.position.x, y: skillNode.position.y },
-        userId: "uuid-user-1234-5678-9012-345678901111",
+        userId: "uuid-user-1234-5678-9012-345678901234",
       };
 
     const toCreateEdge = edges

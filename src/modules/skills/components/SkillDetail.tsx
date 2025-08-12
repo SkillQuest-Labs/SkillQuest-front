@@ -154,26 +154,36 @@ export const SkillDetail = () => {
           >
             <ArrowLeft size={20} />
           </Button>
-          <div>
-            <h1 className="text-2xl font-bold text-white">{isEditing ? "Modifier le skill" : skill.title}</h1>
-            <p className="text-slate-400 text-sm">
+          <div className="flex-1">
+            {isEditing ? (
+              <Input
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                className="bg-transparent border-none text-white text-2xl font-bold h-12 text-center focus:ring-0 focus:border-none focus:outline-none px-2 py-1 border-b-2 border-blue-800"
+                placeholder="Titre du skill"
+              />
+            ) : (
+              <h1 
+                className="text-2xl font-bold text-white cursor-pointer hover:bg-slate-700/50 px-2 py-1 rounded transition-colors"
+                onClick={() => setIsEditing(true)}
+                title="Cliquez pour modifier"
+              >
+                {skill.title}
+              </h1>
+            )}
+            <p className="text-slate-400 text-sm mt-1">
               {skill.createdAt && new Date(skill.createdAt).toLocaleDateString("fr-FR")}
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
-          {!isEditing ? (
-            <Button onClick={() => setIsEditing(true)} className="bg-slate-700 hover:bg-slate-600 text-white">
-              <Edit3 size={16} className="mr-2" />
-              Modifier
-            </Button>
-          ) : (
+          {isEditing && (
             <>
               <Button
                 onClick={handleCancel}
                 variant="outline"
-                className="border-slate-600 text-white hover:bg-slate-700"
+                className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white bg-slate-700/50"
               >
                 <X size={16} className="mr-2" />
                 Annuler
@@ -196,25 +206,6 @@ export const SkillDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Title */}
-            <Card className="bg-slate-800 border-slate-700">
-              <CardHeader>
-                <CardTitle className="text-white">Titre</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {isEditing ? (
-                  <Input
-                    value={formData.title}
-                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    className="bg-slate-700 border-slate-600 text-white"
-                    placeholder="Titre du skill"
-                  />
-                ) : (
-                  <p className="text-white text-lg">{skill.title}</p>
-                )}
-              </CardContent>
-            </Card>
-
             {/* Description */}
             <Card className="bg-slate-800 border-slate-700">
               <CardHeader>
@@ -229,7 +220,13 @@ export const SkillDetail = () => {
                     placeholder="Description du skill"
                   />
                 ) : (
-                  <p className="text-white">{skill.description || "Aucune description"}</p>
+                  <div 
+                    className="text-white cursor-pointer hover:bg-slate-700/50 p-2 rounded transition-colors min-h-[120px]"
+                    onClick={() => setIsEditing(true)}
+                    title="Cliquez pour modifier"
+                  >
+                    {skill.description || "Aucune description"}
+                  </div>
                 )}
               </CardContent>
             </Card>

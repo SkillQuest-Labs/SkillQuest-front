@@ -45,11 +45,6 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
           {/* Badges sur l'image */}
           <div className="absolute top-3 right-3 flex flex-col items-end gap-2 z-10">
             <span
-              className={`skill-badge-difficulty ${difficultyColors[skill.difficulty]} rounded-lg px-3 py-0.5 text-xs font-semibold shadow border border-opacity-20 whitespace-nowrap bg-white/80 backdrop-blur-sm`}
-            >
-              {skill.difficulty === "EASY" ? "Easy" : skill.difficulty === "MEDIUM" ? "Medium" : "Hard"}
-            </span>
-            <span
               className={`skill-badge-difficulty ${statusColors[skill.status]} rounded-lg px-3 py-0.5 text-xs font-semibold shadow border border-opacity-20 whitespace-nowrap bg-white/80 backdrop-blur-sm`}
             >
               {statusLabels[skill.status]}
@@ -100,7 +95,7 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
       <Button
         size="sm"
         variant="ghost"
-        className="absolute top-1 left-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-800/80 hover:bg-slate-700/80 text-white z-20 w-8 h-8 p-0"
+        className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-800/80 hover:bg-slate-700/80 text-white z-20 w-8 h-8 p-0"
         onClick={handleEditClick}
       >
         <Edit3 size={12} />

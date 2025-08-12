@@ -12,7 +12,7 @@ import { SKILLS_PER_PAGE } from "@/modules/skills/skills.const";
 
 export const Skills = () => {
   const { isCollapsed } = useSidebarStore();
-  const { skills: skillsData } = useGetSkills("uuid-user-1234-5678-9012-345678901111");
+  const { skills: skillsData } = useGetSkills("uuid-user-1234-5678-9012-345678901234");
   const navigate = useNavigate();
   const [filters, setFilters] = useState<{
     difficulty: SkillDifficulty;
