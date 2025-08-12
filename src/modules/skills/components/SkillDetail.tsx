@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
-import { useGetSkill, useUpdateSkill } from "@/shared/services/skill/api-skill";
+import { useGetSkill, useUpdateSkill, useDeleteSkill } from "@/shared/services/skill/api-skill";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
@@ -24,9 +24,9 @@ export const SkillDetail = () => {
   const { isCollapsed } = useSidebarStore();
   const { skill, loading: skillLoading, error: skillError } = useGetSkill(skillId || "");
   const { updateSkill, loading: updateLoading } = useUpdateSkill(skillId || "");
+  const { deleteSkill, loading: deleteLoading } = useDeleteSkill(skillId || "");
 
   const [isEditing, setIsEditing] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -116,36 +116,20 @@ export const SkillDetail = () => {
       return;
     }
 
-    setIsDeleting(true);
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:3000"}/skills/${skillId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
-      );
-
-      if (response.ok) {
-        showToast({
-          title: "Succès",
-          description: "Le skill a été supprimé avec succès",
-          status: "success",
-        });
-        navigate("/dashboard/skills");
-      } else {
-        throw new Error("Erreur lors de la suppression");
-      }
+      await deleteSkill();
+      showToast({
+        title: "Succès",
+        description: "Le skill a été supprimé avec succès",
+        status: "success",
+      });
+      navigate("/dashboard/skills");
     } catch {
       showToast({
         title: "Erreur",
         description: "Erreur lors de la suppression du skill",
         status: "error",
       });
-    } finally {
-      setIsDeleting(false);
     }
   };
 
@@ -392,11 +376,11 @@ export const SkillDetail = () => {
                 </Button>
                 <Button
                   onClick={handleDelete}
-                  disabled={isDeleting}
+                  disabled={deleteLoading}
                   variant="destructive"
                   className="w-full bg-red-500/80 hover:bg-red-600/80 text-white"
                 >
-                  {isDeleting ? "Suppression..." : "Supprimer le skill"}
+                  {deleteLoading ? "Suppression..." : "Supprimer le skill"}
                 </Button>
               </CardContent>
             </Card>

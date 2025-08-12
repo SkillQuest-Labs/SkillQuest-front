@@ -5,6 +5,8 @@ import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Edit3, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useDeleteSkill } from "@/shared/services/skill/api-skill";
+import { showToast } from "@/component/notification/show-toast";
 
 type SkillCardProps = {
   skill: Skill;
@@ -12,6 +14,7 @@ type SkillCardProps = {
 
 export const SkillCard = ({ skill }: SkillCardProps) => {
   const navigate = useNavigate();
+  const { deleteSkill, loading: deleteLoading } = useDeleteSkill(skill.skillId || skill.id || "");
 
   const handleEditClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -23,24 +26,27 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
     navigate(`/dashboard/skills/${skill.skillId || skill.id}`);
   };
 
-  const handleDeleteClick = (e: React.MouseEvent) => {
+  const handleDeleteClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    
     if (window.confirm("Êtes-vous sûr de vouloir supprimer ce skill ? Cette action est irréversible.")) {
-      // Appel API pour supprimer le skill
-      fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:3000"}/skills/${skill.skillId || skill.id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then(() => {
-          // Recharger la page ou mettre à jour la liste
-          window.location.reload();
-        })
-        .catch(() => {
-          alert("Erreur lors de la suppression");
+      try {
+        await deleteSkill();
+        showToast({
+          title: "Succès",
+          description: "Le skill a été supprimé avec succès",
+          status: "success",
         });
+        // Recharger la page ou mettre à jour la liste
+        window.location.reload();
+      } catch (error) {
+        showToast({
+          title: "Erreur",
+          description: "Erreur lors de la suppression du skill",
+          status: "error",
+        });
+      }
     }
   };
 
@@ -126,10 +132,15 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
       <Button
         size="sm"
         variant="ghost"
-        className="absolute -top-3 -right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-white hover:bg-gray-100 text-gray-600 z-40 w-7 h-7 p-0 rounded-full shadow-lg border border-gray-300"
+        disabled={deleteLoading}
+        className="absolute -top-3 -right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-white hover:bg-gray-100 text-gray-600 z-40 w-7 h-7 p-0 rounded-full shadow-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
         onClick={handleDeleteClick}
       >
-        <X size={12} />
+        {deleteLoading ? (
+          <div className="w-3 h-3 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+        ) : (
+          <X size={12} />
+        )}
       </Button>
 
       {/* Overlay lumineux fin autour de la carte */}

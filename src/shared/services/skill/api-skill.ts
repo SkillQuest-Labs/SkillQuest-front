@@ -78,3 +78,23 @@ export const useGetSkills = (userId: string) => {
     error,
   };
 };
+
+export const useDeleteSkill = (skillId: string) => {
+  const {
+    mutateAsync: deleteSkill,
+    isPending: loading,
+    error,
+  } = useApiAsync<void, void>(
+    {
+      method: "DELETE",
+      url: `${Constants.API_BASE_URL}/skills/${skillId}`,
+      headers: { "Content-Type": "application/json; charset=UTF-8" },
+    },
+    ["skill", skillId],
+  );
+
+  return { deleteSkill, loading, error };
+};
+
+
+  
