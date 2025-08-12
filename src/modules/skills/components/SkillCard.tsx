@@ -3,7 +3,7 @@ import "../../../styles/skills.css";
 import { statusColors, statusLabels } from "../skills.const";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
-import { Edit3, X } from "lucide-react";
+import { Edit3, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useDeleteSkill } from "@/shared/services/skill/api-skill";
 import { showToast } from "@/component/notification/show-toast";
@@ -122,7 +122,7 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
       <Button
         size="sm"
         variant="ghost"
-        className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-800/80 hover:bg-slate-700/80 text-white z-20 w-8 h-8 p-0"
+        className="absolute top-3 right-12 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-800/80 hover:bg-slate-700/80 text-white z-20 w-8 h-8 p-0"
         onClick={handleEditClick}
       >
         <Edit3 size={12} />
@@ -133,13 +133,13 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
         size="sm"
         variant="ghost"
         disabled={deleteLoading}
-        className="absolute -top-3 -right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-white hover:bg-gray-100 text-gray-600 z-40 w-7 h-7 p-0 rounded-full shadow-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-800/80 hover:bg-slate-700/80 active:bg-red-600 active:text-white text-white z-40 w-8 h-8 p-0 rounded-md shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
         onClick={handleDeleteClick}
       >
         {deleteLoading ? (
-          <div className="w-3 h-3 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+          <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
         ) : (
-          <X size={12} />
+          <Trash2 size={14} />
         )}
       </Button>
 
