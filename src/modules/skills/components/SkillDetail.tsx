@@ -269,6 +269,22 @@ export const SkillDetail = () => {
                 )}
               </CardContent>
             </Card>
+
+            {/* Arbre de compétence */}
+            <Card className="bg-slate-800 border-slate-700">
+              <CardHeader>
+                <CardTitle className="text-white">Arbre de compétence</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-center bg-slate-700/50 border-2 border-dashed border-slate-600 rounded-lg p-8 min-h-[200px]">
+                  <div className="text-center text-slate-400">
+                    <div className="text-4xl mb-2">🌳</div>
+                    <p className="text-sm font-medium">Aperçu de l'arbre de compétence</p>
+                    <p className="text-xs text-slate-500 mt-1">L'image sera générée ici</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Sidebar */}
