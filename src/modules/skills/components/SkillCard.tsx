@@ -29,7 +29,7 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
   const handleDeleteClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     if (window.confirm("Êtes-vous sûr de vouloir supprimer ce skill ? Cette action est irréversible.")) {
       try {
         await deleteSkill();
@@ -40,7 +40,7 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
         });
         // Recharger la page ou mettre à jour la liste
         window.location.reload();
-      } catch (error) {
+      } catch {
         showToast({
           title: "Erreur",
           description: "Erreur lors de la suppression du skill",

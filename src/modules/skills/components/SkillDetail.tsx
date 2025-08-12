@@ -364,7 +364,7 @@ export const SkillDetail = () => {
                 </Button>
                 <Button
                   onClick={() => navigate(`/live-view?skillId=${skillId}`)}
-                  className="w-full bg-purple-600 hover:bg-green-700 text-white relative"
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white relative"
                 >
                   <div className="flex items-center justify-center gap-2">
                     <div className="relative">

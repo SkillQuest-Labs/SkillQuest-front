@@ -95,6 +95,3 @@ export const useDeleteSkill = (skillId: string) => {
 
   return { deleteSkill, loading, error };
 };
-
-
-  
