@@ -23,7 +23,7 @@ export const SkillDetail = () => {
   const navigate = useNavigate();
   const { isCollapsed } = useSidebarStore();
   const { skill, loading: skillLoading, error: skillError } = useGetSkill(skillId || "");
-  const { updateSkill, loading: updateLoading } = useUpdateSkill();
+  const { updateSkill, loading: updateLoading } = useUpdateSkill(skillId || "");
 
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -61,10 +61,7 @@ export const SkillDetail = () => {
         updateData.status = formData.status;
       }
 
-      await updateSkill({
-        skillId,
-        data: updateData,
-      });
+      await updateSkill(updateData);
 
       showToast({
         title: "Succès",

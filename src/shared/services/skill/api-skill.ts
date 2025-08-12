@@ -25,27 +25,21 @@ export const useCreateSkill = () => {
   };
 };
 
-export const useUpdateSkill = () => {
+export const useUpdateSkill = (skillId: string) => {
   const {
     mutateAsync: updateSkill,
     isPending: loading,
     error,
-  } = useApiAsync<UpdateSkillResponse, { skillId: string; data: UpdateSkillInput }>(
+  } = useApiAsync<UpdateSkillResponse, UpdateSkillInput>(
     {
       method: "PUT",
-      url: `${Constants.API_BASE_URL}/skills`,
-      headers: {
-        "Content-Type": "application/json; charset=UTF-8",
-      },
+      url: `${Constants.API_BASE_URL}/skills/${skillId}`,
+      headers: { "Content-Type": "application/json; charset=UTF-8" },
     },
-    ["skill"],
+    ["skill", skillId],
   );
 
-  return {
-    updateSkill,
-    loading,
-    error,
-  };
+  return { updateSkill, loading, error };
 };
 
 export const useGetSkill = (skillId: string) => {
