@@ -1,8 +1,11 @@
 import { callGeminiApi } from "@/shared/lib/gemini-api";
-import type { GeminiContext, QuestAiType } from "@/shared/types/ai/ai.type";
+import { callOpenaiApi } from "@/shared/lib/openai-api";
+import type { AiContextType, QuestAiType } from "@/shared/types/ai/ai.type";
 
-export const generateQuestsFromAI = async (context: GeminiContext): Promise<QuestAiType[]> => {
-  if (!context || !context.instruction.trim()) return [];
+export const generateQuestsFromAI = async (context: AiContextType): Promise<QuestAiType[]> => {
+  if (!context || !context.instruction.trim()) {
+    return [];
+  }
 
   const prompt = `
     Instructions :
@@ -10,7 +13,8 @@ export const generateQuestsFromAI = async (context: GeminiContext): Promise<Ques
     `;
 
   try {
-    const rawResponse = await callGeminiApi(prompt);
+    const provider = context.aiProvider || "gemini";
+    const rawResponse = provider === "gemini" ? await callGeminiApi(prompt) : await callOpenaiApi(prompt);
 
     const jsonMatch = rawResponse?.match(/```json([\s\S]*?)```/i);
 
