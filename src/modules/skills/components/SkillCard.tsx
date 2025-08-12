@@ -1,6 +1,6 @@
 import type { Skill } from "../skills.types";
 import "../../../styles/skills.css";
-import { difficultyColors, statusColors, statusLabels } from "../skills.const";
+import { statusColors, statusLabels } from "../skills.const";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Edit3 } from "lucide-react";

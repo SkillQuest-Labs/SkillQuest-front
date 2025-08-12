@@ -8,7 +8,7 @@ import { Textarea } from "@/shared/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Badge } from "@/shared/components/ui/badge";
-import { ArrowLeft, Save, Edit3, X } from "lucide-react";
+import { ArrowLeft, Save, X } from "lucide-react";
 import type { SkillDifficulty, SkillStatus } from "../skills.types";
 import {
   difficultyDetailColors,
@@ -163,7 +163,7 @@ export const SkillDetail = () => {
                 placeholder="Titre du skill"
               />
             ) : (
-              <h1 
+              <h1
                 className="text-2xl font-bold text-white cursor-pointer hover:bg-slate-700/50 px-2 py-1 rounded transition-colors"
                 onClick={() => setIsEditing(true)}
                 title="Cliquez pour modifier"
@@ -220,7 +220,7 @@ export const SkillDetail = () => {
                     placeholder="Description du skill"
                   />
                 ) : (
-                  <div 
+                  <div
                     className="text-white cursor-pointer hover:bg-slate-700/50 p-2 rounded transition-colors min-h-[120px]"
                     onClick={() => setIsEditing(true)}
                     title="Cliquez pour modifier"
@@ -325,6 +325,18 @@ export const SkillDetail = () => {
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white"
                 >
                   Ouvrir dans le Canvas
+                </Button>
+                <Button
+                  onClick={() => navigate(`/live-view?skillId=${skillId}`)}
+                  className="w-full bg-purple-600 hover:bg-green-700 text-white relative"
+                >
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="relative">
+                      <div className="w-2 h-2 bg-white rounded-full animate-[pulse_5s_ease-in-out_infinite]"></div>
+                      <div className="absolute inset-0 w-2 h-2 bg-white rounded-full animate-ping opacity-75"></div>
+                    </div>
+                    Live View
+                  </div>
                 </Button>
               </CardContent>
             </Card>
