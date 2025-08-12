@@ -1,15 +1,15 @@
 import { toast } from "sonner";
 
-type ToastStatus = "normal" | "action" | "success" | "info" | "warning" | "error" | "loading" | "default";
+type ToastStatus = "success" | "info" | "warning" | "error" | "loading" | "default";
 
 type ToastOptions = {
   title: string;
   description?: string;
-  status?: ToastStatus;
+  status?: ToastStatus | null;
   duration?: number;
 };
 
-export const showToast = ({ title, description, status = "normal", duration }: ToastOptions) => {
+export const showToast = ({ title, description, status = null, duration }: ToastOptions) => {
   if (status === "success") {
     toast.success(title, {
       description: description,
@@ -82,7 +82,7 @@ export const showToast = ({ title, description, status = "normal", duration }: T
     return;
   }
 
-  // Default case
+  // Default case (when status is null or undefined)
   toast(title, {
     description: description,
     duration: duration,
