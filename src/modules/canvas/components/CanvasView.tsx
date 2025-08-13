@@ -1,4 +1,5 @@
-import clsx from "clsx";
+import { Button } from "@/shared/components/ui/button";
+import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import {
   Background,
   Controls,
@@ -10,16 +11,15 @@ import {
   type OnEdgesChange,
   type OnNodesChange,
 } from "@xyflow/react";
+import clsx from "clsx";
+import { ChevronLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import type { CursorModeType, QuestNodeData, SkillNodeData, ViewModeType } from "../canvas.type";
-import { SkillNode } from "./SkillNode";
-import { QuestNode } from "./QuestNode";
 import { CustomEdge } from "./CustomEdge";
 import { FloatingToolbox } from "./floating-toolbox/FloatingToolbox";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/shared/components/ui/button";
-import { ChevronLeft } from "lucide-react";
-import { useCanvasStore } from "@/stores/canvas/canvas-store";
+import { QuestNode } from "./QuestNode";
 import { RoadmapButton } from "./RoadmapButton";
+import { SkillNode } from "./SkillNode";
 
 type CanvasViewProps = {
   nodes: Node<QuestNodeData | SkillNodeData>[];
@@ -131,8 +131,7 @@ export const CanvasView = ({
         </Button>
       </div>
 
-      <div className="absolute top-6 right-6 z-20 flex items-start gap-2">
-        <RoadmapButton onClick={() => setViewMode("skillTree")} />
+      <div className="absolute top-6 right-6 z-20">
         <FloatingToolbox
           cursorMode={cursorMode}
           setCursorMode={setCursorMode}
@@ -140,6 +139,10 @@ export const CanvasView = ({
           expandAll={expandAll}
           openAIGenerator={openAIGenerator}
         />
+      </div>
+
+      <div className="absolute top-68 right-7 z-20">
+        <RoadmapButton onClick={() => setViewMode("skillTree")} />
       </div>
 
       {/* Mode Indicators */}

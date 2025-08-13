@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/shared/components/ui/button";
 import { PauseIcon, PlayIcon, ChevronLeft } from "lucide-react";
-import { renderConcentricCircles } from "./concentric-circles/render-concentric-circles.const";
+import { renderConcentricCircles } from "./concentric-circles/render-concentric-circles";
 
 export type SkillTreeProps = {
   onBack?: () => void;
@@ -21,7 +21,7 @@ export const SkillTree = ({ onBack }: SkillTreeProps) => {
           variant="outline"
           size="sm"
           onClick={onBack}
-          className="absolute top-4 left-4 z-10 bg-slate-700/80 backdrop-blur-sm border-slate-500 hover:bg-slate-600/80 text-slate-200 hover:text-white transition-all duration-200 font-medium shadow-lg flex items-center gap-2"
+          className="absolute cursor-pointer top-4 left-4 z-10 bg-slate-700/80 backdrop-blur-sm border-slate-500 hover:bg-slate-600/80 text-slate-200 hover:text-white transition-all duration-200 font-medium shadow-lg flex items-center gap-2"
         >
           <ChevronLeft className="w-4 h-4" />
           Back
