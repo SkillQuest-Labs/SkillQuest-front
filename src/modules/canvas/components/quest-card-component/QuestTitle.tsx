@@ -1,5 +1,5 @@
 import { cn } from "@/shared/utils/helpers";
-import { Zap } from "lucide-react";
+import { EyeIcon } from "lucide-react";
 
 type QuestTitleProps = {
   title: string;
@@ -8,9 +8,9 @@ type QuestTitleProps = {
 
 export const QuestTitle = ({ title, onChange }: QuestTitleProps) => (
   <>
-    <div className="absolute top-0 left-4 z-10">
-      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 via-yellow-300 to-yellow-500 flex items-center justify-center shadow-[0_2px_12px_2px_rgba(255,215,0,0.25)] border-4 border-yellow-200/80 ring-2 ring-yellow-100/40">
-        <Zap className="w-7 h-7 text-yellow-900 drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]" />
+    <div className="absolute top-0 left-3 z-10">
+      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-700/30 via-yellow-100/20 to-purple-900/30 flex items-center justify-center border-2 border-none  ring-2 ring-purple-100/40">
+        <EyeIcon className="w-9 h-9 text-purple-400 drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]" />
       </div>
     </div>
     <div className="text-center mt-3 mb-8 relative z-10">
