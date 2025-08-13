@@ -51,3 +51,88 @@ export const userLevel = [
     description: "Je pourrais enseigner ce sujet",
   },
 ];
+
+export const SKILL_DOMAINS = [
+  // Tech & IT
+  "Développement Web",
+  "Développement Mobile",
+  "Data Science & IA",
+  "Cybersécurité",
+  "DevOps & Cloud",
+  "Développement Logiciel",
+  "Administration Système",
+  "Réseaux & Infrastructure",
+
+  // Design & Créatif
+  "Design & UX/UI",
+  "Arts Visuels",
+  "Photographie & Vidéo",
+  "Architecture & Design",
+  "Mode & Textile",
+
+  // Business & Économie
+  "Marketing & Communication",
+  "Finance & Comptabilité",
+  "Entrepreneuriat",
+  "Management & Leadership",
+  "Vente & Commerce",
+  "E-commerce",
+
+  // Langues
+  "Langues Étrangères",
+  "Communication",
+  "Traduction",
+
+  // Sciences & Académique
+  "Sciences Exactes",
+  "Ingénierie",
+  "Recherche & Analyse",
+  "Médecine & Santé",
+
+  // Arts & Culture
+  "Musique & Audio",
+  "Littérature & Écriture",
+  "Histoire & Culture",
+  "Philosophie",
+
+  // Pratique & Artisanat
+  "Cuisine & Gastronomie",
+  "Sport & Fitness",
+  "Artisanat & DIY",
+  "Jardinage & Nature",
+  "Mécanique & Technique",
+
+  // Développement Personnel
+  "Développement Personnel",
+  "Bien-être & Santé",
+  "Éducation & Pédagogie",
+] as const;
+
+export const questAmbianceStylesData = [
+  "Professionnel",
+  "Académique",
+  "Ludique",
+  "Créatif",
+  "Médiéval",
+  "High-tech",
+  "Space Opera",
+  "Détective",
+  "Cyberpunk",
+  "Fantasy",
+  "Western",
+  "Post-apocalyptique",
+  "Steampunk",
+  "Mystique",
+] as const;
+
+export const resourceTypesData = [
+  "Documentation officielle",
+  "Tutoriels en ligne",
+  "Vidéos explicatives",
+  "Articles de blog",
+  "Livres et ebooks",
+  "Cours en ligne",
+  "Exercices pratiques",
+  "Forums et communautés",
+  "Podcasts",
+];

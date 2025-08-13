@@ -1,4 +1,6 @@
 import { Button } from "@/shared/components/ui/button";
+import { Checkbox } from "@/shared/components/ui/checkbox";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/shared/components/ui/command";
 import {
   Dialog,
   DialogContent,
@@ -9,24 +11,35 @@ import {
 } from "@/shared/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui/form";
 import { Input } from "@/shared/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Checkbox } from "@/shared/components/ui/checkbox";
-import { Textarea } from "@/shared/components/ui/textarea";
-import { useState } from "react";
-import { ChevronDown, ChevronUp, Sparkles, Target, Settings, Trophy, BookOpen, Loader2 } from "lucide-react";
-import "../../../styles/ai-quest-generation-modal.css";
-import { isSkillNode, userLevel } from "../canvas.const";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/components/ui/popover";
-import { useLoadingStore } from "@/stores/loading-store";
-import { useQuestGenerationFormStore } from "@/stores/canvas/quest-generation-form-store";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
+import { Textarea } from "@/shared/components/ui/textarea";
 import { useCanvasStore } from "@/stores/canvas/canvas-store";
+import { useQuestGenerationFormStore } from "@/stores/canvas/quest-generation-form-store";
+import { useLoadingStore } from "@/stores/loading-store";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  BookOpen,
+  Check,
+  ChevronDown,
+  ChevronUp,
+  ChevronsUpDown,
+  Loader2,
+  Settings,
+  Sparkles,
+  Target,
+  Trophy,
+} from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import "../../../styles/ai-quest-generation-modal.css";
+import { isSkillNode, questAmbianceStylesData, resourceTypesData, SKILL_DOMAINS, userLevel } from "../canvas.const";
 
 // Schéma Zod pour la validation du formulaire
 
 const baseSchema = z.object({
+  aiProvider: z.enum(["openai", "gemini"]).optional(),
   manualContext: z.boolean().optional(),
   contextText: z.string().optional(),
   goal: z.string().optional(),
@@ -36,8 +49,10 @@ const baseSchema = z.object({
   autoEstimate: z.boolean().optional(),
   numberOfQuests: z.number().optional(),
   styleApprentissage: z.enum(["Théorique", "Equilibré", "Pratique"]).optional(),
-  ambianceQueteStyle: z.enum(["Médiéval", "High-tech", "Space Opera", "Détective"]).optional(),
+  ambianceQueteStyle: z.enum(questAmbianceStylesData).optional(),
   ressourceType: z.array(z.string()).optional(),
+  skillDomain: z.string().optional(),
+  customDomain: z.string().optional(),
 });
 
 const questContextSchema = baseSchema.superRefine((data, ctx) => {
@@ -76,10 +91,13 @@ type AIQuestGenerationModalProps = {
 
 export const AIQuestGenerationModal = ({ onGenerate, setOpenAiModal }: AIQuestGenerationModalProps) => {
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
+  const [showCustomDomain, setShowCustomDomain] = useState(false);
+  const [openDomainCombobox, setOpenDomainCombobox] = useState(false);
+
   const form = useForm<QuestContextForm>({
     resolver: zodResolver(questContextSchema),
     mode: "onTouched",
-    defaultValues: { autoEstimate: true, manualContext: false, ressourceType: [] },
+    defaultValues: { autoEstimate: true, manualContext: false, ressourceType: [], aiProvider: "gemini" },
   });
 
   const isLoading = useLoadingStore((state) => state.isLoading);
@@ -92,7 +110,7 @@ export const AIQuestGenerationModal = ({ onGenerate, setOpenAiModal }: AIQuestGe
       data.numberOfQuests = 4;
       data.styleApprentissage = "Equilibré";
       data.ambianceQueteStyle = "High-tech";
-      data.ressourceType = ["Vidéos", "Article de blog", "Documentation", "Exercices intéractifs"];
+      data.ressourceType = resourceTypesData;
     }
 
     setForm(data);
@@ -194,6 +212,186 @@ export const AIQuestGenerationModal = ({ onGenerate, setOpenAiModal }: AIQuestGe
               </div>
             ) : (
               <>
+                {/* Choix du modèle IA */}
+                <div className="form-section">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2 bg-indigo-900/50 rounded-lg">
+                      <Sparkles className="h-5 w-5 text-indigo-400" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-lg text-gray-100">Modèle IA</h3>
+                      <p className="text-sm text-gray-400">Choisis le moteur de génération</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="aiProvider"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm font-medium text-gray-200">Fournisseur</FormLabel>
+                          <FormControl>
+                            <Select onValueChange={field.onChange} value={field.value || undefined}>
+                              <SelectTrigger className="cursor-pointer h-12 w-full border-gray-600 text-gray-100 focus:border-blue-500 focus:ring-blue-500">
+                                <SelectValue placeholder="Sélectionne un modèle" />
+                              </SelectTrigger>
+                              <SelectContent className="border-gray-600 bg-[#182131]">
+                                <SelectItem value="openai" className="cursor-pointer text-gray-100 hover:bg-gray-700">
+                                  <div className="flex items-center gap-2">
+                                    <span className="inline-flex h-2 w-2 rounded-full bg-purple-500" />
+                                    OpenAI (GPT)
+                                  </div>
+                                </SelectItem>
+                                <SelectItem value="gemini" className="cursor-pointer text-gray-100 hover:bg-gray-700">
+                                  <div className="flex items-center gap-2">
+                                    <span className="inline-flex h-2 w-2 rounded-full bg-blue-500" />
+                                    Gemini (Google)
+                                  </div>
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+
+                {/* Section Domaine du Skill */}
+                <div className="form-section">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2 bg-emerald-900/50 rounded-lg">
+                      <BookOpen className="h-5 w-5 text-emerald-400" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-lg text-gray-100">Domaine d'apprentissage</h3>
+                      <p className="text-sm text-gray-400">
+                        Utilise la recherche pour trouver rapidement le bon domaine
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-4">
+                    {/* Domaine principal avec option Autre */}
+                    <div className="flex gap-3 items-end">
+                      <div className="flex-1">
+                        <FormField
+                          control={form.control}
+                          name="skillDomain"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className="text-sm font-medium text-gray-200">Domaine</FormLabel>
+                              <Popover open={openDomainCombobox} onOpenChange={setOpenDomainCombobox}>
+                                <PopoverTrigger asChild>
+                                  <FormControl>
+                                    <Button
+                                      variant="outline"
+                                      role="combobox"
+                                      aria-expanded={openDomainCombobox}
+                                      disabled={showCustomDomain}
+                                      className={`h-12 w-full justify-between border-gray-600 bg-transparent text-gray-100 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-0 hover:bg-gray-800/60 ${
+                                        showCustomDomain ? "opacity-60 cursor-not-allowed" : ""
+                                      }`}
+                                    >
+                                      {field.value
+                                        ? SKILL_DOMAINS.find((domain) => domain === field.value)
+                                        : "Choisis le domaine..."}
+                                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-60" />
+                                    </Button>
+                                  </FormControl>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-[420px] p-0 border-gray-700 bg-[#182131] rounded-lg shadow-[0_10px_40px_rgba(0,0,0,0.35)]">
+                                  <Command className="bg-[#182131]">
+                                    <div className="sticky top-0 z-10 bg-[#182131]/95 backdrop-blur border-b border-gray-700">
+                                      <div className="flex items-center px-3 py-2">
+                                        <BookOpen className="mr-2 h-4 w-4 text-gray-400" />
+                                        <CommandInput
+                                          placeholder="Rechercher un domaine..."
+                                          className="h-8 bg-transparent border-0 text-gray-100 placeholder-gray-400 hover:placeholder-gray-400 focus:ring-0 focus:outline-none"
+                                        />
+                                      </div>
+                                    </div>
+                                    <CommandEmpty className="text-gray-400 text-center py-6">
+                                      Aucun domaine trouvé.
+                                    </CommandEmpty>
+                                    <CommandGroup className="max-h-64 overflow-y-auto">
+                                      {SKILL_DOMAINS.map((domain) => (
+                                        <CommandItem
+                                          key={domain}
+                                          value={domain}
+                                          onSelect={(currentValue) => {
+                                            field.onChange(currentValue === field.value ? "" : currentValue);
+                                            setShowCustomDomain(false);
+                                            setOpenDomainCombobox(false);
+                                          }}
+                                          className="text-gray-100 hover:bg-gray-700/60 cursor-pointer"
+                                        >
+                                          <Check
+                                            className={`mr-2 h-4 w-4 ${
+                                              field.value === domain ? "text-blue-400 opacity-100" : "opacity-0"
+                                            }`}
+                                          />
+                                          {domain}
+                                        </CommandItem>
+                                      ))}
+                                    </CommandGroup>
+                                  </Command>
+                                </PopoverContent>
+                              </Popover>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      {/* Checkbox "Autre" */}
+                      <div className="flex items-center space-x-2 pb-4">
+                        <Checkbox
+                          id="custom-domain-toggle"
+                          checked={showCustomDomain}
+                          onCheckedChange={(checked) => {
+                            setShowCustomDomain(!!checked);
+                            if (checked) {
+                              form.setValue("skillDomain", "");
+                            } else {
+                              form.setValue("customDomain", "");
+                            }
+                          }}
+                          className="h-5 w-5 border-2 border-gray-600 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600 focus:ring-2 focus:ring-blue-500 focus:ring-offset-0"
+                        />
+                        <label
+                          htmlFor="custom-domain-toggle"
+                          className="text-sm font-medium text-gray-200 cursor-pointer select-none hover:text-gray-100 transition-colors"
+                        >
+                          Autre domaine
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Champ domaine personnalisé */}
+                    {showCustomDomain && (
+                      <FormField
+                        control={form.control}
+                        name="customDomain"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-sm font-medium text-gray-200">Domaine personnalisé</FormLabel>
+                            <FormControl>
+                              <Input
+                                {...field}
+                                placeholder="Ex: Architecture, Photoshop, Piano..."
+                                className="h-12 text-base border-gray-600 text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
+                  </div>
+                </div>
+
                 {/* Section Objectif Principal */}
                 <div className="form-section">
                   <div className="flex items-center gap-3 mb-4">
@@ -437,7 +635,7 @@ export const AIQuestGenerationModal = ({ onGenerate, setOpenAiModal }: AIQuestGe
                                         <SelectValue placeholder="Ex. Médiéval" />
                                       </SelectTrigger>
                                       <SelectContent className=" border-gray-600 bg-[#182131]">
-                                        {["Médiéval", "High-tech", "Space Opera", "Détective"].map((opt) => (
+                                        {questAmbianceStylesData.map((opt) => (
                                           <SelectItem
                                             key={opt}
                                             value={opt}
@@ -475,13 +673,7 @@ export const AIQuestGenerationModal = ({ onGenerate, setOpenAiModal }: AIQuestGe
                                     </PopoverTrigger>
                                     <PopoverContent className="w-[300px] bg-[#182131] border-gray-600 text-gray-100">
                                       <div className="flex flex-col gap-2">
-                                        {[
-                                          "Vidéos",
-                                          "Article de blog",
-                                          "Documentation",
-                                          "Exercices intéractifs",
-                                          "Livres",
-                                        ].map((item) => (
+                                        {resourceTypesData.map((item) => (
                                           <FormField
                                             key={item}
                                             control={form.control}

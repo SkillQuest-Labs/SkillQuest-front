@@ -12,7 +12,10 @@ export type QuestAiType = Partial<Quest> & {
   prerequisites?: string[];
 };
 
-export type GeminiContext = {
+export type AiProvider = "openai" | "gemini";
+
+export type AiContextType = {
+  aiProvider?: AiProvider;
   existingQuests: QuestAiType[];
   format: Record<
     keyof {
@@ -28,6 +31,7 @@ export type GeminiContext = {
 };
 
 export type QuestGenerationForm = {
+  aiProvider?: AiProvider;
   manualContext: boolean;
   contextText: string;
   goal: string;
@@ -39,4 +43,6 @@ export type QuestGenerationForm = {
   styleApprentissage: "Théorique" | "Equilibré" | "Pratique";
   ambianceQueteStyle: string;
   ressourceType: string[];
+  skillDomain?: string;
+  customDomain?: string;
 };
