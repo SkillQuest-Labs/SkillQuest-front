@@ -38,8 +38,8 @@ export type SkillNodeData = {
 export type QuestNodeData = {
   kind: "quest";
   title: string;
-  xp: number;
-  difficulty: QuestDifficulty;
+  xp?: number;
+  difficulty?: QuestDifficulty;
   description: string;
   isStarting?: boolean;
   status: QuestStatus;
