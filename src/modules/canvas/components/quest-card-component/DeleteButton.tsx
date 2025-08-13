@@ -5,7 +5,7 @@ type DeleteButtonProps = {
 };
 
 export const DeleteButton = ({ onDelete }: DeleteButtonProps) => (
-  <div className="absolute top-4 right-4 z-10">
+  <div className="absolute top-0 right-4 z-10">
     <div
       className="w-11 h-11 rounded-full bg-gradient-to-br from-red-500 via-red-400 to-pink-500 flex items-center justify-center shadow-lg cursor-pointer border-2 border-white/40 hover:scale-105 transition-transform"
       onClick={(e) => {
