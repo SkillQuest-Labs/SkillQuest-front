@@ -34,6 +34,9 @@ export const useSaveCanvas = () => {
     const skillNode = nodes.find(isSkillNode);
     const skillId = currentSkillId ?? searchSkillId ?? "";
 
+    const getConnectionCount = (nodeId: string) =>
+      edges.filter((edge) => edge.source === nodeId || edge.target === nodeId).length;
+
     const toCreateQuest = nodes
       .filter(isQuestNode)
       .filter((node) => newNodeIds.includes(node.id))
@@ -46,6 +49,7 @@ export const useSaveCanvas = () => {
         isSubSkill: false,
         completionTime: new Date().toISOString(),
         position: { x: node.position.x, y: node.position.y },
+        connectionCount: getConnectionCount(node.id),
         skillId,
       }));
 
@@ -81,6 +85,7 @@ export const useSaveCanvas = () => {
         isSubSkill: false,
         completionTime: new Date().toISOString(),
         position: { x: node.position.x, y: node.position.y },
+        connectionCount: getConnectionCount(node.id),
       }));
 
     const toDeleteQuest = deletedNodesIds
@@ -172,7 +177,6 @@ export const useCanvasLoader = () => {
       data: {
         kind: "quest",
         title: quest.title,
-        xp: quest.xp,
         description: quest.description,
         status: quest.status,
         isCollapsed: false,

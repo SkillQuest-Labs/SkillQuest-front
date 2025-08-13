@@ -57,4 +57,5 @@ export type QuestCardProps = {
   targetHandle?: React.ReactNode;
   sourceHandle?: React.ReactNode;
   isCollapsed?: boolean;
+  connectionCount?: number;
 };
