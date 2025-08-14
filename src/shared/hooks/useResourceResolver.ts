@@ -1,4 +1,7 @@
-import { ResourceResolver } from "@/shared/services/resource-resolver/resource-resolver";
+import {
+  resolveMultipleResources,
+  resolveResource as resolveResourceIntention,
+} from "@/shared/services/resource-resolver/resource-resolver";
 import type { ResolvedResource, ResourceIntention } from "@/shared/types/ai/ai.type";
 import { useCallback, useState } from "react";
 
@@ -12,7 +15,7 @@ export const useResourceResolver = () => {
     setError(null);
 
     try {
-      const resolved = await ResourceResolver.resolveMultipleResources(intentions);
+      const resolved = await resolveMultipleResources(intentions);
       setResolvedResources(resolved);
       return resolved;
     } catch (err) {
@@ -29,7 +32,7 @@ export const useResourceResolver = () => {
     setError(null);
 
     try {
-      const resolved = await ResourceResolver.resolveResource(intention);
+      const resolved = await resolveResourceIntention(intention);
       if (resolved) {
         setResolvedResources((prev) => [...prev, resolved]);
         return resolved;
