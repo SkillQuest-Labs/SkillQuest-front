@@ -23,7 +23,7 @@ export const generateQuestsFromAI = async (context: AiContextType): Promise<Ques
     const parsed = JSON.parse(jsonText) as unknown;
     if (!Array.isArray(parsed)) return [];
 
-    // Filtrage et typage
+    // Filtrage et typage des quêtes brutes
     return parsed
       .filter(
         (item: any) =>
@@ -39,6 +39,7 @@ export const generateQuestsFromAI = async (context: AiContextType): Promise<Ques
         xp: item.xp,
         difficulty: item.difficulty,
         prerequisites: Array.isArray(item.prerequisites) ? item.prerequisites : [],
+        resources: Array.isArray(item.resources) ? item.resources : [],
       }));
   } catch {
     return [];
