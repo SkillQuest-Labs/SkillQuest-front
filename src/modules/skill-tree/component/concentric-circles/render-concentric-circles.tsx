@@ -1,4 +1,4 @@
-import { ConcentricCircles } from "./ConcentricCirclesSVG";
+import { ConcentricCirclesSVG } from "./ConcentricCirclesSVG";
 import type { CircularSkillNode, SkillTreeOptions } from "../../skill-tree.type";
 
 type RenderConcentricCirclesProps = {
@@ -18,5 +18,5 @@ export const renderConcentricCircles = ({
 
   const rings = [70, 140, 210, 280, 350];
 
-  return <ConcentricCircles rings={rings} centerX={centerX} centerY={centerY} options={options} />;
+  return <ConcentricCirclesSVG rings={rings} centerX={centerX} centerY={centerY} options={options} />;
 };

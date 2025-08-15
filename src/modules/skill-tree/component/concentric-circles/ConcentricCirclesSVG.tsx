@@ -7,7 +7,7 @@ type ConcentricCirclesProps = {
   options?: SkillTreeOptions;
 };
 
-export const ConcentricCircles = ({ rings, centerX, centerY, options }: ConcentricCirclesProps) => {
+export const ConcentricCirclesSVG = ({ rings, centerX, centerY, options }: ConcentricCirclesProps) => {
   return (
     <svg
       className="absolute top-0 left-0 w-full h-full overflow-visible pointer-events-none z-0"

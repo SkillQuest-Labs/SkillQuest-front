@@ -1,6 +1,6 @@
 import type { Edge, Node } from "@xyflow/react";
-import type { CircularSkillNode } from "../skill-tree.type";
-import { DependencyGraph } from "./dependency-graph";
+import type { CircularSkillNode } from "../../skill-tree.type";
+import { DependencyGraph } from "../dependency-graph";
 
 // Add all quest nodes to the graph first with initial data
 
