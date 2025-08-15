@@ -9,19 +9,17 @@ import "@/styles/calendar.css";
 import { SessionDialog } from "./components/SessionDialog";
 import { useCreateSession } from "@/shared/services/session/api-session";
 import { CalendarHeader } from "./components/CalendarHeader";
+import { useCalendarResponsive } from "./hooks/useCalendarResponsive";
 import {
+  INITIAL_SESSION_FORM,
+  type CalendarEvent,
+  convertCalendarEventsToDialogSessions,
   convertDateToHourMinute,
   convertDateToISODate,
   capitalizeFirstLetter,
   convertToUtcIso,
-} from "./utils/date.utils";
-import { useCalendarResponsive } from "./hooks/useCalendarResponsive";
-import {
-  type SessionFormState,
-  INITIAL_FORM,
-  type CalendarEvent,
-  convertCalendarEventsToDialogSessions,
 } from "./utils/session.utils";
+import type { SessionFormState } from "./types/session-form.type";
 
 export const CalendarWorkSession = () => {
   const { isCollapsed } = useSidebarStore();
@@ -32,7 +30,7 @@ export const CalendarWorkSession = () => {
   const [workSessions, setWorkSessions] = useState<CalendarEvent[]>([]);
   const [currentView, setCurrentView] = useState<string>("dayGridMonth");
   const [headerTitle, setHeaderTitle] = useState<string>("");
-  const [sessionForm, setSessionForm] = useState<SessionFormState>(INITIAL_FORM);
+  const [sessionForm, setSessionForm] = useState<SessionFormState>(INITIAL_SESSION_FORM);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
@@ -59,7 +57,7 @@ export const CalendarWorkSession = () => {
     const end = selectionInfo.end as Date;
     setEditingIndex(null);
     setSessionForm({
-      ...INITIAL_FORM,
+      ...INITIAL_SESSION_FORM,
       startDate: convertDateToISODate(start),
       startTime: convertDateToHourMinute(start),
       endTime: convertDateToHourMinute(end),
@@ -75,13 +73,13 @@ export const CalendarWorkSession = () => {
       const start = new Date(info.date);
       const end = new Date(start.getTime() + 30 * 60 * 1000);
       setSessionForm({
-        ...INITIAL_FORM,
+        ...INITIAL_SESSION_FORM,
         startDate: convertDateToISODate(start),
         startTime: convertDateToHourMinute(start),
         endTime: convertDateToHourMinute(end),
       });
     } else {
-      setSessionForm({ ...INITIAL_FORM, startDate: info.dateStr });
+      setSessionForm({ ...INITIAL_SESSION_FORM, startDate: info.dateStr });
     }
     setIsDialogOpen(true);
   }, []);
@@ -155,7 +153,7 @@ export const CalendarWorkSession = () => {
 
       setIsDialogOpen(false);
       setEditingIndex(null);
-      setSessionForm(INITIAL_FORM);
+      setSessionForm(INITIAL_SESSION_FORM);
     } catch (error) {
       console.error(error);
     }
@@ -179,7 +177,7 @@ export const CalendarWorkSession = () => {
           }}
           onAddSession={() => {
             setEditingIndex(null);
-            setSessionForm(INITIAL_FORM);
+            setSessionForm(INITIAL_SESSION_FORM);
             setIsDialogOpen(true);
           }}
         />
@@ -223,7 +221,7 @@ export const CalendarWorkSession = () => {
         setForm={setSessionForm}
         onSave={handleSave}
         isEditing={editingIndex !== null}
-        sessions={convertCalendarEventsToDialogSessions(workSessions, sessionForm.startDate, editingIndex)}
+        sessionSlots={convertCalendarEventsToDialogSessions(workSessions, sessionForm.startDate, editingIndex)}
       />
     </div>
   );

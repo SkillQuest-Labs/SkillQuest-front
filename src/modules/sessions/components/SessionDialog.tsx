@@ -14,7 +14,7 @@ interface SessionDialogProps {
   setForm: (form: SessionFormType) => void;
   onSave: () => void;
   isEditing: boolean;
-  sessions: { startDate: string; startTime: string; endTime: string }[];
+  sessionSlots: { startDate: string; startTime: string; endTime: string }[];
 }
 
 export const SessionDialog = ({
@@ -24,7 +24,7 @@ export const SessionDialog = ({
   setForm,
   onSave,
   isEditing,
-  sessions,
+  sessionSlots,
 }: SessionDialogProps) => {
   const isFormValid = form.title.trim() && form.startDate && form.startTime && form.endTime && form.linkedQuest;
 
@@ -33,7 +33,7 @@ export const SessionDialog = ({
   );
 
   const hasSessionConflict = Boolean(
-    form.startTime && form.endTime && isTimeSlotConflict(form.startTime, form.endTime, sessions),
+    form.startTime && form.endTime && isTimeSlotConflict(form.startTime, form.endTime, sessionSlots),
   );
 
   const userId = "uuid-user-1234-5678-9012-345678901234";

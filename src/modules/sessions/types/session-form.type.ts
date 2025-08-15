@@ -36,3 +36,14 @@ export interface SessionFormProps {
   loadingSkills: boolean;
   loadingQuests: boolean;
 }
+
+export type SessionFormState = {
+  title: string;
+  description: string;
+  startDate: string;
+  startTime: string;
+  endTime: string;
+  linkedSkill: string;
+  linkedQuest: string;
+  color: string;
+};
