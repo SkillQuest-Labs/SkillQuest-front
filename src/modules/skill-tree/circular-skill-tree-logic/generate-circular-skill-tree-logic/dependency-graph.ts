@@ -1,4 +1,4 @@
-import type { CircularSkillNode } from "../skill-tree.type";
+import type { CircularSkillNode } from "../../skill-tree.type";
 
 /**
  * A dependency graph implementation for managing skill tree nodes and their relationships.
@@ -36,6 +36,10 @@ export class DependencyGraph {
     }
   }
 
+  getNode(id: string) {
+    return this.nodes[id];
+  }
+
   getPrerequisites(nodeId: string): string[] {
     return this.reverseEdges[nodeId] || [];
   }
@@ -50,7 +54,7 @@ export class DependencyGraph {
 
     return prerequisites.every((prereqId) => {
       const prereqNode = this.nodes[prereqId];
-      return prereqNode?.status === "completed";
+      return prereqNode?.status === "COMPLETED";
     });
   }
 

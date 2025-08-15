@@ -43,6 +43,7 @@ export type QuestNodeData = {
   description: string;
   isStarting?: boolean;
   status: QuestStatus;
+  questType?: string;
   questNumber?: number;
   isCollapsed?: boolean;
   isSubSkill?: boolean;
