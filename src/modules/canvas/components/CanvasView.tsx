@@ -147,7 +147,7 @@ export const CanvasView = ({
 
       {openAiModal && <AIQuestGenerationModal onGenerate={openAIGenerator} setOpenAiModal={setOpenAiModal} />}
 
-      <div className="absolute top-68 right-7 z-20">
+      <div className="absolute top-75 right-7 z-20">
         <RoadmapButton onClick={() => setViewMode("skillTree")} />
       </div>
 

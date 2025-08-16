@@ -15,8 +15,6 @@ export function createQuestNode(
     data: {
       kind: "quest",
       title: questData?.title ?? "New Quest",
-      xp: questData?.xp ?? 100,
-      difficulty: questData?.difficulty ?? "EASY",
       description: questData?.description ?? "Quest description...",
       status: questData?.status ?? "LOCKED",
       isCollapsed: false,

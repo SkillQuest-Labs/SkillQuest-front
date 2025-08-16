@@ -12,8 +12,20 @@ const buildInstruction = (
 ): string => {
   if (!form || !skill) return "";
 
+  // 5. Format de sortie (Impératif et structuré)
+  const formatInstructions = [
+    "\n## FORMAT DE SORTIE",
+    "La sortie doit être un tableau JSON valide. Ne rien inclure avant ou après le tableau. Voici la structure de chaque objet quête :",
+    "```json",
+    `{
+      "title": "string (Titre court, clair et engageant)",
+      "description": "string (Description détaillée en Markdown avec objectifs, étapes, ressources, etc.)",
+    }`,
+    "```",
+  ];
+
   if (form.manualContext && form.contextText?.trim()) {
-    return form.contextText.trim();
+    return [form.contextText.trim(), ...formatInstructions].join("\n");
   }
 
   // 1. Rôle et Objectif principal (Très directif)
@@ -71,20 +83,6 @@ const buildInstruction = (
     "- **Outils** : Si un outil est nécessaire (ex: Figma, VSCode), mentionne-le et fournis un lien officiel.",
   ];
 
-  // 5. Format de sortie (Impératif et structuré)
-  const formatInstructions = [
-    "\n## FORMAT DE SORTIE",
-    "La sortie doit être un tableau JSON valide. Ne rien inclure avant ou après le tableau. Voici la structure de chaque objet quête :",
-    "```json",
-    `{
-      "title": "string (Titre court, clair et engageant)",
-      "description": "string (Description détaillée en Markdown avec objectifs, étapes, ressources, etc.)",
-      "xp": "number (Ex: 100 pour facile, 250 pour moyen, 500 pour difficile)",
-      "difficulty": "string (Doit être 'EASY', 'MEDIUM', ou 'HARD')",
-    }`,
-    "```",
-  ];
-
   return [...roleAndGoal, ...context, ...generalRules, ...resourceRules, ...formatInstructions].join("\n");
 };
 
@@ -96,8 +94,6 @@ export const getAiContext = (): AiContextType => {
   const existingQuests: QuestAiType[] = nodes.filter(isQuestNode).map((node) => ({
     title: node.data.title,
     description: node.data.description,
-    xp: node.data.xp,
-    difficulty: node.data.difficulty,
     prerequisites: [],
   }));
 

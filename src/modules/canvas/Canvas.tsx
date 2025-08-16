@@ -16,7 +16,7 @@ import { CreateSkillModal } from "./components/CreateSkillModal";
 import type { Skill } from "@/shared/types/skill.type";
 import { initialNodes } from "./canvas.const";
 import { useAddAIQuests } from "./hooks/useAddAIQuest";
-import { QuestDetailsModal } from "./components/floating-toolbox/QuestDetailsModal";
+import { QuestDetailsModal } from "./components/quest-card-component/QuestDetailsModal";
 
 export const Canvas = () => {
   const [connectionStart, setConnectionStart] = useState<string | null>(null);
