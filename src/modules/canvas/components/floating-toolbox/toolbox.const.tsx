@@ -6,6 +6,7 @@ export type ToolBoxItem = {
   icon: React.ReactNode;
   tooltip: string;
   activeColor: string;
+  title?: string;
   isActive: (mode: CursorModeType) => boolean;
   handleToolClick: (
     setCursorMode: (mode: CursorModeType) => void,
@@ -27,6 +28,7 @@ export const tools: ToolboxList = [
     icon: <Plus className="w-5 h-5 text-white group-hover:text-black transition-colors" />,
     tooltip: "Create Quest",
     activeColor: "bg-blue-600 hover:bg-blue-700 text-white",
+    title: "Ajoutez une nouvelle quête",
     isActive: (mode) => mode === "create",
     handleToolClick: (setCursorMode, current) => setCursorMode(current === "create" ? "normal" : "create"),
   },
@@ -35,6 +37,7 @@ export const tools: ToolboxList = [
     icon: <Link className="w-5 h-5 text-white group-hover:text-black transition-colors" />,
     tooltip: "Link Quests",
     activeColor: "bg-purple-600 hover:bg-purple-700 text-white",
+    title: "Liez des quêtes entre elles",
     isActive: (mode) => mode === "connect",
     handleToolClick: (setCursorMode, current) => setCursorMode(current === "connect" ? "normal" : "connect"),
   },
@@ -43,6 +46,7 @@ export const tools: ToolboxList = [
     icon: <Target className="w-5 h-5 text-white group-hover:text-black transition-colors" />,
     tooltip: "Select Mode",
     activeColor: "bg-gray-600 hover:bg-gray-700 text-white",
+    title: "Sélect",
     isActive: (mode) => mode === "normal",
     handleToolClick: (setCursorMode) => setCursorMode("normal"),
   },
