@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-
-const computeResponsiveView = () => {
-  const w = window.innerWidth;
-  if (w < 768) return "timeGridDay";
-  if (w < 1024) return "timeGridWeek";
-  return "dayGridMonth";
-};
+import { computeResponsiveView } from "../utils/session.utils";
 
 export function useCalendarResponsive() {
   const [initialView, setInitialView] = useState<string>(computeResponsiveView());

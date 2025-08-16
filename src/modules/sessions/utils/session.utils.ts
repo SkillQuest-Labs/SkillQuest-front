@@ -1,30 +1,4 @@
-import type { SessionFormType, SessionPayload, SessionFormState } from "../types/session-form.type";
-
-export const INITIAL_SESSION_FORM: SessionFormState = {
-  title: "",
-  description: "",
-  startDate: "",
-  startTime: "",
-  endTime: "",
-  linkedSkill: "",
-  linkedQuest: "",
-  color: "#3B82F6",
-};
-
-export type CalendarEvent = {
-  id: string;
-  title: string;
-  description?: string;
-  color: string;
-  start: string; // ISO
-  end: string; // ISO
-  backgroundColor: string;
-  borderColor: string;
-  extendedProps?: {
-    linkedSkill?: string;
-    linkedQuest?: string;
-  };
-};
+import type { SessionFormType, SessionPayload, CalendarEvent } from "../types/session-form.type";
 
 export const convertToMinutes = (time: string): number => {
   const [hours, minutes] = time.split(":").map(Number);
@@ -87,3 +61,10 @@ export const convertDateToHourMinute = (date: Date) =>
 export const capitalizeFirstLetter = (text: string) => (text ? text.charAt(0).toUpperCase() + text.slice(1) : text);
 
 export const convertToUtcIso = (date: string, time: string) => new Date(`${date}T${time}:00`).toISOString(); // -> "2025-08-10T07:30:00.000Z"
+
+export const computeResponsiveView = () => {
+  const w = window.innerWidth;
+  if (w < 768) return "timeGridDay";
+  if (w < 1024) return "timeGridWeek";
+  return "dayGridMonth";
+};

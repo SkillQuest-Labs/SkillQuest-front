@@ -47,3 +47,18 @@ export type SessionFormState = {
   linkedQuest: string;
   color: string;
 };
+
+export type CalendarEvent = {
+  id: string;
+  title: string;
+  description?: string;
+  color: string;
+  start: string; // ISO
+  end: string; // ISO
+  backgroundColor: string;
+  borderColor: string;
+  extendedProps?: {
+    linkedSkill?: string;
+    linkedQuest?: string;
+  };
+};

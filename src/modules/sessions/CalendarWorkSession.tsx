@@ -11,15 +11,14 @@ import { useCreateSession } from "@/shared/services/session/api-session";
 import { CalendarHeader } from "./components/CalendarHeader";
 import { useCalendarResponsive } from "./hooks/useCalendarResponsive";
 import {
-  INITIAL_SESSION_FORM,
-  type CalendarEvent,
   convertCalendarEventsToDialogSessions,
   convertDateToHourMinute,
   convertDateToISODate,
   capitalizeFirstLetter,
   convertToUtcIso,
 } from "./utils/session.utils";
-import type { SessionFormState } from "./types/session-form.type";
+import type { SessionFormState, CalendarEvent } from "./types/session-form.type";
+import { INITIAL_SESSION_FORM } from "./const/session-form.const";
 
 export const CalendarWorkSession = () => {
   const { isCollapsed } = useSidebarStore();
