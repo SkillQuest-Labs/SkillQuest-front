@@ -43,9 +43,9 @@ export const generateCircularNodesData = ({
     const { x, y } = calculateNodePosition({ centerX, centerY, radius, angle: finalAngle });
 
     const nodeVisualsProperties = defineNodeProperties({
-      difficulty: node.data.difficulty,
+      difficulty: "Hard", //remplacer par  node.data.difficulty
       type: node.data.questType || "side",
-      xp: node.data.xp,
+      xp: 200, // remplacer par node.data.xp
     });
 
     const circularNode: CircularSkillNode = {
