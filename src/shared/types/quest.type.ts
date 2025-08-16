@@ -12,8 +12,8 @@ export type Quest = {
   questId: string;
   title: string;
   description: string;
-  difficulty: QuestDifficulty;
-  xp: number;
+  difficulty?: QuestDifficulty;
+  xp?: number;
   degree?: number;
   status: QuestStatus;
   isSubSkill: boolean;

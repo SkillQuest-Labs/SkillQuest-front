@@ -12,8 +12,40 @@ const buildInstruction = (
 ): string => {
   if (!form || !skill) return "";
 
+  // Format de sortie (Impératif et structuré)
+  const formatInstructions = [
+    "\n## FORMAT DE SORTIE",
+    "La sortie doit être un tableau JSON valide. Ne rien inclure avant ou après le tableau. Voici la structure de chaque objet quête :",
+    "```json",
+    `{
+      "title": "string (Titre court, clair et engageant)",
+      "description": "string (Description détaillée en Markdown avec objectifs, étapes, etc. SANS liens directs)",
+      "resources": [
+        {
+          "type": "video",
+          "query": "React hooks tutorial débutant",
+          "preferred_domains": ["youtube.com", "vimeo.com"],
+          "must_include_keywords": ["react", "hooks", "tutorial"],
+          "language": "fr",
+          "difficulty_level": "beginner"
+        },
+        {
+          "type": "documentation",
+          "query": "React hooks documentation officielle",
+          "preferred_domains": ["reactjs.org", "react.dev"],
+          "must_include_keywords": ["react", "hooks", "documentation"],
+          "language": "en",
+          "difficulty_level": "intermediate"
+        }
+      ]
+    }`,
+    "```",
+    "",
+    "**RAPPEL IMPORTANT** : Les ressources ne doivent contenir AUCUNE URL directe, seulement des intentions de recherche.",
+  ];
+
   if (form.manualContext && form.contextText?.trim()) {
-    return form.contextText.trim();
+    return [form.contextText.trim(), ...formatInstructions].join("\n");
   }
 
   // 1. Rôle et Objectif principal (Très directif)
@@ -77,40 +109,6 @@ const buildInstruction = (
     "- **Qualité des recherches** : Utilise des termes précis et pertinents pour faciliter la résolution automatique.",
   ];
 
-  // 5. Format de sortie (Impératif et structuré)
-  const formatInstructions = [
-    "\n## FORMAT DE SORTIE",
-    "La sortie doit être un tableau JSON valide. Ne rien inclure avant ou après le tableau. Voici la structure de chaque objet quête :",
-    "```json",
-    `{
-      "title": "string (Titre court, clair et engageant)",
-      "description": "string (Description détaillée en Markdown avec objectifs, étapes, etc. SANS liens directs)",
-      "xp": "number (Ex: 100 pour facile, 250 pour moyen, 500 pour difficile)",
-      "difficulty": "string (Doit être 'EASY', 'MEDIUM', ou 'HARD')",
-      "resources": [
-        {
-          "type": "video",
-          "query": "React hooks tutorial débutant",
-          "preferred_domains": ["youtube.com", "vimeo.com"],
-          "must_include_keywords": ["react", "hooks", "tutorial"],
-          "language": "fr",
-          "difficulty_level": "beginner"
-        },
-        {
-          "type": "documentation",
-          "query": "React hooks documentation officielle",
-          "preferred_domains": ["reactjs.org", "react.dev"],
-          "must_include_keywords": ["react", "hooks", "documentation"],
-          "language": "en",
-          "difficulty_level": "intermediate"
-        }
-      ]
-    }`,
-    "```",
-    "",
-    "**RAPPEL IMPORTANT** : Les ressources ne doivent contenir AUCUNE URL directe, seulement des intentions de recherche.",
-  ];
-
   return [...roleAndGoal, ...context, ...generalRules, ...resourceRules, ...formatInstructions].join("\n");
 };
 
@@ -122,8 +120,6 @@ export const getAiContext = (): AiContextType => {
   const existingQuests: QuestAiType[] = nodes.filter(isQuestNode).map((node) => ({
     title: node.data.title,
     description: node.data.description,
-    xp: node.data.xp,
-    difficulty: node.data.difficulty,
     prerequisites: [],
   }));
 
