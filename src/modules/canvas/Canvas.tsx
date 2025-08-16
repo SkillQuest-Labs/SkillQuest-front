@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import type { QuestNodeData, ViewModeType } from "./canvas.type";
+import type { QuestNodeData } from "./canvas.type";
 import { useReactFlow, type Node } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import "./../../styles/canvas.css";
@@ -20,7 +20,7 @@ import { QuestDetailsModal } from "./components/quest-card-component/QuestDetail
 
 export const Canvas = () => {
   const [connectionStart, setConnectionStart] = useState<string | null>(null);
-  const [, setViewMode] = useState<ViewModeType>("canvas");
+  const { setViewMode } = useCanvasStore();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();

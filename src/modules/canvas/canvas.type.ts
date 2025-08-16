@@ -2,15 +2,15 @@ import type { QuestStatus } from "@/shared/types/quest.type";
 import type { SkillDifficulty, SkillStatus } from "@/shared/types/skill.type";
 
 export type CursorModeType = "normal" | "create" | "connect" | "collapse" | "expand";
-export type ViewModeType = "canvas" | "timeline";
+export type ViewModeType = "canvas" | "skillTree";
 
 export type FloatingToolboxProps = {
   cursorMode: CursorModeType;
   setCursorMode: (mode: CursorModeType) => void;
-  setViewMode: (mode: ViewModeType) => void;
   collapseAll: () => void;
   expandAll: () => void;
   setOpenAiModal: (open: boolean) => void;
+  className?: string;
 };
 
 export type SkillConfigType = {

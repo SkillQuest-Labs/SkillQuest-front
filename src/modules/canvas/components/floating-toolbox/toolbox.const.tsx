@@ -1,5 +1,5 @@
 import { Link, Plus, Target } from "lucide-react";
-import type { CursorModeType, ViewModeType } from "../../canvas.type";
+import type { CursorModeType } from "../../canvas.type";
 
 export type ToolBoxItem = {
   id: string;
@@ -15,7 +15,6 @@ export type ToolBoxItem = {
       openAIGenerator?: () => void;
       collapseAll?: () => void;
       expandAll?: () => void;
-      setViewMode?: (mode: ViewModeType) => void;
     },
   ) => void;
 };
@@ -50,16 +49,4 @@ export const tools: ToolboxList = [
     isActive: (mode) => mode === "normal",
     handleToolClick: (setCursorMode) => setCursorMode("normal"),
   },
-
-  // {
-  //   id: "roadmap",
-  //   icon: <Map className="w-5 h-5" color="white" />,
-  //   tooltip: "Generate Roadmap",
-  //   activeColor: "bg-green-600 hover:bg-green-700 text-white",
-  //   isActive: () => false, // Always inactive, handled separately
-  //   handleToolClick: (setCursorMode, _, ctx) => {
-  //     ctx?.setViewMode?.("timeline");
-  //     setCursorMode("normal");
-  //   },
-  // },
 ];
