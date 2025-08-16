@@ -2,8 +2,8 @@ import type { AiContextType, QuestAiType, QuestGenerationForm } from "@/shared/t
 import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import { useQuestGenerationFormStore } from "@/stores/canvas/quest-generation-form-store";
 import type { Node } from "@xyflow/react";
-import { isQuestNode, isSkillNode } from "../../canvas.const";
-import type { SkillNodeData } from "../../canvas.type";
+import { isQuestNode, isSkillNode } from "./canvas.const";
+import type { SkillNodeData } from "./canvas.type";
 
 const buildInstruction = (
   form?: Partial<QuestGenerationForm>,
@@ -12,16 +12,36 @@ const buildInstruction = (
 ): string => {
   if (!form || !skill) return "";
 
-  // 5. Format de sortie (Impératif et structuré)
+  // Format de sortie (Impératif et structuré)
   const formatInstructions = [
     "\n## FORMAT DE SORTIE",
     "La sortie doit être un tableau JSON valide. Ne rien inclure avant ou après le tableau. Voici la structure de chaque objet quête :",
     "```json",
     `{
       "title": "string (Titre court, clair et engageant)",
-      "description": "string (Description détaillée en Markdown avec objectifs, étapes, ressources, etc.)",
+      "description": "string (Description détaillée en Markdown avec objectifs, étapes, etc. SANS liens directs)",
+      "resources": [
+        {
+          "type": "video",
+          "query": "React hooks tutorial débutant",
+          "preferred_domains": ["youtube.com", "vimeo.com"],
+          "must_include_keywords": ["react", "hooks", "tutorial"],
+          "language": "fr",
+          "difficulty_level": "beginner"
+        },
+        {
+          "type": "documentation",
+          "query": "React hooks documentation officielle",
+          "preferred_domains": ["reactjs.org", "react.dev"],
+          "must_include_keywords": ["react", "hooks", "documentation"],
+          "language": "en",
+          "difficulty_level": "intermediate"
+        }
+      ]
     }`,
     "```",
+    "",
+    "**RAPPEL IMPORTANT** : Les ressources ne doivent contenir AUCUNE URL directe, seulement des intentions de recherche.",
   ];
 
   if (form.manualContext && form.contextText?.trim()) {
@@ -69,18 +89,24 @@ const buildInstruction = (
 
   const resourceRules = [
     "\n## RÈGLES SPÉCIFIQUES AUX RESSOURCES",
-    "- **Validité ABSOLUE des liens** : PRIORITÉ #1 - Utilise UNIQUEMENT des ressources qui existent réellement. Pour les vidéos, privilégie YouTube en premier, puis d'autres plateformes reconnues. Vérifie que les liens mènent vers des contenus existants et accessibles.",
-    "- **Sources prioritaires par type** :",
-    "  * **Vidéos** : 1) YouTube (chaînes populaires), 2) Vimeo, 3) Plateformes éducatives officielles",
-    "  * **Documentation** : Sites officiels (.org, .edu, .gov), documentation développeur",
-    "  * **Cours** : Plateformes reconnues (Coursera, Udemy, Khan Academy, edX)",
-    "  * **Articles** : Blogs techniques reconnus, Medium avec auteurs vérifiés",
-    "- **Qualité et validité des liens** : Priorise les sources officielles ou reconnues, liens HTTPS uniquement, n'invente JAMAIS d'URL, évite les contenus hors-sujet. En cas de doute sur l'existence d'une ressource, utilise une alternative générale mais sûre.",
-    "- **Adaptation au domaine** : Choisis des ressources adaptées au domaine déclaré. Ex: si 'Cuisine', utilise des sites culinaires reconnus.",
-    "- **Pas de liens morts** : INTERDIT de proposer des pages inexistantes/404. Si une ressource spécifique est introuvable, fournis une alternative officielle/générique existante.",
+    "- **IMPORTANT** : Ne génère JAMAIS d'URLs directes. Génère uniquement des intentions de recherche structurées.",
+    "- **Format des ressources** : Chaque ressource doit être un objet avec :",
+    "  * `type` : 'video' | 'article' | 'documentation' | 'course' | 'podcast' | 'forum' ",
+    "  * `query` : Termes de recherche précis en français",
+    "  * `preferred_domains` : Domaines privilégiés (ex: ['youtube.com', 'vimeo.com'] pour video)",
+    "  * `must_include_keywords` : Mots-clés obligatoires dans le contenu",
+    "  * `language` : 'fr' ou 'en'",
+    "  * `difficulty_level` : 'beginner' | 'intermediate' | 'advanced'",
+    "- **Types et domaines recommandés** :",
+    "  * **video** : ['youtube.com', 'vimeo.com', 'dailymotion.com']",
+    "  * **documentation** : ['*.org', '*.dev', 'developer.mozilla.org', 'docs.microsoft.com']",
+    "  * **article** : ['medium.com', 'dev.to', 'css-tricks.com', 'smashingmagazine.com']",
+    "  * **course** : ['coursera.org', 'udemy.com', 'edx.org', 'khan academy.org']",
+    "  * **forum** : ['stackoverflow.com', 'reddit.com', 'discourse.org']",
+    "  * **tool** : Sites officiels des outils (ex: 'figma.com', 'code.visualstudio.com')",
     `- **Types de ressources à privilégier** : Inclus des ressources correspondant à ces types : ${form.ressourceType?.join(", ")}.`,
-    "- **Ressources externes** : Chaque quête doit inclure au minimum 1 lien cliquable (Markdown `[Titre](https://...)`) vers des ressources PERTINENTES et de qualité.",
-    "- **Outils** : Si un outil est nécessaire (ex: Figma, VSCode), mentionne-le et fournis un lien officiel.",
+    "- **Cohérence avec le domaine** : Adapte les domaines selon le skill (ex: 'marmiton.org' pour cuisine, 'github.com' pour développement).",
+    "- **Qualité des recherches** : Utilise des termes précis et pertinents pour faciliter la résolution automatique.",
   ];
 
   return [...roleAndGoal, ...context, ...generalRules, ...resourceRules, ...formatInstructions].join("\n");
@@ -111,6 +137,7 @@ export const getAiContext = (): AiContextType => {
       description: "string",
       xp: "number",
       difficulty: "EASY|MEDIUM|HARD",
+      resources: "ResourceIntention[]",
       prerequisites: "string[] (optional)",
     },
     instruction,
