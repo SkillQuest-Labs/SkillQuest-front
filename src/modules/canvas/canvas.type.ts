@@ -1,4 +1,4 @@
-import type { QuestDifficulty, QuestStatus } from "@/shared/types/quest.type";
+import type { QuestStatus } from "@/shared/types/quest.type";
 import type { SkillDifficulty, SkillStatus } from "@/shared/types/skill.type";
 
 export type CursorModeType = "normal" | "create" | "connect" | "collapse" | "expand";
@@ -38,8 +38,6 @@ export type SkillNodeData = {
 export type QuestNodeData = {
   kind: "quest";
   title: string;
-  xp?: number;
-  difficulty?: QuestDifficulty;
   description: string;
   isStarting?: boolean;
   status: QuestStatus;
