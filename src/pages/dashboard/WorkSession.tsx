@@ -6,9 +6,7 @@ export const WorkSession = () => {
 
   return (
     <div
-      className={`p-4 md:p-8 min-h-screen h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 transition-all duration-300 ${
-        isCollapsed ? "pl-20" : "pl-64"
-      } flex flex-col min-h-0`}
+      className={`p-4 md:p-8 min-h-screen ${isCollapsed ? "pl-20" : "pl-64"} bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 transition-all duration-300`}
     >
       <CalendarWorkSession />
     </div>
