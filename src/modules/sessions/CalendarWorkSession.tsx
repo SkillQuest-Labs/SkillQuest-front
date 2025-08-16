@@ -31,7 +31,7 @@ export const CalendarWorkSession = () => {
   const [currentView, setCurrentView] = useState<string>("dayGridMonth");
   const [headerTitle, setHeaderTitle] = useState<string>("");
   const [sessionForm, setSessionForm] = useState<SessionFormState>(INITIAL_SESSION_FORM);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   const initialView = useCalendarResponsive();

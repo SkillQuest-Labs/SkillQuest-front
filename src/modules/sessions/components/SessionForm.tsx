@@ -25,20 +25,30 @@ export const SessionForm = ({ form, setForm, skills, quests, loadingSkills, load
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <div className="sm:col-span-2">
           <label className="text-sm text-white mb-1 block">Date</label>
-          <Input type="date" value={form.startDate} onChange={(e) => setForm({ ...form, startDate: e.target.value })} />
+          <Input
+            type="date"
+            className="[color-scheme:dark]"
+            value={form.startDate}
+            onChange={(e) => setForm({ ...form, startDate: e.target.value })}
+          />
         </div>
         <div>
           <label className="text-sm text-white mb-1 block">Heure de début</label>
-          <Input type="time" value={form.startTime} onChange={(e) => setForm({ ...form, startTime: e.target.value })} />
+          <Input
+            type="time"
+            className="[color-scheme:dark]"
+            value={form.startTime}
+            onChange={(e) => setForm({ ...form, startTime: e.target.value })}
+          />
         </div>
         <div>
           <label className="text-sm text-white mb-1 block">Heure de fin</label>
           <Input
             type="time"
+            className="[color-scheme:dark]"
             value={form.endTime}
             onChange={(e) => setForm({ ...form, endTime: e.target.value })}
             min={form.startTime || undefined}
-            disabled={!form.startTime}
           />
         </div>
       </div>

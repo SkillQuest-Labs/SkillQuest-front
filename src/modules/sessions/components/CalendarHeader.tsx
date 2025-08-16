@@ -58,14 +58,14 @@ export const CalendarHeader = ({
           <Button
             onClick={handlePrev}
             aria-label="Période précédente"
-            className="p-1.5 rounded-lg hover:bg-slate-700 text-slate-200"
+            className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-100"
           >
             <ChevronLeft className="h-5 w-5" />
           </Button>
           <Button
             onClick={handleNext}
             aria-label="Période suivante"
-            className="p-1.5 rounded-lg hover:bg-slate-700 text-slate-200"
+            className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-100"
           >
             <ChevronRight className="h-5 w-5" />
           </Button>
