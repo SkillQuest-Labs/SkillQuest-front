@@ -176,7 +176,7 @@ export const QuestDetailsModal = ({ open, quest, onClose }: QuestDetailsModalPro
                 type="button"
                 variant="default"
                 onClick={onClose}
-                className="w-full sm:w-auto bg-gradient-to-br from-red-700 via-red-900 to-gray-800 h-12 cursor-pointer px-6 border-gray-600 text-gray-300 hover:bg-red-800 hover:text-gray-100"
+                className="w-full sm:w-auto bg-red-900 h-12 cursor-pointer px-6 border-gray-600 text-gray-300 hover:bg-red-800 hover:text-gray-100"
               >
                 <span> Fermer </span>
               </Button>
@@ -184,7 +184,7 @@ export const QuestDetailsModal = ({ open, quest, onClose }: QuestDetailsModalPro
                 type="button"
                 variant="ghost"
                 onClick={() => setIsEditing(!isEditing)}
-                className="w-full sm:w-auto bg-gradient-to-br from-gray-700 via-gray-900 to-gray-800 h-12 cursor-pointer px-6 border-gray-600 text-gray-300 hover:bg-gray-800 hover:text-gray-100"
+                className="w-full sm:w-auto bg-gray-800 h-12 cursor-pointer px-6 border-gray-600 text-gray-300 hover:bg-gray-900 hover:text-gray-100"
               >
                 <span> Modifier </span> <Pencil className="h-4 w-4" />
               </Button>
