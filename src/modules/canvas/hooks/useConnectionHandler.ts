@@ -4,6 +4,7 @@ import { useCallback } from "react";
 
 export const useConnectionHandler = (edges: Edge[], setEdges: (edges: Edge[]) => void) => {
   const markNewEdge = useCanvasStore((state) => state.markNewEdge);
+  const markModifiedNode = useCanvasStore((state) => state.markModifiedNode);
 
   return useCallback(
     (params: Connection) => {
@@ -22,7 +23,9 @@ export const useConnectionHandler = (edges: Edge[], setEdges: (edges: Edge[]) =>
       const updated = addEdge(newEdge, edges);
       setEdges(updated);
       markNewEdge(newEdge.id);
+      if (params.source) markModifiedNode(params.source);
+      if (params.target) markModifiedNode(params.target);
     },
-    [edges, setEdges, markNewEdge],
+    [edges, setEdges, markNewEdge, markModifiedNode],
   );
 };

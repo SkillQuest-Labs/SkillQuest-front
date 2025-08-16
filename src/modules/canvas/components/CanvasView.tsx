@@ -13,8 +13,10 @@ import {
 } from "@xyflow/react";
 import clsx from "clsx";
 import { ChevronLeft } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { CursorModeType, QuestNodeData, SkillNodeData, ViewModeType } from "../canvas.type";
+import { AIQuestGenerationModal } from "./AIQuestGenerationModal";
 import { CustomEdge } from "./CustomEdge";
 import { FloatingToolbox } from "./floating-toolbox/FloatingToolbox";
 import { QuestNode } from "./QuestNode";
@@ -66,6 +68,8 @@ export const CanvasView = ({
   const navigate = useNavigate();
 
   const reset = useCanvasStore.getState().reset;
+
+  const [openAiModal, setOpenAiModal] = useState(false);
 
   return (
     <ReactFlow
@@ -131,19 +135,19 @@ export const CanvasView = ({
         </Button>
       </div>
 
-      <div className="absolute top-6 right-6 z-20">
+      {/* Toolbox and RoadmapButton in a flex column, always together */}
+      <div className="absolute top-6 right-6 z-20 flex flex-col items-center gap-4">
         <FloatingToolbox
           cursorMode={cursorMode}
           setCursorMode={setCursorMode}
           collapseAll={collapseAll}
           expandAll={expandAll}
-          openAIGenerator={openAIGenerator}
+          setOpenAiModal={setOpenAiModal}
         />
-      </div>
-
-      <div className="absolute top-68 right-7 z-20">
         <RoadmapButton onClick={() => setViewMode("skillTree")} />
       </div>
+
+      {openAiModal && <AIQuestGenerationModal onGenerate={openAIGenerator} setOpenAiModal={setOpenAiModal} />}
 
       {/* Mode Indicators */}
       {cursorMode === "create" && (

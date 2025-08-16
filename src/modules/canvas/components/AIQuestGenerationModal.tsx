@@ -35,6 +35,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import "../../../styles/ai-quest-generation-modal.css";
 import { isSkillNode, questAmbianceStylesData, resourceTypesData, SKILL_DOMAINS, userLevel } from "../canvas.const";
+import { getResourceTypesInFrench } from "@/shared/utils/resource-types";
 
 // Schéma Zod pour la validation du formulaire
 
@@ -110,7 +111,7 @@ export const AIQuestGenerationModal = ({ onGenerate, setOpenAiModal }: AIQuestGe
       data.numberOfQuests = 4;
       data.styleApprentissage = "Equilibré";
       data.ambianceQueteStyle = "High-tech";
-      data.ressourceType = resourceTypesData;
+      data.ressourceType = getResourceTypesInFrench();
     }
 
     setForm(data);

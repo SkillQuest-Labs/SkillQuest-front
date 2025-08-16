@@ -20,6 +20,7 @@ export const ToolButton = ({ tool, cursorMode, setCursorMode, context }: ToolBut
   return (
     <div className="group relative">
       <Button
+        title={tool.title}
         variant={`${active ? "default" : "ghost"}`}
         onClick={() => tool.handleToolClick(setCursorMode, cursorMode, context)}
         size="sm"

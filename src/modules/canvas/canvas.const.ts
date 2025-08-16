@@ -125,14 +125,4 @@ export const questAmbianceStylesData = [
   "Mystique",
 ] as const;
 
-export const resourceTypesData = [
-  "Documentation officielle",
-  "Tutoriels en ligne",
-  "Vidéos explicatives",
-  "Articles de blog",
-  "Livres et ebooks",
-  "Cours en ligne",
-  "Exercices pratiques",
-  "Forums et communautés",
-  "Podcasts",
-];
+export const resourceTypesData = ["documentation", "video", "article", "course", "forum", "podcasts"];

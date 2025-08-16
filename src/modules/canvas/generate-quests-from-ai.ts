@@ -23,22 +23,14 @@ export const generateQuestsFromAI = async (context: AiContextType): Promise<Ques
     const parsed = JSON.parse(jsonText) as unknown;
     if (!Array.isArray(parsed)) return [];
 
-    // Filtrage et typage
+    // Filtrage et typage des quêtes brutes
     return parsed
-      .filter(
-        (item: any) =>
-          item &&
-          typeof item.title === "string" &&
-          typeof item.description === "string" &&
-          typeof item.xp === "number" &&
-          ["EASY", "MEDIUM", "HARD"].includes(item.difficulty),
-      )
+      .filter((item: any) => item && typeof item.title === "string" && typeof item.description === "string")
       .map((item: any) => ({
         title: item.title,
         description: item.description,
-        xp: item.xp,
-        difficulty: item.difficulty,
         prerequisites: Array.isArray(item.prerequisites) ? item.prerequisites : [],
+        resources: Array.isArray(item.resources) ? item.resources : [],
       }));
   } catch {
     return [];
