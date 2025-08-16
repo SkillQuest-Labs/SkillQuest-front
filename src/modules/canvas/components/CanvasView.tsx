@@ -20,6 +20,8 @@ import { FloatingToolbox } from "./floating-toolbox/FloatingToolbox";
 import { QuestNode } from "./QuestNode";
 import { RoadmapButton } from "./RoadmapButton";
 import { SkillNode } from "./SkillNode";
+import { useState } from "react";
+import { AIQuestGenerationModal } from "./AIQuestGenerationModal";
 
 type CanvasViewProps = {
   nodes: Node<QuestNodeData | SkillNodeData>[];
@@ -66,6 +68,8 @@ export const CanvasView = ({
   const navigate = useNavigate();
 
   const reset = useCanvasStore.getState().reset;
+
+  const [openAiModal, setOpenAiModal] = useState(false);
 
   return (
     <ReactFlow
@@ -137,9 +141,11 @@ export const CanvasView = ({
           setCursorMode={setCursorMode}
           collapseAll={collapseAll}
           expandAll={expandAll}
-          openAIGenerator={openAIGenerator}
+          setOpenAiModal={setOpenAiModal}
         />
       </div>
+
+      {openAiModal && <AIQuestGenerationModal onGenerate={openAIGenerator} setOpenAiModal={setOpenAiModal} />}
 
       <div className="absolute top-68 right-7 z-20">
         <RoadmapButton onClick={() => setViewMode("skillTree")} />

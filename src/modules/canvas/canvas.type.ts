@@ -9,7 +9,7 @@ export type FloatingToolboxProps = {
   setCursorMode: (mode: CursorModeType) => void;
   collapseAll: () => void;
   expandAll: () => void;
-  openAIGenerator: () => void;
+  setOpenAiModal: (open: boolean) => void;
   className?: string;
 };
 

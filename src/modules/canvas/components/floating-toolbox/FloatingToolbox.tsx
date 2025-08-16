@@ -11,7 +11,7 @@ export const FloatingToolbox = ({
   setCursorMode,
   collapseAll,
   expandAll,
-  openAIGenerator,
+  setOpenAiModal,
   className,
 }: FloatingToolboxProps) => {
   const [areNodesCollapsed, setAreNodesCollapsed] = useState<boolean>(false);
@@ -66,7 +66,7 @@ export const FloatingToolbox = ({
     activeColor: "bg-green-600 hover:bg-green-700 text-white",
     isActive: () => false,
     handleToolClick: () => {
-      openAIGenerator();
+      setOpenAiModal(true);
     },
   };
 
@@ -88,7 +88,6 @@ export const FloatingToolbox = ({
           context={{
             collapseAll,
             expandAll,
-            openAIGenerator,
           }}
         />
       ))}
