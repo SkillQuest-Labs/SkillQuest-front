@@ -1,17 +1,17 @@
-import { useLoadingStore } from "@/stores/loading-store";
 import { ChevronDown, ChevronsDownUp, ChevronUp, Loader2, Maximize2, Sparkles } from "lucide-react";
 import { useCallback, useState } from "react";
 import type { CursorModeType, FloatingToolboxProps } from "../../canvas.type";
 import { ToolButton } from "./ToolButton";
 import { tools } from "./toolbox.const";
+import { useLoadingStore } from "@/stores/loading-store";
 
 export const FloatingToolbox = ({
   cursorMode,
   setCursorMode,
-  // setViewMode,
   collapseAll,
   expandAll,
   setOpenAiModal,
+  // className,
 }: FloatingToolboxProps) => {
   const [areNodesCollapsed, setAreNodesCollapsed] = useState<boolean>(false);
   const [isToolboxCollapsed, setIsToolboxCollapsed] = useState<boolean>(false);
@@ -81,7 +81,7 @@ export const FloatingToolbox = ({
 
   return (
     <div
-      className={`absolute top-6 right-6 z-20 rounded-xl shadow-lg flex flex-col gap-1 bg-[rgba(15,10,40,0.85)] border-2 border-[rgba(59,130,246,0.4)] backdrop-blur-md transition-all duration-300 ease-in-out ${
+      className={` rounded-xl shadow-lg flex flex-col gap-1 bg-[rgba(15,10,40,0.85)] border-2 border-[rgba(59,130,246,0.4)] backdrop-blur-md transition-all duration-300 ease-in-out ${
         isToolboxCollapsed ? "w-14 p-1" : "w-auto p-2"
       }`}
     >
@@ -131,9 +131,11 @@ export const FloatingToolbox = ({
                 key={tool.id}
                 tool={tool}
                 cursorMode={cursorMode}
+                context={{
+                  collapseAll,
+                  expandAll,
+                }}
                 setCursorMode={setCursorMode}
-                colllapseAll={collapseAll}
-                expandAll={expandAll}
               />
             ))}
           </>
