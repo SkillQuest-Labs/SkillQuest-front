@@ -17,6 +17,7 @@ import {
   difficultyDetailLabels,
 } from "../skills.const";
 import { showToast } from "@/component/notification/show-toast";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/shared/components/ui/dialog";
 
 export const SkillDetail = () => {
   const { skillId } = useParams<{ skillId: string }>();
@@ -27,6 +28,7 @@ export const SkillDetail = () => {
   const { deleteSkill, loading: deleteLoading } = useDeleteSkill(skillId || "");
 
   const [isEditing, setIsEditing] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -111,10 +113,12 @@ export const SkillDetail = () => {
     return difficultyDetailLabels[difficulty as keyof typeof difficultyDetailLabels] || difficulty;
   };
 
-  const handleDelete = async () => {
-    if (!skillId || !window.confirm("Êtes-vous sûr de vouloir supprimer ce skill ? Cette action est irréversible.")) {
-      return;
-    }
+  const handleDelete = () => {
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!skillId) return;
 
     try {
       await deleteSkill();
@@ -123,6 +127,7 @@ export const SkillDetail = () => {
         description: "Le skill a été supprimé avec succès",
         status: "success",
       });
+      setIsDeleteDialogOpen(false);
       navigate("/dashboard/skills");
     } catch {
       showToast({
@@ -387,6 +392,34 @@ export const SkillDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* Boîte de dialogue de confirmation de suppression */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent className="bg-slate-800 border-slate-700 text-white">
+          <DialogHeader>
+            <DialogTitle className="text-red-400">Confirmer la suppression</DialogTitle>
+            <DialogDescription className="text-slate-300">
+              Êtes-vous sûr de vouloir supprimer le skill "{skill.title}" ? Cette action est irréversible.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setIsDeleteDialogOpen(false)}
+              className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white bg-slate-700/50"
+            >
+              Annuler
+            </Button>
+            <Button
+              onClick={handleConfirmDelete}
+              disabled={deleteLoading}
+              className="bg-red-600 hover:bg-red-700 text-white"
+            >
+              {deleteLoading ? "Suppression..." : "Supprimer"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
