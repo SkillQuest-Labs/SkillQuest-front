@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
 import { useGetSkill, useUpdateSkill, useDeleteSkill } from "@/shared/services/skill/api-skill";
+import type { UpdateSkillInput } from "@/shared/services/skill/api-skill.type";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
@@ -17,7 +18,14 @@ import {
   difficultyDetailLabels,
 } from "../skills.const";
 import { showToast } from "@/component/notification/show-toast";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/shared/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/shared/components/ui/dialog";
 
 export const SkillDetail = () => {
   const { skillId } = useParams<{ skillId: string }>();
@@ -51,7 +59,7 @@ export const SkillDetail = () => {
     if (!skillId) return;
 
     try {
-      const updateData: any = {
+      const updateData: UpdateSkillInput = {
         title: formData.title,
         description: formData.description,
       };

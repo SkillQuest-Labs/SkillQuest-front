@@ -82,18 +82,5 @@ export const showToast = ({ title, description, status = null, duration }: Toast
     return;
   }
 
-  // Default case (when status is null or undefined)
-  toast(title, {
-    description: description,
-    duration: duration,
-    style: {
-      backgroundColor: "rgba(51, 65, 85, 0.1)",
-      borderColor: "rgba(51, 65, 85, 0.3)",
-      color: "#334155",
-      borderWidth: "2px",
-      borderRadius: "8px",
-      boxShadow: "0 4px 12px rgba(51, 65, 85, 0.15)",
-      backdropFilter: "blur(8px)",
-    },
-  });
+  
 };

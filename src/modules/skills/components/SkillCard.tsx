@@ -8,7 +8,14 @@ import { useNavigate } from "react-router-dom";
 import { useDeleteSkill } from "@/shared/services/skill/api-skill";
 import { showToast } from "@/component/notification/show-toast";
 import { useState } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/shared/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/shared/components/ui/dialog";
 import { useQueryClient } from "@tanstack/react-query";
 
 type SkillCardProps = {
@@ -40,17 +47,17 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
   const handleConfirmDelete = async () => {
     try {
       await deleteSkill();
-      
+
       // Invalider le cache des skills pour rafraîchir la liste
       await queryClient.invalidateQueries({ queryKey: ["skills"] });
-      
+
       showToast({
         title: "Succès",
         description: "Le skill a été supprimé avec succès",
         status: "success",
       });
       setIsDeleteDialogOpen(false);
-      
+
       // La liste se rafraîchira automatiquement grâce à l'invalidation du cache
       // L'utilisateur reste sur la même page et voit la carte disparaître
     } catch {
