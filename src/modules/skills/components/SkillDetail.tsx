@@ -11,12 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui
 import { Badge } from "@/shared/components/ui/badge";
 import { ArrowLeft, Save, X } from "lucide-react";
 import type { SkillDifficulty, SkillStatus } from "../skills.types";
-import {
-  getDifficultyColor,
-  getStatusColor,
-  getStatusLabel,
-  getDifficultyLabel,
-} from "../skills.const";
+import { getDifficultyColor, getStatusColor, getStatusLabel, getDifficultyLabel } from "../skills.const";
 import { showToast } from "@/component/notification/show-toast";
 import {
   Dialog,
@@ -32,7 +27,7 @@ export const SkillDetail = () => {
   const navigate = useNavigate();
   const { isCollapsed } = useSidebarStore();
   const { skill, loading: skillLoading, error: skillError } = useGetSkill(skillId || "");
-  const { updateSkill, loading: updateLoading } = useUpdateSkill(skillId || "");
+  const { updateSkill, loading: updateLoading } = useUpdateSkill(skillId || "", "uuid-user-1234-5678-9012-345678901234");
   const { deleteSkill, loading: deleteLoading } = useDeleteSkill(skillId || "");
 
   const [isEditing, setIsEditing] = useState(false);
