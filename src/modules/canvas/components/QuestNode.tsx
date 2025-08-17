@@ -1,4 +1,4 @@
-import { Handle, Position, type Node, type NodeProps } from "@xyflow/react";
+import { Handle, Position, useStore, type Node, type NodeProps } from "@xyflow/react";
 
 import type { QuestNodeData } from "../canvas.type";
 import { useRef } from "react";
@@ -11,6 +11,10 @@ export const QuestNode = ({ id, data }: NodeProps<Node<QuestNodeData>>) => {
   const markDeletedNode = useCanvasStore((state) => state.markDeletedNode);
   const { cursorMode } = useCanvasStore((state) => state);
   const isConnect = cursorMode === "connect";
+
+  const connectionCount = useStore(
+    (state) => state.edges.filter((edge) => edge.source === id || edge.target === id).length,
+  );
 
   const handleDelete = () => {
     if (!nodeRef.current || !blackHoleRef.current) return;
@@ -30,6 +34,7 @@ export const QuestNode = ({ id, data }: NodeProps<Node<QuestNodeData>>) => {
           data={data}
           onDelete={handleDelete}
           isCollapsed={data.isCollapsed}
+          connectionCount={connectionCount}
           sourceHandle={
             <Handle
               type="target"

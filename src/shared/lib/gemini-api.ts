@@ -6,14 +6,18 @@ export const callGeminiApi = async (prompt: string): Promise<string> => {
 
   const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
-    contents: prompt,
-  });
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: prompt,
+    });
 
-  if (typeof response.text !== "string") {
-    throw new Error("Gemini API did not return a text response.");
+    if (typeof response.text !== "string") {
+      throw new Error("Gemini API did not return a text response.");
+    }
+
+    return response.text;
+  } catch {
+    throw "something went wrong with Gemini API";
   }
-
-  return response.text;
 };

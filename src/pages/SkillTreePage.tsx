@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { renderConcentricCircles } from "@/modules/skill-tree/render-concentric-circles.const";
+import { renderConcentricCircles } from "@/modules/skill-tree/component/concentric-circles/render-concentric-circles";
 import { Button } from "@/shared/components/ui/button";
 import { PauseIcon, PlayIcon } from "lucide-react";
 
@@ -12,7 +12,7 @@ export const SkillTreePage = () => {
 
   return (
     <div className="w-full h-screen overflow-hidden relative flex items-center justify-center bg-slate-900">
-      <div className="relative  w-full h-[800px]">
+      <div className="relative border border-slate-600 rounded-lg bg-slate-800 w-[1200px] h-[800px]">
         <Button
           variant="outline"
           size="sm"

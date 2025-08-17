@@ -36,3 +36,29 @@ export interface SessionFormProps {
   loadingSkills: boolean;
   loadingQuests: boolean;
 }
+
+export type SessionFormState = {
+  title: string;
+  description: string;
+  startDate: string;
+  startTime: string;
+  endTime: string;
+  linkedSkill: string;
+  linkedQuest: string;
+  color: string;
+};
+
+export type CalendarEvent = {
+  id: string;
+  title: string;
+  description?: string;
+  color: string;
+  start: string; // ISO
+  end: string; // ISO
+  backgroundColor: string;
+  borderColor: string;
+  extendedProps?: {
+    linkedSkill?: string;
+    linkedQuest?: string;
+  };
+};
