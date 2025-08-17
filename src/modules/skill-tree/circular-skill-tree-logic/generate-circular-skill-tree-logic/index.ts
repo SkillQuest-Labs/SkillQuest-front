@@ -1,19 +1,19 @@
+import { isSkillNode } from "@/modules/canvas/canvas.const";
+import type { QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
 import { type Edge, type Node } from "@xyflow/react";
 import { buildDependencyGraph } from "../init/build-dependency-graph";
-import { findRootQuestIds } from "./find-root-quest-ids";
-import type { QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
-import { isSkillNode } from "@/modules/canvas/canvas.const";
 import { computeNodeLevels } from "./compute-node-levels";
+import { findRootQuestIds } from "./find-root-quest-ids";
 import { generateCircularNodesData } from "./generate-circular-nodes-data";
 
 type GenerateCircularNodesDataProps = {
-  nodes: Node<QuestNodeData>[] | Node<SkillNodeData>[];
+  nodes: Node<QuestNodeData | SkillNodeData>[];
   edges: Edge[];
+  centerX: number;
+  centerY: number;
 };
 
-export const generateCircularSkillTreeData = ({ nodes, edges }: GenerateCircularNodesDataProps) => {
-  const centerX = 500;
-  const centerY = 400;
+export const generateCircularSkillTreeData = ({ nodes, edges, centerX, centerY }: GenerateCircularNodesDataProps) => {
   //   const circularSkillNodes: CircularSkillNode[] = [];
 
   const graph = buildDependencyGraph(nodes, edges);
@@ -58,4 +58,6 @@ export const generateCircularSkillTreeData = ({ nodes, edges }: GenerateCircular
 
   // Add the central node at the beginning of the array
   circularSkillNodes.unshift(graph.getNode("center"));
+
+  return circularSkillNodes;
 };
