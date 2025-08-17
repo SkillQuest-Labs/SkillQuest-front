@@ -12,10 +12,10 @@ import { Badge } from "@/shared/components/ui/badge";
 import { ArrowLeft, Save, X } from "lucide-react";
 import type { SkillDifficulty, SkillStatus } from "../skills.types";
 import {
-  difficultyDetailColors,
-  statusDetailColors,
-  statusDetailLabels,
-  difficultyDetailLabels,
+  getDifficultyColor,
+  getStatusColor,
+  getStatusLabel,
+  getDifficultyLabel,
 } from "../skills.const";
 import { showToast } from "@/component/notification/show-toast";
 import {
@@ -99,26 +99,6 @@ export const SkillDetail = () => {
       });
     }
     setIsEditing(false);
-  };
-
-  const getDifficultyColor = (difficulty: SkillDifficulty) => {
-    if (difficulty === "ALL") return "bg-gray-500";
-    return difficultyDetailColors[difficulty as keyof typeof difficultyDetailColors] || "bg-gray-500";
-  };
-
-  const getStatusColor = (status: SkillStatus) => {
-    if (status === "ALL") return "bg-gray-500";
-    return statusDetailColors[status as keyof typeof statusDetailColors] || "bg-gray-500";
-  };
-
-  const getStatusLabel = (status: SkillStatus) => {
-    if (status === "ALL") return status;
-    return statusDetailLabels[status as keyof typeof statusDetailLabels] || status;
-  };
-
-  const getDifficultyLabel = (difficulty: SkillDifficulty) => {
-    if (difficulty === "ALL") return difficulty;
-    return difficultyDetailLabels[difficulty as keyof typeof difficultyDetailLabels] || difficulty;
   };
 
   const handleDelete = () => {

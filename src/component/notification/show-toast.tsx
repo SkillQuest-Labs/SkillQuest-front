@@ -81,6 +81,4 @@ export const showToast = ({ title, description, status = null, duration }: Toast
     });
     return;
   }
-
-  
 };
