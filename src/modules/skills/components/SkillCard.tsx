@@ -25,7 +25,6 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
   const navigate = useNavigate();
   const { deleteSkill, loading: deleteLoading } = useDeleteSkill(
     skill.skillId || skill.id || "",
-    "uuid-user-1234-5678-9012-345678901234",
   );
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
@@ -56,8 +55,7 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
       });
       setIsDeleteDialogOpen(false);
 
-      // La liste se rafraîchira automatiquement grâce au cache ["skills", userId]
-      // Plus besoin d'invalidation manuelle !
+      
     } catch {
       showToast({
         title: "Erreur",

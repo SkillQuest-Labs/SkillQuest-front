@@ -3,7 +3,7 @@ import { useApi, useApiAsync } from "@/shared/services/useApi";
 import type { CreateSkillInput, CreateSkillResponse, UpdateSkillInput, UpdateSkillResponse } from "./api-skill.type";
 import type { Skill } from "@/shared/types/skill.type";
 
-export const useCreateSkill = (userId: string) => {
+export const useCreateSkill = () => {
   const options = {
     method: "POST",
     url: `${Constants.API_BASE_URL}/skills`,
@@ -16,7 +16,7 @@ export const useCreateSkill = (userId: string) => {
     mutateAsync: createSkill,
     isPending: loading,
     error,
-  } = useApiAsync<CreateSkillResponse, CreateSkillInput>(options, ["skills", userId]);
+  } = useApiAsync<CreateSkillResponse, CreateSkillInput>(options, ["skill"]);
 
   return {
     createSkill,
@@ -25,7 +25,7 @@ export const useCreateSkill = (userId: string) => {
   };
 };
 
-export const useUpdateSkill = (skillId: string, userId: string) => {
+export const useUpdateSkill = (skillId: string) => {
   const {
     mutateAsync: updateSkill,
     isPending: loading,
@@ -36,13 +36,13 @@ export const useUpdateSkill = (skillId: string, userId: string) => {
       url: `${Constants.API_BASE_URL}/skills/${skillId}`,
       headers: { "Content-Type": "application/json; charset=UTF-8" },
     },
-    ["skills", userId],
+    ["skills"],
   );
 
   return { updateSkill, loading, error };
 };
 
-export const useGetSkill = (skillId: string, userId: string) => {
+export const useGetSkill = (skillId: string) => {
   const enabled = Boolean(skillId && skillId.length > 0);
   const options = {
     method: "GET",
@@ -52,7 +52,7 @@ export const useGetSkill = (skillId: string, userId: string) => {
     },
   };
 
-  const { data, isLoading: loading, error } = useApi<CreateSkillResponse>(options, ["skills", userId], enabled);
+  const { data, isLoading: loading, error } = useApi<CreateSkillResponse>(options, ["skills", skillId], enabled);
 
   return {
     skill: data,
@@ -79,7 +79,7 @@ export const useGetSkills = (userId: string) => {
   };
 };
 
-export const useDeleteSkill = (skillId: string, userId: string) => {
+export const useDeleteSkill = (skillId: string) => {
   const {
     mutateAsync: deleteSkill,
     isPending: loading,
@@ -90,7 +90,7 @@ export const useDeleteSkill = (skillId: string, userId: string) => {
       url: `${Constants.API_BASE_URL}/skills/${skillId}`,
       headers: { "Content-Type": "application/json; charset=UTF-8" },
     },
-    ["skills", userId],
+    ["skills"],
   );
 
   return { deleteSkill, loading, error };
