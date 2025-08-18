@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import type { CircularSkillNode } from "../../skill-tree.type";
+import type { CircularSkillNode } from "../skill-tree.type";
 
 type BaseNodeStyle = {
   node: CircularSkillNode;

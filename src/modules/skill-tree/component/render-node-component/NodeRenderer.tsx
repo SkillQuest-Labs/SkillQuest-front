@@ -1,8 +1,8 @@
+import { nodeBaseStyle } from "../../render-node/node-base-style";
+import { nodeShapeStyle } from "../../render-node/node-shape-style";
+import { getNodeBorderColor, getNodeColor } from "../../render-node/render-node";
 import type { CircularSkillNode } from "../../skill-tree.type";
-import { nodeBaseStyle } from "./node-base-style";
-import { nodeShapeStyle } from "./node-shape-style";
-import { nodeContent } from "./node-style.const";
-import { getNodeBorderColor, getNodeColor } from "./render-node";
+import { nodeContent } from "./node-content";
 
 type NodeRendererProps = {
   node: CircularSkillNode;

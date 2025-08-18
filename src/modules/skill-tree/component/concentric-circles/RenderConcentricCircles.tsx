@@ -10,7 +10,7 @@ type RenderConcentricCirclesProps = {
   containerHeight: number;
 };
 
-export const renderConcentricCircles = ({
+export const RenderConcentricCircles = ({
   skillnodes,
   centerX,
   centerY,

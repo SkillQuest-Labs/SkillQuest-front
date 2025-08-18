@@ -1,3 +1,5 @@
+import { SkillTreeLoader } from "@/component/SkillTreeLoader";
+import type { QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
 import { Button } from "@/shared/components/ui/button";
 import type { Edge, Node } from "@xyflow/react";
 import { ChevronLeft, PauseIcon, PlayIcon } from "lucide-react";
@@ -5,10 +7,8 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import { generateCircularSkillTreeData } from "../circular-skill-tree-logic/generate-circular-skill-tree-logic";
 import type { DependencyGraph } from "../circular-skill-tree-logic/generate-circular-skill-tree-logic/dependency-graph";
 import type { CircularSkillNode } from "../skill-tree.type";
-import { renderConcentricCircles } from "./concentric-circles/render-concentric-circles";
-import { NodeRenderer } from "./render-node";
-import { SkillTreeLoader } from "@/component/SkillTreeLoader";
-import type { QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
+import { RenderConcentricCircles } from "./concentric-circles/RenderConcentricCircles";
+import { NodeRenderer } from "./render-node-component/NodeRenderer";
 
 export type SkillTreeDataProps = {
   nodes: CircularSkillNode[];
@@ -126,14 +126,14 @@ export const SkillTree = ({ nodes, edges, onBack }: SkillTreeProps) => {
               position: "relative",
             }}
           >
-            {renderConcentricCircles({
-              skillnodes: circularSkillNodes,
-              centerX,
-              centerY,
-              options: { animationEnabled },
-              containerWidth: containerSize.width,
-              containerHeight: containerSize.height,
-            })}
+            <RenderConcentricCircles
+              skillnodes={circularSkillNodes}
+              centerX={centerX}
+              centerY={centerY}
+              options={{ animationEnabled }}
+              containerWidth={containerSize.width}
+              containerHeight={containerSize.height}
+            />
 
             <div className="animate-in slide-in-from-bottom-4 duration-1000 delay-300">
               {circularSkillNodes.map((node, index) => (

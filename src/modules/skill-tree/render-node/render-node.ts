@@ -1,4 +1,4 @@
-import type { CircularSkillNode } from "../../skill-tree.type";
+import type { CircularSkillNode } from "../skill-tree.type";
 
 export const LEVEL_COLORS: Record<number, { node: string; border: string; connection: string }> = {
   0: { node: "#312e81", border: "#818cf8", connection: "#4f46e5" }, // Indigo - Centre
