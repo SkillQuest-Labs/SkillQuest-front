@@ -52,7 +52,7 @@ export const useGetSkill = (skillId: string) => {
     },
   };
 
-  const { data, isLoading: loading, error } = useApi<CreateSkillResponse>(options, ["skills", skillId], enabled);
+  const { data, isLoading: loading, error } = useApi<CreateSkillResponse>(options, ["skill", skillId], enabled);
 
   return {
     skill: data,
