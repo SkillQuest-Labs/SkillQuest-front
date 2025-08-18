@@ -38,7 +38,7 @@ export const router = createBrowserRouter([
           routing="path"
           path="/sign-up"
           signInUrl="/sign-in"
-          fallbackRedirectUrl="/dashboard"
+          fallbackRedirectUrl="/sign-in"
         />
       </AuthLayout>
     ),
