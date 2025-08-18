@@ -16,7 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
-import { useQueryClient } from "@tanstack/react-query";
+
 
 type SkillCardProps = {
   skill: Skill;
@@ -24,8 +24,10 @@ type SkillCardProps = {
 
 export const SkillCard = ({ skill }: SkillCardProps) => {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const { deleteSkill, loading: deleteLoading } = useDeleteSkill(skill.skillId || skill.id || "");
+  const { deleteSkill, loading: deleteLoading } = useDeleteSkill(
+    skill.skillId || skill.id || "",
+    "uuid-user-1234-5678-9012-345678901234"
+  );
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const handleEditClick = (e: React.MouseEvent) => {
@@ -48,9 +50,6 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
     try {
       await deleteSkill();
 
-      // Invalider le cache des skills pour rafraîchir la liste
-      await queryClient.invalidateQueries({ queryKey: ["skills"] });
-
       showToast({
         title: "Succès",
         description: "Le skill a été supprimé avec succès",
@@ -58,8 +57,8 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
       });
       setIsDeleteDialogOpen(false);
 
-      // La liste se rafraîchira automatiquement grâce à l'invalidation du cache
-      // L'utilisateur reste sur la même page et voit la carte disparaître
+      // La liste se rafraîchira automatiquement grâce au cache ["skills", userId]
+      // Plus besoin d'invalidation manuelle !
     } catch {
       showToast({
         title: "Erreur",

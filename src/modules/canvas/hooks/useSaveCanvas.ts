@@ -21,7 +21,7 @@ export const useSaveCanvas = () => {
   const { createQuest, error: createQuestError } = useCreateQuests();
   const { updateQuest, error: updateQuestError } = useUpdateQuests();
   const { deleteQuest, error: deleteQuestError } = useDeleteQuests();
-  const { createSkill, error: createSkillError } = useCreateSkill();
+  const { createSkill, error: createSkillError } = useCreateSkill("uuid-user-1234-5678-9012-345678901234");
   const { saveQuestRelations, error: questRelationError } = useSaveQuestRelations();
   const { deleteQuestRelations, error: deleteQuestRelationsError } = useDeleteQuestRelations();
   const { nodes, edges, newNodeIds, newEdgeIds, modifiedNodesIds, deletedNodesIds, deletedEdgeIds, clearFlags } =

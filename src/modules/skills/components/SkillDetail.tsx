@@ -26,12 +26,18 @@ export const SkillDetail = () => {
   const { skillId } = useParams<{ skillId: string }>();
   const navigate = useNavigate();
   const { isCollapsed } = useSidebarStore();
-  const { skill, loading: skillLoading, error: skillError } = useGetSkill(skillId || "");
+  const { skill, loading: skillLoading, error: skillError } = useGetSkill(
+    skillId || "",
+    "uuid-user-1234-5678-9012-345678901234"
+  );
   const { updateSkill, loading: updateLoading } = useUpdateSkill(
     skillId || "",
     "uuid-user-1234-5678-9012-345678901234",
   );
-  const { deleteSkill, loading: deleteLoading } = useDeleteSkill(skillId || "");
+  const { deleteSkill, loading: deleteLoading } = useDeleteSkill(
+    skillId || "",
+    "uuid-user-1234-5678-9012-345678901234"
+  );
 
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
