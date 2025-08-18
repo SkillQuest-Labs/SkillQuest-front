@@ -9,6 +9,7 @@ import type { DependencyGraph } from "../circular-skill-tree-logic/generate-circ
 import type { CircularSkillNode } from "../skill-tree.type";
 import { RenderConcentricCircles } from "./concentric-circles/RenderConcentricCircles";
 import { NodeRenderer } from "./render-node-component/NodeRenderer";
+import { ConnectionsRenderer } from "./render-node-connections/ConnectionsRenderer";
 
 export type SkillTreeDataProps = {
   nodes: CircularSkillNode[];
@@ -29,6 +30,7 @@ export const SkillTree = ({ nodes, edges, onBack }: SkillTreeProps) => {
 
   const [selectedNode] = useState<string | null>(null);
   const [activeNodePath] = useState<string[]>([]);
+  const [activeSkillPath, setActiveSkillPath] = useState<string[]>([]);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
   const [highlightedPathNodes] = useState<string[]>([]);
   const [pan] = useState({ x: 0, y: 0 });
@@ -61,9 +63,16 @@ export const SkillTree = ({ nodes, edges, onBack }: SkillTreeProps) => {
     }
   }, [nodes, edges, centerX, centerY]);
 
-  const handleNodeClick = (e: React.MouseEvent<Element, MouseEvent>) => {
-    e.stopPropagation();
-  };
+  const handleNodeClick = useCallback(
+    (e: React.MouseEvent, nodeId: string) => {
+      e.stopPropagation();
+      const node = circularSkillNodes.find((n) => n.id === nodeId);
+      if (!node) return;
+
+      setActiveSkillPath((prev) => [...prev, nodeId]);
+    },
+    [circularSkillNodes],
+  );
 
   const renderSkillNode = useCallback(
     (node: CircularSkillNode) => {
@@ -77,7 +86,7 @@ export const SkillTree = ({ nodes, edges, onBack }: SkillTreeProps) => {
         setHoveredNode,
       });
     },
-    [activeNodePath, hoveredNode, selectedNode, highlightedPathNodes],
+    [activeNodePath, hoveredNode, selectedNode, highlightedPathNodes, handleNodeClick],
   );
 
   return (
@@ -133,6 +142,13 @@ export const SkillTree = ({ nodes, edges, onBack }: SkillTreeProps) => {
               options={{ animationEnabled }}
               containerWidth={containerSize.width}
               containerHeight={containerSize.height}
+            />
+
+            <ConnectionsRenderer
+              nodes={circularSkillNodes}
+              hoveredNode={hoveredNode}
+              activeSkillPath={activeSkillPath}
+              highlightedPathNodes={highlightedPathNodes}
             />
 
             <div className="animate-in slide-in-from-bottom-4 duration-1000 delay-300">

@@ -16,7 +16,7 @@ const getLevelColors = (level: number) => {
   if (LEVEL_COLORS[level]) {
     return LEVEL_COLORS[level];
   }
-  // Couleur par défaut pour les niveaux non définis
+  // Default color for undefined levels
   return LEVEL_COLORS[0];
 };
 
@@ -38,4 +38,20 @@ export const getNodeBorderColor = (node: CircularSkillNode, activeNodePath: stri
 
   const { border: levelBorderColor } = getLevelColors(node.ring);
   return levelBorderColor; // Use level border color
+};
+
+export const getConnectionColor = (
+  fromNode: CircularSkillNode,
+  toNode: CircularSkillNode,
+  activeSkillPath: string[],
+  highlightedPathNodes: string[],
+) => {
+  const isActiveConnection = activeSkillPath.includes(fromNode.id) && activeSkillPath.includes(toNode.id);
+  const isPathHighlighted = highlightedPathNodes.includes(fromNode.id) && highlightedPathNodes.includes(toNode.id);
+
+  if (isPathHighlighted) return "url(#pathHighlightConnection)";
+  if (isActiveConnection) return "url(#activeConnection)";
+
+  const { connection: levelConnectionColor } = getLevelColors(toNode.ring);
+  return `url(#levelConnection-${levelConnectionColor.substring(1)})`; // Create unique gradient ID
 };
