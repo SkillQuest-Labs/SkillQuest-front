@@ -8,6 +8,7 @@ import type { CircularSkillNode } from "../skill-tree.type";
 import { renderConcentricCircles } from "./concentric-circles/render-concentric-circles";
 import { NodeRenderer } from "./render-node";
 import { SkillTreeLoader } from "@/component/SkillTreeLoader";
+import type { QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
 
 export type SkillTreeDataProps = {
   nodes: CircularSkillNode[];
@@ -15,7 +16,7 @@ export type SkillTreeDataProps = {
 };
 
 export type SkillTreeProps = {
-  nodes: Node<any>[];
+  nodes: Node<QuestNodeData | SkillNodeData>[];
   edges: Edge[];
   onBack?: () => void;
 };
