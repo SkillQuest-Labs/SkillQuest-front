@@ -17,7 +17,6 @@ import {
   DialogTitle,
 } from "@/shared/components/ui/dialog";
 
-
 type SkillCardProps = {
   skill: Skill;
 };
@@ -26,7 +25,7 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
   const navigate = useNavigate();
   const { deleteSkill, loading: deleteLoading } = useDeleteSkill(
     skill.skillId || skill.id || "",
-    "uuid-user-1234-5678-9012-345678901234"
+    "uuid-user-1234-5678-9012-345678901234",
   );
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 

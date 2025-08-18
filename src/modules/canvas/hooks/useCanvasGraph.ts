@@ -56,12 +56,15 @@ export const useCanvasGraph = () => {
       changes.forEach((change) => {
         if (change.type === "remove" && change.id) {
           markDeleteEdge(change.id);
+          const edge = edges.find((e) => e.id === change.id);
+          if (edge?.source) markModifiedNode(edge.source);
+          if (edge?.target) markModifiedNode(edge.target);
         }
       });
       const updatedEdges = applyEdgeChanges(changes, edges);
       setEdges(updatedEdges);
     },
-    [edges, setEdges, markDeleteEdge],
+    [edges, setEdges, markDeleteEdge, markModifiedNode],
   );
 
   const addQuestNode = (position: XYPosition) => {
