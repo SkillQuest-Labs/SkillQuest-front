@@ -1,6 +1,6 @@
 import { Constants } from "@/shared/constante/api-constante";
 import { useApi, useApiAsync } from "@/shared/services/useApi";
-import type { CreateSkillInput, CreateSkillResponse } from "./api-skill.type";
+import type { CreateSkillInput, CreateSkillResponse, UpdateSkillInput, UpdateSkillResponse } from "./api-skill.type";
 import type { Skill } from "@/shared/types/skill.type";
 
 export const useCreateSkill = () => {
@@ -23,6 +23,23 @@ export const useCreateSkill = () => {
     loading,
     error,
   };
+};
+
+export const useUpdateSkill = (skillId: string) => {
+  const {
+    mutateAsync: updateSkill,
+    isPending: loading,
+    error,
+  } = useApiAsync<UpdateSkillResponse, UpdateSkillInput>(
+    {
+      method: "PUT",
+      url: `${Constants.API_BASE_URL}/skills/${skillId}`,
+      headers: { "Content-Type": "application/json; charset=UTF-8" },
+    },
+    ["skills"],
+  );
+
+  return { updateSkill, loading, error };
 };
 
 export const useGetSkill = (skillId: string) => {
@@ -53,11 +70,28 @@ export const useGetSkills = (userId: string) => {
     },
   };
 
-  const { data, isLoading: loading, error } = useApi<Skill[]>(options, ["skills"]);
+  const { data, isLoading: loading, error } = useApi<Skill[]>(options, ["skills", userId]);
 
   return {
     skills: data || [],
     loading,
     error,
   };
+};
+
+export const useDeleteSkill = (skillId: string) => {
+  const {
+    mutateAsync: deleteSkill,
+    isPending: loading,
+    error,
+  } = useApiAsync<void, void>(
+    {
+      method: "DELETE",
+      url: `${Constants.API_BASE_URL}/skills/${skillId}`,
+      headers: { "Content-Type": "application/json; charset=UTF-8" },
+    },
+    ["skills"],
+  );
+
+  return { deleteSkill, loading, error };
 };
