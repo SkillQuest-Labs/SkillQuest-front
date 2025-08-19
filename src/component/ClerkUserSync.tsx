@@ -21,7 +21,7 @@ export default function ClerkUserSync() {
           }),
         });
       } catch (error) {
-        // Optionnel : tu peux garder une gestion silencieuse des erreurs
+        console.error("Failed to sync Clerk user:", error);
       }
     };
 
