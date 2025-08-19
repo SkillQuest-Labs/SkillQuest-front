@@ -1,11 +1,11 @@
 import avatarImage from "@/assets/avatar.svg";
 import { AvatarHud } from "@/component/avatar-hud/AvatarHud";
-import SyncUser from "@/component/SyncUser";
+import ClerkUserSync from "@/component/ClerkUserSync";
 
 export const DashboardUser = () => {
   return (
     <div>
-      <SyncUser />
+      <ClerkUserSync />
       <div className="flex items-center justify-center h-screen">
         <h1 className="text-3xl font-bold text-white">Dashboard user</h1>
       </div>
