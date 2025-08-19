@@ -24,12 +24,12 @@ export const generateCircularSkillTreeData = ({ nodes, edges, centerX, centerY }
     graph.addNode({
       id: "center",
       title: node.data.config.title,
-      description: node.data.config.description,
+      description: node.data.config.description || "",
       position: { x: centerX, y: centerY },
       size: 50,
       shape: "circle",
       nodeType: "mastery",
-      status: "NOT_STARTED",
+      status: "IN_PROGRESS",
       isLocked: false,
       connections: rootQuestIds, // Store direct dependents for the center node
       prerequisites: [],
@@ -52,12 +52,13 @@ export const generateCircularSkillTreeData = ({ nodes, edges, centerX, centerY }
   // Now that all nodes are in the graph with their prerequisites, determine if each node is locked
   circularSkillNodes.forEach((node) => {
     if (node.id !== "center") {
-      node.isLocked = !graph.isUnlocked(node.id);
+    const isConnectedToCenter = node.prerequisites.includes("center");
+    node.isLocked = !isConnectedToCenter;
     }
   });
 
   // Add the central node at the beginning of the array
   circularSkillNodes.unshift(graph.getNode("center"));
 
-  return circularSkillNodes;
+  return { graph, circularSkillNodes };
 };

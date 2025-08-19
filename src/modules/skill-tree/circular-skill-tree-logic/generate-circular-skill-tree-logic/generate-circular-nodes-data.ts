@@ -3,11 +3,12 @@ import type { QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type"
 import type { CircularSkillNode, QuestProgressStatus } from "../../skill-tree.type";
 import { defineNodeProperties } from "./define-node-properties";
 import { calculateNodePosition, countNodesPerLevel, sortQuestNodesByLevel } from "../skill-tree.const";
+import type { DependencyGraph } from "./dependency-graph";
 
 type GenerateCircularNodesDataProps = {
   nodes: Node<QuestNodeData | SkillNodeData>[];
   visitedLevels: Record<string, number>;
-  graph: any;
+  graph: DependencyGraph;
   ringRadii: number[];
   centerX: number;
   centerY: number;
@@ -51,7 +52,7 @@ export const generateCircularNodesData = ({
     const circularNode: CircularSkillNode = {
       id: node.id,
       title: node.data.title,
-      description: node.data.description,
+      description: "",
       position: { x, y },
       size: nodeVisualsProperties.size,
       shape: nodeVisualsProperties.shape,

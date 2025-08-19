@@ -26,22 +26,26 @@ export const SkillTree = ({ nodes, edges, onBack }: SkillTreeProps) => {
   const [animationEnabled, setAnimationEnabled] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [circularSkillNodes, setCircularSkillNodes] = useState<CircularSkillNode[]>([]);
-  const canvasRef = useRef<HTMLDivElement>(null);
+  const [dependencyGraph, setDependencyGraph] = useState<DependencyGraph>();
 
-  const [selectedNode] = useState<string | null>(null);
+  const skilTreecanvasRef = useRef<HTMLDivElement>(null);
+  const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [panStart, setPanStart] = useState({ x: 0, y: 0 });
+  const [isPanning, setIsPanning] = useState(false);
+
+  const [selectedNode, setSelectedNode] = useState<string | null>(null);
   const [activeNodePath] = useState<string[]>([]);
   const [activeSkillPath, setActiveSkillPath] = useState<string[]>([]);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
-  const [highlightedPathNodes] = useState<string[]>([]);
-  const [pan] = useState({ x: 0, y: 0 });
-  const [zoom] = useState(1);
+  const [highlightedPathNodes, setHighlightedPathNodes] = useState<string[]>([]);
 
   // Dynamically measure container size and compute center
   const [containerSize, setContainerSize] = useState({ width: 1000, height: 800 });
 
   useLayoutEffect(() => {
-    if (canvasRef.current) {
-      const rect = canvasRef.current.getBoundingClientRect();
+    if (skilTreecanvasRef.current) {
+      const rect = skilTreecanvasRef.current.getBoundingClientRect();
       setContainerSize({ width: rect.width, height: rect.height });
     }
   }, []);
@@ -53,8 +57,9 @@ export const SkillTree = ({ nodes, edges, onBack }: SkillTreeProps) => {
     const generateNodes = async () => {
       setIsLoading(true);
       await new Promise((resolve) => setTimeout(resolve, 800));
-      const generatedNodes = generateCircularSkillTreeData({ nodes, edges, centerX, centerY });
-      setCircularSkillNodes(generatedNodes);
+      const { graph, circularSkillNodes } = generateCircularSkillTreeData({ nodes, edges, centerX, centerY });
+      setCircularSkillNodes(circularSkillNodes);
+      setDependencyGraph(graph);
       setIsLoading(false);
     };
 
@@ -66,13 +71,44 @@ export const SkillTree = ({ nodes, edges, onBack }: SkillTreeProps) => {
   const handleNodeClick = useCallback(
     (e: React.MouseEvent, nodeId: string) => {
       e.stopPropagation();
+      setIsPanning(false); // Stop panning when clicking on a node
+
       const node = circularSkillNodes.find((n) => n.id === nodeId);
       if (!node) return;
 
+      setSelectedNode(nodeId);
+
+      // Calculate and set highlighted path
+      if (dependencyGraph) {
+        setHighlightedPathNodes(dependencyGraph.getConnectedPath(nodeId));
+      }
+
       setActiveSkillPath((prev) => [...prev, nodeId]);
     },
-    [circularSkillNodes],
+    [circularSkillNodes, dependencyGraph],
   );
+
+  const handleWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.95 : 1.05;
+    setZoom((prev) => Math.max(0.5, Math.min(3, prev * delta)));
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    // Allow panning everywhere except when clicking directly on nodes
+    setIsPanning(true);
+    setPanStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (isPanning) {
+      setPan({ x: e.clientX - panStart.x, y: e.clientY - panStart.y });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsPanning(false);
+  };
 
   const renderSkillNode = useCallback(
     (node: CircularSkillNode) => {
@@ -88,6 +124,11 @@ export const SkillTree = ({ nodes, edges, onBack }: SkillTreeProps) => {
     },
     [activeNodePath, hoveredNode, selectedNode, highlightedPathNodes, handleNodeClick],
   );
+
+  const handleSkillTreeCanvasClick = () => {
+    setSelectedNode(null);
+    setHighlightedPathNodes([]);
+  };
 
   return (
     <div className="w-full h-screen overflow-hidden relative  flex items-center justify-center bg-slate-900">
@@ -120,7 +161,16 @@ export const SkillTree = ({ nodes, edges, onBack }: SkillTreeProps) => {
         )}
       </Button>
 
-      <div ref={canvasRef} className="w-full h-[400px] cursor-grab active:cursor-grabbing">
+      <div
+        ref={skilTreecanvasRef}
+        className="w-full h-[400px] cursor-grab active:cursor-grabbing"
+        onClick={handleSkillTreeCanvasClick}
+        onWheel={handleWheel}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+      >
         {isLoading ? (
           <SkillTreeLoader
             title="Génération de l'arbre de compétences"

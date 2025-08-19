@@ -43,6 +43,7 @@ export const NodeRenderer = ({
   return (
     <div
       key={node.id}
+      data-node-id={node.id}
       style={{ ...baseStyle, ...shapeStyle, position: "absolute" }}
       onClick={(e) => handleNodeClick(e, node.id)}
       onMouseEnter={() => setHoveredNode(node.id)}
