@@ -1,42 +1,60 @@
 import { useState, useMemo } from "react";
-import { skillsMock } from "../../modules/skills/skills.const";
 import type { SkillDifficulty, SkillSort, SkillStatus } from "../../modules/skills/skills.types";
 import { SkillFilters } from "../../modules/skills/components/SkillFilters";
-import { SkillGrid, SKILLS_PER_PAGE } from "../../modules/skills/components/SkillGrid";
+import { SkillGrid } from "../../modules/skills/components/SkillGrid";
 import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
 import { Plus } from "lucide-react";
 import { Pagination } from "../../modules/skills/components/Pagination";
+import { useNavigate } from "react-router-dom";
+import { useCanvasStore } from "@/stores/canvas/canvas-store";
+import { useGetSkills } from "@/shared/services/skill/api-skill";
+import { SKILLS_PER_PAGE } from "@/modules/skills/skills.const";
 
 export const Skills = () => {
   const { isCollapsed } = useSidebarStore();
+  const { skills: skillsData } = useGetSkills("uuid-user-1234-5678-9012-345678901234");
+  const navigate = useNavigate();
   const [filters, setFilters] = useState<{
     difficulty: SkillDifficulty;
     sort: SkillSort;
     status: SkillStatus;
   }>({
-    difficulty: "all",
-    sort: "recent",
-    status: "all",
+    difficulty: "ALL",
+    sort: "RECENT",
+    status: "ALL",
   });
   const [page, setPage] = useState(1);
 
   const filteredSkills = useMemo(() => {
-    let result = [...skillsMock];
-    if (filters.difficulty !== "all") {
+    if (!skillsData || !Array.isArray(skillsData)) return [];
+
+    let result = [...skillsData];
+
+    if (filters.difficulty && filters.difficulty.toUpperCase() !== "ALL") {
       result = result.filter((s) => s.difficulty === filters.difficulty);
     }
-    if (filters.status !== "all") {
+
+    if (filters.status && filters.status.toUpperCase() !== "ALL") {
       result = result.filter((s) => s.status === filters.status);
     }
-    result.sort((a, b) => {
-      if (filters.sort === "recent") {
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-      } else {
-        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-      }
-    });
+
+    // result.sort((a, b) => {
+    //   if (filters.sort === "RECENT") {
+    //     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    //   } else {
+    //     return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    //   }
+    // });
+
     return result;
-  }, [filters]);
+  }, [filters, skillsData]);
+
+  const reset = useCanvasStore((state) => state.reset);
+
+  const handleCreateNewSkill = () => {
+    reset();
+    navigate("/canvas?createSkill=true");
+  };
 
   return (
     <div
@@ -45,10 +63,14 @@ export const Skills = () => {
       } flex flex-col min-h-0`}
     >
       <div className="flex items-center justify-between mb-6 flex-shrink-0">
-        <h1 className="text-2xl font-bold text-white">Mes Skills</h1>
+        <div>
+          <h1 className="text-2xl font-bold text-white">Mes Skills</h1>
+          {/* <p className="text-slate-400 text-sm mt-1">{skillsData && skillsData.length} skills au total</p> */}
+        </div>
         <button
           className="flex items-center gap-1 bg-slate-700 hover:bg-slate-600 focus:ring-2 focus:ring-blue-400 text-white font-medium px-3 py-1.5 rounded-md shadow-sm transition-all duration-150 text-sm"
           type="button"
+          onClick={handleCreateNewSkill}
         >
           <Plus size={18} />
           <span>Create a skill</span>

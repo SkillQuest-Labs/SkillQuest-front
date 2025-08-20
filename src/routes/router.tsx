@@ -3,8 +3,9 @@ import { ProtectedRoute } from "./protected-route";
 import { routes } from "./router.const";
 import { DashboardLayout } from "@/pages/dashboard/DashboardLayout";
 import { DashboardUser } from "@/pages/dashboard/DashboardUser";
-import { CanvasPage } from "@/pages/CanvasPage";
+import { CanvasPage } from "@/pages/canvas/CanvasPage";
 import { Skills } from "@/pages/dashboard/Skills";
+import { SkillDetail } from "@/modules/skills/components/SkillDetail";
 import { Profil } from "@/pages/dashboard/Profil";
 import { Store } from "@/pages/dashboard/Store";
 import { NotFoundPage } from "@/pages/404";
@@ -12,6 +13,8 @@ import { SignIn, SignUp } from "@clerk/clerk-react";
 import { authAppearance } from "@/shared/constants/auth.const";
 import { AuthLayout } from "@/component/AuthLayout";
 import { UnauthorizedPage } from "@/pages/Unauthorized";
+import { WorkSession } from "@/pages/dashboard/WorkSession";
+import { SkillTreePage } from "@/pages/canvas/SkillTreePage";
 
 export const router = createBrowserRouter([
   // Public routes for authentication
@@ -61,6 +64,10 @@ export const router = createBrowserRouter([
             element: <Skills />,
           },
           {
+            path: routes.skillDetail.path,
+            element: <SkillDetail />,
+          },
+          {
             path: routes.profil.path,
             element: <Profil />,
           },
@@ -68,11 +75,19 @@ export const router = createBrowserRouter([
             path: routes.store.path,
             element: <Store />,
           },
+          {
+            path: routes.workSession.path,
+            element: <WorkSession />,
+          },
         ],
       },
       {
         path: routes.canvas.path,
         element: <CanvasPage />,
+      },
+      {
+        path: routes.skillsTree.path,
+        element: <SkillTreePage />,
       },
     ],
   },

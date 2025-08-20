@@ -1,15 +1,15 @@
 import { toast } from "sonner";
 
-type ToastStatus = "normal" | "action" | "success" | "info" | "warning" | "error" | "loading" | "default";
+type ToastStatus = "success" | "info" | "warning" | "error" | "loading" | "default";
 
 type ToastOptions = {
   title: string;
-  description: string;
-  status?: ToastStatus;
+  description?: string;
+  status?: ToastStatus | null;
   duration?: number;
 };
 
-export const showToast = ({ title, description, status, duration }: ToastOptions) => {
+export const showToast = ({ title, description, status = null, duration }: ToastOptions) => {
   if (status === "success") {
     toast.success(title, {
       description: description,
@@ -25,6 +25,7 @@ export const showToast = ({ title, description, status, duration }: ToastOptions
         backdropFilter: "blur(8px)",
       },
     });
+    return;
   }
 
   if (status === "error") {
@@ -42,5 +43,42 @@ export const showToast = ({ title, description, status, duration }: ToastOptions
         backdropFilter: "blur(8px)",
       },
     });
+    return;
+  }
+
+  if (status === "warning") {
+    toast.warning(title, {
+      description: description,
+      icon: "⚠️",
+      duration: duration,
+      style: {
+        backgroundColor: "rgba(245, 158, 11, 0.1)",
+        borderColor: "rgba(245, 158, 11, 0.3)",
+        color: "#d97706",
+        borderWidth: "2px",
+        borderRadius: "8px",
+        boxShadow: "0 4px 12px rgba(245, 158, 11, 0.15)",
+        backdropFilter: "blur(8px)",
+      },
+    });
+    return;
+  }
+
+  if (status === "info") {
+    toast.info(title, {
+      description: description,
+      icon: "ℹ️",
+      duration: duration,
+      style: {
+        backgroundColor: "rgba(59, 130, 246, 0.1)",
+        borderColor: "rgba(59, 130, 246, 0.3)",
+        color: "#1d4ed8",
+        borderWidth: "2px",
+        borderRadius: "8px",
+        boxShadow: "0 4px 12px rgba(59, 130, 246, 0.15)",
+        backdropFilter: "blur(8px)",
+      },
+    });
+    return;
   }
 };

@@ -10,6 +10,7 @@ import {
 export const useApi = <TResult>(
   options: RequestInit & { url: string } = { url: "" },
   cacheKey: unknown[] = [options.url],
+  enabled: boolean = true,
   queryOption?: Omit<UseQueryOptions<TResult, Error, TResult, unknown[]>, "queryKey" | "queryFn">,
 ): { error?: Error; isLoading: boolean; data?: TResult } => {
   const fetchData = async () => {
@@ -32,6 +33,7 @@ export const useApi = <TResult>(
 
   const { isLoading, data, error } = useQuery<TResult, Error, TResult, unknown[]>({
     queryKey: cacheKey,
+    enabled,
     queryFn: fetchData,
     ...queryOption,
   });

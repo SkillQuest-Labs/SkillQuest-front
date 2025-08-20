@@ -7,8 +7,12 @@ import {
   type XYPosition,
 } from "@xyflow/react";
 import type { QuestNodeData, SkillNodeData } from "../canvas.type";
-import { useCanvasStore } from "@/stores/quest/canvas-store";
+import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import { useCallback } from "react";
+import type { Skill } from "@/shared/types/skill.type";
+import { isQuestNode } from "../canvas.const";
+import { useSkillStore } from "@/stores/skill/skill-store";
+import { createQuestNode } from "@/shared/utils/quetes/quest-node";
 
 // This hook manages the state of nodes and edges in the canvas graph.
 export const useCanvasGraph = () => {
@@ -19,7 +23,9 @@ export const useCanvasGraph = () => {
   const addNode = useCanvasStore((state) => state.addNode);
   const removeNode = useCanvasStore((state) => state.removeNode);
   const markModifiedNode = useCanvasStore((state) => state.markModifiedNode);
-  const markNew = useCanvasStore((state) => state.markNew);
+  const markNodeNew = useCanvasStore((state) => state.markNodeNew);
+  const markDeleteEdge = useCanvasStore((state) => state.markDeleteEdge);
+  const setCurrentSkillId = useSkillStore((state) => state.setCurrentSkillId);
 
   const updateNodeData = useCallback(
     (id: string, field: string, value: any) => {
@@ -47,34 +53,56 @@ export const useCanvasGraph = () => {
 
   const onEdgesChange: OnEdgesChange = useCallback(
     (changes) => {
+      changes.forEach((change) => {
+        if (change.type === "remove" && change.id) {
+          markDeleteEdge(change.id);
+          const edge = edges.find((e) => e.id === change.id);
+          if (edge?.source) markModifiedNode(edge.source);
+          if (edge?.target) markModifiedNode(edge.target);
+        }
+      });
       const updatedEdges = applyEdgeChanges(changes, edges);
       setEdges(updatedEdges);
     },
-    [edges, setEdges],
+    [edges, setEdges, markDeleteEdge, markModifiedNode],
   );
 
   const addQuestNode = (position: XYPosition) => {
-    const id = `quest-${Date.now()}`; // to change
+    const id = `quest-${crypto.randomUUID()}`;
 
-    const newNode: Node<QuestNodeData> = {
+    const newNode = createQuestNode(id, position, removeNode, updateNodeData);
+    addNode(newNode);
+    markNodeNew(id);
+  };
+
+  const addSkillNode = (position: XYPosition, skill: Skill) => {
+    const id = `skill-${crypto.randomUUID()}`;
+    const newNode: Node<SkillNodeData> = {
       id: id,
-      type: "questNode",
+      type: "skill",
       position,
       data: {
-        kind: "quest",
-        title: "New Quest",
-        xp: 100,
-        difficulty: "EASY",
-        description: "Quest description...",
-        status: "LOCKED",
-        isCollapsed: false,
-        onDelete: (nid: string) => removeNode(nid),
-        onUpdate: (field: string, value: any) => updateNodeData(id, field, value),
+        kind: "skill",
+        config: {
+          title: skill.title || "New Skill",
+          description: skill.description || "Skill description...",
+          status: skill.status || "DRAFT",
+          difficulty: skill.difficulty,
+          color: "from-blue-500 to-indigo-600",
+        },
+        // onUpdate: (field: string, value: any) => updateNodeData(id, field, value),
       },
     };
 
-    addNode(newNode);
-    markNew(id);
+    // Retrieve the current nodes
+    const prevNodes = useCanvasStore.getState().nodes;
+    const hasSkillNode = prevNodes.some((n) => !isQuestNode(n));
+    if (hasSkillNode) {
+      const newNodes = prevNodes.map((n) => (!isQuestNode(n) ? newNode : n));
+      setNodes(newNodes);
+      markNodeNew(id);
+      setCurrentSkillId(id);
+    }
   };
 
   const collapseAll = useCallback(() => {
@@ -100,6 +128,7 @@ export const useCanvasGraph = () => {
     setEdges,
     onEdgesChange,
     addQuestNode,
+    addSkillNode,
     deleteNode: removeNode,
     collapseAll,
     expandAll,

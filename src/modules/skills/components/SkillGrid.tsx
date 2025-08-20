@@ -1,6 +1,7 @@
 import { SkillCard } from "./SkillCard";
 import type { Skill } from "../skills.types";
 import "../../../styles/skills.css";
+import { SKILLS_PER_PAGE } from "../skills.const";
 
 // Props modifiées : page et setPage sont passés par le parent
 export type SkillGridProps = {
@@ -8,8 +9,6 @@ export type SkillGridProps = {
   page: number;
   setPage: (page: number) => void;
 };
-
-export const SKILLS_PER_PAGE = 12;
 
 export const SkillGrid = ({ skills, page }: SkillGridProps) => {
   const startIdx = (page - 1) * SKILLS_PER_PAGE;

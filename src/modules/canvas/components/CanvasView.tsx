@@ -1,4 +1,5 @@
-import clsx from "clsx";
+import { Button } from "@/shared/components/ui/button";
+import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import {
   Background,
   Controls,
@@ -10,16 +11,17 @@ import {
   type OnEdgesChange,
   type OnNodesChange,
 } from "@xyflow/react";
+import clsx from "clsx";
+import { ChevronLeft } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { CursorModeType, QuestNodeData, SkillNodeData, ViewModeType } from "../canvas.type";
-import { SkillNode } from "./SkillNode";
-import { QuestNode } from "./QuestNode";
+import { AIQuestGenerationModal } from "./AIQuestGenerationModal";
 import { CustomEdge } from "./CustomEdge";
 import { FloatingToolbox } from "./floating-toolbox/FloatingToolbox";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/shared/components/ui/button";
-import { ChevronLeft, Save } from "lucide-react";
-import { SaveLoader } from "@/component/icons/save-loader";
-import { useLoadingStore } from "@/stores/loading-store";
+import { QuestNode } from "./QuestNode";
+import { RoadmapButton } from "./RoadmapButton";
+import { SkillNode } from "./SkillNode";
 
 type CanvasViewProps = {
   nodes: Node<QuestNodeData | SkillNodeData>[];
@@ -31,11 +33,11 @@ type CanvasViewProps = {
   onConnect: (params: Connection) => void;
   cursorMode: CursorModeType;
   setCursorMode: (mode: CursorModeType) => void;
-  setViewMode: React.Dispatch<React.SetStateAction<ViewModeType>>;
+  setViewMode: (mode: ViewModeType) => void;
   className?: string;
   collapseAll: () => void;
   expandAll: () => void;
-  onSaveCanvas: () => void;
+  openAIGenerator: () => void;
 };
 
 const nodeTypes = {
@@ -61,11 +63,13 @@ export const CanvasView = ({
   setViewMode,
   collapseAll,
   expandAll,
-  onSaveCanvas,
+  openAIGenerator,
 }: CanvasViewProps) => {
   const navigate = useNavigate();
 
-  const { isLoading: isCanvasSaving, loadingType } = useLoadingStore();
+  const reset = useCanvasStore.getState().reset;
+
+  const [openAiModal, setOpenAiModal] = useState(false);
 
   return (
     <ReactFlow
@@ -82,11 +86,18 @@ export const CanvasView = ({
       onPaneClick={onPaneClick}
       onNodeClick={onNodeClick}
       onConnect={onConnect}
+      isValidConnection={(connection) => {
+        // Prevent self-connections
+        return connection.source !== connection.target;
+      }}
       zoomOnScroll={false}
       panOnScroll={true}
       minZoom={0.2}
       maxZoom={2}
       fitView
+      connectionRadius={200}
+      snapToGrid={true}
+      snapGrid={[30, 30]}
     >
       <Background color="#aaa" gap={30} size={0.5} />
 
@@ -113,7 +124,10 @@ export const CanvasView = ({
           variant="outline"
           size="sm"
           aria-label="Retour au tableau de bord"
-          onClick={() => navigate("/dashboard")}
+          onClick={() => {
+            reset();
+            navigate("/dashboard");
+          }}
           className="bg-[#0C0821] hover:bg-gray-700 text-white hover:text-white px-4 py-2 rounded-lg shadow-lg transition-colors cursor-pointer duration-200 flex items-center gap-2"
         >
           <ChevronLeft className="w-5 h-5" />
@@ -121,41 +135,19 @@ export const CanvasView = ({
         </Button>
       </div>
 
-      <div className="absolute top-6 right-32 z-20">
-        <Button
-          variant={isCanvasSaving ? "outline" : "default"}
-          size="sm"
-          aria-label="Save"
-          disabled={isCanvasSaving}
-          onClick={() => onSaveCanvas()}
-          className={clsx(
-            "bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white px-5 py-2 rounded-xl cursor-pointer shadow-xl transition-all duration-200 flex items-center gap-2 border-2 border-white/80",
-            isCanvasSaving && "opacity-60 cursor-not-allowed",
-          )}
-        >
-          <span className="font-semibold tracking-wide flex items-center gap-2">
-            {isCanvasSaving && loadingType === "spinner" ? (
-              <>
-                <span className="font-bold text-sm">Saving</span>
-                <SaveLoader />
-              </>
-            ) : (
-              <>
-                <span className="font-bold text-sm">Save</span>
-                <Save className="w-6 h-6" />
-              </>
-            )}
-          </span>
-        </Button>
+      {/* Toolbox and RoadmapButton in a flex column, always together */}
+      <div className="absolute top-6 right-6 z-20 flex flex-col items-center gap-4">
+        <FloatingToolbox
+          cursorMode={cursorMode}
+          setCursorMode={setCursorMode}
+          collapseAll={collapseAll}
+          expandAll={expandAll}
+          setOpenAiModal={setOpenAiModal}
+        />
+        <RoadmapButton onClick={() => setViewMode("skillTree")} />
       </div>
 
-      <FloatingToolbox
-        cursorMode={cursorMode}
-        setCursorMode={setCursorMode}
-        setViewMode={setViewMode}
-        collapseAll={collapseAll}
-        expandAll={expandAll}
-      />
+      {openAiModal && <AIQuestGenerationModal onGenerate={openAIGenerator} setOpenAiModal={setOpenAiModal} />}
 
       {/* Mode Indicators */}
       {cursorMode === "create" && (

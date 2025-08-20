@@ -1,0 +1,29 @@
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none !important;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .form-section {
+    /* background: #1a1a2e; */
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    border: 1px solid #2d2d44;
+  }
+  .form-section:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
+  }
+  .advanced-section {
+    background: linear-gradient(135deg, #0e0a2b 0%, #1a1a2e 100%);
+    border: 1px solid #2d2d44;
+  }
+
+  .input-focus:focus-within {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  }

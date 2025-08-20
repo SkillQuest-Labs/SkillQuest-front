@@ -6,9 +6,12 @@ export interface IRoute {
 export interface IRoutes {
   dashboard: IRoute;
   skills: IRoute;
+  skillDetail: IRoute;
   profil: IRoute;
   store: IRoute;
   canvas: IRoute;
+  skillsTree: IRoute;
+  workSession: IRoute;
   notfound: IRoute;
   signIn: IRoute;
   signUp: IRoute;
@@ -23,6 +26,10 @@ export const routes: IRoutes = {
   skills: {
     path: "/dashboard/skills",
     display: "Skills",
+  },
+  skillDetail: {
+    path: "/dashboard/skills/:skillId",
+    display: "Skill Detail",
   },
   profil: {
     path: "/dashboard/profil",
@@ -43,6 +50,14 @@ export const routes: IRoutes = {
   signUp: {
     path: "/sign-up",
     display: "Sign Up",
+  skillsTree: {
+    path: "/skills-tree",
+    display: "Skills Tree",
+  },
+  workSession: {
+    path: "/dashboard/work-session",
+    display: "WorkSession",
+
   },
   notfound: {
     path: "*",

@@ -1,14 +1,16 @@
-import type { QuestDifficulty, QuestStatus } from "@/shared/types/quest.type";
+import type { QuestStatus } from "@/shared/types/quest.type";
+import type { SkillDifficulty, SkillStatus } from "@/shared/types/skill.type";
 
 export type CursorModeType = "normal" | "create" | "connect" | "collapse" | "expand";
-export type ViewModeType = "canvas" | "timeline";
+export type ViewModeType = "canvas" | "skillTree";
 
 export type FloatingToolboxProps = {
   cursorMode: CursorModeType;
   setCursorMode: (mode: CursorModeType) => void;
-  setViewMode: (mode: ViewModeType) => void;
   collapseAll: () => void;
   expandAll: () => void;
+  setOpenAiModal: (open: boolean) => void;
+  className?: string;
 };
 
 export type SkillConfigType = {
@@ -21,8 +23,10 @@ export type SkillConfigType = {
 export type SkillConfig = {
   title: string;
   description: string;
-  icon: string;
-  color: string;
+  status: SkillStatus;
+  difficulty: SkillDifficulty;
+  icon?: string;
+  color?: string;
 };
 
 export type SkillNodeData = {
@@ -34,11 +38,10 @@ export type SkillNodeData = {
 export type QuestNodeData = {
   kind: "quest";
   title: string;
-  xp: number;
-  difficulty: QuestDifficulty;
   description: string;
   isStarting?: boolean;
   status: QuestStatus;
+  questType?: string;
   questNumber?: number;
   isCollapsed?: boolean;
   isSubSkill?: boolean;
@@ -53,4 +56,5 @@ export type QuestCardProps = {
   targetHandle?: React.ReactNode;
   sourceHandle?: React.ReactNode;
   isCollapsed?: boolean;
+  connectionCount?: number;
 };
