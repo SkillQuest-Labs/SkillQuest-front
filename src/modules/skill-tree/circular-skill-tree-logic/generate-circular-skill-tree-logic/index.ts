@@ -14,33 +14,48 @@ type GenerateCircularNodesDataProps = {
 };
 
 export const generateCircularSkillTreeData = ({ nodes, edges, centerX, centerY }: GenerateCircularNodesDataProps) => {
-  //   const circularSkillNodes: CircularSkillNode[] = [];
-
   const graph = buildDependencyGraph(nodes, edges);
   const rootQuestIds = findRootQuestIds(nodes, edges, graph);
 
-  // Add "center" node to graph and connect it to root quests (skill node)
-  nodes.filter(isSkillNode).forEach((node) => {
-    graph.addNode({
-      id: "center",
-      title: node.data.config.title,
-      description: node.data.config.description || "",
-      position: { x: centerX, y: centerY },
-      size: 50,
-      shape: "circle",
-      nodeType: "mastery",
-      status: "IN_PROGRESS",
-      isLocked: false,
-      connections: rootQuestIds, // Store direct dependents for the center node
-      prerequisites: [],
-      ring: 0,
-      angle: 0,
-      icon: node.data.config.icon,
+  // Add center node to graph and connect it to root quests (using skill node's actual ID)
+  const skillNode = nodes.find(isSkillNode);
+  if (skillNode) {
+    const existingSkillNode = graph.getNode(skillNode.id);
+    if (existingSkillNode) {
+      existingSkillNode.position = { x: centerX, y: centerY };
+      existingSkillNode.size = 50;
+      existingSkillNode.shape = "circle";
+      existingSkillNode.nodeType = "mastery";
+      existingSkillNode.ring = 0;
+      existingSkillNode.angle = 0;
+      existingSkillNode.connections = rootQuestIds;
+    } else {
+      graph.addNode({
+        id: skillNode.id, // Use actual skill ID, not "center"
+        title: skillNode.data.config.title,
+        description: skillNode.data.config.description || "",
+        position: { x: centerX, y: centerY },
+        size: 50,
+        shape: "circle",
+        nodeType: "mastery",
+        status: "IN_PROGRESS",
+        isLocked: false,
+        connections: rootQuestIds,
+        prerequisites: [],
+        ring: 0,
+        angle: 0,
+        icon: skillNode.data.config.icon,
+      });
+    }
+
+    // Connect skill node to root quests (only if not already connected)
+    rootQuestIds.forEach((rootId) => {
+      const existingPrereqs = graph.getPrerequisites(rootId);
+      if (!existingPrereqs.includes(skillNode.id)) {
+        graph.addEdge(skillNode.id, rootId);
+      }
     });
-  });
-  rootQuestIds.forEach((rootId) => {
-    graph.addEdge("center", rootId);
-  });
+  }
 
   const { visitedLevels, maxLevel } = computeNodeLevels({ graph, rootQuestIds });
 
@@ -50,15 +65,21 @@ export const generateCircularSkillTreeData = ({ nodes, edges, centerX, centerY }
   const circularSkillNodes = generateCircularNodesData({ nodes, visitedLevels, graph, ringRadii, centerX, centerY });
 
   // Now that all nodes are in the graph with their prerequisites, determine if each node is locked
+  const skillNodeId = skillNode?.id;
   circularSkillNodes.forEach((node) => {
-    if (node.id !== "center") {
-    const isConnectedToCenter = node.prerequisites.includes("center");
-    node.isLocked = !isConnectedToCenter;
+    if (node.id !== skillNodeId) {
+      const isConnectedToSkill = skillNodeId && node.prerequisites.includes(skillNodeId);
+      node.isLocked = !isConnectedToSkill;
     }
   });
 
-  // Add the central node at the beginning of the array
-  circularSkillNodes.unshift(graph.getNode("center"));
+  if (skillNodeId) {
+    const skillCircularNode = graph.getNode(skillNodeId);
+    if (skillCircularNode) {
+      // Add the central node at the beginning of the array
+      circularSkillNodes.unshift(skillCircularNode);
+    }
+  }
 
   return { graph, circularSkillNodes };
 };
