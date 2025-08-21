@@ -11,6 +11,7 @@ export interface IRoutes {
   store: IRoute;
   canvas: IRoute;
   workSession: IRoute;
+  avatar: IRoute;
   notfound: IRoute;
 }
 
@@ -34,6 +35,10 @@ export const routes: IRoutes = {
   store: {
     path: "/dashboard/store",
     display: "Store",
+  },
+  avatar: {
+    path: "/dashboard/avatar",
+    display: "Avatar",
   },
   canvas: {
     path: "/canvas",

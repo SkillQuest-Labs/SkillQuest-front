@@ -8,6 +8,7 @@ import { Skills } from "@/pages/dashboard/Skills";
 import { SkillDetail } from "@/modules/skills/components/SkillDetail";
 import { Profil } from "@/pages/dashboard/Profil";
 import { Store } from "@/pages/dashboard/Store";
+import { Avatar } from "@/pages/dashboard/Avatar";
 import { NotFoundPage } from "@/pages/404";
 import { WorkSession } from "@/pages/dashboard/WorkSession";
 
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
           {
             path: routes.store.path,
             element: <Store />,
+          },
+          {
+            path: routes.avatar.path,
+            element: <Avatar />,
           },
           {
             path: routes.workSession.path,

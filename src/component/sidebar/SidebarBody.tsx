@@ -1,5 +1,5 @@
 import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
-import { Home, LayoutTemplate, Star, User, CalendarRange } from "lucide-react";
+import { Home, LayoutTemplate, Star, User, CalendarRange, Bot } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 export const SidebarBody = () => {
@@ -82,6 +82,21 @@ export const SidebarBody = () => {
           >
             <CalendarRange size={20} />
             {!isCollapsed && <span className="text-sm font-medium">Session de travail</span>}
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/dashboard/avatar"
+            className={({ isActive }) =>
+              `px-4 py-2 flex items-center transition-all duration-300 ease-in-out transform hover:scale-96 ${
+                isCollapsed ? "justify-center" : "gap-3"
+              } hover:bg-gray-700 hover:shadow-lg ${
+                isActive ? "bg-gradient-to-r from-[#334155] to-[#141e32] rounded-l-xl shadow-md" : ""
+              }`
+            }
+          >
+            <Bot size={20} />
+            {!isCollapsed && <span className="text-sm font-medium">Avatar</span>}
           </NavLink>
         </li>
       </ul>
