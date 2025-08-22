@@ -1,5 +1,4 @@
-import { LEVEL_COLORS } from "../../render-node/render-node";
-
+import { LEVEL_COLORS } from "../../skill-tree.type";
 
 export const ConnectionDefs = () => (
   <defs>
