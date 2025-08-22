@@ -38,7 +38,7 @@ export const generateCircularSkillTreeData = ({ nodes, edges, centerX, centerY }
         size: 50,
         shape: "circle",
         nodeType: "mastery",
-        status: "IN_PROGRESS",
+        status: "COMPLETED",
         isLocked: false,
         connections: rootQuestIds,
         prerequisites: [],

@@ -5,7 +5,7 @@ type ConnectionLineProps = {
   node: CircularSkillNode;
   prereqNode: CircularSkillNode;
   hoveredNode: string | null;
-  activeSkillPath: string[];
+  activeNodePath: string[];
   highlightedPathNodes: string[];
 };
 
@@ -13,15 +13,15 @@ export const ConnectionLine = ({
   node,
   prereqNode,
   hoveredNode,
-  activeSkillPath,
+  activeNodePath,
   highlightedPathNodes,
 }: ConnectionLineProps) => {
   const isHovered = hoveredNode === node.id || hoveredNode === prereqNode.id;
   const isTargetLocked = node.isLocked; // Check if the target node is locked
-  const strokeColor = getConnectionColor(prereqNode, node, activeSkillPath, highlightedPathNodes);
+  const strokeColor = getConnectionColor(prereqNode, node, activeNodePath, highlightedPathNodes);
 
   const isPathHighlighted = highlightedPathNodes.includes(prereqNode.id) && highlightedPathNodes.includes(node.id);
-  const isActiveConnection = activeSkillPath.includes(prereqNode.id) && activeSkillPath.includes(node.id);
+  const isActiveConnection = activeNodePath.includes(prereqNode.id) && activeNodePath.includes(node.id);
 
   return (
     <g>

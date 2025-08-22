@@ -22,8 +22,8 @@ const getLevelColors = (level: number) => {
 
 export const getNodeColor = (node: CircularSkillNode, activeNodePath: string[], hoveredNode: string | null) => {
   if (node.isLocked) return "#1a202c"; // Dark slate for locked
+  if (node.status === "COMPLETED") return "#34d399"; // Emerald-400 (completed stays green)
   if (activeNodePath.includes(node.id)) return "#22d3ee"; // Cyan-400 (active path)
-  if (node.status === "COMPLETED") return "#34d399"; // Emerald-400
   if (hoveredNode === node.id) return "#60a5fa"; // Blue-400
 
   const { node: levelNodeColor } = getLevelColors(node.ring);
@@ -43,10 +43,10 @@ export const getNodeBorderColor = (node: CircularSkillNode, activeNodePath: stri
 export const getConnectionColor = (
   fromNode: CircularSkillNode,
   toNode: CircularSkillNode,
-  activeSkillPath: string[],
+  activeNodePath: string[],
   highlightedPathNodes: string[],
 ) => {
-  const isActiveConnection = activeSkillPath.includes(fromNode.id) && activeSkillPath.includes(toNode.id);
+  const isActiveConnection = activeNodePath.includes(fromNode.id) && activeNodePath.includes(toNode.id);
   const isPathHighlighted = highlightedPathNodes.includes(fromNode.id) && highlightedPathNodes.includes(toNode.id);
 
   if (isPathHighlighted) return "url(#pathHighlightConnection)";

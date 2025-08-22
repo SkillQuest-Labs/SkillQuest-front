@@ -5,14 +5,14 @@ import { ConnectionLine } from "./ConnectionLine";
 type ConnectionsRendererProps = {
   nodes: CircularSkillNode[];
   hoveredNode: string | null;
-  activeSkillPath: string[];
+  activeNodePath: string[];
   highlightedPathNodes: string[];
 };
 
 export const ConnectionsRenderer = ({
   nodes,
   hoveredNode,
-  activeSkillPath,
+  activeNodePath,
   highlightedPathNodes,
 }: ConnectionsRendererProps) => {
   return (
@@ -40,7 +40,7 @@ export const ConnectionsRenderer = ({
               node={node}
               prereqNode={prereqNode}
               hoveredNode={hoveredNode}
-              activeSkillPath={activeSkillPath}
+              activeNodePath={activeNodePath}
               highlightedPathNodes={highlightedPathNodes}
             />
           );
