@@ -1,3 +1,4 @@
+import { useAuth } from "@clerk/clerk-react";
 import {
   useMutation,
   type UseMutationOptions,
@@ -13,21 +14,34 @@ export const useApi = <TResult>(
   enabled: boolean = true,
   queryOption?: Omit<UseQueryOptions<TResult, Error, TResult, unknown[]>, "queryKey" | "queryFn">,
 ): { error?: Error; isLoading: boolean; data?: TResult } => {
-  const fetchData = async () => {
-    const res = await fetch(options.url, {
-      ...options,
-      headers: {
-        ...options.headers,
-        // Authorization: `Bearer ${accessToken}`,
-      },
-    });
+  const { getToken } = useAuth();
 
-    if (res.status !== 200 && res.status !== 201) {
-      const error = await res.json();
-      throw error;
+  const fetchData = async () => {
+    let accessToken;
+    try {
+      accessToken = await getToken();
+    } catch {
+      throw new Error("Access token not found");
+    }
+
+    if (accessToken) {
+      const res = await fetch(options.url, {
+        ...options,
+        headers: {
+          ...options.headers,
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (res.status !== 200 && res.status !== 201) {
+        const error = await res.json();
+        throw error;
+      } else {
+        const data = await res.json();
+        return data;
+      }
     } else {
-      const data = await res.json();
-      return data;
+      throw new Error("Access token not found");
     }
   };
 
@@ -47,22 +61,37 @@ export const useApiAsync = <TResult, TVars = void>(
   cacheKey?: unknown[],
   queryOptions?: UseMutationOptions<TResult, Error, TVars>,
 ) => {
-  const fetchData = async (body: TVars): Promise<TResult> => {
-    const res = await fetch(fetchOptions.url, {
-      ...fetchOptions,
-      headers: {
-        ...fetchOptions.headers,
-      },
-      body: body != null ? JSON.stringify(body) : undefined,
-    });
+  const { getToken } = useAuth();
 
-    if (!res.ok) {
-      const error = await res.json();
-      throw error;
+  const fetchData = async (body: TVars): Promise<TResult> => {
+    let accessToken;
+
+    try {
+      accessToken = await getToken();
+    } catch {
+      throw new Error("Access token not found");
     }
 
-    const data = await res.json();
-    return data as Promise<TResult>;
+    if (accessToken) {
+      const res = await fetch(fetchOptions.url, {
+        ...fetchOptions,
+        headers: {
+          ...fetchOptions.headers,
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: body != null ? JSON.stringify(body) : undefined,
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw error;
+      }
+
+      const data = await res.json();
+      return data as Promise<TResult>;
+    } else {
+      throw new Error("Access token not found");
+    }
   };
 
   const queryClient = useQueryClient();

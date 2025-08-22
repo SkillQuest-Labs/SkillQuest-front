@@ -20,7 +20,7 @@ export interface IRoutes {
 
 export const routes: IRoutes = {
   dashboard: {
-    path: "/",
+    path: "/dashboard",
     display: "Dashboard",
   },
   skills: {
@@ -50,6 +50,7 @@ export const routes: IRoutes = {
   signUp: {
     path: "/sign-up",
     display: "Sign Up",
+  },
   skillsTree: {
     path: "/skills-tree",
     display: "Skills Tree",
@@ -57,7 +58,6 @@ export const routes: IRoutes = {
   workSession: {
     path: "/dashboard/work-session",
     display: "WorkSession",
-
   },
   notfound: {
     path: "*",
