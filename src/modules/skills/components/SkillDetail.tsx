@@ -1,18 +1,7 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
-import { useGetSkill, useUpdateSkill, useDeleteSkill } from "@/shared/services/skill/api-skill";
-import type { UpdateSkillInput } from "@/shared/services/skill/api-skill.type";
-import { Button } from "@/shared/components/ui/button";
-import { Input } from "@/shared/components/ui/input";
-import { Textarea } from "@/shared/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
-import { Badge } from "@/shared/components/ui/badge";
-import { ArrowLeft, Save, X } from "lucide-react";
-import type { SkillDifficulty, SkillStatus } from "../skills.types";
-import { getDifficultyColor, getStatusColor, getStatusLabel, getDifficultyLabel } from "../skills.const";
 import { showToast } from "@/component/notification/show-toast";
+import { Badge } from "@/shared/components/ui/badge";
+import { Button } from "@/shared/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -21,27 +10,39 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
+import { Input } from "@/shared/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
+import { Textarea } from "@/shared/components/ui/textarea";
+import { useDeleteSkill, useGetSkill, useUpdateSkill } from "@/shared/services/skill/api-skill";
+import type { UpdateSkillInput } from "@/shared/services/skill/api-skill.type";
+import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
+import { ArrowLeft, Maximize2, Save, TreePine, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { getDifficultyColor, getDifficultyLabel, getStatusColor, getStatusLabel } from "../skills.const";
+import type { SkillDifficulty, SkillStatus } from "../skills.types";
+import { SkillTree } from "@/modules/skill-tree/component/SkillTree";
+import { useNodesDataLoader } from "../hooks/useNodesDataLoader";
 
 export const SkillDetail = () => {
   const { skillId } = useParams<{ skillId: string }>();
   const navigate = useNavigate();
   const { isCollapsed } = useSidebarStore();
-  const {
-    skill,
-    loading: skillLoading,
-    error: skillError,
-  } = useGetSkill(skillId || "");
+  const { skill, loading: skillLoading, error: skillError } = useGetSkill(skillId || "");
   const { updateSkill, loading: updateLoading } = useUpdateSkill(skillId || "");
   const { deleteSkill, loading: deleteLoading } = useDeleteSkill(skillId || "");
 
   const [isEditing, setIsEditing] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isFullscreenOpen, setIsFullscreenOpen] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     difficulty: "EASY" as SkillDifficulty,
     status: "DRAFT" as SkillStatus,
   });
+
+  const { nodesData, edgesData } = useNodesDataLoader();
 
   useEffect(() => {
     if (skill) {
@@ -243,19 +244,44 @@ export const SkillDetail = () => {
               </CardContent>
             </Card>
 
-            {/* Arbre de compétence */}
             <Card className="bg-slate-800 border-slate-700">
-              <CardHeader>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0">
                 <CardTitle className="text-white">Arbre de compétence</CardTitle>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={() => setIsFullscreenOpen(true)}
+                    variant="outline"
+                    size="sm"
+                    className="border-slate-600 cursor-pointer text-slate-300 hover:bg-slate-700 hover:text-white bg-slate-700/50"
+                    disabled={!nodesData || nodesData.length === 0}
+                  >
+                    <Maximize2 size={16} className="mr-2" />
+                    Voir l'arbre complet
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center justify-center bg-slate-700/50 border-2 border-dashed border-slate-600 rounded-lg p-8 min-h-[200px]">
-                  <div className="text-center text-slate-400">
-                    <div className="text-4xl mb-2">🌳</div>
-                    <p className="text-sm font-medium">Aperçu de l'arbre de compétence</p>
-                    <p className="text-xs text-slate-500 mt-1">L'image sera générée ici</p>
+                {nodesData && nodesData.length > 0 && edgesData && edgesData?.length > 0 ? (
+                  <div className="w-full h-[400px] bg-slate-900 rounded-lg overflow-hidden border border-slate-600 flex items-center justify-center">
+                    <SkillTree nodes={nodesData} edges={edgesData} minimalistView={true} />
                   </div>
-                </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center bg-slate-700/50 border-2 border-dashed border-slate-600 rounded-lg p-8 min-h-[200px]">
+                    <div className="text-center text-slate-400">
+                      <div className="text-4xl mb-2">🌳</div>
+                      <p className="text-sm font-medium mb-2">Aucun arbre de compétence sauvegardé</p>
+                      <p className="text-xs text-slate-500 mb-4">Créez et sauvegardez votre arbre depuis le canvas</p>
+                      <Button
+                        onClick={() => navigate(`/canvas?skillId=${skillId}`)}
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        size="sm"
+                      >
+                        <TreePine size={16} className="mr-2" />
+                        Créer l'arbre
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
@@ -407,6 +433,39 @@ export const SkillDetail = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {isFullscreenOpen && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full h-full max-w-7xl max-h-screen bg-slate-900 rounded-lg border border-slate-700 flex flex-col overflow-hidden">
+           
+            <div className="flex items-center justify-between p-4 border-b border-slate-700">
+              <h2 className="text-xl font-semibold text-white truncate">Arbre de compétence - {skill.title}</h2>
+              <Button
+                onClick={() => setIsFullscreenOpen(false)}
+                variant="ghost"
+                size="sm"
+                className="text-slate-400 hover:text-white hover:bg-slate-700 flex-shrink-0"
+              >
+                <X size={20} />
+              </Button>
+            </div>
+            <div className="flex-1 overflow-hidden">
+              {nodesData && nodesData.length > 0 && edgesData && edgesData?.length > 0 ? (
+                <div className="w-full h-full flex items-center justify-center">
+                  <SkillTree nodes={nodesData} edges={edgesData} minimalistView={false} />
+                </div>
+              ) : (
+                <div className="flex items-center justify-center h-full text-slate-400">
+                  <div className="text-center">
+                    <div className="text-4xl mb-2">🌳</div>
+                    <p>Aucun arbre de compétence disponible</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
