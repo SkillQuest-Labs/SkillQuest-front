@@ -1,12 +1,4 @@
 import type { Quest } from "../quest.type";
-import type { Skill } from "../skill.type";
-
-export type SkillAiType = Partial<Skill> & {
-  questNumber: number;
-  level: string;
-  goal: string;
-  goalDescription: string;
-};
 
 export type ResourceIntention = {
   type: "video" | "article" | "documentation" | "course" | "podcast" | "forum";
@@ -46,7 +38,6 @@ export type QuestGenerationForm = {
   manualContext: boolean;
   contextText: string;
   goal: string;
-  goalDescription: string;
   selfLevel: string;
   relatedSkill: string;
   autoEstimate: boolean;

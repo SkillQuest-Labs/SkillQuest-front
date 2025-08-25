@@ -63,7 +63,6 @@ const buildInstruction = (
     `- **Description du skill** : ${skill.data.config.description}`,
     `- **Domaine d'apprentissage déclaré** : ${form.skillDomain === "Autre" ? form.customDomain : form.skillDomain}`,
     `- **Objectif final de l'utilisateur** : ${form.goal}`,
-    `- **Description de l'objectif** : ${form.goalDescription}`,
     `- **Niveau actuel de l'utilisateur** : ${form.selfLevel}. La première quête doit être adaptée à ce niveau.`,
     `- **Style d'apprentissage préféré** : ${form.styleApprentissage}`,
     `- **Compétence connexe à considérer** : ${form.relatedSkill}. Si pertinent, suggère comment le skill principal peut interagir avec cette compétence.`,
