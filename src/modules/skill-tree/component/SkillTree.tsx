@@ -143,7 +143,7 @@ export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreePro
   const selectedNodeData = circularSkillNodes.find((n) => n.id === selectedNode);
 
   return (
-    <div className="w-full h-screen relative overflow-hidden flex items-center justify-center bg-slate-900">
+    <div className="w-full h-screen relative overflow-auto flex items-center justify-center bg-slate-900">
       {onBack && (
         <Button
           variant="outline"
@@ -176,6 +176,7 @@ export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreePro
       <div
         ref={skillTreeContainerRef}
         className="w-full h-[400px] cursor-grab active:cursor-grabbing"
+        style={{ overflow: "visible" }}
         onClick={handleSkillTreeCanvasClick}
         onWheel={handleWheel}
         onMouseDown={handleMouseDown}

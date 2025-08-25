@@ -25,6 +25,7 @@ export const ConnectionsRenderer = ({
         height: "100%",
         pointerEvents: "none",
         zIndex: 1,
+        overflow: "visible",
       }}
     >
       <ConnectionDefs />
