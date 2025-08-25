@@ -33,7 +33,7 @@ export const NotFoundPage = () => {
         className="px-6 py-3 bg-white text-black cursor-pointer font-semibold rounded-lg hover:bg-gray-200 transition-colors duration-200"
         asChild
       >
-        <Link to="/dashboard" className="flex items-center gap-2">
+        <Link to="/sign-in/*" className="flex items-center gap-2">
           <ArrowLeft size={16} />
           Retour
         </Link>

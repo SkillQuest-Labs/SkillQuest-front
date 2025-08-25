@@ -42,6 +42,7 @@ export const router = createBrowserRouter([
           path="/sign-up"
           signInUrl="/sign-in"
           fallbackRedirectUrl="/sign-in"
+          unsafeMetadata={{ role: "mentor" }}
         />
       </AuthLayout>
     ),

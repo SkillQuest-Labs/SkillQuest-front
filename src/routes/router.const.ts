@@ -44,11 +44,11 @@ export const routes: IRoutes = {
     display: "Canvas",
   },
   signIn: {
-    path: "/sign-in",
+    path: "/sign-in/*",
     display: "Sign In",
   },
   signUp: {
-    path: "/sign-up",
+    path: "/sign-up/*",
     display: "Sign Up",
   },
   skillsTree: {
