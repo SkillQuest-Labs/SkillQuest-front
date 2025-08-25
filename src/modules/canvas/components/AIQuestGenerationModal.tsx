@@ -44,7 +44,6 @@ const baseSchema = z.object({
   manualContext: z.boolean().optional(),
   contextText: z.string().optional(),
   goal: z.string().optional(),
-  goalDescription: z.string().optional(),
   selfLevel: z.enum(["Novice", "Initié", "Intermédiaire", "Avancé", "Expert"]).optional(),
   relatedSkill: z.string().optional(),
   autoEstimate: z.boolean().optional(),
@@ -414,30 +413,10 @@ export const AIQuestGenerationModal = ({ onGenerate, setOpenAiModal }: AIQuestGe
                           Objectif <span className="text-red-400">*</span>
                         </FormLabel>
                         <FormControl>
-                          <Input
+                          <Textarea
                             {...field}
                             placeholder="Ex. Maîtriser Git et GitHub pour la collaboration"
-                            className="h-12 text-base  border-gray-600 text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="goalDescription"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="mt-3 text-sm font-medium text-gray-200">
-                          Description (recommandé)
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            {...field}
-                            placeholder="Une phrase décrivant plus en détail ton but final"
-                            className="h-12 text-base border-gray-600 text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500"
+                            className="h-18 text-base border-gray-600 text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500 resize-none"
                           />
                         </FormControl>
                         <FormMessage />
@@ -458,55 +437,58 @@ export const AIQuestGenerationModal = ({ onGenerate, setOpenAiModal }: AIQuestGe
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="selfLevel"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-medium text-gray-200">
-                            Niveau actuel <span className="text-red-400">*</span>
-                          </FormLabel>
-                          <FormControl>
-                            <Select onValueChange={field.onChange} value={field.value}>
-                              <SelectTrigger className="cursor-pointer h-12 w-full border-gray-600 text-gray-100 focus:border-blue-500 focus:ring-blue-500">
-                                <SelectValue placeholder="Sélectionne ton niveau" />
-                              </SelectTrigger>
-                              <SelectContent className="border-gray-600 bg-[#182131]">
-                                {userLevel.map((lvl) => (
-                                  <SelectItem
-                                    key={lvl.label}
-                                    value={lvl.label}
-                                    className="cursor-pointer text-gray-100 hover:bg-gray-700 flex items-center gap-2"
-                                  >
-                                    <span>{lvl.label}</span>
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="relatedSkill"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-medium text-gray-200">Compétence connexe</FormLabel>
-                          <FormControl>
-                            <Input
-                              {...field}
-                              placeholder="Ex. Je maitrise le JS, le CSS, le HTML etc..."
-                              className="text-base  border-gray-600 text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                  <div className="flex flex-col gap-4">
+                    <div className="flex-1">
+                      <FormField
+                        control={form.control}
+                        name="selfLevel"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-sm font-medium text-gray-200">
+                              Niveau actuel <span className="text-red-400">*</span>
+                            </FormLabel>
+                            <FormControl>
+                              <Select onValueChange={field.onChange} value={field.value}>
+                                <SelectTrigger className="cursor-pointer h-12 w-full border-gray-600 text-gray-100 focus:border-blue-500 focus:ring-blue-500">
+                                  <SelectValue placeholder="Sélectionne ton niveau" />
+                                </SelectTrigger>
+                                <SelectContent className="border-gray-600 bg-[#182131]">
+                                  {userLevel.map((lvl) => (
+                                    <SelectItem
+                                      key={lvl.label}
+                                      value={lvl.label}
+                                      className="cursor-pointer text-gray-100 hover:bg-gray-700 flex items-center gap-2"
+                                    >
+                                      <span>{lvl.label}</span>
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <FormField
+                        control={form.control}
+                        name="relatedSkill"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="text-sm font-medium text-gray-200">Compétences connexes</FormLabel>
+                            <FormControl>
+                              <Textarea
+                                {...field}
+                                placeholder="Ex. Je maîtrise le JS, le CSS, le HTML, etc..."
+                                className="h-18 text-base border-gray-600 text-gray-100 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500 resize-none"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
                 </div>
 

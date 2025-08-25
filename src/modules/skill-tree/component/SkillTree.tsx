@@ -3,12 +3,16 @@ import type { QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type"
 import { Button } from "@/shared/components/ui/button";
 import type { Edge, Node } from "@xyflow/react";
 import { ChevronLeft, PauseIcon, PlayIcon } from "lucide-react";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { generateCircularSkillTreeData } from "../circular-skill-tree-logic/generate-circular-skill-tree-logic";
 import type { DependencyGraph } from "../circular-skill-tree-logic/generate-circular-skill-tree-logic/dependency-graph";
 import type { CircularSkillNode } from "../skill-tree.type";
 import { RenderConcentricCircles } from "./concentric-circles/RenderConcentricCircles";
 import { NodeRenderer } from "./render-node-component/NodeRenderer";
+import { ConnectionsRenderer } from "./render-node-connections/ConnectionsRenderer";
+import { RenderNodeDetails } from "./NodeDetails";
+import { SkillTreeLegends } from "./SkillTreeLegends";
+import { useContainerSize } from "../hooks/useContainerSize";
 
 export type SkillTreeDataProps = {
   nodes: CircularSkillNode[];
@@ -18,54 +22,104 @@ export type SkillTreeDataProps = {
 export type SkillTreeProps = {
   nodes: Node<QuestNodeData | SkillNodeData>[];
   edges: Edge[];
+  minimalistView?: boolean;
   onBack?: () => void;
 };
 
-export const SkillTree = ({ nodes, edges, onBack }: SkillTreeProps) => {
+export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreeProps) => {
   const [animationEnabled, setAnimationEnabled] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [circularSkillNodes, setCircularSkillNodes] = useState<CircularSkillNode[]>([]);
-  const canvasRef = useRef<HTMLDivElement>(null);
+  const [dependencyGraph, setDependencyGraph] = useState<DependencyGraph>();
 
-  const [selectedNode] = useState<string | null>(null);
-  const [activeNodePath] = useState<string[]>([]);
+  const [zoom, setZoom] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const [panStart, setPanStart] = useState({ x: 0, y: 0 });
+  const [isPanning, setIsPanning] = useState(false);
+
+  const [selectedNode, setSelectedNode] = useState<string | null>(null);
+  const [activeNodePath, setActiveNodePath] = useState<string[]>([]);
   const [hoveredNode, setHoveredNode] = useState<string | null>(null);
-  const [highlightedPathNodes] = useState<string[]>([]);
-  const [pan] = useState({ x: 0, y: 0 });
-  const [zoom] = useState(1);
+  const [highlightedPathNodes, setHighlightedPathNodes] = useState<string[]>([]);
 
-  // Dynamically measure container size and compute center
-  const [containerSize, setContainerSize] = useState({ width: 1000, height: 800 });
-
-  useLayoutEffect(() => {
-    if (canvasRef.current) {
-      const rect = canvasRef.current.getBoundingClientRect();
-      setContainerSize({ width: rect.width, height: rect.height });
-    }
-  }, []);
+  const { ref: skillTreeContainerRef, size: containerSize } = useContainerSize();
 
   const centerX = containerSize.width / 2;
   const centerY = containerSize.height / 2;
 
+  const hasGenerated = useRef(false);
   useEffect(() => {
+    if (hasGenerated.current) return;
+
     const generateNodes = async () => {
       setIsLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 800));
-      const generatedNodes = generateCircularSkillTreeData({ nodes, edges, centerX, centerY });
-      setCircularSkillNodes(generatedNodes);
+      await new Promise((resolve) => setTimeout(resolve, 300));
+
+      if (minimalistView) {
+        setZoom(0.5);
+      }
+      const { graph, circularSkillNodes } = generateCircularSkillTreeData({
+        nodes,
+        edges,
+        centerX: containerSize.width / 2,
+        centerY: containerSize.height / 2,
+      });
+
+      setCircularSkillNodes(circularSkillNodes);
+      setDependencyGraph(graph);
       setIsLoading(false);
+      hasGenerated.current = true;
     };
 
-    if (centerX > 0 && centerY > 0) {
-      generateNodes();
-    }
-  }, [nodes, edges, centerX, centerY]);
+    generateNodes();
+  }, [nodes, edges, containerSize, minimalistView]);
 
-  const handleNodeClick = (e: React.MouseEvent<Element, MouseEvent>) => {
-    e.stopPropagation();
+  const handleNodeClick = useCallback(
+    (e: React.MouseEvent, nodeId: string) => {
+      e.stopPropagation();
+      setIsPanning(false);
+
+      const node = circularSkillNodes.find((n) => n.id === nodeId);
+      if (!node) return;
+
+      setSelectedNode(nodeId);
+
+      // Calculate and set highlighted path
+      if (dependencyGraph) {
+        setHighlightedPathNodes(dependencyGraph.getConnectedPath(nodeId));
+      }
+
+      if (node.status === "NOT_STARTED" && !node.isLocked) {
+        // Update active path
+        setActiveNodePath((prev) => [...prev, nodeId]);
+      }
+    },
+    [circularSkillNodes, dependencyGraph],
+  );
+
+  const handleWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.95 : 1.05;
+    setZoom((prev) => Math.max(0.5, Math.min(3, prev * delta)));
   };
 
-  const renderSkillNode = useCallback(
+  const handleMouseDown = (e: React.MouseEvent) => {
+    // Allow panning everywhere except when clicking directly on nodes
+    setIsPanning(true);
+    setPanStart({ x: e.clientX - pan.x, y: e.clientY - pan.y });
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (isPanning) {
+      setPan({ x: e.clientX - panStart.x, y: e.clientY - panStart.y });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsPanning(false);
+  };
+
+  const renderNode = useCallback(
     (node: CircularSkillNode) => {
       return NodeRenderer({
         node,
@@ -77,11 +131,19 @@ export const SkillTree = ({ nodes, edges, onBack }: SkillTreeProps) => {
         setHoveredNode,
       });
     },
-    [activeNodePath, hoveredNode, selectedNode, highlightedPathNodes],
+    [activeNodePath, hoveredNode, selectedNode, highlightedPathNodes, handleNodeClick],
   );
 
+  const handleSkillTreeCanvasClick = () => {
+    setSelectedNode(null);
+    setHighlightedPathNodes([]);
+    setActiveNodePath([]);
+  };
+
+  const selectedNodeData = circularSkillNodes.find((n) => n.id === selectedNode);
+
   return (
-    <div className="w-full h-screen overflow-hidden relative  flex items-center justify-center bg-slate-900">
+    <div className="w-full h-screen relative overflow-auto flex items-center justify-center bg-slate-900">
       {onBack && (
         <Button
           variant="outline"
@@ -93,25 +155,35 @@ export const SkillTree = ({ nodes, edges, onBack }: SkillTreeProps) => {
           Back
         </Button>
       )}
-
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => setAnimationEnabled(!animationEnabled)}
-        className="absolute cursor-pointer top-4 right-4 z-10 bg-slate-700/80 backdrop-blur-sm border-slate-500 hover:bg-slate-600/80 text-slate-200 hover:text-white transition-all duration-200 font-medium shadow-lg"
+      {!minimalistView && (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setAnimationEnabled(!animationEnabled)}
+          className="absolute cursor-pointer top-15 left-4 z-10 bg-slate-700/80 backdrop-blur-sm border-slate-500 hover:bg-slate-600/80 text-slate-200 hover:text-white transition-all duration-200 font-medium shadow-lg"
+        >
+          {animationEnabled ? (
+            <>
+              <PauseIcon className="inline-block w-4 h-4 mr-1" /> Pause
+            </>
+          ) : (
+            <>
+              <PlayIcon className="inline-block w-4 h-4 mr-1" /> Play
+            </>
+          )}
+        </Button>
+      )}
+      <div
+        ref={skillTreeContainerRef}
+        className="w-full h-[400px] cursor-grab active:cursor-grabbing"
+        style={{ overflow: "visible" }}
+        onClick={handleSkillTreeCanvasClick}
+        onWheel={handleWheel}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
       >
-        {animationEnabled ? (
-          <>
-            <PauseIcon className="inline-block w-4 h-4 mr-1" /> Pause
-          </>
-        ) : (
-          <>
-            <PlayIcon className="inline-block w-4 h-4 mr-1" /> Play
-          </>
-        )}
-      </Button>
-
-      <div ref={canvasRef} className="w-full h-[400px] cursor-grab active:cursor-grabbing">
         {isLoading ? (
           <SkillTreeLoader
             title="Génération de l'arbre de compétences"
@@ -145,13 +217,23 @@ export const SkillTree = ({ nodes, edges, onBack }: SkillTreeProps) => {
                     animationFillMode: "both",
                   }}
                 >
-                  {renderSkillNode(node)}
+                  {renderNode(node)}
                 </div>
               ))}
             </div>
+
+            <ConnectionsRenderer
+              nodes={circularSkillNodes}
+              hoveredNode={hoveredNode}
+              activeNodePath={activeNodePath}
+              highlightedPathNodes={highlightedPathNodes}
+            />
           </div>
         )}
       </div>
+      {selectedNodeData && !minimalistView && <RenderNodeDetails selectedNodeData={selectedNodeData} />}
+      {/* Skill Tree Legend */}
+      {circularSkillNodes.length > 0 && !minimalistView && <SkillTreeLegends />}
     </div>
   );
 };
