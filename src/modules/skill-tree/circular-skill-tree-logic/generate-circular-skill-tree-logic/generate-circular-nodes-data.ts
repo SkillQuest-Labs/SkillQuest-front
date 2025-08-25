@@ -5,7 +5,7 @@ import { defineNodeProperties } from "./define-node-properties";
 import { calculateNodePosition, countNodesPerLevel, sortQuestNodesByLevel } from "../skill-tree.const";
 
 type GenerateCircularNodesDataProps = {
-  nodes: Node<QuestNodeData>[] | Node<SkillNodeData>[];
+  nodes: Node<QuestNodeData | SkillNodeData>[];
   visitedLevels: Record<string, number>;
   graph: any;
   ringRadii: number[];
