@@ -32,7 +32,7 @@ export type SkillTreeOptions = {
 };
 
 export type CountNodesPerLevel = {
-  nodes: Node<QuestNodeData>[] | Node<SkillNodeData>[];
+  nodes: Node<QuestNodeData | SkillNodeData>[];
   visitedLevels: Record<string, number>;
 };
 

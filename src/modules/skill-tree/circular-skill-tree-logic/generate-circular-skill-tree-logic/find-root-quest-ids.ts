@@ -5,7 +5,7 @@ import { isQuestNode, isSkillNode } from "@/modules/canvas/canvas.const";
 
 //Identify Root Nodes (connected to skill-block or no prerequisites)
 export const findRootQuestIds = (
-  nodes: Node<QuestNodeData>[] | Node<SkillNodeData>[],
+  nodes: Node<QuestNodeData | SkillNodeData>[],
   edges: Edge[],
   graph: DependencyGraph,
 ): string[] => {

@@ -1,21 +1,87 @@
-import { useState } from "react";
+import { SkillTreeLoader } from "@/component/SkillTreeLoader";
+import type { QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
 import { Button } from "@/shared/components/ui/button";
-import { PauseIcon, PlayIcon, ChevronLeft } from "lucide-react";
-import { renderConcentricCircles } from "./concentric-circles/render-concentric-circles";
+import type { Edge, Node } from "@xyflow/react";
+import { ChevronLeft, PauseIcon, PlayIcon } from "lucide-react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { generateCircularSkillTreeData } from "../circular-skill-tree-logic/generate-circular-skill-tree-logic";
+import type { DependencyGraph } from "../circular-skill-tree-logic/generate-circular-skill-tree-logic/dependency-graph";
+import type { CircularSkillNode } from "../skill-tree.type";
+import { RenderConcentricCircles } from "./concentric-circles/RenderConcentricCircles";
+import { NodeRenderer } from "./render-node-component/NodeRenderer";
+
+export type SkillTreeDataProps = {
+  nodes: CircularSkillNode[];
+  graph: DependencyGraph;
+};
 
 export type SkillTreeProps = {
+  nodes: Node<QuestNodeData | SkillNodeData>[];
+  edges: Edge[];
   onBack?: () => void;
 };
 
-export const SkillTree = ({ onBack }: SkillTreeProps) => {
+export const SkillTree = ({ nodes, edges, onBack }: SkillTreeProps) => {
   const [animationEnabled, setAnimationEnabled] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [circularSkillNodes, setCircularSkillNodes] = useState<CircularSkillNode[]>([]);
+  const canvasRef = useRef<HTMLDivElement>(null);
 
-  // Center the skill tree in the middle of the container
-  const centerX = 600;
-  const centerY = 400;
+  const [selectedNode] = useState<string | null>(null);
+  const [activeNodePath] = useState<string[]>([]);
+  const [hoveredNode, setHoveredNode] = useState<string | null>(null);
+  const [highlightedPathNodes] = useState<string[]>([]);
+  const [pan] = useState({ x: 0, y: 0 });
+  const [zoom] = useState(1);
+
+  // Dynamically measure container size and compute center
+  const [containerSize, setContainerSize] = useState({ width: 1000, height: 800 });
+
+  useLayoutEffect(() => {
+    if (canvasRef.current) {
+      const rect = canvasRef.current.getBoundingClientRect();
+      setContainerSize({ width: rect.width, height: rect.height });
+    }
+  }, []);
+
+  const centerX = containerSize.width / 2;
+  const centerY = containerSize.height / 2;
+
+  useEffect(() => {
+    const generateNodes = async () => {
+      setIsLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 800));
+      const generatedNodes = generateCircularSkillTreeData({ nodes, edges, centerX, centerY });
+      setCircularSkillNodes(generatedNodes);
+      setIsLoading(false);
+    };
+
+    if (centerX > 0 && centerY > 0) {
+      generateNodes();
+    }
+  }, [nodes, edges, centerX, centerY]);
+
+  const handleNodeClick = (e: React.MouseEvent<Element, MouseEvent>) => {
+    e.stopPropagation();
+  };
+
+  const renderSkillNode = useCallback(
+    (node: CircularSkillNode) => {
+      return NodeRenderer({
+        node,
+        activeNodePath,
+        hoveredNode,
+        selectedNode,
+        highlightedPathNodes,
+        handleNodeClick,
+        setHoveredNode,
+      });
+    },
+    [activeNodePath, hoveredNode, selectedNode, highlightedPathNodes],
+  );
 
   return (
-    <div className="w-full h-screen overflow-hidden relative flex items-center justify-center bg-slate-900">
+    <div className="w-full h-screen overflow-hidden relative  flex items-center justify-center bg-slate-900">
       {onBack && (
         <Button
           variant="outline"
@@ -27,30 +93,64 @@ export const SkillTree = ({ onBack }: SkillTreeProps) => {
           Back
         </Button>
       )}
-      <div className="relative  w-full h-[800px]">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setAnimationEnabled(!animationEnabled)}
-          className="absolute top-4 right-4 z-10 bg-slate-700/80 backdrop-blur-sm border-slate-500 hover:bg-slate-600/80 text-slate-200 hover:text-white transition-all duration-200 font-medium shadow-lg"
-        >
-          {animationEnabled ? (
-            <>
-              <PauseIcon className="inline-block w-4 h-4 mr-1" /> Pause
-            </>
-          ) : (
-            <>
-              <PlayIcon className="inline-block w-4 h-4 mr-1" /> Play
-            </>
-          )}
-        </Button>
 
-        {renderConcentricCircles({
-          skillnodes: [],
-          centerX,
-          centerY,
-          options: { animationEnabled },
-        })}
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => setAnimationEnabled(!animationEnabled)}
+        className="absolute cursor-pointer top-4 right-4 z-10 bg-slate-700/80 backdrop-blur-sm border-slate-500 hover:bg-slate-600/80 text-slate-200 hover:text-white transition-all duration-200 font-medium shadow-lg"
+      >
+        {animationEnabled ? (
+          <>
+            <PauseIcon className="inline-block w-4 h-4 mr-1" /> Pause
+          </>
+        ) : (
+          <>
+            <PlayIcon className="inline-block w-4 h-4 mr-1" /> Play
+          </>
+        )}
+      </Button>
+
+      <div ref={canvasRef} className="w-full h-[400px] cursor-grab active:cursor-grabbing">
+        {isLoading ? (
+          <SkillTreeLoader
+            title="Génération de l'arbre de compétences"
+            description="Calcul des positions et des connexions..."
+          />
+        ) : (
+          <div
+            className="w-full h-full animate-in fade-in-0 duration-700"
+            style={{
+              transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+              transformOrigin: "center center",
+              position: "relative",
+            }}
+          >
+            <RenderConcentricCircles
+              skillnodes={circularSkillNodes}
+              centerX={centerX}
+              centerY={centerY}
+              options={{ animationEnabled }}
+              containerWidth={containerSize.width}
+              containerHeight={containerSize.height}
+            />
+
+            <div className="animate-in slide-in-from-bottom-4 duration-1000 delay-300">
+              {circularSkillNodes.map((node, index) => (
+                <div
+                  key={node.id}
+                  className="animate-in zoom-in-0 fade-in-0 duration-500"
+                  style={{
+                    animationDelay: `${400 + index * 100}ms`,
+                    animationFillMode: "both",
+                  }}
+                >
+                  {renderSkillNode(node)}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

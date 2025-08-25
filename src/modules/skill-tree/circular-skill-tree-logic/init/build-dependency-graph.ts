@@ -6,10 +6,7 @@ import { isQuestNode } from "@/modules/canvas/canvas.const";
 
 // Add all quest nodes to the graph first with initial data
 
-export const buildDependencyGraph = (
-  nodes: Node<QuestNodeData>[] | Node<SkillNodeData>[],
-  edges: Edge[],
-): DependencyGraph => {
+export const buildDependencyGraph = (nodes: Node<QuestNodeData | SkillNodeData>[], edges: Edge[]): DependencyGraph => {
   const graph = new DependencyGraph();
 
   nodes.filter(isQuestNode).forEach((node) => {

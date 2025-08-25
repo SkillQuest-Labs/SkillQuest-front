@@ -14,7 +14,6 @@ import { authAppearance } from "@/shared/constants/auth.const";
 import { AuthLayout } from "@/component/AuthLayout";
 import { UnauthorizedPage } from "@/pages/Unauthorized";
 import { WorkSession } from "@/pages/dashboard/WorkSession";
-import { SkillTreePage } from "@/pages/canvas/SkillTreePage";
 
 export const router = createBrowserRouter([
   // Public routes for authentication
@@ -85,10 +84,6 @@ export const router = createBrowserRouter([
       {
         path: routes.canvas.path,
         element: <CanvasPage />,
-      },
-      {
-        path: routes.skillsTree.path,
-        element: <SkillTreePage />,
       },
     ],
   },

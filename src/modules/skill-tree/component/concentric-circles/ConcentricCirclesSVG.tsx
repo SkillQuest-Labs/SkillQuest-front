@@ -5,13 +5,22 @@ type ConcentricCirclesProps = {
   centerX: number;
   centerY: number;
   options?: SkillTreeOptions;
+  containerWidth?: number;
+  containerHeight?: number;
 };
 
-export const ConcentricCirclesSVG = ({ rings, centerX, centerY, options }: ConcentricCirclesProps) => {
+export const ConcentricCirclesSVG = ({
+  rings,
+  centerX,
+  centerY,
+  options,
+  containerWidth,
+  containerHeight,
+}: ConcentricCirclesProps) => {
   return (
     <svg
       className="absolute top-0 left-0 w-full h-full overflow-visible pointer-events-none z-0"
-      viewBox="0 0 1200 800"
+      viewBox={`0 0 ${containerWidth} ${containerHeight}`}
     >
       {/* Define gradients */}
       <defs>
