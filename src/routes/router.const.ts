@@ -12,6 +12,9 @@ export interface IRoutes {
   canvas: IRoute;
   workSession: IRoute;
   notfound: IRoute;
+  signIn: IRoute;
+  signUp: IRoute;
+  unauthorized: IRoute;
 }
 
 export const routes: IRoutes = {
@@ -39,6 +42,14 @@ export const routes: IRoutes = {
     path: "/canvas",
     display: "Canvas",
   },
+  signIn: {
+    path: "/sign-in/*",
+    display: "Sign In",
+  },
+  signUp: {
+    path: "/sign-up/*",
+    display: "Sign Up",
+  },
   workSession: {
     path: "/dashboard/work-session",
     display: "WorkSession",
@@ -46,5 +57,9 @@ export const routes: IRoutes = {
   notfound: {
     path: "*",
     display: "Not found",
+  },
+  unauthorized: {
+    path: "/unauthorized",
+    display: "Unauthorized",
   },
 };

@@ -3,19 +3,21 @@ import FuzzyText from "@/shared/components/ui/fuzzytext";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export const NotFoundPage = () => {
+export const UnauthorizedPage = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black gap-8">
       <div className="text-center">
-        <FuzzyText
-          baseIntensity={0.2}
-          hoverIntensity={0.5}
-          enableHover={true}
-          fontSize="clamp(4rem, 15vw, 12rem)"
-          color="#ffffff"
-        >
-          404
-        </FuzzyText>
+        <div className="flex justify-center">
+          <FuzzyText
+            baseIntensity={0.2}
+            hoverIntensity={0.5}
+            enableHover={true}
+            fontSize="clamp(4rem, 15vw, 12rem)"
+            color="#ffffff"
+          >
+            403
+          </FuzzyText>
+        </div>
         <div className="mt-8 flex justify-center">
           <FuzzyText
             baseIntensity={0.15}
@@ -24,7 +26,7 @@ export const NotFoundPage = () => {
             fontSize="clamp(1.5rem, 5vw, 3rem)"
             color="#ff4444"
           >
-            Not found
+            Unauthorized Access. Please contact the administrator.
           </FuzzyText>
         </div>
       </div>
