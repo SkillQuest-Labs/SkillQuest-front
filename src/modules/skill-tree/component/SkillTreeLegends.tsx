@@ -4,7 +4,7 @@ import { useState } from "react";
 import { LEVEL_COLORS } from "../skill-tree.type";
 
 export const SkillTreeLegends = () => {
-  const [isLegendCollapsed, setIsLegendCollapsed] = useState(true);
+  const [isLegendCollapsed, setIsLegendCollapsed] = useState(false);
 
   return (
     <div

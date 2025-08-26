@@ -215,10 +215,10 @@ export const SkillDetail = () => {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="flex-1 overflow-y-auto scrollbar-hide">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-8 space-y-6">
             {/* Description */}
             <Card className="bg-slate-800 border-slate-700">
               <CardHeader>
@@ -286,15 +286,12 @@ export const SkillDetail = () => {
             </Card>
           </div>
 
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Status & Difficulty */}
+          <div className="lg:col-span-4 space-y-6">
             <Card className="bg-slate-800 border-slate-700">
               <CardHeader>
                 <CardTitle className="text-white">Statut & Difficulté</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {/* Status */}
                 <div>
                   <label className="text-sm font-medium text-slate-300 mb-2 block">Statut</label>
                   {isEditing ? (
@@ -376,18 +373,18 @@ export const SkillDetail = () => {
               <CardContent className="space-y-2">
                 <Button
                   onClick={() => navigate(`/canvas?skillId=${skillId}`)}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                  className="w-full cursor-pointer bg-slate-700 hover:bg-blue-700 text-white border border-slate-600"
                 >
                   Ouvrir dans le Canvas
                 </Button>
                 <Button
                   onClick={() => navigate(`/live-view?skillId=${skillId}`)}
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white relative"
+                  className="w-full cursor-pointer bg-slate-700 hover:bg-purple-800 text-white border border-slate-600 relative"
                 >
                   <div className="flex items-center justify-center gap-2">
                     <div className="relative">
-                      <div className="w-2 h-2 bg-white rounded-full animate-[pulse_5s_ease-in-out_infinite]"></div>
-                      <div className="absolute inset-0 w-2 h-2 bg-white rounded-full animate-ping opacity-75"></div>
+                      <div className="w-2 h-2 bg-purple-400 rounded-full animate-[pulse_5s_ease-in-out_infinite]"></div>
+                      <div className="absolute inset-0 w-2 h-2 bg-purple-400 rounded-full animate-ping opacity-75"></div>
                     </div>
                     Live View
                   </div>
@@ -396,7 +393,7 @@ export const SkillDetail = () => {
                   onClick={handleDelete}
                   disabled={deleteLoading}
                   variant="destructive"
-                  className="w-full bg-red-500/80 hover:bg-red-600/80 text-white"
+                  className="w-full cursor-pointer bg-slate-700 hover:bg-red-700 text-white border border-slate-600"
                 >
                   {deleteLoading ? "Suppression..." : "Supprimer le skill"}
                 </Button>
@@ -437,7 +434,6 @@ export const SkillDetail = () => {
       {isFullscreenOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="w-full h-full max-w-7xl max-h-screen bg-slate-900 rounded-lg border border-slate-700 flex flex-col overflow-hidden">
-           
             <div className="flex items-center justify-between p-4 border-b border-slate-700">
               <h2 className="text-xl font-semibold text-white truncate">Arbre de compétence - {skill.title}</h2>
               <Button
