@@ -70,6 +70,7 @@ export const generateCircularSkillTreeData = ({ nodes, edges, centerX, centerY }
     if (node.id !== skillNodeId) {
       const isConnectedToSkill = skillNodeId && node.prerequisites.includes(skillNodeId);
       node.isLocked = !isConnectedToSkill;
+      node.status = isConnectedToSkill ? "UNLOCKED" : "LOCKED";
       node.icon = isConnectedToSkill ? "🔓" : "🔒";
     }
   });
