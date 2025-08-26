@@ -54,16 +54,18 @@ export const ConnectionLine = ({
       )}
 
       {/* Main connection line */}
-      <line
-        x1={prereqNode.position.x}
-        y1={prereqNode.position.y}
-        x2={node.position.x}
-        y2={node.position.y}
-        stroke={strokeColor}
-        strokeWidth={isPathHighlighted ? 4 : isActiveConnection ? 3 : 1.5} // Slightly thicker for non-active branch connections
-        strokeOpacity={isPathHighlighted ? 1 : isActiveConnection ? 1 : isTargetLocked ? 0.5 : 0.8} // Inactive connections are less opaque
-        strokeDasharray={isTargetLocked ? "5,5" : "none"} // Dashed for locked paths
-      />
+      {prereqNode && (
+        <line
+          x1={prereqNode.position.x}
+          y1={prereqNode.position.y}
+          x2={node.position.x}
+          y2={node.position.y}
+          stroke={strokeColor}
+          strokeWidth={isPathHighlighted ? 4 : isActiveConnection ? 3 : 1.5} // Slightly thicker for non-active branch connections
+          strokeOpacity={isPathHighlighted ? 1 : isActiveConnection ? 1 : isTargetLocked ? 0.5 : 0.8} // Inactive connections are less opaque
+          strokeDasharray={isTargetLocked ? "5,5" : "none"} // Dashed for locked paths
+        />
+      )}
     </g>
   );
 };

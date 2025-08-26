@@ -38,7 +38,7 @@ export const generateCircularSkillTreeData = ({ nodes, edges, centerX, centerY }
         size: 50,
         shape: "circle",
         nodeType: "mastery",
-        status: "COMPLETED",
+        status: "NOT_STARTED",
         isLocked: false,
         connections: rootQuestIds,
         prerequisites: [],
@@ -70,6 +70,7 @@ export const generateCircularSkillTreeData = ({ nodes, edges, centerX, centerY }
     if (node.id !== skillNodeId) {
       const isConnectedToSkill = skillNodeId && node.prerequisites.includes(skillNodeId);
       node.isLocked = !isConnectedToSkill;
+      node.icon = isConnectedToSkill ? "🔓" : "🔒";
     }
   });
 
