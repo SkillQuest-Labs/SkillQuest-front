@@ -17,6 +17,7 @@ import type { Skill } from "@/shared/types/skill.type";
 import { initialNodes } from "./canvas.const";
 import { useAddAIQuests } from "./hooks/useAddAIQuest";
 import { QuestDetailsModal } from "./components/quest-card-component/QuestDetailsModal";
+import { CanvasLoader } from "./components/CanvasLoader";
 
 export const Canvas = () => {
   const [connectionStart, setConnectionStart] = useState<string | null>(null);
@@ -106,6 +107,7 @@ export const Canvas = () => {
 
   return (
     <div className="h-screen bg-gray-50 relative ">
+      <CanvasLoader />
       <CanvasView
         nodes={nodes}
         edges={edges}
