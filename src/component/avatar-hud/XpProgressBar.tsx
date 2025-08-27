@@ -20,5 +20,5 @@ export const XpProgressBar = ({ xpUser, xpMax, level }: XpProgressBarProps) => {
         <span className="hover:text-slate-100 transition-colors duration-200">{`${xpUser} / ${xpMax} XP`}</span>
       </div>
     </div>
-  );
+  ); 
 };
