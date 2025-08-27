@@ -23,9 +23,7 @@ type SkillCardProps = {
 
 export const SkillCard = ({ skill }: SkillCardProps) => {
   const navigate = useNavigate();
-  const { deleteSkill, loading: deleteLoading } = useDeleteSkill(
-    skill.skillId || skill.id || "",
-  );
+  const { deleteSkill, loading: deleteLoading } = useDeleteSkill(skill.skillId || skill.id || "");
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const handleEditClick = (e: React.MouseEvent) => {
@@ -54,8 +52,6 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
         status: "success",
       });
       setIsDeleteDialogOpen(false);
-
-      
     } catch {
       showToast({
         title: "Erreur",

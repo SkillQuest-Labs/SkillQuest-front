@@ -21,9 +21,7 @@ export function useUserProgress(userId: string) {
 
   const totalXp = useMemo(() => {
     if (!Array.isArray(skills)) return 0;
-    return skills
-      .filter((s) => isDone(s?.status))
-      .reduce((sum, s) => sum + xpOf(s), 0);
+    return skills.filter((s) => isDone(s?.status)).reduce((sum, s) => sum + xpOf(s), 0);
   }, [skills]);
 
   const { level, xp, xpMax } = levelFromTotalXp(totalXp);

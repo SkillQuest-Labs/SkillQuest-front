@@ -20,16 +20,16 @@ export const DashboardUser = () => {
     }
   }, [user]);
 
-    const userId = user?.id ?? "";
+  const userId = user?.id ?? "";
   return (
     <div>
       <div className="flex items-center justify-center h-screen">
         <h1 className="text-3xl font-bold text-white">{`Welcome back ${userData?.role} ${userData?.firstname}`}</h1>
       </div>
       <AnimatedAvatarHud
-        userId={userId}                         
-        username={userData?.firstname ?? ""}            
-        role={userData?.role ?? ""}                     
+        userId={userId}
+        username={userData?.firstname ?? ""}
+        role={userData?.role ?? ""}
         avatarUrl={avatarImage}
       />
     </div>

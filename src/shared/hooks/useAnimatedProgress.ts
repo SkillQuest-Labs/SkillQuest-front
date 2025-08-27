@@ -1,20 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 
 type ProgressInput = {
-  level: number;   // niveau calculé
-  xp: number;      // xp dans le niveau
-  xpMax: number;   // cap du niveau
+  level: number; // niveau calculé
+  xp: number; // xp dans le niveau
+  xpMax: number; // cap du niveau
   totalXp?: number;
   animMs?: number; // default 750ms
 };
 
-export function useAnimatedProgress({
-  level,
-  xp,
-  xpMax,
-  totalXp,
-  animMs = 750,
-}: ProgressInput) {
+export function useAnimatedProgress({ level, xp, xpMax, totalXp, animMs = 750 }: ProgressInput) {
   const prev = useRef({ level, xp, xpMax, totalXp });
 
   const [animLevel, setAnimLevel] = useState(level);
