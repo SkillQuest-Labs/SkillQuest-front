@@ -8,7 +8,7 @@
   transition: box-shadow 0.2s, transform 0.2s, border 0.2s;
   border: 1px solid rgba(100,116,139,0.15); /* slate-500/20, plus fin */
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 .skill-card-custom::before {
   content: '';

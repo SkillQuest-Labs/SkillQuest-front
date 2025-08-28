@@ -1,10 +1,9 @@
-import type { Skill, SkillStatus } from "@/shared/types/skill.type";
+import type { Skill } from "@/shared/types/skill.type";
 
 export type CreateSkillInput = Skill;
 
-export type CreateSkillResponse = Skill & {
-  id: string;
-  status: SkillStatus;
-  completionTime: null;
-  userId: string;
-};
+export type CreateSkillResponse = Skill;
+
+export type UpdateSkillInput = Partial<Skill>;
+
+export type UpdateSkillResponse = Skill;

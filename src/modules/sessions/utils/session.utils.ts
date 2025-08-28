@@ -1,4 +1,4 @@
-import type { SessionFormType, SessionPayload } from "../types/session-form.type";
+import type { SessionFormType, SessionPayload, CalendarEvent } from "../types/session-form.type";
 
 export const convertToMinutes = (time: string): number => {
   const [hours, minutes] = time.split(":").map(Number);
@@ -31,4 +31,40 @@ export const buildSessionPayload = (form: SessionFormType): SessionPayload => {
     color: form.color,
     linkedSkillId: form.linkedSkill,
   };
+};
+
+export const convertCalendarEventsToDialogSessions = (
+  calendarEvents: CalendarEvent[],
+  selectedStartDate: string,
+  indexOfEventBeingEdited: number | null,
+) => {
+  return calendarEvents
+    .filter((calendarEvent, eventIndex) => {
+      const eventStartDate = calendarEvent.start.slice(0, 10);
+      return eventIndex !== indexOfEventBeingEdited && eventStartDate === selectedStartDate;
+    })
+    .map((calendarEvent) => {
+      return {
+        startDate: calendarEvent.start.slice(0, 10),
+        startTime: calendarEvent.start.slice(11, 16),
+        endTime: calendarEvent.end.slice(11, 16),
+      };
+    });
+};
+
+export const convertDateToISODate = (date: Date) =>
+  new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+
+export const convertDateToHourMinute = (date: Date) =>
+  new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(11, 16);
+
+export const capitalizeFirstLetter = (text: string) => (text ? text.charAt(0).toUpperCase() + text.slice(1) : text);
+
+export const convertToUtcIso = (date: string, time: string) => new Date(`${date}T${time}:00`).toISOString(); // -> "2025-08-10T07:30:00.000Z"
+
+export const computeResponsiveView = () => {
+  const w = window.innerWidth;
+  if (w < 768) return "timeGridDay";
+  if (w < 1024) return "timeGridWeek";
+  return "dayGridMonth";
 };
