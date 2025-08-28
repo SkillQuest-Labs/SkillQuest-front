@@ -1,19 +1,22 @@
-export function getXpMax(level: number): number {
-  const raw = 100 * Math.pow(1.25, Math.max(level, 1) - 1);
-  return Math.round(raw / 10) * 10;
+// Progression quadratique basée sur le niveau (modifiable)
+export function xpForLevel(level: number): number {
+  const base = 100; // niveau 1 → 2
+  return base * (level ** 2);
 }
 
-export function levelFromTotalXp(totalXp: number): { level: number; xp: number; xpMax: number } {
+// Déduit le niveau courant et le seuil suivant depuis un total d'XP
+export function getLevelFromXp(totalXp: number): {
+  level: number;
+  currentXp: number;
+  nextLevelXp: number;
+} {
   let level = 1;
-  let remaining = Math.max(0, totalXp | 0);
+  let nextLevelXp = xpForLevel(level);
 
-  for (;;) {
-    const cap = getXpMax(level);
-    if (remaining >= cap) {
-      remaining -= cap;
-      level += 1;
-      continue;
-    }
-    return { level, xp: remaining, xpMax: cap };
+  while (totalXp >= nextLevelXp) {
+    level++;
+    nextLevelXp = xpForLevel(level);
   }
+
+  return { level, currentXp: totalXp, nextLevelXp };
 }
