@@ -14,6 +14,7 @@ import { authAppearance } from "@/shared/constants/auth.const";
 import { AuthLayout } from "@/component/AuthLayout";
 import { UnauthorizedPage } from "@/pages/Unauthorized";
 import { WorkSession } from "@/pages/dashboard/WorkSession";
+import { Stats } from "@/pages/dashboard/Stats";
 
 export const router = createBrowserRouter([
   // Public routes for authentication
@@ -78,6 +79,10 @@ export const router = createBrowserRouter([
           {
             path: routes.workSession.path,
             element: <WorkSession />,
+          },
+          {
+            path: routes.stats.path,
+            element: <Stats />,
           },
         ],
       },
