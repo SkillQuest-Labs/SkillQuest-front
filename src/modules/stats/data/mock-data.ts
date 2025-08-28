@@ -231,10 +231,10 @@ export const mockUserStats: UserStats = {
 
 // Données complètes pour le graphique
 export const mockChartData: ChartData = {
-  experienceMetrics: mockExperienceMetrics,
   levelProgression: mockLevelProgression,
   xpThresholds: mockXpThresholds,
   userStats: mockUserStats,
   questCompletionMetrics: mockQuestCompletionMetrics,
   skillRadarMetrics: mockSkillRadarMetrics,
+  experienceXpMetrics: [],
 };

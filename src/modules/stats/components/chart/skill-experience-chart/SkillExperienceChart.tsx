@@ -1,13 +1,10 @@
 import ReactECharts from "echarts-for-react";
-import type { ChartData } from "@/modules/stats/types/stats.types";
 import { getChartOption } from "./chart-option.const";
+import { useGetSkills } from "@/shared/services/skill/api-skill";
 
-type SkillExperienceChartProps = {
-  data: ChartData;
-};
-
-export const SkillExperienceChart = ({ data }: SkillExperienceChartProps) => {
-  const chartOptions = getChartOption(data);
+export const SkillExperienceChart = () => {
+  const { skills: skillsData } = useGetSkills("uuid-user-1234-5678-9012-345678901234");
+  const chartOptions = getChartOption(skillsData);
 
   return (
     <div className="w-full rounded-xl bg-[#131928] p-6 shadow-lg">

@@ -1,9 +1,8 @@
 import { mockChartData } from "@/modules/stats/components/chart";
 import { GameStatsCard } from "@/modules/stats/components/GameStatsCard";
 import { UserLevelCard } from "@/modules/stats/components/UserLevelCard";
-import { TabPanel } from "@/modules/stats/components/tab-panel/TabPanel";
+import { StatsCharts } from "@/modules/stats/components/StatsCharts";
 import { Award, BarChart3, Target, TrendingUp } from "lucide-react";
-import { chartTabs } from "@/modules/stats/components/tab-panel/ChartTabs.const";
 
 export const Stats = () => {
   const { userStats } = mockChartData;
@@ -75,7 +74,7 @@ export const Stats = () => {
             </div>
 
             <div className="h-[75%]">
-              <TabPanel tabs={chartTabs} defaultActiveTab="skill-experience" variant="default" className="w-full" />
+              <StatsCharts defaultActiveTab="skill-experience" />
             </div>
           </div>
 

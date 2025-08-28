@@ -1,5 +1,5 @@
 import { BarChart3 } from "lucide-react";
-import { mockChartData, SkillExperienceChart } from "../chart";
+import { SkillExperienceChart } from "../chart";
 import type { TabItem } from "./tab-panel.type";
 
 export const chartTabs: TabItem[] = [
@@ -7,6 +7,6 @@ export const chartTabs: TabItem[] = [
     id: "skill-experience",
     label: "XP par Compétence",
     icon: BarChart3,
-    content: <SkillExperienceChart data={mockChartData} />,
+    content: <SkillExperienceChart />,
   },
 ];

@@ -1,3 +1,5 @@
+import type { Skill } from "@/shared/types/skill.type";
+
 export interface ExperienceMetric {
   skillId: string;
   skillName: string;
@@ -51,7 +53,7 @@ export interface SkillRadarData {
 }
 
 export interface ChartData {
-  experienceMetrics: ExperienceMetric[];
+  experienceXpMetrics: Skill[];
   levelProgression: LevelProgression[];
   xpThresholds: XpThreshold[];
   userStats: UserStats;
