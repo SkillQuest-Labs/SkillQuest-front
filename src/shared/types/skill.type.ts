@@ -13,5 +13,6 @@ export type Skill = {
   difficulty: SkillDifficulty;
   progressValue?: number;
   imageUrl?: string;
+  color?: string;
   createdAt?: string;
 };
