@@ -9,7 +9,7 @@ export type {
   SkillRadarData,
 } from "../../types/stats.types";
 
-export { SkillExperienceChart } from "./SkillExperienceChart";
+export { SkillExperienceChart } from "./skill-experience-chart/SkillExperienceChart";
 
 // Mock Data
 export * from "../../data/mock-data";
