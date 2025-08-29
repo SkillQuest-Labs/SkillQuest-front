@@ -8,19 +8,19 @@ export interface ExperienceMetric {
   color: string;
 }
 
-export interface LevelProgression {
+export type LevelProgression = {
   level: number;
-  xpRequired: number;
-  xpCurrent: number;
-  date: string;
-  isCurrentLevel: boolean;
-}
+  xpInLevel: number; // XP accumulated in this level only
+  totalXpAtLevel: number; // Player's total XP up to this level
+  xpRequired: number; // XP required to complete this level
+  isCurrentLevel: boolean; // true if this is the player's current level
+};
 
-export interface XpThreshold {
+export type XpThreshold = {
   level: number;
   xpRequired: number;
   xpCumulative: number;
-}
+};
 
 export interface UserStats {
   totalXp: number;
