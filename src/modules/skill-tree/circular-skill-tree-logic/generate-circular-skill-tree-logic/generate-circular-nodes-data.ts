@@ -54,9 +54,9 @@ export const generateCircularNodesData = ({
     const { x, y } = calculateNodePosition({ centerX, centerY, radius, angle: finalAngle });
 
     const nodeVisualsProperties = defineNodeProperties({
-      difficulty: "Hard", // Replace with node.data.difficulty
-      type: node.data.questType || "side",
-      xp: 200, // Replace with node.data.xp
+      nodeKind: node.data.kind,
+      xp: 0,
+      status: node.data.status,
     });
 
     const circularNode: CircularSkillNode = {
@@ -67,7 +67,7 @@ export const generateCircularNodesData = ({
       size: nodeVisualsProperties.size,
       shape: nodeVisualsProperties.shape,
       nodeType: nodeVisualsProperties.nodeType,
-      status: "NOT_STARTED", // The status of the quests returned from the canvas needs to be corrected here
+      status: node.data.status,
       isLocked: false,
       connections: graph.getDependents(node.id),
       prerequisites: graph.getPrerequisites(node.id),

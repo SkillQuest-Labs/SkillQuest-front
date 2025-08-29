@@ -96,6 +96,20 @@
   }
   
 
+/* Animation shimmer pour le loader */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
 /* Pro: aucune propriété globale n'est affectée, pas de clignotement, pas de bug, pas de scrollbars */
 body, .custom-canvas {
   backface-visibility: hidden;

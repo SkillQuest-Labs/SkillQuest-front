@@ -1,15 +1,16 @@
+import type { QuestStatus } from "@/shared/types/quest.type";
+import type { SkillStatus } from "@/shared/types/skill.type";
 import type { NodeShape, SkillNodeType } from "../../skill-tree.type";
 
 type DefineNodePropertiesArgs = {
+  nodeKind: string;
   xp: number;
-  difficulty: string | undefined;
-  type: string;
+  status: QuestStatus | SkillStatus;
 };
 
 export const defineNodeProperties = ({
-  xp,
-  difficulty,
-  type,
+  nodeKind,
+  status,
 }: DefineNodePropertiesArgs): {
   nodeType: SkillNodeType;
   size: number;
@@ -17,23 +18,23 @@ export const defineNodeProperties = ({
   icon: string;
   cost: number;
 } => {
-  if (difficulty === "Hard" || type === "main") {
+  if (nodeKind === "skill" && status === "NOT_STARTED") {
     return {
       nodeType: "keystone",
       size: 40,
-      shape: "hexagon",
+      shape: "diamond",
       icon: "👑",
       cost: 3,
     };
-  } else if (xp >= 200) {
+  } else if (nodeKind === "quest" && status === "LOCKED") {
     return {
       nodeType: "large",
       size: 35,
-      shape: "diamond",
-      icon: "💎",
+      shape: "hexagon",
+      icon: "🔒",
       cost: 2,
     };
-  } else if (xp >= 100) {
+  } else if (nodeKind === "quest" && status === "UNLOCKED") {
     return {
       nodeType: "medium",
       size: 30,

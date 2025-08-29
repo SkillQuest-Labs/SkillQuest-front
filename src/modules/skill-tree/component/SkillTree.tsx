@@ -160,7 +160,7 @@ export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreePro
           variant="outline"
           size="sm"
           onClick={() => setAnimationEnabled(!animationEnabled)}
-          className="absolute cursor-pointer top-15 left-4 z-10 bg-slate-700/80 backdrop-blur-sm border-slate-500 hover:bg-slate-600/80 text-slate-200 hover:text-white transition-all duration-200 font-medium shadow-lg"
+          className="absolute cursor-pointer top-15 right-4 z-10 bg-slate-700/80 backdrop-blur-sm border-slate-500 hover:bg-slate-600/80 text-slate-200 hover:text-white transition-all duration-200 font-medium shadow-lg"
         >
           {animationEnabled ? (
             <>

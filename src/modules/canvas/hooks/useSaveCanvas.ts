@@ -16,6 +16,7 @@ import { showToast } from "@/component/notification/show-toast";
 import { useCreateSkill, useGetSkill } from "@/shared/services/skill/api-skill";
 import { useSearchParams } from "react-router-dom";
 import { useSkillStore } from "@/stores/skill/skill-store";
+import { useLoadingStore } from "@/stores/loading-store";
 
 export const useSaveCanvas = () => {
   const { createQuest, error: createQuestError } = useCreateQuests();
@@ -144,11 +145,12 @@ export const useSaveCanvas = () => {
 
 export const useCanvasLoader = () => {
   const [searchParams] = useSearchParams();
+  const { setLoading } = useLoadingStore();
 
   const skillId = searchParams.get("skillId");
 
-  const { quests, questRelations } = useGetQuests(skillId ?? "");
-  const { skill } = useGetSkill(skillId ?? "");
+  const { quests, questRelations, loading: questsLoading } = useGetQuests(skillId ?? "");
+  const { skill, loading: skillLoading } = useGetSkill(skillId ?? "");
 
   const setNodes = useCanvasStore((state) => state.setNodes);
   const setEdges = useCanvasStore((state) => state.setEdges);
@@ -166,6 +168,11 @@ export const useCanvasLoader = () => {
     },
     [setNodes, markModifiedNode],
   );
+
+  useEffect(() => {
+    const isLoading = questsLoading || skillLoading;
+    setLoading(isLoading, "overlay");
+  }, [questsLoading, skillLoading, setLoading]);
 
   useEffect(() => {
     if (!quests || !skill || !questRelations) return;
