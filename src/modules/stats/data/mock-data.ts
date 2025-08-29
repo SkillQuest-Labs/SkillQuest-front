@@ -1,7 +1,4 @@
-import type {
-  ChartData,
-  UserStats,
-} from "../types/stats.types";
+import type { ChartData, UserStats } from "../types/stats.types";
 
 // Statistiques utilisateur globales
 export const mockUserStats: UserStats = {

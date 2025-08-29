@@ -34,10 +34,6 @@ export const Stats = () => {
                   label: "ce mois",
                   positive: true,
                 }}
-                badge={{
-                  text: "HOT",
-                  variant: "hot",
-                }}
               />
 
               <StatsCard
@@ -50,10 +46,6 @@ export const Stats = () => {
                   label: "cette semaine",
                   positive: true,
                 }}
-                badge={{
-                  text: "NEW",
-                  variant: "new",
-                }}
               />
 
               <StatsCard
@@ -65,10 +57,6 @@ export const Stats = () => {
                   value: "+8",
                   label: "ce mois",
                   positive: true,
-                }}
-                badge={{
-                  text: "RARE",
-                  variant: "rare",
                 }}
               />
             </div>
