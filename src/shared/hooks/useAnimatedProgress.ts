@@ -27,17 +27,14 @@ export function useAnimatedProgress({ level, xp, xpMax, totalXp, animMs = 750 }:
       return;
     }
 
-    // 1) remplir à 100% de l’ancien niveau
     setAnimCap(p.xpMax);
     setAnimXp(p.xpMax);
 
     const t1 = setTimeout(() => {
-      // 2) reset au nouveau niveau
       setAnimLevel(level);
       setAnimCap(xpMax);
       setAnimXp(0);
 
-      // 3) appliquer le surplus
       requestAnimationFrame(() => {
         const t2 = setTimeout(() => setAnimXp(xp), 50);
         return () => clearTimeout(t2);

@@ -20,18 +20,17 @@ export const DashboardUser = () => {
     }
   }, [user]);
 
-  //const userId = user?.id ?? "";
+  const userId = user?.id ?? "";
   return (
     <div>
       <div className="flex items-center justify-center h-screen">
         <h1 className="text-3xl font-bold text-white">{`Welcome back ${userData?.role} ${userData?.username}`}</h1>
       </div>
       <AnimatedAvatarHud
-        userId="mock-user-1"
-        username="Yami"
-        role="Apprenti"
+        userId={userId}
+        username={userData?.username ?? ""}
+        role={userData?.role ?? ""}
         avatarUrl={avatarImage}
-        isMock={true} // 🔥 va utiliser useUserProgressMock
       />
     </div>
   );
