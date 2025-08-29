@@ -168,7 +168,7 @@ export const SkillTreeLegends = () => {
           </div>
 
           {/* Rings/Levels */}
-          <div className="mb-6">
+          {/* <div className="mb-6">
             <h3 className="text-lg font-semibold mb-3 text-purple-300">Niveaux de Progression</h3>
             <div className="space-y-2 text-xs">
               {Object.entries(LEVEL_COLORS)
@@ -187,7 +187,7 @@ export const SkillTreeLegends = () => {
                 ))}
               <div className="text-gray-400 text-center mt-2">...</div>
             </div>
-          </div>
+          </div> */}
 
           {/* Interactions */}
           <div>

@@ -1,9 +1,18 @@
+import clsx from "clsx";
 import type { CircularSkillNode } from "../skill-tree.type";
 
-export const RenderNodeDetails = ({ selectedNodeData }: { selectedNodeData: CircularSkillNode }) => (
+type RenderNodeDetailsProps = {
+  selectedNodeData: CircularSkillNode;
+  minimalistView?: boolean;
+};
+
+export const RenderNodeDetails = ({ selectedNodeData, minimalistView }: RenderNodeDetailsProps) => (
   <div
     key={selectedNodeData.id}
-    className="absolute bottom-6 right-8 z-50 bg-gradient-to-br from-black/90 via-blue-950/90 to-cyan-900/90 shadow-2xl backdrop-blur-lg rounded-xl p-5 border border-cyan-400/40 max-w-sm transition-all duration-300 ease-out scale-100 opacity-100 animate-fade-in"
+    className={clsx(
+      "absolute bottom-6 right-8 z-50 bg-gradient-to-br from-black/90 via-blue-950/90 to-cyan-900/90 shadow-2xl backdrop-blur-lg rounded-xl p-5 border border-cyan-400/40 max-w-sm transition-all duration-300 ease-out scale-100 opacity-100 animate-fade-in",
+      !minimalistView && "bottom-16",
+    )}
   >
     <div className="text-white">
       <div className="flex items-center gap-3 mb-4">
