@@ -1,3 +1,5 @@
+import type { LucideIcon } from "lucide-react";
+
 export interface ExperienceMetric {
   skillId: string;
   skillName: string;
@@ -58,3 +60,26 @@ export interface ChartData {
   questCompletionMetrics: QuestCompletionMetric[];
   skillRadarMetrics: SkillRadarData[];
 }
+
+export type StatsCardProps = {
+  title: string;
+  value: number;
+  icon: LucideIcon;
+  color: "blue" | "purple" | "green" | "orange" | "red" | "yellow";
+  progress?: {
+    current: number;
+    max: number;
+    label?: string;
+  };
+  change?: {
+    value: string;
+    label: string;
+    positive?: boolean;
+  };
+  badge?: {
+    text: string;
+    variant: "new" | "hot" | "rare" | "legendary";
+  };
+  className?: string;
+  onClick?: () => void;
+};
