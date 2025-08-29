@@ -1,13 +1,12 @@
 import { useMemo } from "react";
 import { getLevelFromXp } from "@/shared/lib/xp";
 import { computeTotalXpFromSkills } from "@/shared/lib/xpQuest";
-import { useGetSkills } from "@/shared/services/skill/api-skill";
+import { mockSkills } from "../../mock/mockSkills"; // 🔥 ton fichier de mocks
 
-export function useUserProgress(userId: string) {
-  const { skills } = useGetSkills(userId);
+export function useUserProgressMock() {
+  const skills = mockSkills; // données en dur
 
   const totalXp = useMemo(() => {
-    if (!Array.isArray(skills)) return 0;
     return computeTotalXpFromSkills(skills);
   }, [skills]);
 
@@ -15,8 +14,8 @@ export function useUserProgress(userId: string) {
 
   return {
     level,
-    xpUser: currentXp, // XP total courant (on l’affiche tel quel)
-    xpMax: nextLevelXp, // Seuil global du prochain niveau
+    xpUser: currentXp,
+    xpMax: nextLevelXp,
     totalXp,
   };
 }

@@ -1,7 +1,7 @@
 // Progression quadratique basée sur le niveau (modifiable)
 export function xpForLevel(level: number): number {
   const base = 100; // niveau 1 → 2
-  return base * (level ** 2);
+  return base * level ** 2;
 }
 
 // Déduit le niveau courant et le seuil suivant depuis un total d'XP

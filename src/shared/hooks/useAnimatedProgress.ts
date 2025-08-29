@@ -8,13 +8,7 @@ type ProgressInput = {
   animMs?: number;
 };
 
-export function useAnimatedProgress({
-  level,
-  xp,
-  xpMax,
-  totalXp,
-  animMs = 750,
-}: ProgressInput) {
+export function useAnimatedProgress({ level, xp, xpMax, totalXp, animMs = 750 }: ProgressInput) {
   const prev = useRef({ level, xp, xpMax, totalXp });
 
   const [animLevel, setAnimLevel] = useState(level);

@@ -25,12 +25,9 @@ export function computeQuestXp(quest: any): number {
 
 // Somme l'XP des quêtes DONE d'une skill (skill.quests | skill.tasks | skill.missions)
 export function computeSkillXp(skill: any): number {
-  const quests: any[] =
-    skill?.quests ?? skill?.tasks ?? skill?.missions ?? [];
+  const quests: any[] = skill?.quests ?? skill?.tasks ?? skill?.missions ?? [];
 
-  return quests
-    .filter((q) => isQuestDone(q?.status))
-    .reduce((sum, q) => sum + computeQuestXp(q), 0);
+  return quests.filter((q) => isQuestDone(q?.status)).reduce((sum, q) => sum + computeQuestXp(q), 0);
 }
 
 // XP total utilisateur depuis un tableau de skills (chaque skill contient des quêtes)
@@ -40,7 +37,5 @@ export function computeTotalXpFromSkills(skills: any[]): number {
 
 // Variante si tu as déjà un tableau plat de quêtes au niveau utilisateur
 export function computeTotalXpFromQuests(quests: any[]): number {
-  return (quests ?? [])
-    .filter((q) => isQuestDone(q?.status))
-    .reduce((sum, q) => sum + computeQuestXp(q), 0);
+  return (quests ?? []).filter((q) => isQuestDone(q?.status)).reduce((sum, q) => sum + computeQuestXp(q), 0);
 }
