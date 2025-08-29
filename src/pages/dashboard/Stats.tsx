@@ -1,16 +1,15 @@
 import { mockChartData } from "@/modules/stats/components/chart";
 import { GameStatsCard } from "@/modules/stats/components/GameStatsCard";
 import { UserLevelCard } from "@/modules/stats/components/UserLevelCard";
-import { TabPanel } from "@/modules/stats/components/tab-panel/TabPanel";
+import { StatsCharts } from "@/modules/stats/components/StatsCharts";
 import { Award, BarChart3, Target, TrendingUp } from "lucide-react";
-import { chartTabs } from "@/modules/stats/components/tab-panel/ChartTabs.const";
 
 export const Stats = () => {
   const { userStats } = mockChartData;
 
   return (
-    <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900  ">
-      <div className="w-[95%] h-full mx-auto py-5">
+    <div className="max-h-screen">
+      <div className="w-[95%] mx-auto py-5">
         {/* Header */}
         <div className="mb-2">
           <div className="flex items-center gap-3 mb-4">
@@ -21,10 +20,10 @@ export const Stats = () => {
           </div>
         </div>
 
-        <div className="flex gap-8">
-          <div className="w-4/5  rounded-xl p-4">
+        <div className="flex gap-8 h-full">
+          <div className="w-4/5 h-full rounded-xl p-4">
             {/* Stats Cards sections */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div className="h-[25%] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
               <GameStatsCard
                 title="XP Total"
                 value={userStats.totalXp}
@@ -74,13 +73,13 @@ export const Stats = () => {
               />
             </div>
 
-            <div>
-              <TabPanel tabs={chartTabs} defaultActiveTab="skill-experience" variant="default" className="w-full" />
+            <div className="h-[75%]">
+              <StatsCharts defaultActiveTab="skill-experience" />
             </div>
           </div>
 
           {/* second partie */}
-          <div className="w-1/5 p-4">
+          <div className="w-1/5 h-full p-4">
             <div className="mb-4">
               <UserLevelCard
                 currentLevel={userStats.currentLevel}

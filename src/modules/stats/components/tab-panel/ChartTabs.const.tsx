@@ -7,7 +7,7 @@ export const chartTabs: TabItem[] = [
     id: "skill-experience",
     label: "XP par Compétence",
     icon: BarChart3,
-    content: <SkillExperienceChart data={mockChartData} height={400} />,
+    content: <SkillExperienceChart />,
   },
   {
     id: "level-progression",
