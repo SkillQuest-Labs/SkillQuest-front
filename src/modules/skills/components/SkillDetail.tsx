@@ -62,6 +62,9 @@ export const SkillDetail = () => {
       const updateData: UpdateSkillInput = {
         title: formData.title,
         description: formData.description,
+        totalXp: 0, // to be replaced with the correct values
+        averageQuestXp: 0,
+        completedQuests: 0,
       };
 
       if (formData.difficulty !== "ALL") {
