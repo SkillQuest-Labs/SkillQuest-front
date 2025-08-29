@@ -62,6 +62,9 @@ export const SkillDetail = () => {
       const updateData: UpdateSkillInput = {
         title: formData.title,
         description: formData.description,
+        totalXp: 0, // to be replaced with the correct values
+        averageQuestXp: 0,
+        completedQuests: 0,
       };
 
       if (formData.difficulty !== "ALL") {
@@ -437,7 +440,6 @@ export const SkillDetail = () => {
       {isFullscreenOpen && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="w-full h-full max-w-7xl max-h-screen bg-slate-900 rounded-lg border border-slate-700 flex flex-col overflow-hidden">
-           
             <div className="flex items-center justify-between p-4 border-b border-slate-700">
               <h2 className="text-xl font-semibold text-white truncate">Arbre de compétence - {skill.title}</h2>
               <Button
