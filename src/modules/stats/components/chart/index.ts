@@ -11,8 +11,6 @@ export type {
 
 export { SkillExperienceChart } from "./SkillExperienceChart";
 export { LevelProgressionChart } from "./LevelProgressionChart";
-export { QuestCompletionChart } from "./QuestCompletionChart";
-export { SkillRadarChart } from "./SkillRadarChart";
 
 // Mock Data
 export * from "../../data/mock-data";
