@@ -1,5 +1,5 @@
-import { BarChart3 } from "lucide-react";
-import { SkillExperienceChart } from "../chart";
+import { Activity, BarChart3 } from "lucide-react";
+import { LevelProgressionChart, SkillExperienceChart } from "../chart";
 import type { TabItem } from "./tab-panel.type";
 
 export const chartTabs: TabItem[] = [
@@ -8,5 +8,11 @@ export const chartTabs: TabItem[] = [
     label: "XP par Compétence",
     icon: BarChart3,
     content: <SkillExperienceChart />,
+  },
+  {
+    id: "level-progression",
+    label: "Progression Niveaux",
+    icon: Activity,
+    content: <LevelProgressionChart />,
   },
 ];

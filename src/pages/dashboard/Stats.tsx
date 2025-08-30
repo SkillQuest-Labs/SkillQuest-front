@@ -1,5 +1,5 @@
 import { mockChartData } from "@/modules/stats/components/chart";
-import { GameStatsCard } from "@/modules/stats/components/GameStatsCard";
+import { StatsCard } from "@/modules/stats/components/StatsCard";
 import { UserLevelCard } from "@/modules/stats/components/UserLevelCard";
 import { StatsCharts } from "@/modules/stats/components/StatsCharts";
 import { Award, BarChart3, Target, TrendingUp } from "lucide-react";
@@ -24,7 +24,7 @@ export const Stats = () => {
           <div className="w-4/5 h-full rounded-xl p-4">
             {/* Stats Cards sections */}
             <div className="h-[25%] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-              <GameStatsCard
+              <StatsCard
                 title="XP Total"
                 value={userStats.totalXp}
                 icon={TrendingUp}
@@ -34,13 +34,9 @@ export const Stats = () => {
                   label: "ce mois",
                   positive: true,
                 }}
-                badge={{
-                  text: "HOT",
-                  variant: "hot",
-                }}
               />
 
-              <GameStatsCard
+              <StatsCard
                 title="Skills Complétées"
                 value={userStats.skillsCompleted}
                 icon={Target}
@@ -50,13 +46,9 @@ export const Stats = () => {
                   label: "cette semaine",
                   positive: true,
                 }}
-                badge={{
-                  text: "NEW",
-                  variant: "new",
-                }}
               />
 
-              <GameStatsCard
+              <StatsCard
                 title="Quêtes Terminées"
                 value={userStats.questsCompleted}
                 icon={BarChart3}
@@ -65,10 +57,6 @@ export const Stats = () => {
                   value: "+8",
                   label: "ce mois",
                   positive: true,
-                }}
-                badge={{
-                  text: "RARE",
-                  variant: "rare",
                 }}
               />
             </div>
@@ -88,9 +76,6 @@ export const Stats = () => {
                 totalXp={userStats.totalXp}
                 icon={Award}
               />
-            </div>
-            <div className="">
-              <UserLevelCard currentLevel={9} currentXp={50} maxXp={2700} totalXp={100} icon={Award} />
             </div>
           </div>
         </div>
