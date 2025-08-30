@@ -20,9 +20,9 @@ import { ArrowLeft, Maximize2, Save, TreePine, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getDifficultyColor, getDifficultyLabel, getStatusColor, getStatusLabel } from "../skills.const";
-import type { SkillDifficulty, SkillStatus } from "../skills.types";
 import { SkillTree } from "@/modules/skill-tree/component/SkillTree";
 import { useNodesDataLoader } from "../hooks/useNodesDataLoader";
+import type { SkillDifficulty, SkillStatus } from "@/shared/types/skill.type";
 
 export const SkillDetail = () => {
   const { skillId } = useParams<{ skillId: string }>();
@@ -60,19 +60,12 @@ export const SkillDetail = () => {
 
     try {
       const updateData: UpdateSkillInput = {
+        ...skill,
         title: formData.title,
         description: formData.description,
-        totalXp: 0, // to be replaced with the correct values
-        averageQuestXp: 0,
-        completedQuests: 0,
+        difficulty: formData.difficulty,
+        status: formData.status,
       };
-
-      if (formData.difficulty !== "ALL") {
-        updateData.difficulty = formData.difficulty;
-      }
-      if (formData.status !== "ALL") {
-        updateData.status = formData.status;
-      }
 
       await updateSkill(updateData);
 
