@@ -7,7 +7,7 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import "@/styles/calendar.css";
 import { SessionDialog } from "./components/SessionDialog";
-import { useCreateSession } from "@/shared/services/session/api-session";
+import { useCreateSession, useGetSessions } from "@/shared/services/session/api-session";
 import { CalendarHeader } from "./components/CalendarHeader";
 import { useCalendarResponsive } from "./hooks/useCalendarResponsive";
 import {
@@ -16,6 +16,7 @@ import {
   convertDateToISODate,
   capitalizeFirstLetter,
   convertToUtcIso,
+  convertSessionsToEvents,
 } from "./utils/session.utils";
 import type { SessionFormState, CalendarEvent } from "./types/session-form.type";
 import { INITIAL_SESSION_FORM } from "./const/session-form.const";
@@ -23,6 +24,7 @@ import { INITIAL_SESSION_FORM } from "./const/session-form.const";
 export const CalendarWorkSession = () => {
   const { isCollapsed } = useSidebarStore();
   const { createSession } = useCreateSession();
+  const { sessions } = useGetSessions("uuid-user-1234-5678-9012-345678901234");
 
   const calendarRef = useRef<FullCalendar | null>(null);
 
@@ -34,6 +36,11 @@ export const CalendarWorkSession = () => {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   const initialView = useCalendarResponsive();
+
+  useEffect(() => {
+    if (!sessions || !Array.isArray(sessions)) return;
+    setWorkSessions(convertSessionsToEvents(sessions));
+  }, [sessions]);
 
   useEffect(() => {
     const api = calendarRef.current?.getApi();

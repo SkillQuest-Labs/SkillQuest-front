@@ -30,3 +30,26 @@ export interface CreateSessionResponse {
     workSessionId: string;
   }[];
 }
+
+export type Session = {
+  id: string;
+  title: string;
+  description: string;
+  color: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  duration: number;
+  userId: string;
+  linkedSkillId: string | null;
+  quests: {
+    id: string;
+    questId: string;
+    workSessionId: string;
+    quest: {
+      title: string;
+    };
+  }[];
+};
+
+export type Sessions = Session[];

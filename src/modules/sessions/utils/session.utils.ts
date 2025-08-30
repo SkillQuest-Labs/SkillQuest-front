@@ -1,3 +1,4 @@
+import type { Sessions } from "@/shared/services/session/api-session.type";
 import type { SessionFormType, SessionPayload, CalendarEvent } from "../types/session-form.type";
 
 export const convertToMinutes = (time: string): number => {
@@ -67,4 +68,21 @@ export const computeResponsiveView = () => {
   if (w < 768) return "timeGridDay";
   if (w < 1024) return "timeGridWeek";
   return "dayGridMonth";
+};
+
+export const convertSessionsToEvents = (sessions: Sessions): CalendarEvent[] => {
+  return sessions.map((session) => ({
+    id: session.id,
+    title: session.title,
+    description: session.description ?? "",
+    start: session.startTime,
+    end: session.endTime,
+    color: session.color ?? "#3B82F6",
+    backgroundColor: session.color ?? "#3B82F6",
+    borderColor: session.color ?? "#3B82F6",
+    extendedProps: {
+      linkedSkill: session.linkedSkillId ?? "",
+      linkedQuestIds: Array.isArray(session.quests) ? session.quests.map((quest) => quest.id) : [],
+    },
+  }));
 };
