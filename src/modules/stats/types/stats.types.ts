@@ -1,3 +1,5 @@
+import type { LucideIcon } from "lucide-react";
+
 export interface ExperienceMetric {
   skillId: string;
   skillName: string;
@@ -8,19 +10,19 @@ export interface ExperienceMetric {
   color: string;
 }
 
-export interface LevelProgression {
+export type LevelProgression = {
   level: number;
-  xpRequired: number;
-  xpCurrent: number;
-  date: string;
-  isCurrentLevel: boolean;
-}
+  xpInLevel: number; // XP accumulated in this level only
+  totalXpAtLevel: number; // Player's total XP up to this level
+  xpRequired: number; // XP required to complete this level
+  isCurrentLevel: boolean; // true if this is the player's current level
+};
 
-export interface XpThreshold {
+export type XpThreshold = {
   level: number;
   xpRequired: number;
   xpCumulative: number;
-}
+};
 
 export interface UserStats {
   totalXp: number;
@@ -58,3 +60,26 @@ export interface ChartData {
   questCompletionMetrics: QuestCompletionMetric[];
   skillRadarMetrics: SkillRadarData[];
 }
+
+export type StatsCardProps = {
+  title: string;
+  value: number;
+  icon: LucideIcon;
+  color: "blue" | "purple" | "green" | "orange" | "red" | "yellow";
+  progress?: {
+    current: number;
+    max: number;
+    label?: string;
+  };
+  change?: {
+    value: string;
+    label: string;
+    positive?: boolean;
+  };
+  badge?: {
+    text: string;
+    variant: "new" | "hot" | "rare" | "legendary";
+  };
+  className?: string;
+  onClick?: () => void;
+};

@@ -1,18 +1,8 @@
 // Types
-export type {
-  ChartData,
-  ExperienceMetric,
-  LevelProgression,
-  XpThreshold,
-  UserStats,
-  QuestCompletionMetric,
-  SkillRadarData,
-} from "../../types/stats.types";
+export type { ChartData, UserStats } from "../../types/stats.types";
 
-export { SkillExperienceChart } from "./SkillExperienceChart";
-export { LevelProgressionChart } from "./LevelProgressionChart";
-export { QuestCompletionChart } from "./QuestCompletionChart";
-export { SkillRadarChart } from "./SkillRadarChart";
+export { SkillExperienceChart } from "./skill-experience-chart/SkillExperienceChart";
+export { LevelProgressionChart } from "./level-progression-chart/LevelProgressionChart";
 
 // Mock Data
 export * from "../../data/mock-data";

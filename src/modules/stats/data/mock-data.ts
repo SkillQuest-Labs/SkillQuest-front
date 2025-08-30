@@ -1,97 +1,4 @@
-import type {
-  ChartData,
-  ExperienceMetric,
-  LevelProgression,
-  XpThreshold,
-  UserStats,
-  QuestCompletionMetric,
-  SkillRadarData,
-} from "../types/stats.types";
-
-// Données factices pour les métriques d'expérience par skill
-export const mockExperienceMetrics: ExperienceMetric[] = [
-  {
-    skillId: "1",
-    skillName: "JavaScript",
-    totalXp: 2850,
-    completedQuests: 12,
-    averageQuestXp: 237,
-    difficulty: "MEDIUM",
-    color: "#F7DF1E",
-  },
-  {
-    skillId: "2",
-    skillName: "React",
-    totalXp: 2200,
-    completedQuests: 8,
-    averageQuestXp: 275,
-    difficulty: "HARD",
-    color: "#61DAFB",
-  },
-  {
-    skillId: "3",
-    skillName: "TypeScript",
-    totalXp: 1800,
-    completedQuests: 6,
-    averageQuestXp: 300,
-    difficulty: "HARD",
-    color: "#3178C6",
-  },
-  {
-    skillId: "4",
-    skillName: "CSS",
-    totalXp: 1650,
-    completedQuests: 15,
-    averageQuestXp: 110,
-    difficulty: "EASY",
-    color: "#1572B6",
-  },
-  {
-    skillId: "5",
-    skillName: "Node.js",
-    totalXp: 1400,
-    completedQuests: 5,
-    averageQuestXp: 280,
-    difficulty: "MEDIUM",
-    color: "#339933",
-  },
-  {
-    skillId: "6",
-    skillName: "Git",
-    totalXp: 950,
-    completedQuests: 10,
-    averageQuestXp: 95,
-    difficulty: "EASY",
-    color: "#F05032",
-  },
-];
-
-// Données factices pour la progression des niveaux dans le temps
-export const mockLevelProgression: LevelProgression[] = [
-  { level: 1, xpRequired: 100, xpCurrent: 100, date: "2024-01-01", isCurrentLevel: false },
-  { level: 2, xpRequired: 250, xpCurrent: 350, date: "2024-01-15", isCurrentLevel: false },
-  { level: 3, xpRequired: 450, xpCurrent: 800, date: "2024-02-01", isCurrentLevel: false },
-  { level: 4, xpRequired: 700, xpCurrent: 1500, date: "2024-02-20", isCurrentLevel: false },
-  { level: 5, xpRequired: 1000, xpCurrent: 2500, date: "2024-03-10", isCurrentLevel: false },
-  { level: 6, xpRequired: 1350, xpCurrent: 3850, date: "2024-03-25", isCurrentLevel: false },
-  { level: 7, xpRequired: 1750, xpCurrent: 5600, date: "2024-04-12", isCurrentLevel: false },
-  { level: 8, xpRequired: 2200, xpCurrent: 7800, date: "2024-05-01", isCurrentLevel: false },
-  { level: 9, xpRequired: 2700, xpCurrent: 10500, date: "2024-05-20", isCurrentLevel: true },
-];
-
-// Seuils XP pour chaque niveau
-export const mockXpThresholds: XpThreshold[] = [
-  { level: 1, xpRequired: 100, xpCumulative: 100 },
-  { level: 2, xpRequired: 250, xpCumulative: 350 },
-  { level: 3, xpRequired: 450, xpCumulative: 800 },
-  { level: 4, xpRequired: 700, xpCumulative: 1500 },
-  { level: 5, xpRequired: 1000, xpCumulative: 2500 },
-  { level: 6, xpRequired: 1350, xpCumulative: 3850 },
-  { level: 7, xpRequired: 1750, xpCumulative: 5600 },
-  { level: 8, xpRequired: 2200, xpCumulative: 7800 },
-  { level: 9, xpRequired: 2700, xpCumulative: 10500 },
-  { level: 10, xpRequired: 3250, xpCumulative: 13750 },
-];
+import type { ChartData, UserStats, QuestCompletionMetric, SkillRadarData } from "../types/stats.types";
 
 // Données factices pour les quêtes complétées par skill
 export const mockQuestCompletionMetrics: QuestCompletionMetric[] = [
@@ -231,9 +138,9 @@ export const mockUserStats: UserStats = {
 
 // Données complètes pour le graphique
 export const mockChartData: ChartData = {
-  experienceMetrics: mockExperienceMetrics,
-  levelProgression: mockLevelProgression,
-  xpThresholds: mockXpThresholds,
+  experienceMetrics: [],
+  levelProgression: [],
+  xpThresholds: [],
   userStats: mockUserStats,
   questCompletionMetrics: mockQuestCompletionMetrics,
   skillRadarMetrics: mockSkillRadarMetrics,
