@@ -24,7 +24,7 @@ import { INITIAL_SESSION_FORM } from "./const/session-form.const";
 export const CalendarWorkSession = () => {
   const { isCollapsed } = useSidebarStore();
   const { createSession } = useCreateSession();
-  const { sessions } = useGetSessions("uuid-user-1234-5678-9012-345678901234");
+  const { sessions } = useGetSessions("uuid-user-1234-5678-9012-345678901234"); //user id need be to be change
 
   const calendarRef = useRef<FullCalendar | null>(null);
 
@@ -59,14 +59,12 @@ export const CalendarWorkSession = () => {
   }, []);
 
   const handleSelect = useCallback((selectionInfo: any) => {
-    const start = selectionInfo.start as Date;
-    const end = selectionInfo.end as Date;
     setEditingIndex(null);
     setSessionForm({
       ...INITIAL_SESSION_FORM,
-      startDate: convertDateToISODate(start),
-      startTime: convertDateToHourMinute(start),
-      endTime: convertDateToHourMinute(end),
+      startDate: String(selectionInfo.start),
+      startTime: String(selectionInfo.start),
+      endTime: String(selectionInfo.end),
     });
     setIsDialogOpen(true);
   }, []);
@@ -122,40 +120,13 @@ export const CalendarWorkSession = () => {
         color: sessionForm.color,
         linkedSkillId: sessionForm.linkedSkill,
         questId: sessionForm.linkedQuest,
-        userId: "uuid-user-1234-5678-9012-345678901234",
+        userId: "uuid-user-1234-5678-9012-345678901234", // user id need be to change
         startDate: sessionForm.startDate,
         startTime: convertToUtcIso(sessionForm.startDate, sessionForm.startTime),
         endTime: convertToUtcIso(sessionForm.startDate, sessionForm.endTime),
       };
 
-      const eventForCalendar: CalendarEvent = {
-        id: crypto.randomUUID(),
-        title: payloadForApi.title,
-        description: payloadForApi.description,
-        color: payloadForApi.color,
-        start: payloadForApi.startTime,
-        end: payloadForApi.endTime,
-        backgroundColor: payloadForApi.color,
-        borderColor: payloadForApi.color,
-        extendedProps: {
-          linkedSkill: sessionForm.linkedSkill,
-          linkedQuest: sessionForm.linkedQuest,
-        },
-      };
-
-      if (editingIndex !== null) {
-        const next = [...workSessions];
-
-        eventForCalendar.id = next[editingIndex].id;
-        next[editingIndex] = { ...next[editingIndex], ...eventForCalendar };
-        setWorkSessions(next);
-      } else {
-        const created = await createSession(payloadForApi as any);
-        if (created?.id) {
-          eventForCalendar.id = String(created.id);
-        }
-        setWorkSessions((prev) => [...prev, eventForCalendar]);
-      }
+      await createSession(payloadForApi as any);
 
       setIsDialogOpen(false);
       setEditingIndex(null);
@@ -163,7 +134,7 @@ export const CalendarWorkSession = () => {
     } catch (error) {
       console.error(error);
     }
-  }, [editingIndex, sessionForm, workSessions, createSession]);
+  }, [sessionForm, createSession]);
 
   return (
     <div className="transition-all duration-300 min-h-screen">
@@ -215,6 +186,7 @@ export const CalendarWorkSession = () => {
               scrollTime="08:00:00"
               dayHeaderFormat={{ weekday: "long" }}
               eventDisplay="block"
+              displayEventTime={false}
             />
           </div>
         </div>

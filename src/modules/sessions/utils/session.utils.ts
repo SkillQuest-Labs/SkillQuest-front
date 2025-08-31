@@ -61,7 +61,13 @@ export const convertDateToHourMinute = (date: Date) =>
 
 export const capitalizeFirstLetter = (text: string) => (text ? text.charAt(0).toUpperCase() + text.slice(1) : text);
 
-export const convertToUtcIso = (date: string, time: string) => new Date(`${date}T${time}:00`).toISOString(); // -> "2025-08-10T07:30:00.000Z"
+export const convertToUtcIso = (date: string, time: string): string => {
+  const [year, month, day] = date.split("-").map(Number);
+  const [hour, minute] = time.split(":").map(Number);
+
+  const utcDate = new Date(Date.UTC(year, month - 1, day, hour, minute));
+  return utcDate.toISOString();
+};
 
 export const computeResponsiveView = () => {
   const w = window.innerWidth;
