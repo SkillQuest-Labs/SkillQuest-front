@@ -17,7 +17,7 @@ export const SelectSkillField = ({ currentSession, setForm, skills, loading }: S
           setForm({
             ...currentSession,
             linkedSkill: e.target.value,
-            linkedQuest: "", // reset linked quest when skill changes
+            linkedQuests: [],
           })
         }
         className="w-full p-2 rounded bg-slate-800 border border-slate-600 text-white"

@@ -3,7 +3,7 @@ export interface CreateSessionInput {
   startTime: string;
   endTime: string;
   userId: string;
-  questId: string;
+  questIds: string[];
   title: string;
   description?: string;
   color: string;
@@ -43,6 +43,7 @@ export type Session = {
   userId: string;
   linkedSkillId: string | null;
   quests: {
+    title: string;
     id: string;
     questId: string;
     workSessionId: string;

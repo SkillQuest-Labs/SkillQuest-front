@@ -7,6 +7,6 @@ export const INITIAL_SESSION_FORM: SessionFormType = {
   startTime: "",
   endTime: "",
   linkedSkill: "",
-  linkedQuest: "",
+  linkedQuests: [],
   color: "#3B82F6",
 };

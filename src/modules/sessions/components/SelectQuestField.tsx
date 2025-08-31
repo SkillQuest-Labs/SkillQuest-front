@@ -13,8 +13,16 @@ export const SelectQuestField = ({ currentSession, setForm, quests, loading, dis
     <div className="mb-4">
       <label className="text-sm text-white mb-1 block">Choisir une quête</label>
       <select
-        value={currentSession.linkedQuest}
-        onChange={(e) => setForm({ ...currentSession, linkedQuest: e.target.value })}
+        value={currentSession.linkedQuests?.map((quest) => quest.id) ?? []}
+        onChange={(e) => {
+          const selectedIds = Array.from(e.target.selectedOptions).map((opt) => opt.value);
+          setForm({
+            ...currentSession,
+            linkedQuests: quests
+              .filter((quest) => selectedIds.includes(quest.id))
+              .map((quest) => ({ id: quest.id, title: quest.title })),
+          });
+        }}
         disabled={disabled}
         className={`w-full p-2 rounded border ${
           disabled

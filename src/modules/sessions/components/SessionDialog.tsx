@@ -31,7 +31,7 @@ export const SessionDialog = ({
     formSession.startDate &&
     formSession.startTime &&
     formSession.endTime &&
-    formSession.linkedQuest;
+    formSession.linkedQuests.length > 0;
 
   const hasTimeConflict = Boolean(
     formSession.startTime &&

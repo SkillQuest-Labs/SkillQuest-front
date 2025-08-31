@@ -1,5 +1,5 @@
-import type { Sessions } from "@/shared/services/session/api-session.type";
-import type { SessionFormType, SessionPayload, CalendarEvent } from "../types/session-form.type";
+import type { CreateSessionInput, Sessions } from "@/shared/services/session/api-session.type";
+import type { SessionFormType, CalendarEvent } from "../types/session-form.type";
 
 export const convertToMinutes = (time: string): number => {
   const [hours, minutes] = time.split(":").map(Number);
@@ -20,17 +20,17 @@ export const isTimeSlotConflict = (
   });
 };
 
-export const buildSessionPayload = (form: SessionFormType): SessionPayload => {
+export const buildSessionPayload = (sessionForm: SessionFormType): CreateSessionInput => {
   return {
-    date: form.startDate,
-    startTime: new Date(`${form.startDate}T${form.startTime}`).toISOString(),
-    endTime: new Date(`${form.startDate}T${form.endTime}`).toISOString(),
+    startDate: sessionForm.startDate,
+    startTime: new Date(`${sessionForm.startDate}T${sessionForm.startTime}`).toISOString(),
+    endTime: new Date(`${sessionForm.startDate}T${sessionForm.endTime}`).toISOString(),
     userId: "uuid-user-1234-5678-9012-345678901234",
-    questId: form.linkedQuest,
-    title: form.title,
-    description: form.description,
-    color: form.color,
-    linkedSkillId: form.linkedSkill,
+    questIds: (sessionForm.linkedQuests || []).map((quest) => quest.id),
+    title: sessionForm.title,
+    description: sessionForm.description,
+    color: sessionForm.color,
+    linkedSkillId: sessionForm.linkedSkill,
   };
 };
 
@@ -49,6 +49,7 @@ export const convertCalendarEventsToDialogSessions = (
         startDate: calendarEvent.start.slice(0, 10),
         startTime: calendarEvent.start.slice(11, 16),
         endTime: calendarEvent.end.slice(11, 16),
+        linkedQuests: calendarEvent.extendedProps.linkedQuests,
       };
     });
 };
@@ -82,7 +83,12 @@ export const convertSessionsToEvents = (sessions: Sessions): CalendarEvent[] => 
     borderColor: session.color ?? "#3B82F6",
     extendedProps: {
       linkedSkill: session.linkedSkillId ?? "",
-      linkedQuestIds: Array.isArray(session.quests) ? session.quests.map((quest) => quest.id) : [],
+      linkedQuests: Array.isArray(session.quests)
+        ? session.quests.map((sessionQuest) => ({
+            id: sessionQuest.questId ?? sessionQuest.id,
+            title: sessionQuest.quest?.title ?? sessionQuest.title ?? "",
+          }))
+        : [],
     },
   }));
 };

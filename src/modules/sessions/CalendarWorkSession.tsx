@@ -104,7 +104,7 @@ export const CalendarWorkSession = () => {
         startTime: selected.start?.slice(11, 16) ?? "",
         endTime: selected.end?.slice(11, 16) ?? "",
         linkedSkill: selected.extendedProps?.linkedSkill ?? "",
-        linkedQuest: selected.extendedProps?.linkedQuest ?? "",
+        linkedQuests: selected.extendedProps?.linkedQuests,
         color: selected.backgroundColor ?? "#3B82F6",
       });
       setIsDialogOpen(true);
@@ -124,7 +124,7 @@ export const CalendarWorkSession = () => {
         description: sessionForm.description,
         color: sessionForm.color,
         linkedSkillId: sessionForm.linkedSkill,
-        questId: sessionForm.linkedQuest,
+        questIds: sessionForm.linkedQuests.map((linkedQuest) => linkedQuest.id),
         userId: "uuid-user-1234-5678-9012-345678901234", // user id need be to change
         startDate: sessionForm.startDate,
         startTime: startIsoUtc,
