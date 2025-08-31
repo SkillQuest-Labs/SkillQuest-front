@@ -9,11 +9,6 @@ export interface SessionFormType {
   color: string;
 }
 
-export interface SessionFormWithId extends SessionFormType {
-  id: string;
-  date: string;
-}
-
 export interface SessionPayload {
   date: string;
   startTime: string;
@@ -29,24 +24,13 @@ export interface SessionPayload {
 }
 
 export interface SessionFormProps {
-  form: SessionFormType;
+  currentSession: SessionFormType;
   setForm: (form: SessionFormType) => void;
   skills: any[];
   quests: any[];
   loadingSkills: boolean;
   loadingQuests: boolean;
 }
-
-export type SessionFormState = {
-  title: string;
-  description: string;
-  startDate: string;
-  startTime: string;
-  endTime: string;
-  linkedSkill: string;
-  linkedQuest: string;
-  color: string;
-};
 
 export type CalendarEvent = {
   id: string;

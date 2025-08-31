@@ -1,20 +1,20 @@
 import type { SessionFormType } from "../types/session-form.type";
 
 interface SelectQuestProps {
-  form: SessionFormType;
+  currentSession: SessionFormType;
   setForm: (form: SessionFormType) => void;
   quests: any[];
   loading: boolean;
   disabled?: boolean;
 }
 
-export const SelectQuestField = ({ form, setForm, quests, loading, disabled = false }: SelectQuestProps) => {
+export const SelectQuestField = ({ currentSession, setForm, quests, loading, disabled = false }: SelectQuestProps) => {
   return (
     <div className="mb-4">
       <label className="text-sm text-white mb-1 block">Choisir une quête</label>
       <select
-        value={form.linkedQuest}
-        onChange={(e) => setForm({ ...form, linkedQuest: e.target.value })}
+        value={currentSession.linkedQuest}
+        onChange={(e) => setForm({ ...currentSession, linkedQuest: e.target.value })}
         disabled={disabled}
         className={`w-full p-2 rounded border ${
           disabled

@@ -1,6 +1,6 @@
-import type { SessionFormState } from "../types/session-form.type";
+import type { SessionFormType } from "../types/session-form.type";
 
-export const INITIAL_SESSION_FORM: SessionFormState = {
+export const INITIAL_SESSION_FORM: SessionFormType = {
   title: "",
   description: "",
   startDate: "",

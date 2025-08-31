@@ -10,8 +10,8 @@ import { CircleAlert } from "lucide-react";
 interface SessionDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  form: SessionFormType;
-  setForm: (form: SessionFormType) => void;
+  formSession: SessionFormType;
+  setFormSession: (form: SessionFormType) => void;
   onSave: () => void;
   isEditing: boolean;
   sessionSlots: { startDate: string; startTime: string; endTime: string }[];
@@ -20,25 +20,34 @@ interface SessionDialogProps {
 export const SessionDialog = ({
   open,
   onOpenChange,
-  form,
-  setForm,
+  formSession,
+  setFormSession,
   onSave,
   isEditing,
   sessionSlots,
 }: SessionDialogProps) => {
-  const isFormValid = form.title.trim() && form.startDate && form.startTime && form.endTime && form.linkedQuest;
+  const isFormValid =
+    formSession.title.trim() &&
+    formSession.startDate &&
+    formSession.startTime &&
+    formSession.endTime &&
+    formSession.linkedQuest;
 
   const hasTimeConflict = Boolean(
-    form.startTime && form.endTime && convertToMinutes(form.endTime) <= convertToMinutes(form.startTime),
+    formSession.startTime &&
+      formSession.endTime &&
+      convertToMinutes(formSession.endTime) <= convertToMinutes(formSession.startTime),
   );
 
   const hasSessionConflict = Boolean(
-    form.startTime && form.endTime && isTimeSlotConflict(form.startTime, form.endTime, sessionSlots),
+    formSession.startTime &&
+      formSession.endTime &&
+      isTimeSlotConflict(formSession.startTime, formSession.endTime, sessionSlots),
   );
 
   const userId = "uuid-user-1234-5678-9012-345678901234";
   const { skills, loading: loadingSkills } = useGetSkills(userId);
-  const { quests, loading: loadingQuests } = useGetQuests(form.linkedSkill);
+  const { quests, loading: loadingQuests } = useGetQuests(formSession.linkedSkill);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -49,8 +58,8 @@ export const SessionDialog = ({
         </DialogHeader>
 
         <SessionForm
-          form={form}
-          setForm={setForm}
+          currentSession={formSession}
+          setForm={setFormSession}
           skills={skills}
           quests={quests ?? []}
           loadingSkills={loadingSkills}

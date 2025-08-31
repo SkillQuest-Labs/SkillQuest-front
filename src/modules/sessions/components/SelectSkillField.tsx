@@ -1,21 +1,21 @@
 import type { SessionFormType } from "../types/session-form.type";
 
 interface SelectSkillProps {
-  form: SessionFormType;
+  currentSession: SessionFormType;
   setForm: (form: SessionFormType) => void;
   skills: any[];
   loading: boolean;
 }
 
-export const SelectSkillField = ({ form, setForm, skills, loading }: SelectSkillProps) => {
+export const SelectSkillField = ({ currentSession, setForm, skills, loading }: SelectSkillProps) => {
   return (
     <div className="mb-4">
       <label className="text-sm text-white mb-1 block">Choisir un skill</label>
       <select
-        value={form.linkedSkill}
+        value={currentSession.linkedSkill}
         onChange={(e) =>
           setForm({
-            ...form,
+            ...currentSession,
             linkedSkill: e.target.value,
             linkedQuest: "", // reset linked quest when skill changes
           })

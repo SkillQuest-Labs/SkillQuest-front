@@ -2,7 +2,7 @@ import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
 import FullCalendar from "@fullcalendar/react";
 import frLocale from "@fullcalendar/core/locales/fr";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin from "@fullcalendar/interaction";
+import interactionPlugin, { type DateClickArg } from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import "@/styles/calendar.css";
@@ -12,14 +12,13 @@ import { CalendarHeader } from "./components/CalendarHeader";
 import { useCalendarResponsive } from "./hooks/useCalendarResponsive";
 import {
   convertCalendarEventsToDialogSessions,
-  convertDateToHourMinute,
-  convertDateToISODate,
   capitalizeFirstLetter,
   convertToUtcIso,
   convertSessionsToEvents,
 } from "./utils/session.utils";
-import type { SessionFormState, CalendarEvent } from "./types/session-form.type";
+import type { SessionFormType, CalendarEvent } from "./types/session-form.type";
 import { INITIAL_SESSION_FORM } from "./const/session-form.const";
+import type { DateSelectArg, EventClickArg } from "@fullcalendar/core";
 
 export const CalendarWorkSession = () => {
   const { isCollapsed } = useSidebarStore();
@@ -31,7 +30,7 @@ export const CalendarWorkSession = () => {
   const [workSessions, setWorkSessions] = useState<CalendarEvent[]>([]);
   const [currentView, setCurrentView] = useState<string>("dayGridMonth");
   const [headerTitle, setHeaderTitle] = useState<string>("");
-  const [sessionForm, setSessionForm] = useState<SessionFormState>(INITIAL_SESSION_FORM);
+  const [sessionForm, setSessionForm] = useState<SessionFormType>(INITIAL_SESSION_FORM);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
@@ -58,39 +57,42 @@ export const CalendarWorkSession = () => {
     setHeaderTitle(capitalizeFirstLetter(arg.view.title));
   }, []);
 
-  const handleSelect = useCallback((selectionInfo: any) => {
+  const handleSelect = useCallback((arg: DateSelectArg) => {
+    const { startStr, endStr } = arg;
     setEditingIndex(null);
     setSessionForm({
       ...INITIAL_SESSION_FORM,
-      startDate: String(selectionInfo.start),
-      startTime: String(selectionInfo.start),
-      endTime: String(selectionInfo.end),
+      startDate: startStr,
+      startTime: startStr,
+      endTime: endStr,
     });
     setIsDialogOpen(true);
   }, []);
 
-  const handleDateClick = useCallback((info: any) => {
-    const viewType = calendarRef.current?.getApi().view.type ?? "";
+  const handleDateClick = useCallback((arg: DateClickArg) => {
+    const { date, dateStr, view } = arg;
     setEditingIndex(null);
 
-    if (viewType.startsWith("timeGrid")) {
-      const start = new Date(info.date);
-      const end = new Date(start.getTime() + 30 * 60 * 1000);
+    if (view.type.startsWith("timeGrid")) {
+      const start = dateStr;
+      const endTimeIso = new Date(date.getTime() + 30 * 60 * 1000).toISOString();
+
       setSessionForm({
         ...INITIAL_SESSION_FORM,
-        startDate: convertDateToISODate(start),
-        startTime: convertDateToHourMinute(start),
-        endTime: convertDateToHourMinute(end),
+        startDate: start.slice(0, 10),
+        startTime: start.slice(11, 16),
+        endTime: endTimeIso.slice(11, 16),
       });
     } else {
-      setSessionForm({ ...INITIAL_SESSION_FORM, startDate: info.dateStr });
+      setSessionForm({ ...INITIAL_SESSION_FORM, startDate: dateStr.slice(0, 10) });
     }
     setIsDialogOpen(true);
   }, []);
 
   const handleEventClick = useCallback(
-    (clickInfo: any) => {
-      const index = workSessions.findIndex((eventItem) => eventItem.id === clickInfo.event.id);
+    (clickInfo: EventClickArg) => {
+      const id = clickInfo.event.id;
+      const index = workSessions.findIndex((e) => e.id === id);
       if (index < 0) return;
 
       const selected = workSessions[index];
@@ -114,7 +116,10 @@ export const CalendarWorkSession = () => {
 
   const handleSave = useCallback(async () => {
     try {
-      const payloadForApi = {
+      const startIsoUtc = convertToUtcIso(sessionForm.startDate, sessionForm.startTime);
+      const endIsoUtc = convertToUtcIso(sessionForm.startDate, sessionForm.endTime);
+
+      const payload = {
         title: sessionForm.title,
         description: sessionForm.description,
         color: sessionForm.color,
@@ -122,11 +127,11 @@ export const CalendarWorkSession = () => {
         questId: sessionForm.linkedQuest,
         userId: "uuid-user-1234-5678-9012-345678901234", // user id need be to change
         startDate: sessionForm.startDate,
-        startTime: convertToUtcIso(sessionForm.startDate, sessionForm.startTime),
-        endTime: convertToUtcIso(sessionForm.startDate, sessionForm.endTime),
+        startTime: startIsoUtc,
+        endTime: endIsoUtc,
       };
 
-      await createSession(payloadForApi as any);
+      await createSession(payload);
 
       setIsDialogOpen(false);
       setEditingIndex(null);
@@ -187,6 +192,7 @@ export const CalendarWorkSession = () => {
               dayHeaderFormat={{ weekday: "long" }}
               eventDisplay="block"
               displayEventTime={false}
+              timeZone="UTC"
             />
           </div>
         </div>
@@ -195,8 +201,8 @@ export const CalendarWorkSession = () => {
       <SessionDialog
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
-        form={sessionForm}
-        setForm={setSessionForm}
+        formSession={sessionForm}
+        setFormSession={setSessionForm}
         onSave={handleSave}
         isEditing={editingIndex !== null}
         sessionSlots={convertCalendarEventsToDialogSessions(workSessions, sessionForm.startDate, editingIndex)}
