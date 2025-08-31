@@ -36,7 +36,11 @@ export const SkillRadarChart = () => {
 
       {/* Radar Chart */}
       <div className="flex-1 min-h-0 mb-4">
-        <ReactECharts option={radarChartOptions()} style={{ height: "100%", width: "100%" }} opts={{ renderer: "svg" }} />
+        <ReactECharts
+          option={radarChartOptions()}
+          style={{ height: "100%", width: "100%" }}
+          opts={{ renderer: "svg" }}
+        />
       </div>
 
       {/* Statistiques récapitulatives */}

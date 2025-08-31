@@ -44,15 +44,15 @@ export const getChartOptions = (skillRadarMetrics: SkillRadarData[]) => {
 
     // Séries "point" : une par skill, elles n'ont que 1 valeur non-nullule à la dimension correspondante
     const pointSeries = skillRadarMetrics.map((skill, idx) => ({
-      name: skill.skillName, // utile pour retrouver le skill dans le tooltip
+      name: skill.skillName,
       type: "radar",
-      // data : tableau d'une seule entrée où seules les autres dimensions sont null
+
       data: [
         {
           value: indicators.map((_, j) => (j === idx ? skill.masteryLevel : null)),
         },
       ],
-      // On n'affiche pas le contour/aire pour ces mini-séries, seulement le symbole
+
       lineStyle: { opacity: 0.5 },
       areaStyle: { opacity: 0 },
       symbol: "circle",
@@ -73,7 +73,7 @@ export const getChartOptions = (skillRadarMetrics: SkillRadarData[]) => {
       animationEasing: "cubicOut",
 
       tooltip: {
-        trigger: "item", // on veut l'item pour permettre un tooltip par point (chaque point = une série)
+        trigger: "item",
         backgroundColor: "rgba(15, 23, 42, 0.95)",
         borderColor: "rgba(148, 163, 184, 0.2)",
         borderWidth: 1,
