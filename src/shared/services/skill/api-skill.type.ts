@@ -1,6 +1,6 @@
 import type { Skill } from "@/shared/types/skill.type";
 
-export type CreateSkillInput = Skill;
+export type CreateSkillInput = Omit<Skill, "totalQuests">;
 
 export type CreateSkillResponse = Skill;
 
