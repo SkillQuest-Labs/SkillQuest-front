@@ -13,6 +13,6 @@ export const chartTabs: TabItem[] = [
     id: "quest-completion",
     label: "Quêtes par Skill",
     icon: CheckSquare,
-    content: <QuestCompletionChart data={mockChartData} height={400} />,
+    content: <QuestCompletionChart />,
   },
 ];

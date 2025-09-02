@@ -10,7 +10,7 @@ export type {
 } from "../../types/stats.types";
 
 export { SkillExperienceChart } from "./SkillExperienceChart";
-export { QuestCompletionChart } from "./QuestCompletionChart";
+export { QuestCompletionChart } from "./quest-completion-chart/QuestCompletionChart";
 
 // Mock Data
 export * from "../../data/mock-data";
