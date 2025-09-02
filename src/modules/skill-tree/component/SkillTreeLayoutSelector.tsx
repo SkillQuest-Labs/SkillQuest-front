@@ -60,36 +60,3 @@ export const SkillTreeLayoutSelector = ({
         })}
       </div>
 
-      {/* Alternative: Dropdown selector (commented out for now) */}
-      {/* 
-      <Select value={currentLayout} onValueChange={onLayoutChange}>
-        <SelectTrigger className="w-[180px] bg-slate-700/80 border-slate-500 text-slate-200">
-          <SelectValue placeholder="Choisir une vue" />
-        </SelectTrigger>
-        <SelectContent className="bg-slate-800 border-slate-600">
-          {availableLayouts.map((layout) => {
-            const config = layoutConfig[layout];
-            const Icon = config.icon;
-            
-            return (
-              <SelectItem 
-                key={layout} 
-                value={layout}
-                className="text-slate-200 hover:bg-slate-700 focus:bg-slate-700"
-              >
-                <div className="flex items-center gap-2">
-                  <Icon className="w-4 h-4" />
-                  <div className="flex flex-col">
-                    <span className="font-medium">{config.label}</span>
-                    <span className="text-xs text-slate-400">{config.description}</span>
-                  </div>
-                </div>
-              </SelectItem>
-            );
-          })}
-        </SelectContent>
-      </Select>
-      */}
-    </div>
-  );
-};
