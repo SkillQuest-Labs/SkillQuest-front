@@ -1,31 +1,8 @@
-import { type LucideIcon } from "lucide-react";
 import { cn } from "@/shared/utils/helpers";
 import { badgeVariants, colorVariants } from "../stats.const";
+import type { StatsCardProps } from "../types/stats.types";
 
-export type GameStatsCardProps = {
-  title: string;
-  value: number;
-  icon: LucideIcon;
-  color: "blue" | "purple" | "green" | "orange" | "red" | "yellow";
-  progress?: {
-    current: number;
-    max: number;
-    label?: string;
-  };
-  change?: {
-    value: string;
-    label: string;
-    positive?: boolean;
-  };
-  badge?: {
-    text: string;
-    variant: "new" | "hot" | "rare" | "legendary";
-  };
-  className?: string;
-  onClick?: () => void;
-};
-
-export const GameStatsCard = ({
+export const StatsCard = ({
   title,
   value,
   icon: Icon,
@@ -35,7 +12,7 @@ export const GameStatsCard = ({
   badge,
   className,
   onClick,
-}: GameStatsCardProps) => {
+}: StatsCardProps) => {
   const colorConfig = colorVariants[color];
   const progressPercentage = progress ? (progress.current / progress.max) * 100 : 0;
 

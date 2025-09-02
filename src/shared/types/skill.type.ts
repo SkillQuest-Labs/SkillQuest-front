@@ -14,6 +14,9 @@ export type Skill = {
   progressValue?: number;
   imageUrl?: string;
   totalQuests?: number;
+  totalXp?: number;
   completedQuests?: number;
+  averageQuestXp?: number;
+  color?: string;
   createdAt?: string;
 };
