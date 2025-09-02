@@ -7,7 +7,12 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import "@/styles/calendar.css";
 import { SessionDialog } from "./components/SessionDialog";
-import { useCreateSession, useGetSessions } from "@/shared/services/session/api-session";
+import {
+  useCreateSession,
+  useDeleteSession,
+  useGetSessions,
+  useUpdateSession,
+} from "@/shared/services/session/api-session";
 import { CalendarHeader } from "./components/CalendarHeader";
 import { useCalendarResponsive } from "./hooks/useCalendarResponsive";
 import {
@@ -23,7 +28,6 @@ import type { DateSelectArg, EventClickArg } from "@fullcalendar/core";
 export const CalendarWorkSession = () => {
   const { isCollapsed } = useSidebarStore();
   const { createSession } = useCreateSession();
-  const { sessions } = useGetSessions("uuid-user-1234-5678-9012-345678901234"); //user id need be to be change
 
   const calendarRef = useRef<FullCalendar | null>(null);
 
@@ -33,6 +37,12 @@ export const CalendarWorkSession = () => {
   const [sessionForm, setSessionForm] = useState<SessionFormType>(INITIAL_SESSION_FORM);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const editingSessionId = editingIndex !== null ? workSessions[editingIndex]?.id : "";
+
+  const { sessions } = useGetSessions("uuid-user-1234-5678-9012-345678901234"); //user id need be to be change
+  const { updateSession } = useUpdateSession(editingSessionId);
+  const { deleteSession } = useDeleteSession();
 
   const initialView = useCalendarResponsive();
 
@@ -131,15 +141,47 @@ export const CalendarWorkSession = () => {
         endTime: endIsoUtc,
       };
 
-      await createSession(payload);
+      if (editingIndex === null) {
+        await createSession(payload);
+      } else {
+        const idToUpdate = workSessions[editingIndex]?.id;
+        if (!idToUpdate) throw new Error("Session id introuvable");
+        await updateSession(payload);
+      }
 
       setIsDialogOpen(false);
       setEditingIndex(null);
       setSessionForm(INITIAL_SESSION_FORM);
     } catch (error) {
-      console.error(error);
+      //add toast error in future
+      console.error(error); // temporary console error
     }
-  }, [sessionForm, createSession]);
+  }, [sessionForm, editingIndex, workSessions, createSession, updateSession]);
+
+  const handleDelete = useCallback(async () => {
+    try {
+      if (editingIndex === null) return;
+      const id = workSessions[editingIndex]?.id;
+      if (!id) throw new Error("Session id introuvable");
+
+      const confirmSessionDelete = window.confirm("Supprimer cette session ?");
+      if (!confirmSessionDelete) return;
+
+      setIsDeleting(true);
+      await deleteSession(id);
+
+      setWorkSessions((prev) => prev.filter((_, i) => i !== editingIndex));
+
+      setIsDialogOpen(false);
+      setEditingIndex(null);
+      setSessionForm(INITIAL_SESSION_FORM);
+    } catch (error) {
+      //add toast error in future
+      console.error(error); // temporary console error
+    } finally {
+      setIsDeleting(false);
+    }
+  }, [editingIndex, workSessions, deleteSession]);
 
   return (
     <div className="transition-all duration-300 min-h-screen">
@@ -206,6 +248,9 @@ export const CalendarWorkSession = () => {
         onSave={handleSave}
         isEditing={editingIndex !== null}
         sessionSlots={convertCalendarEventsToDialogSessions(workSessions, sessionForm.startDate, editingIndex)}
+        editingSessionId={editingSessionId}
+        onDelete={handleDelete}
+        isDeleting={isDeleting}
       />
     </div>
   );

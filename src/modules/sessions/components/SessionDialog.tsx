@@ -1,11 +1,11 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/shared/components/ui/dialog";
-import { Button } from "@/shared/components/ui/button";
 import { useGetQuests } from "@/shared/services/quest/api-quest";
 import { useGetSkills } from "@/shared/services/skill/api-skill";
 import type { SessionFormType } from "../types/session-form.type";
 import { SessionForm } from "./SessionForm";
 import { convertToMinutes, isTimeSlotConflict } from "../utils/session.utils";
 import { CircleAlert } from "lucide-react";
+import { SessionDialogActions } from "./SessionDialogActions";
 
 interface SessionDialogProps {
   open: boolean;
@@ -15,6 +15,9 @@ interface SessionDialogProps {
   onSave: () => void;
   isEditing: boolean;
   sessionSlots: { startDate: string; startTime: string; endTime: string }[];
+  editingSessionId?: string | null;
+  onDelete?: () => void;
+  isDeleting?: boolean;
 }
 
 export const SessionDialog = ({
@@ -25,13 +28,16 @@ export const SessionDialog = ({
   onSave,
   isEditing,
   sessionSlots,
+  editingSessionId,
+  onDelete,
+  isDeleting = false,
 }: SessionDialogProps) => {
   const isFormValid =
     formSession.title.trim() &&
     formSession.startDate &&
     formSession.startTime &&
     formSession.endTime &&
-    formSession.linkedQuests.length > 0;
+    (formSession.linkedQuests?.length ?? 0) > 0;
 
   const hasTimeConflict = Boolean(
     formSession.startTime &&
@@ -78,22 +84,15 @@ export const SessionDialog = ({
           </p>
         )}
 
-        <div className="flex justify-end space-x-2 mt-4">
-          <Button variant="ghost" onClick={() => onOpenChange(false)}>
-            Annuler
-          </Button>
-          <Button
-            onClick={onSave}
-            disabled={!isFormValid || hasTimeConflict || hasSessionConflict}
-            className={`${
-              isFormValid && !hasTimeConflict && !hasSessionConflict
-                ? "bg-blue-600 hover:bg-blue-700"
-                : "bg-gray-600 cursor-not-allowed"
-            } text-white`}
-          >
-            {isEditing ? "Mettre à jour" : "Enregistrer"}
-          </Button>
-        </div>
+        <SessionDialogActions
+          onClose={() => onOpenChange(false)}
+          onSave={onSave}
+          onDelete={onDelete}
+          isEditing={isEditing}
+          editingSessionId={editingSessionId}
+          isDeleting={isDeleting}
+          saveDisabled={!isFormValid || hasTimeConflict || hasSessionConflict}
+        />
       </DialogContent>
     </Dialog>
   );

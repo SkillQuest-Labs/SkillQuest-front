@@ -13,7 +13,7 @@ export const SelectQuestField = ({ currentSession, setForm, quests, loading, dis
     <div className="mb-4">
       <label className="text-sm text-white mb-1 block">Choisir une quête</label>
       <select
-        value={currentSession.linkedQuests?.map((quest) => quest.id) ?? []}
+        value={currentSession.linkedQuests?.[0]?.id ?? ""}
         onChange={(e) => {
           const selectedIds = Array.from(e.target.selectedOptions).map((opt) => opt.value);
           setForm({
