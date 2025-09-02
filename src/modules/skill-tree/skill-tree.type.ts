@@ -1,18 +1,21 @@
-import { type Node } from "@xyflow/react";
+import { type Node, type Edge } from "@xyflow/react";
 import type { QuestNodeData, SkillNodeData } from "../canvas/canvas.type";
 import type { QuestStatus } from "@/shared/types/quest.type";
 import type { SkillStatus } from "../skills/skills.types";
+import type { DependencyGraph } from "./layout-strategies/shared/dependency-graph";
 
 export type NodeShape = "circle" | "square" | "diamond" | "hexagon";
 export type SkillNodeType = "small" | "medium" | "large" | "keystone" | "mastery";
 export type QuestProgressStatus = "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED";
+export type SkillTreeLayoutType = "circular" | "hierarchical";
 
 export type Position = {
   x: number;
   y: number;
 };
 
-export type CircularSkillNode = {
+// Base interface for all skill tree nodes
+export type BaseSkillNode = {
   id: string;
   title: string;
   description: string;
@@ -24,9 +27,53 @@ export type CircularSkillNode = {
   isLocked: boolean;
   connections: string[]; // IDs of nodes this node connects to (its dependents)
   prerequisites: string[]; // IDs of nodes this node depends on
+  icon?: string;
+};
+
+// Circular layout specific properties
+export type CircularSkillNode = BaseSkillNode & {
   ring: number; // Which ring/level from center
   angle: number; // Position in ring
-  icon?: string;
+};
+
+// Hierarchical layout specific properties
+export type HierarchicalSkillNode = BaseSkillNode & {
+  level: number; // Vertical level in hierarchy
+  column: number; // Horizontal position in level
+  branchPath: string[]; // Path from root to this node
+};
+
+// Union type for all layout nodes
+export type SkillTreeNode = CircularSkillNode | HierarchicalSkillNode;
+
+// Layout generation props
+export type GenerateLayoutProps = {
+  nodes: Node<QuestNodeData | SkillNodeData>[];
+  edges: Edge[];
+  centerX: number;
+  centerY: number;
+  containerWidth?: number;
+  containerHeight?: number;
+};
+
+// Layout generation result
+export type SkillTreeLayoutResult = {
+  nodes: SkillTreeNode[];
+  graph: DependencyGraph;
+};
+
+// Layout strategy interface
+export interface LayoutStrategy {
+  generateLayout(props: GenerateLayoutProps): SkillTreeLayoutResult;
+}
+
+// Type guards
+export const isCircularSkillNode = (node: SkillTreeNode): node is CircularSkillNode => {
+  return "ring" in node && "angle" in node;
+};
+
+export const isHierarchicalSkillNode = (node: SkillTreeNode): node is HierarchicalSkillNode => {
+  return "level" in node && "column" in node && "branchPath" in node;
 };
 
 export type SkillTreeOptions = {
