@@ -1,11 +1,13 @@
 import { nodeBaseStyle } from "../../render-node/node-base-style";
 import { nodeShapeStyle } from "../../render-node/node-shape-style";
 import { getNodeBorderColor, getNodeColor } from "../../render-node/render-node";
-import type { CircularSkillNode } from "../../skill-tree.type";
+import type { SkillTreeNode, CircularSkillNode } from "../../skill-tree.type";
+import { isHierarchicalSkillNode } from "../../skill-tree.type";
 import { nodeContent } from "./node-content";
+import { HierarchicalNodeRenderer } from "../render-hierarchical/HierarchicalNodeRenderer";
 
 type NodeRendererProps = {
-  node: CircularSkillNode;
+  node: SkillTreeNode;
   activeNodePath: string[];
   hoveredNode: string | null;
   selectedNode: string | null;
@@ -13,6 +15,7 @@ type NodeRendererProps = {
   handleNodeClick: (e: React.MouseEvent<Element, MouseEvent>, nodeId: string) => void;
   setHoveredNode: (value: React.SetStateAction<string | null>) => void;
 };
+
 export const NodeRenderer = ({
   node,
   activeNodePath,
@@ -22,37 +25,54 @@ export const NodeRenderer = ({
   handleNodeClick,
   setHoveredNode,
 }: NodeRendererProps) => {
-  const color = getNodeColor(node, activeNodePath, hoveredNode);
-  const borderColor = getNodeBorderColor(node, activeNodePath, selectedNode);
-  const isActive = activeNodePath.includes(node.id);
-  const isPathHighlighted = highlightedPathNodes.includes(node.id); // Check if node is part of highlighted path
+  // Use hierarchical renderer for hierarchical nodes
+  if (isHierarchicalSkillNode(node)) {
+    return (
+      <HierarchicalNodeRenderer
+        node={node}
+        activeNodePath={activeNodePath}
+        hoveredNode={hoveredNode}
+        selectedNode={selectedNode}
+        highlightedPathNodes={highlightedPathNodes}
+        handleNodeClick={handleNodeClick}
+        setHoveredNode={setHoveredNode}
+      />
+    );
+  }
+
+  // Default to circular renderer for circular nodes
+  const circularNode = node as CircularSkillNode;
+  const color = getNodeColor(circularNode, activeNodePath, hoveredNode);
+  const borderColor = getNodeBorderColor(circularNode, activeNodePath, selectedNode);
+  const isActive = activeNodePath.includes(circularNode.id);
+  const isPathHighlighted = highlightedPathNodes.includes(circularNode.id);
 
   const baseStyle = nodeBaseStyle({
-    node,
+    node: circularNode,
     color,
     borderColor,
     isPathHighlighted,
     isActive,
-    isSelected: selectedNode === node.id,
+    isSelected: selectedNode === circularNode.id,
   });
 
-  const shapeStyle = nodeShapeStyle(node.shape);
+  const shapeStyle = nodeShapeStyle(circularNode.shape);
 
-  const content = nodeContent(node);
+  const content = nodeContent(circularNode);
 
   return (
     <div
-      key={node.id}
-      data-node-id={node.id}
+      key={circularNode.id}
+      data-node-id={circularNode.id}
       style={{ ...baseStyle, ...shapeStyle, position: "absolute" }}
-      onClick={(e) => handleNodeClick(e, node.id)}
-      onMouseEnter={() => setHoveredNode(node.id)}
+      onClick={(e) => handleNodeClick(e, circularNode.id)}
+      onMouseEnter={() => setHoveredNode(circularNode.id)}
       onMouseLeave={() => setHoveredNode(null)}
     >
       {content}
 
       {/* Pulsing effect for available quest */}
-      {node.status === "NOT_STARTED" && (
+      {circularNode.status === "NOT_STARTED" && (
         <div
           style={{
             position: "absolute",

@@ -1,8 +1,9 @@
 import clsx from "clsx";
-import type { CircularSkillNode } from "../skill-tree.type";
+import type { SkillTreeNode } from "../skill-tree.type";
+import { isCircularSkillNode, isHierarchicalSkillNode } from "../skill-tree.type";
 
 type RenderNodeDetailsProps = {
-  selectedNodeData: CircularSkillNode;
+  selectedNodeData: SkillTreeNode;
   minimalistView?: boolean;
 };
 
@@ -24,7 +25,12 @@ export const RenderNodeDetails = ({ selectedNodeData, minimalistView }: RenderNo
             {selectedNodeData.title}
           </h3>
           <p className="text-xs text-cyan-300 uppercase tracking-widest font-semibold mt-1">
-            {selectedNodeData.nodeType} • Ring {selectedNodeData.ring}
+            {selectedNodeData.nodeType} •{" "}
+            {isCircularSkillNode(selectedNodeData)
+              ? `Ring ${selectedNodeData.ring}`
+              : isHierarchicalSkillNode(selectedNodeData)
+                ? `Level ${selectedNodeData.level}`
+                : "Node"}
           </p>
         </div>
       </div>

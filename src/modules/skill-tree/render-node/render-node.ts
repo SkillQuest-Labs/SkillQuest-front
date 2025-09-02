@@ -1,4 +1,4 @@
-import { LEVEL_COLORS, type CircularSkillNode } from "../skill-tree.type";
+import { LEVEL_COLORS, type SkillTreeNode, isCircularSkillNode, isHierarchicalSkillNode } from "../skill-tree.type";
 
 const getLevelColors = (level: number) => {
   if (LEVEL_COLORS[level]) {
@@ -8,23 +8,27 @@ const getLevelColors = (level: number) => {
   return LEVEL_COLORS[0];
 };
 
-export const getNodeColor = (node: CircularSkillNode, activeNodePath: string[], hoveredNode: string | null) => {
+export const getNodeColor = (node: SkillTreeNode, activeNodePath: string[], hoveredNode: string | null) => {
   if (node.isLocked) return "#1a202c"; // Dark slate for locked
   if (node.status === "COMPLETED") return "#34d399"; // Emerald-400 (completed stays green)
   if (activeNodePath.includes(node.id)) return "#22d3ee"; // Cyan-400 (active path)
   if (hoveredNode === node.id) return "#60a5fa"; // Blue-400
 
-  const { node: levelNodeColor } = getLevelColors(node.ring);
+  // Get level based on node type
+  const level = isCircularSkillNode(node) ? node.ring : isHierarchicalSkillNode(node) ? node.level : 0;
+  const { node: levelNodeColor } = getLevelColors(level);
   return levelNodeColor; // Use level color
 };
 
-export const getNodeBorderColor = (node: CircularSkillNode, activeNodePath: string[], selectedNode: string | null) => {
+export const getNodeBorderColor = (node: SkillTreeNode, activeNodePath: string[], selectedNode: string | null) => {
   if (selectedNode === node.id) return "#fbbf24"; // Amber-400 (selected)
   if (node.isLocked) return "#dc2626"; // Red-600 for locked border
   if (activeNodePath.includes(node.id)) return "#67e8f9"; // Cyan-300
   if (node.status === "COMPLETED") return "#6ee7b7"; // Emerald-300
 
-  const { border: levelBorderColor } = getLevelColors(node.ring);
+  // Get level based on node type
+  const level = isCircularSkillNode(node) ? node.ring : isHierarchicalSkillNode(node) ? node.level : 0;
+  const { border: levelBorderColor } = getLevelColors(level);
   return levelBorderColor; // Use level border color
 };
 

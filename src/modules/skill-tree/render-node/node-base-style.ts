@@ -1,8 +1,8 @@
 import type { CSSProperties } from "react";
-import type { CircularSkillNode } from "../skill-tree.type";
+import type { SkillTreeNode } from "../skill-tree.type";
 
 type BaseNodeStyle = {
-  node: CircularSkillNode;
+  node: SkillTreeNode;
   color: string;
   borderColor: string;
   isPathHighlighted: boolean;
