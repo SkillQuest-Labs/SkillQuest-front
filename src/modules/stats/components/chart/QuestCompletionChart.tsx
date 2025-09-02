@@ -1,6 +1,9 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import type { ChartData } from "../../types/stats.types";
+import { Button } from "@/shared/components/ui/button";
+
+type ChartViewType = "stacked" | "grouped";
 
 interface QuestCompletionChartProps {
   data: ChartData;
@@ -8,8 +11,10 @@ interface QuestCompletionChartProps {
 }
 
 export const QuestCompletionChart: React.FC<QuestCompletionChartProps> = ({ data, height = 400 }) => {
+  const [viewType, setViewType] = useState<ChartViewType>("stacked");
   const chartOptions = useMemo(() => {
     const { questCompletionMetrics } = data;
+    const isGrouped = viewType === "grouped";
 
     return {
       animation: true,
@@ -39,6 +44,40 @@ export const QuestCompletionChart: React.FC<QuestCompletionChartProps> = ({ data
           fontWeight: 500,
         },
         formatter: (params: any) => {
+          // Gestion pour vue groupée (barres côte à côte)
+          if (!Array.isArray(params)) {
+            const skillName = params.axisValue;
+            const metric = questCompletionMetrics.find((m) => m.skillName === skillName);
+            const isCompleted = params.seriesName === "Quêtes Complétées";
+
+            if (metric) {
+              const otherValue = isCompleted ? metric.remainingQuests : metric.completedQuests;
+              const otherLabel = isCompleted ? "Restantes" : "Complétées";
+              const otherColor = isCompleted ? "#cbd5e1" : "#10b981";
+
+              return `
+                <div style="padding: 8px; font-family: 'Inter', sans-serif;">
+                  <div style="font-weight: 600; font-size: 14px; color: #f1f5f9; margin-bottom: 8px;">${skillName}</div>
+                  <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <div style="width: 12px; height: 12px; background: ${params.color}; border-radius: 2px;"></div>
+                      <span style="color: ${params.color}; font-weight: 500;">${params.seriesName}: ${params.value}</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <div style="width: 12px; height: 12px; background: ${otherColor}; border-radius: 2px;"></div>
+                      <span style="color: ${otherColor}; font-weight: 500;">${otherLabel}: ${otherValue}</span>
+                    </div>
+                    <div style="margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(148, 163, 184, 0.2);">
+                      <span style="color: #cbd5e1; font-size: 12px;">Total: ${metric.totalQuests} quêtes</span><br>
+                      <span style="color: #cbd5e1; font-size: 12px;">Progression: ${metric.completionRate.toFixed(1)}%</span>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }
+          }
+
+          // Gestion pour vue empilée (barres empilées)
           if (Array.isArray(params) && params.length >= 2) {
             const completedParam = params.find((p) => p.seriesName === "Quêtes Complétées");
             const remainingParam = params.find((p) => p.seriesName === "Quêtes Restantes");
@@ -55,8 +94,8 @@ export const QuestCompletionChart: React.FC<QuestCompletionChartProps> = ({ data
                       <span style="color: #10b981; font-weight: 500;">Complétées: ${completedParam.value}</span>
                     </div>
                     <div style="display: flex; align-items: center; gap: 8px;">
-                      <div style="width: 12px; height: 12px; background: #f59e0b; border-radius: 2px;"></div>
-                      <span style="color: #f59e0b; font-weight: 500;">Restantes: ${remainingParam.value}</span>
+                      <div style="width: 12px; height: 12px; background: #cbd5e1; border-radius: 2px;"></div>
+                      <span style="color: #cbd5e1; font-weight: 500;">Restantes: ${remainingParam.value}</span>
                     </div>
                     <div style="margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(148, 163, 184, 0.2);">
                       <span style="color: #cbd5e1; font-size: 12px;">Total: ${metric.totalQuests} quêtes</span><br>
@@ -71,7 +110,20 @@ export const QuestCompletionChart: React.FC<QuestCompletionChartProps> = ({ data
         },
       },
       legend: {
-        data: ["Quêtes Complétées", "Quêtes Restantes"],
+        data: [
+          {
+            name: "Quêtes Complétées",
+            itemStyle: {
+              color: "#10b981",
+            },
+          },
+          {
+            name: "Quêtes Restantes",
+            itemStyle: {
+              color: "#cbd5e1",
+            },
+          },
+        ],
         top: "5%",
         textStyle: {
           color: "#cbd5e1",
@@ -135,12 +187,13 @@ export const QuestCompletionChart: React.FC<QuestCompletionChartProps> = ({ data
         {
           name: "Quêtes Complétées",
           type: "bar",
-          stack: "quests",
+          stack: isGrouped ? undefined : "quests",
+          barGap: isGrouped ? "10%" : undefined,
           data: questCompletionMetrics.map((metric) => ({
             value: metric.completedQuests,
             itemStyle: {
               color: "#10b981",
-              borderRadius: [0, 0, 4, 4],
+              borderRadius: isGrouped ? [4, 4, 4, 4] : [0, 0, 4, 4],
             },
           })),
           emphasis: {
@@ -156,33 +209,68 @@ export const QuestCompletionChart: React.FC<QuestCompletionChartProps> = ({ data
         {
           name: "Quêtes Restantes",
           type: "bar",
-          stack: "quests",
+          stack: isGrouped ? undefined : "quests",
           data: questCompletionMetrics.map((metric) => ({
             value: metric.remainingQuests,
             itemStyle: {
-              color: "#f59e0b",
-              borderRadius: [4, 4, 0, 0],
+              color: "#cbd5e1",
+              borderRadius: isGrouped ? [4, 4, 4, 4] : [4, 4, 0, 0],
             },
           })),
           emphasis: {
             focus: "series",
             itemStyle: {
-              color: "#d97706",
+              color: "#4b5563",
               shadowBlur: 10,
-              shadowColor: "rgba(245, 158, 11, 0.3)",
+              shadowColor: "rgba(107, 114, 128, 0.3)",
             },
           },
           animationDelay: (idx: number) => idx * 100 + 50,
         },
       ],
     };
-  }, [data]);
+  }, [data, viewType]);
 
   return (
     <div className="w-full bg-gradient-to-br from-slate-900/50 to-slate-800/30 rounded-xl border border-slate-700/50 p-6">
+      {/* Switch de vue */}
+      <div className="mb-4 flex justify-end">
+        <div className="relative bg-slate-800/50 rounded-lg p-1 border border-slate-600/30">
+          <div
+            className={`absolute top-1 bottom-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-md transition-all duration-300 ease-in-out ${
+              viewType === "stacked" ? "left-1 w-[calc(50%-2px)]" : "left-[calc(50%+2px)] w-[calc(50%-2px)]"
+            }`}
+          />
+          <div className="relative flex">
+            <Button
+              variant="ghost"
+              onClick={() => setViewType("stacked")}
+              className={`px-4 py-2 cursor-pointer text-sm font-medium rounded-md transition-all duration-200 ${
+                viewType === "stacked" ? "text-white z-10" : "text-gray-400 hover:text-gray-300"
+              }`}
+            >
+              Vue Empilée
+            </Button>
+            <Button
+              variant="ghost"
+              onClick={() => setViewType("grouped")}
+              className={`px-4 py-2 cursor-pointer text-sm font-medium rounded-md transition-all duration-200 ${
+                viewType === "grouped" ? "text-white z-10" : "text-gray-400 hover:text-gray-300"
+              }`}
+            >
+              Vue Multiple
+            </Button>
+          </div>
+        </div>
+      </div>
+
       <div className="mb-6">
         <h3 className="text-xl font-bold text-white mb-2">Progression des Quêtes par Compétence</h3>
-        <p className="text-gray-400 text-sm">Visualisation des quêtes complétées et restantes pour chaque compétence</p>
+        <p className="text-gray-400 text-sm">
+          {viewType === "stacked"
+            ? "Visualisation des quêtes complétées et restantes pour chaque compétence (vue empilée)"
+            : "Comparaison côte à côte des quêtes complétées et restantes par compétence"}
+        </p>
       </div>
 
       <ReactECharts
