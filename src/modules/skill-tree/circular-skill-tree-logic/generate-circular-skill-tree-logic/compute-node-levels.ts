@@ -1,4 +1,4 @@
-import type { DependencyGraph } from "./dependency-graph";
+import type { DependencyGraph } from "../../layout-strategies/shared/dependency-graph";
 
 type ComputeNodeLevelsProps = {
   graph: DependencyGraph;

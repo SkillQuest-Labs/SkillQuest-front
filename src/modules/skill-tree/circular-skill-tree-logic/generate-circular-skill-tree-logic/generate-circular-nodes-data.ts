@@ -3,7 +3,7 @@ import { type Node } from "@xyflow/react";
 import type { CircularSkillNode } from "../../skill-tree.type";
 import { calculateNodePosition, countNodesPerLevel, sortQuestNodesByLevel } from "../skill-tree.const";
 import { defineNodeProperties } from "./define-node-properties";
-import type { DependencyGraph } from "./dependency-graph";
+import type { DependencyGraph } from "../../layout-strategies/shared/dependency-graph";
 
 type GenerateCircularNodesDataProps = {
   nodes: Node<QuestNodeData | SkillNodeData>[];

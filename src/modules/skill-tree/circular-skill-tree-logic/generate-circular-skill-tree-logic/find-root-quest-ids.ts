@@ -1,5 +1,5 @@
 import type { Edge, Node } from "@xyflow/react";
-import type { DependencyGraph } from "./dependency-graph";
+import type { DependencyGraph } from "../../layout-strategies/shared/dependency-graph";
 import type { QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
 import { isQuestNode, isSkillNode } from "@/modules/canvas/canvas.const";
 

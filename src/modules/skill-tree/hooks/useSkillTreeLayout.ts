@@ -58,7 +58,7 @@ export const useSkillTreeLayout = ({
             centerX: containerWidth / 2,
             centerY: containerHeight / 2,
             containerWidth,
-            containerHeight,
+            containerHeight: 800,
           });
           setSkillTreeNodes(fallbackResult.nodes);
           setDependencyGraph(fallbackResult.graph);

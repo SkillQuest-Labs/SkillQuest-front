@@ -1,4 +1,4 @@
-import type { CircularSkillNode } from "../../skill-tree.type";
+import type { SkillTreeNode } from "../../skill-tree.type";
 
 /**
  * A dependency graph implementation for managing skill tree nodes and their relationships.
@@ -6,11 +6,11 @@ import type { CircularSkillNode } from "../../skill-tree.type";
  * validation of unlock conditions and traversal of skill paths.
  */
 export class DependencyGraph {
-  private nodes: Record<string, CircularSkillNode> = {};
+  private nodes: Record<string, SkillTreeNode> = {};
   private edges: Record<string, string[]> = {};
   private reverseEdges: Record<string, string[]> = {};
 
-  addNode(node: CircularSkillNode) {
+  addNode(node: SkillTreeNode) {
     this.nodes[node.id] = node;
     if (!this.edges[node.id]) {
       this.edges[node.id] = [];

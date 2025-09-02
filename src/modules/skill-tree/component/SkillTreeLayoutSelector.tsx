@@ -59,4 +59,6 @@ export const SkillTreeLayoutSelector = ({
           );
         })}
       </div>
-
+    </div>
+  );
+};

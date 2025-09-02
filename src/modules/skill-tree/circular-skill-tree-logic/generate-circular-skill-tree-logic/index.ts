@@ -26,8 +26,9 @@ export const generateCircularSkillTreeData = ({ nodes, edges, centerX, centerY }
       existingSkillNode.size = 50;
       existingSkillNode.shape = "circle";
       existingSkillNode.nodeType = "mastery";
-      existingSkillNode.ring = 0;
-      existingSkillNode.angle = 0;
+      // Cast to CircularSkillNode to access ring and angle properties
+      (existingSkillNode as any).ring = 0;
+      (existingSkillNode as any).angle = 0;
       existingSkillNode.connections = rootQuestIds;
     } else {
       graph.addNode({
@@ -79,7 +80,7 @@ export const generateCircularSkillTreeData = ({ nodes, edges, centerX, centerY }
     const skillCircularNode = graph.getNode(skillNodeId);
     if (skillCircularNode) {
       // Add the central node at the beginning of the array
-      circularSkillNodes.unshift(skillCircularNode);
+      circularSkillNodes.unshift(skillCircularNode as CircularSkillNode);
     }
   }
 

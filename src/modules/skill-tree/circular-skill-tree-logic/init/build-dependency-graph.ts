@@ -1,6 +1,6 @@
 import type { Edge, Node } from "@xyflow/react";
 import type { QuestProgressStatus } from "../../skill-tree.type";
-import { DependencyGraph } from "../generate-circular-skill-tree-logic/dependency-graph";
+import { DependencyGraph } from "../../layout-strategies/shared/dependency-graph";
 import type { QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
 import { isQuestNode } from "@/modules/canvas/canvas.const";
 
