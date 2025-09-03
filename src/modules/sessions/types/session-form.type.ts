@@ -1,3 +1,6 @@
+import type { Quest } from "@/shared/types/quest.type";
+import type { Skill } from "@/shared/types/skill.type";
+
 export interface SessionFormType {
   title: string;
   description: string;
@@ -5,15 +8,15 @@ export interface SessionFormType {
   startTime: string;
   endTime: string;
   linkedSkill: string;
-  linkedQuests: Array<{ id: string; title: string }>;
+  linkedQuests: { id: string; title: string }[];
   color: string;
 }
 
 export interface SessionFormProps {
   currentSession: SessionFormType;
   setForm: (form: SessionFormType) => void;
-  skills: any[];
-  quests: any[];
+  skills: Skill[];
+  quests: Quest[];
   loadingSkills: boolean;
   loadingQuests: boolean;
 }
@@ -29,6 +32,6 @@ export type CalendarEvent = {
   borderColor: string;
   extendedProps: {
     linkedSkill: string;
-    linkedQuests: Array<{ id: string; title: string }>;
+    linkedQuests: { id: string; title: string }[];
   };
 };
