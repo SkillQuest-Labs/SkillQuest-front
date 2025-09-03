@@ -1,29 +1,31 @@
 import { mockChartData } from "@/modules/stats/components/chart";
 import { StatsCard } from "@/modules/stats/components/StatsCard";
-import { UserLevelCard } from "@/modules/stats/components/UserLevelCard";
 import { StatsCharts } from "@/modules/stats/components/StatsCharts";
+import { UserLevelCard } from "@/modules/stats/components/UserLevelCard";
 import { Award, BarChart3, Target, TrendingUp } from "lucide-react";
 
 export const Stats = () => {
   const { userStats } = mockChartData;
 
   return (
-    <div className="max-h-screen">
-      <div className="w-[95%] mx-auto py-5">
+    <div className="h-full overflow-hidden">
+      <div className="w-[95%] max-w-full mx-auto p-4 h-full flex flex-col">
         {/* Header */}
-        <div className="mb-2">
-          <div className="flex items-center gap-3 mb-4">
+        <div className="flex-shrink-0 mb-4">
+          <div className="flex items-center gap-3">
             <div>
-              <h1 className="text-3xl font-bold text-white">Statistiques d'Expérience</h1>
-              <p className="text-gray-400 mt-1">Suivez votre progression et analysez vos performances</p>
+              <h1 className="text-2xl lg:text-3xl font-bold text-white">Statistiques d'Expérience</h1>
+              <p className="text-gray-400 mt-1 text-sm lg:text-base">
+                Suivez votre progression et analysez vos performances
+              </p>
             </div>
           </div>
         </div>
 
-        <div className="flex gap-8 h-full">
-          <div className="w-4/5 h-full rounded-xl p-4">
+        <div className="flex-1 flex flex-col lg:flex-row gap-4 min-h-0">
+          <div className="flex-1 flex flex-col min-h-0">
             {/* Stats Cards sections */}
-            <div className="h-[25%] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div className="flex-shrink-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
               <StatsCard
                 title="XP Total"
                 value={userStats.totalXp}
@@ -61,14 +63,14 @@ export const Stats = () => {
               />
             </div>
 
-            <div className="h-[75%]">
+            <div className="flex-1 min-h-0">
               <StatsCharts defaultActiveTab="skill-experience" />
             </div>
           </div>
 
           {/* second partie */}
-          <div className="w-1/5 h-full p-4">
-            <div className="mb-4">
+          <div className="w-full lg:w-80 flex-shrink-0">
+            <div className="h-full">
               <UserLevelCard
                 currentLevel={userStats.currentLevel}
                 currentXp={userStats.totalXp % 2700}

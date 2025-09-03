@@ -47,7 +47,6 @@ export interface SkillRadarData {
   skillId: string;
   skillName: string;
   masteryLevel: number; // 0-100
-  maxLevel: number;
   color: string;
   description?: string;
 }

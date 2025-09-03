@@ -1,4 +1,4 @@
-import type { ChartData, UserStats, QuestCompletionMetric, SkillRadarData } from "../types/stats.types";
+import type { ChartData, UserStats, QuestCompletionMetric } from "../types/stats.types";
 
 // Données factices pour les quêtes complétées par skill
 export const mockQuestCompletionMetrics: QuestCompletionMetric[] = [
@@ -58,74 +58,6 @@ export const mockQuestCompletionMetrics: QuestCompletionMetric[] = [
   },
 ];
 
-// Données factices pour le radar chart des compétences
-export const mockSkillRadarMetrics: SkillRadarData[] = [
-  {
-    skillId: "1",
-    skillName: "JavaScript",
-    masteryLevel: 85,
-    maxLevel: 100,
-    color: "#F7DF1E",
-    description: "Langage de programmation web dynamique",
-  },
-  {
-    skillId: "2",
-    skillName: "React",
-    masteryLevel: 78,
-    maxLevel: 100,
-    color: "#61DAFB",
-    description: "Bibliothèque pour interfaces utilisateur",
-  },
-  {
-    skillId: "3",
-    skillName: "TypeScript",
-    masteryLevel: 72,
-    maxLevel: 100,
-    color: "#3178C6",
-    description: "JavaScript avec typage statique",
-  },
-  {
-    skillId: "4",
-    skillName: "CSS",
-    masteryLevel: 90,
-    maxLevel: 100,
-    color: "#1572B6",
-    description: "Feuilles de style en cascade",
-  },
-  {
-    skillId: "5",
-    skillName: "Node.js",
-    masteryLevel: 65,
-    maxLevel: 100,
-    color: "#339933",
-    description: "Runtime JavaScript côté serveur",
-  },
-  {
-    skillId: "6",
-    skillName: "Git",
-    masteryLevel: 88,
-    maxLevel: 100,
-    color: "#F05032",
-    description: "Système de contrôle de version",
-  },
-  {
-    skillId: "7",
-    skillName: "Docker",
-    masteryLevel: 55,
-    maxLevel: 100,
-    color: "#2496ED",
-    description: "Plateforme de conteneurisation",
-  },
-  {
-    skillId: "8",
-    skillName: "MongoDB",
-    masteryLevel: 68,
-    maxLevel: 100,
-    color: "#47A248",
-    description: "Base de données NoSQL",
-  },
-];
-
 // Statistiques utilisateur globales
 export const mockUserStats: UserStats = {
   totalXp: 10850,
@@ -143,5 +75,5 @@ export const mockChartData: ChartData = {
   xpThresholds: [],
   userStats: mockUserStats,
   questCompletionMetrics: mockQuestCompletionMetrics,
-  skillRadarMetrics: mockSkillRadarMetrics,
+  skillRadarMetrics: [],
 };
