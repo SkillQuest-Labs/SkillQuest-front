@@ -58,10 +58,10 @@ export const TabPanel = ({
   const activeTabContent = tabs.find((tab) => tab.id === activeTab)?.content;
 
   return (
-    <div className={cn("w-full", className)}>
+    <div className={cn("w-full h-full flex flex-col", className)}>
       <div
         className={cn(
-          "flex space-x-1 mb-6",
+          "flex space-x-1 mb-4 flex-shrink-0",
           variant === "underline" ? "border-b border-slate-700" : "bg-slate-800 p-1 rounded-lg",
           tabsClassName,
         )}
@@ -84,7 +84,7 @@ export const TabPanel = ({
             >
               <div className="flex items-center space-x-2">
                 {Icon && <Icon className={cn("w-4 h-4", isActive ? "text-current" : "text-gray-500")} />}
-                <span>{tab.label}</span>
+                <span className="hidden sm:inline">{tab.label}</span>
               </div>
             </Button>
           );
@@ -92,7 +92,7 @@ export const TabPanel = ({
       </div>
 
       <div
-        className={cn("transition-all duration-300 ease-in-out", contentClassName)}
+        className={cn("flex-1 min-h-0 transition-all duration-300 ease-in-out", contentClassName)}
         role="tabpanel"
         aria-labelledby={`tab-${activeTab}`}
         id={`tabpanel-${activeTab}`}

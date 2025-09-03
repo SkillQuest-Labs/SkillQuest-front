@@ -13,7 +13,7 @@ export const StatsCharts = ({ className, defaultActiveTab = "skill-experience" }
       tabs={chartTabs}
       defaultActiveTab={defaultActiveTab}
       variant="default"
-      className={clsx("w-full", className)}
+      className={clsx("w-full h-full flex flex-col", className)}
     />
   );
 };

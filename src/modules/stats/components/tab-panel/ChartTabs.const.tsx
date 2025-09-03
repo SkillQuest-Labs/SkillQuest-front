@@ -1,5 +1,5 @@
-import { BarChart3, CheckSquare } from "lucide-react";
-import { QuestCompletionChart, SkillExperienceChart } from "../chart";
+import { Activity, BarChart3, CheckSquare } from "lucide-react";
+import { QuestCompletionChart, SkillExperienceChart, SkillRadarChart } from "../chart";
 import type { TabItem } from "./tab-panel.type";
 
 export const chartTabs: TabItem[] = [
@@ -14,5 +14,11 @@ export const chartTabs: TabItem[] = [
     label: "Quêtes par Skill",
     icon: CheckSquare,
     content: <QuestCompletionChart />,
+  },
+  {
+    id: "skill-radar",
+    label: "Profil de Compétences",
+    icon: Activity,
+    content: <SkillRadarChart />,
   },
 ];

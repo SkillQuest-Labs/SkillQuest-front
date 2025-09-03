@@ -1,7 +1,7 @@
 import { type Node } from "@xyflow/react";
 import type { QuestNodeData, SkillNodeData } from "../canvas/canvas.type";
 import type { QuestStatus } from "@/shared/types/quest.type";
-import type { SkillStatus } from "../skills/skills.types";
+import type { SkillStatus } from "@/shared/types/skill.type";
 
 export type NodeShape = "circle" | "square" | "diamond" | "hexagon";
 export type SkillNodeType = "small" | "medium" | "large" | "keystone" | "mastery";

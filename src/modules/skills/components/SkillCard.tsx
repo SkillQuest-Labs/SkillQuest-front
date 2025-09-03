@@ -1,4 +1,3 @@
-import type { Skill } from "../skills.types";
 import "../../../styles/skills.css";
 import { statusColors, statusLabels } from "../skills.const";
 import { Badge } from "@/shared/components/ui/badge";
@@ -16,6 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/components/ui/dialog";
+import type { Skill } from "@/shared/types/skill.type";
 
 type SkillCardProps = {
   skill: Skill;
@@ -69,10 +69,10 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
         onClick={handleCardClick}
       >
         {/* Image de fond */}
-        {skill.image && (
+        {skill.imageUrl && (
           <div className="relative w-full h-32">
             <img
-              src={skill.image}
+              src={skill.imageUrl}
               alt={skill.title}
               className="absolute inset-0 w-full h-full object-cover object-center"
               style={{ borderTopLeftRadius: "1rem", borderTopRightRadius: "1rem" }}
