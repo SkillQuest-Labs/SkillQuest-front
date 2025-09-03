@@ -39,8 +39,6 @@ export interface QuestCompletionMetric {
   completedQuests: number;
   remainingQuests: number;
   totalQuests: number;
-  completionRate: number;
-  color: string;
 }
 
 export interface SkillRadarData {

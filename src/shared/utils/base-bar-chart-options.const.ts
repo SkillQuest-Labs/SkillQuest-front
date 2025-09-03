@@ -3,7 +3,7 @@ import type { EChartsOption } from "echarts-for-react";
 
 type baseBarChartOptionsParams = {
   gridOverrides?: EChartsOption["grid"];
-  legendData: string[];
+  legendData: string[] | { name: string; itemStyle: { color: string } }[];
   tooltipFormatter: (params: any) => string;
   xAxisData: string[];
   yAxisName: string;
