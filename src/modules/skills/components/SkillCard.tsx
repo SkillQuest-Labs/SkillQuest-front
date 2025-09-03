@@ -1,4 +1,3 @@
-// import type { Skill } from "../skills.types";
 import "../../../styles/skills.css";
 import { statusColors, statusLabels } from "../skills.const";
 import { Badge } from "@/shared/components/ui/badge";
