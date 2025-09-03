@@ -13,7 +13,6 @@ export type Skill = {
   difficulty: SkillDifficulty;
   progressValue?: number;
   imageUrl?: string;
-  totalQuests?: number;
   totalXp?: number;
   totalQuests?: number;
   completedQuests?: number;
