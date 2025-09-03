@@ -3,17 +3,17 @@ import { Button } from "@/shared/components/ui/button";
 type SessionDialogActionsProps = {
   onClose: () => void;
   onSave: () => void;
-  onDelete?: () => void;
   isEditing: boolean;
   editingSessionId?: string | null;
   isDeleting?: boolean;
   saveDisabled: boolean;
+  setIsDeleteDialogOpen: (open: boolean) => void;
 };
 
 export const SessionDialogActions = ({
   onClose,
   onSave,
-  onDelete,
+  setIsDeleteDialogOpen,
   isEditing,
   editingSessionId,
   isDeleting = false,
@@ -24,7 +24,7 @@ export const SessionDialogActions = ({
       {isEditing && !!editingSessionId && (
         <Button
           variant="destructive"
-          onClick={onDelete}
+          onClick={() => setIsDeleteDialogOpen(true)}
           disabled={isDeleting}
           className="mr-auto bg-red-600 hover:bg-red-700 text-white"
         >

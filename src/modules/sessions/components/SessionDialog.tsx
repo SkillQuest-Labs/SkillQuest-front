@@ -16,7 +16,7 @@ interface SessionDialogProps {
   isEditing: boolean;
   sessionSlots: { startDate: string; startTime: string; endTime: string }[];
   editingSessionId?: string | null;
-  onDelete?: () => void;
+  setIsDeleteDialogOpen: (open: boolean) => void;
   isDeleting?: boolean;
 }
 
@@ -29,7 +29,7 @@ export const SessionDialog = ({
   isEditing,
   sessionSlots,
   editingSessionId,
-  onDelete,
+  setIsDeleteDialogOpen,
   isDeleting = false,
 }: SessionDialogProps) => {
   const isFormValid =
@@ -87,7 +87,7 @@ export const SessionDialog = ({
         <SessionDialogActions
           onClose={() => onOpenChange(false)}
           onSave={onSave}
-          onDelete={onDelete}
+          setIsDeleteDialogOpen={setIsDeleteDialogOpen}
           isEditing={isEditing}
           editingSessionId={editingSessionId}
           isDeleting={isDeleting}

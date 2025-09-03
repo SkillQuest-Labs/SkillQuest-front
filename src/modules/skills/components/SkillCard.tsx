@@ -7,15 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { useDeleteSkill } from "@/shared/services/skill/api-skill";
 import { showToast } from "@/component/notification/show-toast";
 import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/shared/components/ui/dialog";
 import type { Skill } from "@/shared/types/skill.type";
+import { ConfirmDeleteDialogue } from "@/component/confirm-dialogue/ConfirmDeleteDialogue";
 
 type SkillCardProps = {
   skill: Skill;
@@ -161,32 +154,13 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
       </div>
 
       {/* Boîte de dialogue de confirmation de suppression */}
-      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogContent className="bg-slate-800 border-slate-700 text-white">
-          <DialogHeader>
-            <DialogTitle className="text-red-400">Confirmer la suppression</DialogTitle>
-            <DialogDescription className="text-slate-300">
-              Êtes-vous sûr de vouloir supprimer le skill "{skill.title}" ? Cette action est irréversible.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="gap-2">
-            <Button
-              variant="outline"
-              onClick={() => setIsDeleteDialogOpen(false)}
-              className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white bg-slate-700/50"
-            >
-              Annuler
-            </Button>
-            <Button
-              onClick={handleConfirmDelete}
-              disabled={deleteLoading}
-              className="bg-red-600 hover:bg-red-700 text-white"
-            >
-              {deleteLoading ? "Suppression..." : "Supprimer"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ConfirmDeleteDialogue
+        isDeleteDialogOpen={isDeleteDialogOpen}
+        setIsDeleteDialogOpen={setIsDeleteDialogOpen}
+        messageDialogue={`Êtes-vous sûr de vouloir supprimer le skill ${skill.title} ? Cette action est irréversible.`}
+        deleteLoading={deleteLoading}
+        handleConfirmDelete={handleConfirmDelete}
+      />
     </>
   );
 };

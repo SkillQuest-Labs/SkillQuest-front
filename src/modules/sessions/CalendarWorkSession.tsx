@@ -24,6 +24,8 @@ import {
 import type { SessionFormType, CalendarEvent } from "./types/session-form.type";
 import { INITIAL_SESSION_FORM } from "./const/session-form.const";
 import type { DateSelectArg, EventClickArg } from "@fullcalendar/core";
+import { ConfirmDeleteDialogue } from "@/component/confirm-dialogue/ConfirmDeleteDialogue";
+import { showToast } from "@/component/notification/show-toast";
 
 export const CalendarWorkSession = () => {
   const { isCollapsed } = useSidebarStore();
@@ -38,6 +40,8 @@ export const CalendarWorkSession = () => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
   const editingSessionId = editingIndex !== null ? workSessions[editingIndex]?.id : "";
 
   const { sessions } = useGetSessions("uuid-user-1234-5678-9012-345678901234"); //user id need be to be change
@@ -152,36 +156,48 @@ export const CalendarWorkSession = () => {
       setIsDialogOpen(false);
       setEditingIndex(null);
       setSessionForm(INITIAL_SESSION_FORM);
-    } catch (error) {
-      //add toast error in future
-      console.error(error); // temporary console error
+
+      showToast({
+        title: "Succès",
+        description: "Session sauvegardé",
+        status: "success",
+      });
+    } catch {
+      showToast({
+        title: "Erreur",
+        description: "Erreur lors de sauvegarde de la session",
+        status: "error",
+      });
     }
   }, [sessionForm, editingIndex, workSessions, createSession, updateSession]);
 
   const handleDelete = useCallback(async () => {
     try {
-      if (editingIndex === null) return;
-      const id = workSessions[editingIndex]?.id;
-      if (!id) throw new Error("Session id introuvable");
-
-      const confirmSessionDelete = window.confirm("Supprimer cette session ?");
-      if (!confirmSessionDelete) return;
-
       setIsDeleting(true);
-      await deleteSession(id);
+      await deleteSession(editingSessionId);
 
-      setWorkSessions((prev) => prev.filter((_, i) => i !== editingIndex));
+      setWorkSessions((workSession) => workSession.filter((_, i) => i !== editingIndex));
 
       setIsDialogOpen(false);
       setEditingIndex(null);
       setSessionForm(INITIAL_SESSION_FORM);
-    } catch (error) {
-      //add toast error in future
-      console.error(error); // temporary console error
+      setIsDeleteDialogOpen(false);
+
+      showToast({
+        title: "Succès",
+        description: "La session a été supprimé avec succès",
+        status: "success",
+      });
+    } catch {
+      showToast({
+        title: "Erreur",
+        description: "Erreur lors de la suppression de la session",
+        status: "error",
+      });
     } finally {
       setIsDeleting(false);
     }
-  }, [editingIndex, workSessions, deleteSession]);
+  }, [deleteSession, editingSessionId, editingIndex]);
 
   return (
     <div className="transition-all duration-300 min-h-screen">
@@ -249,8 +265,15 @@ export const CalendarWorkSession = () => {
         isEditing={editingIndex !== null}
         sessionSlots={convertCalendarEventsToDialogSessions(workSessions, sessionForm.startDate, editingIndex)}
         editingSessionId={editingSessionId}
-        onDelete={handleDelete}
+        setIsDeleteDialogOpen={setIsDeleteDialogOpen}
         isDeleting={isDeleting}
+      />
+
+      <ConfirmDeleteDialogue
+        isDeleteDialogOpen={isDeleteDialogOpen}
+        setIsDeleteDialogOpen={setIsDeleteDialogOpen}
+        messageDialogue="Êtes-vous sûr de vouloir supprimer la session ? Cette action est irréversible."
+        handleConfirmDelete={handleDelete}
       />
     </div>
   );
