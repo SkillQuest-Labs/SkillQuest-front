@@ -1,7 +1,7 @@
 import { SkillCard } from "./SkillCard";
-import type { Skill } from "../skills.types";
 import "../../../styles/skills.css";
 import { SKILLS_PER_PAGE } from "../skills.const";
+import type { Skill } from "@/shared/types/skill.type";
 
 // Props modifiées : page et setPage sont passés par le parent
 export type SkillGridProps = {

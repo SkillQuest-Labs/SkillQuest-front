@@ -1,11 +1,11 @@
-import type { SkillDifficulty, SkillSort, SkillStatus } from "../skills.types";
+import type { SkillSort, FilterSkillDifficulty, FilterSkillStatus } from "../skills.types";
 import { ChevronDown } from "lucide-react";
 
 type SkillFiltersProps = {
-  difficulty: SkillDifficulty;
+  difficulty: FilterSkillDifficulty;
   sort: SkillSort;
-  status: SkillStatus;
-  onFilterChange: (filters: { difficulty: SkillDifficulty; sort: SkillSort; status: SkillStatus }) => void;
+  status: FilterSkillStatus;
+  onFilterChange: (filters: { difficulty: FilterSkillDifficulty; sort: SkillSort; status: FilterSkillStatus }) => void;
 };
 
 export const SkillFilters = ({ difficulty, sort, status, onFilterChange }: SkillFiltersProps) => {
@@ -18,7 +18,7 @@ export const SkillFilters = ({ difficulty, sort, status, onFilterChange }: Skill
             <select
               className="appearance-none border border-slate-700 rounded-lg px-3 py-2 bg-slate-900 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-150 pr-8 hover:border-blue-400"
               value={difficulty}
-              onChange={(e) => onFilterChange({ difficulty: e.target.value as SkillDifficulty, sort, status })}
+              onChange={(e) => onFilterChange({ difficulty: e.target.value as FilterSkillDifficulty, sort, status })}
             >
               <option value="All">All</option>
               <option value="EASY">Easy</option>
@@ -36,7 +36,7 @@ export const SkillFilters = ({ difficulty, sort, status, onFilterChange }: Skill
             <select
               className="appearance-none border border-slate-700 rounded-lg px-3 py-2 bg-slate-900 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-150 pr-8 hover:border-blue-400"
               value={status}
-              onChange={(e) => onFilterChange({ difficulty, sort, status: e.target.value as SkillStatus })}
+              onChange={(e) => onFilterChange({ difficulty, sort, status: e.target.value as FilterSkillStatus })}
             >
               <option value="ALL">All</option>
               <option value="DRAFT">Draft</option>
