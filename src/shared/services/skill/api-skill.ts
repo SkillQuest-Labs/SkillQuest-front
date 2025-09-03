@@ -36,7 +36,7 @@ export const useUpdateSkill = (skillId: string) => {
       url: `${Constants.API_BASE_URL}/skills/${skillId}`,
       headers: { "Content-Type": "application/json; charset=UTF-8" },
     },
-    ["skills"],
+    ["skills", skillId],
   );
 
   return { updateSkill, loading, error };

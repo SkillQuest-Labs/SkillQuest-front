@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import type { SkillDifficulty, SkillSort, SkillStatus } from "../../modules/skills/skills.types";
+import type { FilterSkillDifficulty, FilterSkillStatus, SkillSort } from "../../modules/skills/skills.types";
 import { SkillFilters } from "../../modules/skills/components/SkillFilters";
 import { SkillGrid } from "../../modules/skills/components/SkillGrid";
 import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
@@ -15,9 +15,9 @@ export const Skills = () => {
   const { skills: skillsData } = useGetSkills("uuid-user-1234-5678-9012-345678901234");
   const navigate = useNavigate();
   const [filters, setFilters] = useState<{
-    difficulty: SkillDifficulty;
+    difficulty: FilterSkillDifficulty;
     sort: SkillSort;
-    status: SkillStatus;
+    status: FilterSkillStatus;
   }>({
     difficulty: "ALL",
     sort: "RECENT",
