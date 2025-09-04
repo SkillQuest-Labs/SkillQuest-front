@@ -1,10 +1,9 @@
 import avatarImage from "@/assets/avatar.svg";
-//import { AvatarHud } from "@/component/avatar-hud/AvatarHud";
 import type { UserData, UserRole } from "@/shared/types/user.type";
 import { useUser } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
 import AnimatedAvatarHud from "@/component/avatar-hud/AnimatedAvatarHud";
-//import  AvatarScene  from "@/component/avatar-hud/AvatarScene";
+
 
 export const DashboardUser = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
