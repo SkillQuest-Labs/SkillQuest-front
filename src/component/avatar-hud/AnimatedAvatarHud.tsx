@@ -1,7 +1,7 @@
-// AnimatedAvatarHud.tsx
 import { AvatarHud } from "@/component/avatar-hud/AvatarHud";
 import { useUserProgress } from "@/shared/hooks/useUserProgress";
 import { useAnimatedProgress } from "@/shared/hooks/useAnimatedProgress";
+import LevelUpToast from "@/component/avatar-hud/LevelUpToast";
 
 type Props = {
   userId: string;
@@ -11,7 +11,7 @@ type Props = {
 };
 
 export default function AnimatedAvatarHud({ userId, username, role, avatarUrl }: Props) {
-  const { level, xpUser, xpMax, totalXp } = useUserProgress(userId);
+  const { level, xpUser, xpMax, totalXp, userClass, badge, isClassChange } = useUserProgress(userId);
 
   const { animLevel, animXp, animCap } = useAnimatedProgress({
     level,
@@ -21,13 +21,22 @@ export default function AnimatedAvatarHud({ userId, username, role, avatarUrl }:
   });
 
   return (
-    <AvatarHud
-      username={username}
-      role={role}
-      avatarUrl={avatarUrl}
-      level={animLevel}
-      xpUser={animXp}
-      xpMax={animCap}
-    />
+    <>
+      <AvatarHud
+        username={username}
+        role={role}
+        avatarUrl={avatarUrl}
+        level={animLevel}
+        xpUser={animXp}
+        xpMax={animCap}
+        userClass={userClass}   // 👈 nouveau (voir ci-dessous)
+        badgeSrc={badge}        // 👈 nouveau (voir ci-dessous)
+      />
+      <LevelUpToast
+        show={isClassChange}
+        userClass={userClass}
+        badge={badge}
+      />
+    </>
   );
 }
