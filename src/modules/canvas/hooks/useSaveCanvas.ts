@@ -9,14 +9,13 @@ import {
   useSaveQuestRelations,
   useUpdateQuests,
 } from "@/shared/services/quest/api-quest";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import { isQuestNode, isSkillNode } from "../canvas.const";
 import { showToast } from "@/component/notification/show-toast";
 import { useCreateSkill, useGetSkill } from "@/shared/services/skill/api-skill";
 import { useSearchParams } from "react-router-dom";
 import { useSkillStore } from "@/stores/skill/skill-store";
-import { useLoadingStore } from "@/stores/loading-store";
 
 export const useSaveCanvas = () => {
   const { createQuest, error: createQuestError } = useCreateQuests();
@@ -145,7 +144,6 @@ export const useSaveCanvas = () => {
 
 export const useCanvasLoader = () => {
   const [searchParams] = useSearchParams();
-  const { setLoading } = useLoadingStore();
 
   const skillId = searchParams.get("skillId");
 
@@ -169,12 +167,22 @@ export const useCanvasLoader = () => {
     [setNodes, markModifiedNode],
   );
 
+  const [loading, setLoading] = useState(false);
+
+  // Set loading state based on API calls
   useEffect(() => {
     const isLoading = questsLoading || skillLoading;
-    setLoading(isLoading, "overlay");
-  }, [questsLoading, skillLoading, setLoading]);
+    setLoading(isLoading);
+  }, [questsLoading, skillLoading]);
 
   useEffect(() => {
+    if (!skillId) {
+      setLoading(false);
+      return;
+    }
+
+    // Only proceed if we have all the data and are not loading
+    if (questsLoading || skillLoading) return;
     if (!quests || !skill || !questRelations) return;
 
     const questNodes: Node<QuestNodeData>[] = quests.map((quest) => ({
@@ -223,5 +231,19 @@ export const useCanvasLoader = () => {
     setEdges(questEdges);
     setNodes([...questNodes, skillNode]);
     setCurrentSkillId(skillNode.id);
-  }, [skill, quests, questRelations, setNodes, setEdges, addNode, removeNode, updateNodeData, setCurrentSkillId]);
+  }, [
+    skill,
+    skillId,
+    quests,
+    questRelations,
+    setNodes,
+    setEdges,
+    addNode,
+    removeNode,
+    updateNodeData,
+    setCurrentSkillId,
+    questsLoading,
+    skillLoading,
+  ]);
+  return { loading };
 };

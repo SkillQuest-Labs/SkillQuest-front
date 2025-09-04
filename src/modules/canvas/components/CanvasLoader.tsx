@@ -1,13 +1,6 @@
-import { useLoadingStore } from "@/stores/loading-store";
 import { Loader2 } from "lucide-react";
 
 export const CanvasLoader = () => {
-  const { isLoading, loadingType } = useLoadingStore();
-
-  if (!isLoading || loadingType !== "overlay") {
-    return null;
-  }
-
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center bg-[rgba(12,8,33,0.8)] backdrop-blur-sm">
       <div className="flex flex-col items-center space-y-6 p-8 bg-[rgba(12,8,33,0.85)] rounded-2xl shadow-2xl border border-[rgba(255,255,255,0.08)] backdrop-blur-md">
