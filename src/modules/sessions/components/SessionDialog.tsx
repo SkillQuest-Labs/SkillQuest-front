@@ -1,44 +1,59 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/shared/components/ui/dialog";
-import { Button } from "@/shared/components/ui/button";
 import { useGetQuests } from "@/shared/services/quest/api-quest";
 import { useGetSkills } from "@/shared/services/skill/api-skill";
 import type { SessionFormType } from "../types/session-form.type";
 import { SessionForm } from "./SessionForm";
 import { convertToMinutes, isTimeSlotConflict } from "../utils/session.utils";
 import { CircleAlert } from "lucide-react";
+import { SessionDialogActions } from "./SessionDialogActions";
 
 interface SessionDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  form: SessionFormType;
-  setForm: (form: SessionFormType) => void;
+  formSession: SessionFormType;
+  setFormSession: (form: SessionFormType) => void;
   onSave: () => void;
   isEditing: boolean;
   sessionSlots: { startDate: string; startTime: string; endTime: string }[];
+  editingSessionId?: string | null;
+  setIsDeleteDialogOpen: (open: boolean) => void;
+  isDeleting?: boolean;
 }
 
 export const SessionDialog = ({
   open,
   onOpenChange,
-  form,
-  setForm,
+  formSession,
+  setFormSession,
   onSave,
   isEditing,
   sessionSlots,
+  editingSessionId,
+  setIsDeleteDialogOpen,
+  isDeleting = false,
 }: SessionDialogProps) => {
-  const isFormValid = form.title.trim() && form.startDate && form.startTime && form.endTime && form.linkedQuest;
+  const isFormValid =
+    formSession.title.trim() &&
+    formSession.startDate &&
+    formSession.startTime &&
+    formSession.endTime &&
+    (formSession.linkedQuests?.length ?? 0) > 0;
 
   const hasTimeConflict = Boolean(
-    form.startTime && form.endTime && convertToMinutes(form.endTime) <= convertToMinutes(form.startTime),
+    formSession.startTime &&
+      formSession.endTime &&
+      convertToMinutes(formSession.endTime) <= convertToMinutes(formSession.startTime),
   );
 
   const hasSessionConflict = Boolean(
-    form.startTime && form.endTime && isTimeSlotConflict(form.startTime, form.endTime, sessionSlots),
+    formSession.startTime &&
+      formSession.endTime &&
+      isTimeSlotConflict(formSession.startTime, formSession.endTime, sessionSlots),
   );
 
   const userId = "uuid-user-1234-5678-9012-345678901234";
   const { skills, loading: loadingSkills } = useGetSkills(userId);
-  const { quests, loading: loadingQuests } = useGetQuests(form.linkedSkill);
+  const { quests, loading: loadingQuests } = useGetQuests(formSession.linkedSkill);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -49,8 +64,8 @@ export const SessionDialog = ({
         </DialogHeader>
 
         <SessionForm
-          form={form}
-          setForm={setForm}
+          currentSession={formSession}
+          setForm={setFormSession}
           skills={skills}
           quests={quests ?? []}
           loadingSkills={loadingSkills}
@@ -69,22 +84,15 @@ export const SessionDialog = ({
           </p>
         )}
 
-        <div className="flex justify-end space-x-2 mt-4">
-          <Button variant="ghost" onClick={() => onOpenChange(false)}>
-            Annuler
-          </Button>
-          <Button
-            onClick={onSave}
-            disabled={!isFormValid || hasTimeConflict || hasSessionConflict}
-            className={`${
-              isFormValid && !hasTimeConflict && !hasSessionConflict
-                ? "bg-blue-600 hover:bg-blue-700"
-                : "bg-gray-600 cursor-not-allowed"
-            } text-white`}
-          >
-            {isEditing ? "Mettre à jour" : "Enregistrer"}
-          </Button>
-        </div>
+        <SessionDialogActions
+          onClose={() => onOpenChange(false)}
+          onSave={onSave}
+          setIsDeleteDialogOpen={setIsDeleteDialogOpen}
+          isEditing={isEditing}
+          editingSessionId={editingSessionId}
+          isDeleting={isDeleting}
+          saveDisabled={!isFormValid || hasTimeConflict || hasSessionConflict}
+        />
       </DialogContent>
     </Dialog>
   );

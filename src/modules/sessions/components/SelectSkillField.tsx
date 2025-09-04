@@ -1,26 +1,38 @@
+import type { Skill } from "@/shared/types/skill.type";
 import type { SessionFormType } from "../types/session-form.type";
 
 interface SelectSkillProps {
-  form: SessionFormType;
+  currentSession: SessionFormType;
   setForm: (form: SessionFormType) => void;
-  skills: any[];
+  skills: Skill[];
   loading: boolean;
 }
 
-export const SelectSkillField = ({ form, setForm, skills, loading }: SelectSkillProps) => {
+export const SelectSkillField = ({ currentSession, setForm, skills, loading }: SelectSkillProps) => {
   return (
-    <div className="mb-4">
+    <div className="mb-4 min-w-0">
+      {" "}
+      {/* min-w-0 pour autoriser la réduction dans un flex/grid */}
       <label className="text-sm text-white mb-1 block">Choisir un skill</label>
       <select
-        value={form.linkedSkill}
+        value={currentSession.linkedSkill}
         onChange={(e) =>
           setForm({
-            ...form,
+            ...currentSession,
             linkedSkill: e.target.value,
-            linkedQuest: "", // reset linked quest when skill changes
+            linkedQuests: [],
           })
         }
-        className="w-full p-2 rounded bg-slate-800 border border-slate-600 text-white"
+        className="
+          block w-full h-10
+          rounded-md bg-slate-800 text-white
+          border border-slate-600
+          px-3 pr-8
+          overflow-hidden text-ellipsis whitespace-nowrap
+          outline-none ring-2 ring-transparent
+          focus:border-sky-400 focus:ring-sky-500/40
+          disabled:bg-slate-700 disabled:text-slate-400 disabled:cursor-not-allowed
+        "
       >
         <option value="">Aucune</option>
         {loading ? (

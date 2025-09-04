@@ -20,7 +20,7 @@ export const useGetQuests = (skillId: string) => {
     url: `${Constants.API_BASE_URL}/quests/${skillId}`,
   };
 
-  const { data, isLoading: loading, error } = useApi<GetQuestsResponse>(options, ["quests"], enabled); // add the userId to the cache key
+  const { data, isLoading: loading, error } = useApi<GetQuestsResponse>(options, ["quests", skillId], enabled); // add the userId to the cache key
 
   return {
     quests: data?.quests,

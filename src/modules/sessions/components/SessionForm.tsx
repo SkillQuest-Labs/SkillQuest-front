@@ -5,20 +5,27 @@ import { SelectSkillField } from "./SelectSkillField";
 import { SelectQuestField } from "./SelectQuestField";
 import { ColorPicker } from "./ColorPicker";
 
-export const SessionForm = ({ form, setForm, skills, quests, loadingSkills, loadingQuests }: SessionFormProps) => {
+export const SessionForm = ({
+  currentSession,
+  setForm,
+  skills,
+  quests,
+  loadingSkills,
+  loadingQuests,
+}: SessionFormProps) => {
   return (
     <>
       <Input
         placeholder="Titre"
-        value={form.title}
-        onChange={(e) => setForm({ ...form, title: e.target.value })}
+        value={currentSession.title}
+        onChange={(e) => setForm({ ...currentSession, title: e.target.value })}
         className="mb-2"
       />
 
       <Textarea
         placeholder="Description"
-        value={form.description}
-        onChange={(e) => setForm({ ...form, description: e.target.value })}
+        value={currentSession.description}
+        onChange={(e) => setForm({ ...currentSession, description: e.target.value })}
         className="mb-4"
       />
 
@@ -28,8 +35,8 @@ export const SessionForm = ({ form, setForm, skills, quests, loadingSkills, load
           <Input
             type="date"
             className="[color-scheme:dark]"
-            value={form.startDate}
-            onChange={(e) => setForm({ ...form, startDate: e.target.value })}
+            value={currentSession.startDate}
+            onChange={(e) => setForm({ ...currentSession, startDate: e.target.value })}
           />
         </div>
         <div>
@@ -37,8 +44,8 @@ export const SessionForm = ({ form, setForm, skills, quests, loadingSkills, load
           <Input
             type="time"
             className="[color-scheme:dark]"
-            value={form.startTime}
-            onChange={(e) => setForm({ ...form, startTime: e.target.value })}
+            value={currentSession.startTime}
+            onChange={(e) => setForm({ ...currentSession, startTime: e.target.value })}
           />
         </div>
         <div>
@@ -46,22 +53,22 @@ export const SessionForm = ({ form, setForm, skills, quests, loadingSkills, load
           <Input
             type="time"
             className="[color-scheme:dark]"
-            value={form.endTime}
-            onChange={(e) => setForm({ ...form, endTime: e.target.value })}
-            min={form.startTime || undefined}
+            value={currentSession.endTime}
+            onChange={(e) => setForm({ ...currentSession, endTime: e.target.value })}
+            min={currentSession.startTime || undefined}
           />
         </div>
       </div>
 
-      <SelectSkillField form={form} setForm={setForm} skills={skills} loading={loadingSkills} />
+      <SelectSkillField currentSession={currentSession} setForm={setForm} skills={skills} loading={loadingSkills} />
       <SelectQuestField
-        form={form}
+        currentSession={currentSession}
         setForm={setForm}
         quests={quests}
         loading={loadingQuests}
-        disabled={!form.linkedSkill}
+        disabled={!currentSession.linkedSkill}
       />
-      <ColorPicker form={form} setForm={setForm} />
+      <ColorPicker currentSession={currentSession} setForm={setForm} />
     </>
   );
 };
