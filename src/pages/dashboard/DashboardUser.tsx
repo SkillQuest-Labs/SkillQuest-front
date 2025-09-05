@@ -1,6 +1,6 @@
 import avatarImage from "@/assets/avatar.svg";
 import { AvatarHud } from "@/component/avatar-hud/AvatarHud";
-import type { UserData, UserRole } from "@/shared/types/user.type";
+import type { UserData, UserRoleType } from "@/shared/types/user.type";
 import { useUser } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
 
@@ -10,9 +10,9 @@ export const DashboardUser = () => {
 
   useEffect(() => {
     if (user) {
-      const role = user?.unsafeMetadata?.role as UserRole;
+      const role = user?.unsafeMetadata?.role as UserRoleType;
       setUserData({
-        firstname: user.firstName || "",
+        username: user.firstName || "",
         role: role,
       });
     }
@@ -21,10 +21,10 @@ export const DashboardUser = () => {
   return (
     <div>
       <div className="flex items-center justify-center h-screen">
-        <h1 className="text-3xl font-bold text-white">{`Welcome back ${userData?.role} ${userData?.firstname}`}</h1>
+        <h1 className="text-3xl font-bold text-white">{`Welcome back ${userData?.role} ${userData?.username}`}</h1>
       </div>
       <AvatarHud
-        username={userData?.firstname ?? ""}
+        username={userData?.username ?? ""}
         role={userData?.role ?? ""}
         avatarUrl={avatarImage}
         level={15}

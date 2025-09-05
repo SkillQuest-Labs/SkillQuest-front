@@ -6,6 +6,7 @@ import { SessionForm } from "./SessionForm";
 import { convertToMinutes, isTimeSlotConflict } from "../utils/session.utils";
 import { CircleAlert } from "lucide-react";
 import { SessionDialogActions } from "./SessionDialogActions";
+import { useUser } from "@clerk/clerk-react";
 
 interface SessionDialogProps {
   open: boolean;
@@ -51,8 +52,9 @@ export const SessionDialog = ({
       isTimeSlotConflict(formSession.startTime, formSession.endTime, sessionSlots),
   );
 
-  const userId = "uuid-user-1234-5678-9012-345678901234";
-  const { skills, loading: loadingSkills } = useGetSkills(userId);
+  const { user } = useUser();
+  const userId = user?.id;
+  const { skills, loading: loadingSkills } = useGetSkills(userId || "");
   const { quests, loading: loadingQuests } = useGetQuests(formSession.linkedSkill);
 
   return (

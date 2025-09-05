@@ -1,9 +1,12 @@
 import ReactECharts from "echarts-for-react";
 import { getChartOption } from "./chart-option.const";
 import { useGetSkills } from "@/shared/services/skill/api-skill";
+import { useUser } from "@clerk/clerk-react";
 
 export const SkillExperienceChart = () => {
-  const { skills: skillsData } = useGetSkills("uuid-user-1234-5678-9012-345678901234");
+  const { user } = useUser();
+  const userId = user?.id;
+  const { skills: skillsData } = useGetSkills(userId || "");
   const chartOptions = getChartOption(skillsData);
 
   return (
