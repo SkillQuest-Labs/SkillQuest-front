@@ -26,13 +26,21 @@ export default function LevelUpToast({ show, userClass, badge, onHide, durationM
 
   return (
     <div className="fixed bottom-28 right-6 z-[60] pointer-events-none">
-      <div className="relative px-4 py-3 rounded-2xl bg-slate-900/90 border border-slate-700/60 shadow-2xl backdrop-blur-md
-                      animate-[pop_320ms_ease-out]">
+      <div
+        className="relative px-4 py-3 rounded-2xl bg-slate-900/90 border border-slate-700/60 shadow-2xl backdrop-blur-md
+                      animate-[pop_320ms_ease-out]"
+      >
         <div className="flex items-center gap-3">
-          <img src={badge} alt={userClass} className="w-10 h-10 drop-shadow animate-[pulseGlow_1.2s_ease-in-out_infinite]" />
+          <img
+            src={badge}
+            alt={userClass}
+            className="w-10 h-10 drop-shadow animate-[pulseGlow_1.2s_ease-in-out_infinite]"
+          />
           <div className="flex flex-col">
             <span className="text-xs uppercase tracking-wider text-slate-400">Changement de classe</span>
-            <span className="text-base font-semibold text-slate-100">Vous êtes maintenant <span className="text-amber-300">{userClass}</span> !</span>
+            <span className="text-base font-semibold text-slate-100">
+              Vous êtes maintenant <span className="text-amber-300">{userClass}</span> !
+            </span>
           </div>
         </div>
       </div>

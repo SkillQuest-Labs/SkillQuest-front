@@ -11,15 +11,7 @@ export function useUserProgress(userId: string) {
     return computeTotalXpFromSkills(skills); // somme des quêtes DONE: EASY=100, MEDIUM=200, HARD=400
   }, [skills]);
 
-  const {
-    level,
-    currentXp,
-    nextLevelXp,
-    userClass,
-    badge,
-    nextClass,
-    isClassChange,
-  } = getProgression(totalXp);
+  const { level, currentXp, nextLevelXp, userClass, badge, nextClass, isClassChange } = getProgression(totalXp);
 
   return {
     level,

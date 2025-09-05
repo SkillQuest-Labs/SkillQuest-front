@@ -18,7 +18,9 @@ export const AvatarHud = ({ username, role, avatarUrl, level, xpUser, xpMax, use
       <div className="flex flex-row items-center gap-4 p-4 rounded-xl bg-[#0E172B]/95 backdrop-blur-md drop-shadow-lg border border-slate-600/30 hover:border-slate-500/50 transition-all duration-300">
         <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-slate-400 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
           <img src={avatarUrl} alt="avatar" className="w-full h-full object-cover" />
-          {badgeSrc && <img src={badgeSrc} alt="badge" className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full shadow" />}
+          {badgeSrc && (
+            <img src={badgeSrc} alt="badge" className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full shadow" />
+          )}
         </div>
 
         <div className="flex flex-col gap-y-1 w-64 text-right">

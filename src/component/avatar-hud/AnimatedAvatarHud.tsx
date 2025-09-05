@@ -29,14 +29,10 @@ export default function AnimatedAvatarHud({ userId, username, role, avatarUrl }:
         level={animLevel}
         xpUser={animXp}
         xpMax={animCap}
-        userClass={userClass}   // 👈 nouveau (voir ci-dessous)
-        badgeSrc={badge}        // 👈 nouveau (voir ci-dessous)
+        userClass={userClass} // 👈 nouveau (voir ci-dessous)
+        badgeSrc={badge} // 👈 nouveau (voir ci-dessous)
       />
-      <LevelUpToast
-        show={isClassChange}
-        userClass={userClass}
-        badge={badge}
-      />
+      <LevelUpToast show={isClassChange} userClass={userClass} badge={badge} />
     </>
   );
 }
