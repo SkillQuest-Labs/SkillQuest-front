@@ -36,6 +36,9 @@ export type Session = {
   duration: number;
   userId: string;
   linkedSkillId: string;
+  linkedSkill: {
+    title: string;
+  };
   quests: {
     title: string;
     id: string;

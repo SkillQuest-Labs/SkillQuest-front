@@ -1,0 +1,83 @@
+/* Boutons */
+.btn-action{
+  background: transparent;
+  border-radius: 0;
+  transition: background-color .18s ease, color .18s ease;
+  height: 100%;
+  width: 100%;
+  color: #e5e7eb;
+}
+.btn-play:hover     { background-color: rgba(34,197,94,.12);  color: #f8fafc; }
+.btn-validate:hover { background-color: rgba(59,130,246,.12); color: #f8fafc; }
+.btn-delete:hover   { background-color: rgba(244,63,94,.12);  color: #f8fafc; }
+
+/* Card : bordure FIXE, lift sans flou, pulse fixe */
+:root{
+  --card-accent: #60a5fa;            /* couleur du ring/pulse */
+  --card-bg-hover: rgba(96,165,250,.06);
+}
+.session-card{
+  position: relative;
+  border-radius: 1rem;
+  overflow: visible;
+  border: 1px solid #334155; /* slate-700 FIXE */
+  transition: transform .18s ease, box-shadow .18s ease, background-color .18s ease;
+  will-change: transform, background-color;
+}
+.session-card:hover{
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 20px rgba(0,0,0,.25),
+    0 0 0 1px rgba(99,102,241,.08);
+  background-color: var(--card-bg-hover);
+}
+.session-card::after{
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  border: 2px solid var(--card-accent);
+  opacity: 0;
+  pointer-events: none;
+}
+.session-card:hover::after{ animation: cardPulse 1.6s ease-in-out infinite; }
+@keyframes cardPulse{ 0%{opacity:0} 50%{opacity:1} 100%{opacity:0} }
+
+/* Pastille : taille + bord (la couleur vient du style inline du TSX) */
+.session-dot{
+  height: 1.25rem;
+  width: 1.25rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255,255,255,.2);
+  /* pas de background-color ici → c’est s.color en inline */
+}
+
+
+/* ---------- Empty state styles ---------- */
+
+/* Icône avec halo animé */
+.empty-icon::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 9999px;
+  border: 2px solid rgba(96,165,250,.35);
+  animation: emptyPulse 2s ease-in-out infinite;
+  opacity: .6;
+  pointer-events: none;
+}
+@keyframes emptyPulse {
+  0%   { transform: scale(.92); opacity: .3; }
+  50%  { transform: scale(1);   opacity: .9; }
+  100% { transform: scale(.92); opacity: .3; }
+}
+
+/* Badges descriptifs */
+.empty-badge {
+  background-color: rgba(148,163,184,.12);    /* slate-400 @ ~12% */
+  border: 1px solid rgba(148,163,184,.25);
+  color: #e5e7eb;                              /* slate-200 */
+  padding: 6px 10px;
+  border-radius: 9999px;
+  line-height: 1;
+}

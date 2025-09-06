@@ -64,16 +64,19 @@ export const useUpdateSession = (sessionId: string) => {
   return { updateSession, loading, error };
 };
 
-export const useDeleteSession = () => {
-  const deleteSession = async (id: string): Promise<void> => {
-    const res = await fetch(`${Constants.API_BASE_URL}/sessions/${id}`, {
+export const useDeleteSession = (sessionId: string) => {
+  const {
+    mutateAsync: deleteSession,
+    isPending,
+    error,
+  } = useApiAsync<void, void>(
+    {
       method: "DELETE",
+      url: `${Constants.API_BASE_URL}/sessions/${sessionId}`,
       headers: { "Content-Type": "application/json; charset=UTF-8" },
-    });
-    if (!res.ok) {
-      const errorMessage = await res.text().catch(() => "");
-      throw new Error(errorMessage || "Delete session failed");
-    }
-  };
-  return { deleteSession };
+    },
+    ["sessions"],
+  );
+
+  return { deleteSession, isPending, error };
 };
