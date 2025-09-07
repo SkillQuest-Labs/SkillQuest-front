@@ -81,6 +81,7 @@ export const FloatingToolbox = ({
 
   return (
     <div
+      data-tour="toolbox"
       className={` rounded-xl shadow-lg flex flex-col gap-1 bg-[rgba(15,10,40,0.85)] border-2 border-[rgba(59,130,246,0.4)] backdrop-blur-md transition-all duration-300 ease-in-out ${
         isToolboxCollapsed ? "w-14 p-1" : "w-auto p-2"
       }`}
