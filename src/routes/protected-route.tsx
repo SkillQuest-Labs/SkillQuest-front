@@ -1,4 +1,5 @@
 import { LoadingComponent } from "@/component/LoadingComponent";
+import { useSynchUser } from "@/shared/hooks/useSynchUser";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { Navigate, Outlet } from "react-router-dom";
 
@@ -7,6 +8,8 @@ import { Navigate, Outlet } from "react-router-dom";
 export const ProtectedRoute = () => {
   const { user } = useUser();
   const { isLoaded, isSignedIn } = useAuth();
+
+  useSynchUser();
 
   const allowedRoles = ["mentor", "apprenti"];
   const role = user?.unsafeMetadata?.role;

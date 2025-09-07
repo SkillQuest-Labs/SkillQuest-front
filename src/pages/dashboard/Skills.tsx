@@ -9,10 +9,13 @@ import { useNavigate } from "react-router-dom";
 import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import { useGetSkills } from "@/shared/services/skill/api-skill";
 import { SKILLS_PER_PAGE } from "@/modules/skills/skills.const";
+import { useUser } from "@clerk/clerk-react";
 
 export const Skills = () => {
   const { isCollapsed } = useSidebarStore();
-  const { skills: skillsData } = useGetSkills("uuid-user-1234-5678-9012-345678901234");
+  const { user } = useUser();
+  const userId = user?.id;
+  const { skills: skillsData } = useGetSkills(userId || "");
   const navigate = useNavigate();
   const [filters, setFilters] = useState<{
     difficulty: FilterSkillDifficulty;

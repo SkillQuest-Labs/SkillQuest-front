@@ -16,11 +16,12 @@ import {
 import { CalendarHeader } from "./components/CalendarHeader";
 import { useCalendarResponsive } from "./hooks/useCalendarResponsive";
 import {
+  buildSessionPayload,
   convertCalendarEventsToDialogSessions,
   capitalizeFirstLetter,
-  convertToUtcIso,
   convertSessionsToEvents,
 } from "./utils/session.utils";
+import { useUser } from "@clerk/clerk-react";
 import type { SessionFormType, CalendarEvent } from "./types/session-form.type";
 import { INITIAL_SESSION_FORM } from "./const/session-form.const";
 import type { DateSelectArg, EventClickArg } from "@fullcalendar/core";
@@ -30,6 +31,8 @@ import { showToast } from "@/component/notification/show-toast";
 export const CalendarWorkSession = () => {
   const { isCollapsed } = useSidebarStore();
   const { createSession } = useCreateSession();
+  const { user } = useUser();
+  const userId = user?.id;
 
   const calendarRef = useRef<FullCalendar | null>(null);
 
@@ -44,7 +47,7 @@ export const CalendarWorkSession = () => {
 
   const editingSessionId = editingIndex !== null ? workSessions[editingIndex]?.id : "";
 
-  const { sessions } = useGetSessions("uuid-user-1234-5678-9012-345678901234"); //user id need be to be change
+  const { sessions } = useGetSessions(userId || "");
   const { updateSession } = useUpdateSession(editingSessionId);
   const { deleteSession } = useDeleteSession();
 
@@ -130,20 +133,16 @@ export const CalendarWorkSession = () => {
 
   const handleSave = useCallback(async () => {
     try {
-      const startIsoUtc = convertToUtcIso(sessionForm.startDate, sessionForm.startTime);
-      const endIsoUtc = convertToUtcIso(sessionForm.startDate, sessionForm.endTime);
+      if (!userId) {
+        showToast({
+          title: "Erreur",
+          description: "Utilisateur non connecté",
+          status: "error",
+        });
+        return;
+      }
 
-      const payload = {
-        title: sessionForm.title,
-        description: sessionForm.description,
-        color: sessionForm.color,
-        linkedSkillId: sessionForm.linkedSkill,
-        questIds: sessionForm.linkedQuests.map((linkedQuest) => linkedQuest.id),
-        userId: "uuid-user-1234-5678-9012-345678901234", // user id need be to change
-        startDate: sessionForm.startDate,
-        startTime: startIsoUtc,
-        endTime: endIsoUtc,
-      };
+      const payload = buildSessionPayload(sessionForm, userId);
 
       if (editingIndex === null) {
         await createSession(payload);
@@ -169,7 +168,7 @@ export const CalendarWorkSession = () => {
         status: "error",
       });
     }
-  }, [sessionForm, editingIndex, workSessions, createSession, updateSession]);
+  }, [userId,sessionForm, editingIndex, workSessions, createSession, updateSession]);
 
   const handleDelete = useCallback(async () => {
     try {

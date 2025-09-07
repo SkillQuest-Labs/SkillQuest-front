@@ -3,9 +3,12 @@ import { Award, Target, TrendingUp } from "lucide-react";
 import { useGetSkills } from "@/shared/services/skill/api-skill";
 import { buildSkillRadarData } from "./skill-radar-chart.const";
 import { getChartOptions } from "./chart-options.const";
+import { useUser } from "@clerk/clerk-react";
 
 export const SkillRadarChart = () => {
-  const { skills: skillsData } = useGetSkills("uuid-user-1234-5678-9012-345678901234");
+  const { user } = useUser();
+  const userId = user?.id;
+  const { skills: skillsData } = useGetSkills(userId || "");
 
   const skillRadarMetrics = buildSkillRadarData(skillsData);
 

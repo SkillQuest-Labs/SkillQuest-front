@@ -16,6 +16,7 @@ import { showToast } from "@/component/notification/show-toast";
 import { useCreateSkill, useGetSkill } from "@/shared/services/skill/api-skill";
 import { useSearchParams } from "react-router-dom";
 import { useSkillStore } from "@/stores/skill/skill-store";
+import { useUser } from "@clerk/clerk-react";
 
 export const useSaveCanvas = () => {
   const { createQuest, error: createQuestError } = useCreateQuests();
@@ -28,6 +29,7 @@ export const useSaveCanvas = () => {
     useCanvasStore();
   const [searchParams] = useSearchParams();
   const currentSkillId = useSkillStore((state) => state.currentSkillId);
+  const { user } = useUser();
 
   const saveCanvas = async () => {
     const searchSkillId = searchParams.get("skillId");
@@ -62,7 +64,7 @@ export const useSaveCanvas = () => {
         status: skillNode.data.config.status,
         difficulty: skillNode.data.config.difficulty,
         // position: { x: skillNode.position.x, y: skillNode.position.y },
-        userId: "uuid-user-1234-5678-9012-345678901234",
+        userId: user?.id,
       };
 
     const toCreateEdge = edges

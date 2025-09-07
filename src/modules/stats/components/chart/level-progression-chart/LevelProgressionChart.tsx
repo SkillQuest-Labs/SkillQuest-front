@@ -2,9 +2,12 @@ import ReactECharts from "echarts-for-react";
 import { useGetSkills } from "@/shared/services/skill/api-skill";
 import { buildLevelProgressionData } from "./level-progression.const";
 import { getChartOptions } from "./chart-option.const";
+import { useUser } from "@clerk/clerk-react";
 
 export const LevelProgressionChart = () => {
-  const { skills: skillsData } = useGetSkills("uuid-user-1234-5678-9012-345678901234");
+  const { user } = useUser();
+  const userId = user?.id;
+  const { skills: skillsData } = useGetSkills(userId || "");
 
   const userTotalXp = skillsData.reduce((acc, skill) => acc + (skill.totalXp || 0), 0);
 

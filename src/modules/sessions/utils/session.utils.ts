@@ -20,12 +20,14 @@ export const isTimeSlotConflict = (
   });
 };
 
-export const buildSessionPayload = (sessionForm: SessionFormType): CreateSessionInput => {
+export const buildSessionPayload = (sessionForm: SessionFormType, userId: string): CreateSessionInput => {
+  const startIsoUtc = convertToUtcIso(sessionForm.startDate, sessionForm.startTime);
+  const endIsoUtc = convertToUtcIso(sessionForm.startDate, sessionForm.endTime);
   return {
     startDate: sessionForm.startDate,
-    startTime: new Date(`${sessionForm.startDate}T${sessionForm.startTime}`).toISOString(),
-    endTime: new Date(`${sessionForm.startDate}T${sessionForm.endTime}`).toISOString(),
-    userId: "uuid-user-1234-5678-9012-345678901234",
+    startTime: startIsoUtc,
+    endTime: endIsoUtc,
+    userId: userId,
     questIds: (sessionForm.linkedQuests || []).map((quest) => quest.id),
     title: sessionForm.title,
     description: sessionForm.description,

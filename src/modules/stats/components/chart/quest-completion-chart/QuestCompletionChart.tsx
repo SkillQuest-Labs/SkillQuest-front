@@ -4,6 +4,7 @@ import { Button } from "@/shared/components/ui/button";
 import { buildQuestCompletionData } from "./quest-completion-chart.const";
 import { useGetSkills } from "@/shared/services/skill/api-skill";
 import { getChartOptions } from "./chart-option.const";
+import { useUser } from "@clerk/clerk-react";
 
 type ChartViewType = "stacked" | "grouped";
 
@@ -12,7 +13,9 @@ export const QuestCompletionChart = () => {
 
   const isGrouped = viewType === "grouped";
 
-  const { skills: skillsData } = useGetSkills("uuid-user-1234-5678-9012-345678901234");
+  const { user } = useUser();
+  const userId = user?.id;
+  const { skills: skillsData } = useGetSkills(userId || "");
 
   const questCompletionMetrics = buildQuestCompletionData(skillsData);
 
