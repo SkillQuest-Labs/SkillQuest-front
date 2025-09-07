@@ -73,6 +73,8 @@ export const CanvasView = ({
 
   return (
     <ReactFlow
+      id="canvas-root"
+      data-tour="canvas"
       onInit={(reactFlowInstance) => {
         reactFlowInstance.setViewport({ x: 0, y: 0, zoom: 0.5 }, { duration: 800 });
       }}
@@ -101,23 +103,27 @@ export const CanvasView = ({
     >
       <Background color="#aaa" gap={30} size={0.5} />
 
-      <Controls position="bottom-right" />
+      <div data-tour="controls">
+        <Controls position="bottom-right" />
+      </div>
 
-      <MiniMap
-        nodeStrokeWidth={2}
-        position="bottom-left"
-        nodeColor={(node) => {
-          return node.type === "skill" ? "#3b82f6" : "#10b981";
-        }}
-        style={{
-          backgroundColor: "rgba(12, 8, 33, 0.8)",
-          border: "2px solid rgba(59, 130, 246, 0.3)",
-          borderRadius: "12px",
-          backdropFilter: "blur(8px)",
-        }}
-        maskColor="rgba(12, 8, 33, 0.4)"
-        className="shadow-2xl "
-      />
+      <div data-tour="minimap">
+        <MiniMap
+          nodeStrokeWidth={2}
+          position="bottom-left"
+          nodeColor={(node) => {
+            return node.type === "skill" ? "#3b82f6" : "#10b981";
+          }}
+          style={{
+            backgroundColor: "rgba(12, 8, 33, 0.8)",
+            border: "2px solid rgba(59, 130, 246, 0.3)",
+            borderRadius: "12px",
+            backdropFilter: "blur(8px)",
+          }}
+          maskColor="rgba(12, 8, 33, 0.4)"
+          className="shadow-2xl "
+        />
+      </div>
 
       <div className="absolute top-6 left-4 z-20">
         <Button
@@ -144,7 +150,9 @@ export const CanvasView = ({
           expandAll={expandAll}
           setOpenAiModal={setOpenAiModal}
         />
-        <RoadmapButton onClick={() => setViewMode("skillTree")} />
+        <div data-tour="roadmap">
+          <RoadmapButton onClick={() => setViewMode("skillTree")} />
+        </div>
       </div>
 
       {openAiModal && <AIQuestGenerationModal onGenerate={openAIGenerator} setOpenAiModal={setOpenAiModal} />}
