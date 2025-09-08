@@ -18,6 +18,7 @@ import { initialNodes } from "./canvas.const";
 import { useAddAIQuests } from "./hooks/useAddAIQuest";
 import { QuestDetailsModal } from "./components/quest-card-component/QuestDetailsModal";
 import { CanvasLoader } from "./components/CanvasLoader";
+import { CanvasOnboarding } from "./components/CanvasOnboarding";
 
 export const Canvas = () => {
   const [connectionStart, setConnectionStart] = useState<string | null>(null);
@@ -143,6 +144,7 @@ export const Canvas = () => {
       <QuestDetailsModal open={isQuestModalOpen} quest={selectedQuest} onClose={() => setIsQuestModalOpen(false)} />
 
       <Toaster position="bottom-right" />
+      <CanvasOnboarding />
     </div>
   );
 };
