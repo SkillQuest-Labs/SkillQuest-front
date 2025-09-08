@@ -12,9 +12,10 @@ export interface ExperienceMetric {
 
 export type LevelProgression = {
   level: number;
-  xpInLevel: number; // XP accumulated in this level only
+  xpEarnedInLevel: number; // XP accumulated in this level only
   totalXpAtLevel: number; // Player's total XP up to this level
   xpRequired: number; // XP required to complete this level
+  extraXP: number; // XP earned beyond the required XP for this level
   isCurrentLevel: boolean; // true if this is the player's current level
 };
 

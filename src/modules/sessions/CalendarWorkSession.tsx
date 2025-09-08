@@ -168,7 +168,7 @@ export const CalendarWorkSession = () => {
         status: "error",
       });
     }
-  }, [userId,sessionForm, editingIndex, workSessions, createSession, updateSession]);
+  }, [userId, sessionForm, editingIndex, workSessions, createSession, updateSession]);
 
   const handleDelete = useCallback(async () => {
     try {

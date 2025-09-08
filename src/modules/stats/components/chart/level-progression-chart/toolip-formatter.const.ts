@@ -59,10 +59,10 @@ const buildProgressionTooltipItem = (progression: LevelProgression) => {
           ${progression.isCurrentLevel ? '<span style="margin-left:0.5rem;padding:2px 8px;border-radius:6px;background:#06b6d4;color:#fff;font-size:0.85em;font-weight:600;">Niveau Actuel</span>' : ""}
         </div>
         <div style="margin-top:0.3rem;color:#f1f5f9;font-size:0.98rem;">
-          <span style="font-weight:600;">XP total :</span> <span style="color:#bae6fd">${progression.totalXpAtLevel}</span>
+          <span style="font-weight:600;">XP total actuel :</span> <span style="color:#bae6fd">${progression.totalXpAtLevel}</span>
         </div>
         <div style="color:#f1f5f9;font-size:0.98rem;">
-          <span style="font-weight:600;">XP gagané dans ce niveau :</span> <span style="color:#7dd3fc">${progression.xpInLevel}</span>
+          <span style="font-weight:600;">XP gagané dans ce niveau :</span> <span style="color:#7dd3fc">${progression.xpEarnedInLevel}</span>
         </div>
       </div>
     `;

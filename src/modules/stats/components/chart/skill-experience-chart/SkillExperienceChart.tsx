@@ -1,7 +1,7 @@
-import ReactECharts from "echarts-for-react";
-import { getChartOption } from "./chart-option.const";
 import { useGetSkills } from "@/shared/services/skill/api-skill";
 import { useUser } from "@clerk/clerk-react";
+import ReactECharts from "echarts-for-react";
+import { getChartOption } from "./chart-option.const";
 
 export const SkillExperienceChart = () => {
   const { user } = useUser();
