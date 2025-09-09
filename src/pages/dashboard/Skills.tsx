@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import type { FilterSkillDifficulty, FilterSkillStatus, SkillSort } from "../../modules/skills/skills.types";
+import type { SkillFiltersType } from "../../modules/skills/skills.types";
 import { SkillFilters } from "../../modules/skills/components/SkillFilters";
 import { SkillCard } from "../../modules/skills/components/SkillCard";
 import { EmptySkills } from "../../modules/skills/components/EmptySkills";
@@ -18,11 +18,8 @@ export const Skills = () => {
   const userId = user?.id;
   const { skills: skillsData } = useGetSkills(userId || "");
   const navigate = useNavigate();
-  const [filters, setFilters] = useState<{
-    difficulty: FilterSkillDifficulty;
-    sort: SkillSort;
-    status: FilterSkillStatus;
-  }>({
+  const [filters, setFilters] = useState<SkillFiltersType>({
+    search: "",
     difficulty: "ALL",
     sort: "RECENT",
     status: "ALL",
@@ -34,25 +31,34 @@ export const Skills = () => {
 
     let result = [...skillsData];
 
-    if (filters.difficulty && filters.difficulty.toUpperCase() !== "ALL") {
+    // Filtre par recherche (titre)
+    if (filters.search.trim()) {
+      result = result.filter((s) => 
+        s.title.toLowerCase().includes(filters.search.toLowerCase())
+      );
+    }
+
+    // Filtre par difficulté
+    if (filters.difficulty && filters.difficulty !== "ALL") {
       result = result.filter((s) => s.difficulty === filters.difficulty);
     }
 
-    if (filters.status && filters.status.toUpperCase() !== "ALL") {
+    // Filtre par statut
+    if (filters.status && filters.status !== "ALL") {
       result = result.filter((s) => s.status === filters.status);
     }
 
-    // result.sort((a, b) => {
-    //   if (filters.sort === "RECENT") {
-    //     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    //   } else {
-    //     return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-    //   }
-    // });
+    // Tri par date
+    result.sort((a, b) => {
+      if (filters.sort === "RECENT") {
+        return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
+      } else {
+        return new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime();
+      }
+    });
 
     return result;
   }, [filters, skillsData]);
-
 
   return (
     <div
@@ -75,9 +81,7 @@ export const Skills = () => {
 
       {/* Filtres */}
       <SkillFilters
-        difficulty={filters.difficulty}
-        sort={filters.sort}
-        status={filters.status}
+        filters={filters}
         onFilterChange={setFilters}
       />
 
