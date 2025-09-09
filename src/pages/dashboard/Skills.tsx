@@ -33,9 +33,7 @@ export const Skills = () => {
 
     // Filtre par recherche (titre)
     if (filters.search.trim()) {
-      result = result.filter((s) => 
-        s.title.toLowerCase().includes(filters.search.toLowerCase())
-      );
+      result = result.filter((s) => s.title.toLowerCase().includes(filters.search.toLowerCase()));
     }
 
     // Filtre par difficulté
@@ -80,10 +78,7 @@ export const Skills = () => {
       </div>
 
       {/* Filtres */}
-      <SkillFilters
-        filters={filters}
-        onFilterChange={setFilters}
-      />
+      <SkillFilters filters={filters} onFilterChange={setFilters} />
 
       {/* Compteur de résultats */}
       <div className="text-sm text-slate-400 mb-4">
