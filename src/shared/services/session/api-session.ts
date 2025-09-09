@@ -3,6 +3,7 @@ import type {
   CreateSessionInput,
   CreateSessionResponse,
   Session,
+  SessionsQuery,
   UpdateSessionInput,
   UpdateSessionResponse,
 } from "./api-session.type";
@@ -79,4 +80,40 @@ export const useDeleteSession = (sessionId: string) => {
   );
 
   return { deleteSession, isPending, error };
+};
+
+export const useListSessions = (params: SessionsQuery) => {
+  const { userId, skill = "", quest = "", date = "", page = 1, limit = 20 } = params;
+
+  const search = new URLSearchParams();
+  search.set("userId", userId); // ← IMPORTANT
+  if (skill) search.set("skill", skill);
+  if (quest) search.set("quest", quest);
+  if (date) search.set("date", date);
+  search.set("page", String(page));
+  search.set("limit", String(limit));
+
+  const url = `${Constants.API_BASE_URL}/sessions/filter?${search.toString()}`;
+
+  const {
+    data,
+    isLoading: loading,
+    error,
+  } = useApi<{
+    items: Session[];
+    hasMore: boolean;
+    nextCursor: string | null;
+  }>(
+    { method: "GET", url, headers: { "Content-Type": "application/json; charset=UTF-8" } },
+    ["sessions", { userId, skill, quest, date, page, limit }],
+    Boolean(userId), // ← n’appelle pas si userId vide
+  );
+
+  return {
+    sessions: data?.items ?? [],
+    hasMore: data?.hasMore ?? false,
+    nextCursor: data?.nextCursor ?? null,
+    loading,
+    error,
+  };
 };

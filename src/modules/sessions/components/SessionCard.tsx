@@ -73,15 +73,16 @@ export const SessionCard = ({ session }: SessionCardProps) => {
         </div>
 
         {/* Footer actions (barre propre en bas) */}
-        <div className="mt-5 grid grid-cols-3 overflow-hidden rounded-lg border border-slate-700/60">
+        <div className="mt-5 grid grid-cols-[1fr_1fr_1.25fr] overflow-hidden rounded-lg border border-slate-700/60">
           <Button
             onClick={handlePlay}
             aria-label="Démarrer la session"
             className="btn-action btn-play h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white"
           >
             <Play className="h-4 w-4" />
-            <span className="ml-2 hidden sm:inline">Play</span>
+            <span className="ml-2 hidden sm:inline">Lancer</span>
           </Button>
+
           <Button
             onClick={handleValidate}
             aria-label="Valider la session"
@@ -90,13 +91,14 @@ export const SessionCard = ({ session }: SessionCardProps) => {
             <Check className="h-4 w-4" />
             <span className="ml-2 hidden sm:inline">Valider</span>
           </Button>
+
           <Button
             onClick={() => setIsDeleteDialogOpen(true)}
             aria-label="Supprimer la session"
             className="btn-action btn-delete h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white"
           >
             <Trash2 className="h-4 w-4" />
-            <span className="ml-2 hidden sm:inline">Supprimer</span>
+            {/* Évite la coupure du texte sur les écrans étroits */}
           </Button>
         </div>
       </div>
