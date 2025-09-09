@@ -1,15 +1,16 @@
 import { useState, useMemo } from "react";
 import type { FilterSkillDifficulty, FilterSkillStatus, SkillSort } from "../../modules/skills/skills.types";
 import { SkillFilters } from "../../modules/skills/components/SkillFilters";
-import { SkillGrid } from "../../modules/skills/components/SkillGrid";
+import { SkillCard } from "../../modules/skills/components/SkillCard";
+import { EmptySkills } from "../../modules/skills/components/EmptySkills";
 import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
-import { Plus } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Pagination } from "../../modules/skills/components/Pagination";
 import { useNavigate } from "react-router-dom";
-import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import { useGetSkills } from "@/shared/services/skill/api-skill";
 import { SKILLS_PER_PAGE } from "@/modules/skills/skills.const";
 import { useUser } from "@clerk/clerk-react";
+import "@/styles/sessions-listing.css";
 
 export const Skills = () => {
   const { isCollapsed } = useSidebarStore();
@@ -52,12 +53,6 @@ export const Skills = () => {
     return result;
   }, [filters, skillsData]);
 
-  const reset = useCanvasStore((state) => state.reset);
-
-  const handleCreateNewSkill = () => {
-    reset();
-    navigate("/canvas?createSkill=true");
-  };
 
   return (
     <div
@@ -65,34 +60,52 @@ export const Skills = () => {
         isCollapsed ? "pl-20" : "pl-64"
       } flex flex-col min-h-0`}
     >
-      <div className="flex items-center justify-between mb-6 flex-shrink-0">
-        <div>
-          <h1 className="text-2xl font-bold text-white">Mes Skills</h1>
-          {/* <p className="text-slate-400 text-sm mt-1">{skillsData && skillsData.length} skills au total</p> */}
-        </div>
-        <button
-          className="flex items-center gap-1 bg-slate-700 hover:bg-slate-600 focus:ring-2 focus:ring-blue-400 text-white font-medium px-3 py-1.5 rounded-md shadow-sm transition-all duration-150 text-sm"
-          type="button"
-          onClick={handleCreateNewSkill}
-        >
-          <Plus size={18} />
-          <span>Create a skill</span>
+      {/* Header */}
+      <div className="flex items-center gap-4 mb-6 flex-shrink-0">
+        <button onClick={() => navigate("/dashboard")} className="text-slate-400 hover:text-white transition-colors">
+          <ArrowLeft size={20} />
         </button>
+        <div>
+          <h1 className="text-2xl font-bold text-white">Tous vos skills</h1>
+          <p className="text-slate-400 text-sm mt-1">
+            Consultez, éditez ou supprimez vos compétences et suivez votre progression.
+          </p>
+        </div>
       </div>
-      <div className="flex-shrink-0">
-        <SkillFilters
-          difficulty={filters.difficulty}
-          sort={filters.sort}
-          status={filters.status}
-          onFilterChange={setFilters}
-        />
+
+      {/* Filtres */}
+      <SkillFilters
+        difficulty={filters.difficulty}
+        sort={filters.sort}
+        status={filters.status}
+        onFilterChange={setFilters}
+      />
+
+      {/* Compteur de résultats */}
+      <div className="text-sm text-slate-400 mb-4">
+        {filteredSkills.length} résultat{filteredSkills.length > 1 ? "s" : ""} affiché
+        {filteredSkills.length > 1 ? "s" : ""}.
       </div>
-      <div className="flex-1 min-h-[440px] overflow-y-auto scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-900 pt-6 pb-12">
-        <SkillGrid skills={filteredSkills} page={page} setPage={setPage} />
+
+      {/* Contenu principal */}
+      <div className="flex-1 min-h-0">
+        {filteredSkills.length === 0 ? (
+          <EmptySkills />
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {filteredSkills.map((skill) => (
+              <SkillCard key={skill.id} skill={skill} />
+            ))}
+          </div>
+        )}
       </div>
-      <div className="flex-shrink-0 flex items-center justify-center">
-        <Pagination page={page} setPage={setPage} totalPages={Math.ceil(filteredSkills.length / SKILLS_PER_PAGE)} />
-      </div>
+
+      {/* Pagination */}
+      {filteredSkills.length > 0 && (
+        <div className="flex-shrink-0 flex items-center justify-center mt-6">
+          <Pagination page={page} setPage={setPage} totalPages={Math.ceil(filteredSkills.length / SKILLS_PER_PAGE)} />
+        </div>
+      )}
     </div>
   );
 };
