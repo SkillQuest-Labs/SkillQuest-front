@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 import { useGetSkills } from "@/shared/services/skill/api-skill";
 import { SKILLS_PER_PAGE } from "@/modules/skills/skills.const";
 import { useUser } from "@clerk/clerk-react";
+import { Button } from "@/shared/components/ui/button";
+import { routes } from "@/routes/router.const";
 import "@/styles/sessions-listing.css";
 
 export const Skills = () => {
@@ -65,16 +67,28 @@ export const Skills = () => {
       } flex flex-col min-h-0`}
     >
       {/* Header */}
-      <div className="flex items-center gap-4 mb-6 flex-shrink-0">
-        <button onClick={() => navigate("/dashboard")} className="text-slate-400 hover:text-white transition-colors">
-          <ArrowLeft size={20} />
-        </button>
-        <div>
-          <h1 className="text-2xl font-bold text-white">Tous vos skills</h1>
-          <p className="text-slate-400 text-sm mt-1">
-            Consultez, éditez ou supprimez vos compétences et suivez votre progression.
-          </p>
+      <div className="flex items-center justify-between mb-6 flex-shrink-0">
+        <div className="flex items-center gap-4">
+          <button onClick={() => navigate("/dashboard")} className="text-slate-400 hover:text-white transition-colors">
+            <ArrowLeft size={20} />
+          </button>
+          <div>
+            <h1 className="text-2xl font-bold text-white">Tous vos skills</h1>
+            <p className="text-slate-400 text-sm mt-1">
+              Consultez, éditez ou supprimez vos compétences et suivez votre progression.
+            </p>
+          </div>
         </div>
+        
+        {/* Bouton Créer un skill - affiché seulement si la page n'est pas vide */}
+        {filteredSkills.length > 0 && (
+          <Button
+            onClick={() => navigate(`${routes.canvas.path}?createSkill=true`)}
+            className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white"
+          >
+            Créer un skill
+          </Button>
+        )}
       </div>
 
       {/* Filtres */}
