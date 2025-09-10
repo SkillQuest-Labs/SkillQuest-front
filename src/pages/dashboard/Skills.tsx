@@ -79,7 +79,7 @@ export const Skills = () => {
             </p>
           </div>
         </div>
-        
+
         {/* Bouton Créer un skill - affiché seulement si la page n'est pas vide */}
         {filteredSkills.length > 0 && (
           <Button

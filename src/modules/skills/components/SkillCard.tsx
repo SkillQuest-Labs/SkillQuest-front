@@ -1,5 +1,5 @@
 import "../../../styles/skills.css";
-import { statusColors, statusLabels } from "../skills.const";
+import { statusLabels } from "../skills.const";
 import { Button } from "@/shared/components/ui/button";
 import { Edit3, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -48,12 +48,6 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
         {/* Header */}
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
-            <span
-              aria-label="Difficulté"
-              className="skill-dot"
-              style={{ backgroundColor: statusColors[skill.status] }}
-              title={skill.difficulty}
-            />
             <h3 className="truncate font-semibold text-slate-100 leading-tight">{skill.title}</h3>
           </div>
 
@@ -65,10 +59,6 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
 
         {/* Infos */}
         <div className="mt-4 flex flex-wrap items-center gap-2 text-sm">
-          <div className="rounded-full bg-slate-800/60 px-3 py-1">
-            <span className="text-slate-400">Difficulté :</span>{" "}
-            <span className="font-medium text-slate-100">{skill.difficulty}</span>
-          </div>
           {typeof skill.progressValue === "number" && (
             <div className="rounded-full bg-slate-800/60 px-3 py-1">
               <span className="text-slate-400">Progression :</span>{" "}
