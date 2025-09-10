@@ -2,13 +2,44 @@ import type { SkillRadarData } from "@/modules/stats/types/stats.types";
 
 export const getChartOptions = (skillRadarMetrics: SkillRadarData[]) => {
   const radarChartOptions = () => {
-    const indicators = skillRadarMetrics.map((skill) => ({
-      name: skill.skillName,
-      color: "#FFF",
-      max: 100,
-    }));
+    // ensure there are at least 3 axes to form a polygon
+    let indicators, radarData;
+    const minAxes = 3;
 
-    const radarData = skillRadarMetrics.map((skill) => skill.masteryLevel);
+    if (skillRadarMetrics.length < minAxes) {
+      // Cas avec moins de 3 skills : on ajoute des axes fictifs
+      indicators = [];
+      radarData = [];
+
+      // Ajouter les vrais skills
+      skillRadarMetrics.forEach((skill) => {
+        indicators.push({
+          name: skill.skillName,
+          color: "#FFF",
+          max: 100,
+        });
+        radarData.push(skill.masteryLevel);
+      });
+
+      // Ajouter des axes fictifs invisibles pour atteindre le minimum
+      const axesToAdd = minAxes - skillRadarMetrics.length;
+      for (let i = 0; i < axesToAdd; i++) {
+        indicators.push({
+          name: "", // Axe fictif invisible
+          color: "transparent",
+          max: 100,
+        });
+        radarData.push(0); // Valeur 0 pour les axes fictifs
+      }
+    } else {
+      // Cas normal : 3+ skills
+      indicators = skillRadarMetrics.map((skill) => ({
+        name: skill.skillName,
+        color: "#FFF",
+        max: 100,
+      }));
+      radarData = skillRadarMetrics.map((skill) => skill.masteryLevel);
+    }
 
     // Main series (the visible polygon)
     const mainSeries = {
@@ -89,7 +120,10 @@ export const getChartOptions = (skillRadarMetrics: SkillRadarData[]) => {
 
       data: [
         {
-          value: indicators.map((_, j) => (j === idx ? skill.masteryLevel : null)),
+          value: indicators.map((_, j) => {
+            // Seul l'axe correspondant au skill a une valeur, les autres sont null
+            return j === idx ? skill.masteryLevel : null;
+          }),
         },
       ],
 
@@ -200,6 +234,8 @@ export const getChartOptions = (skillRadarMetrics: SkillRadarData[]) => {
             fontWeight: 600,
           },
           formatter: (name: string) => {
+            // Hide dummy axes in the case of a single skill
+            if (name === "") return "";
             const maxLength = skillRadarMetrics.length > 8 ? 15 : skillRadarMetrics.length > 6 ? 18 : 20;
             return name.length > maxLength ? name.substring(0, maxLength) + "..." : name;
           },
