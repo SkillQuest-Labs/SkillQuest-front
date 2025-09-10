@@ -5,11 +5,7 @@ import { useDeleteSession } from "@/shared/services/session/api-session";
 import type { Session } from "@/shared/services/session/api-session.type";
 import { Check, Play, Trash2 } from "lucide-react";
 import { useState } from "react";
-
-const getDateToTime = (iso: string) => {
-  const d = new Date(iso);
-  return `${String(d.getUTCHours()).padStart(2, "0")}:${String(d.getUTCMinutes()).padStart(2, "0")}`;
-};
+import { getDateToTime } from "../utils/session.utils";
 
 type SessionCardProps = { session: Session };
 
@@ -38,9 +34,7 @@ export const SessionCard = ({ session }: SessionCardProps) => {
 
   return (
     <>
-      {/* Carte en colonne: header → infos → footer */}
       <div className="flex h-full flex-col">
-        {/* Header */}
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <span
@@ -52,13 +46,11 @@ export const SessionCard = ({ session }: SessionCardProps) => {
             <h3 className="truncate font-semibold text-slate-100 leading-tight">{session.linkedSkill.title}</h3>
           </div>
 
-          {/* Date compacte à droite */}
           <span className="rounded-full bg-slate-800/60 px-3 py-1 text-xs text-slate-300">
             {session.date.slice(0, 10)}
           </span>
         </div>
 
-        {/* Infos */}
         <div className="mt-4 flex flex-wrap items-center gap-2 text-sm">
           <div className="rounded-full bg-slate-800/60 px-3 py-1">
             <span className="text-slate-400">Heure :</span>{" "}
@@ -72,7 +64,6 @@ export const SessionCard = ({ session }: SessionCardProps) => {
           </div>
         </div>
 
-        {/* Footer actions (barre propre en bas) */}
         <div className="mt-5 grid grid-cols-[1fr_1fr_1.25fr] overflow-hidden rounded-lg border border-slate-700/60">
           <Button
             onClick={handlePlay}
@@ -98,7 +89,6 @@ export const SessionCard = ({ session }: SessionCardProps) => {
             className="btn-action btn-delete h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white"
           >
             <Trash2 className="h-4 w-4" />
-            {/* Évite la coupure du texte sur les écrans étroits */}
           </Button>
         </div>
       </div>

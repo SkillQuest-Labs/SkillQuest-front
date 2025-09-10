@@ -1,48 +1,62 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { routes } from "@/routes/router.const";
-import { ArrowLeft, Search, X, Calendar as CalendarIcon } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import "@/styles/sessions-listing.css";
 import { SessionCard } from "./components/SessionCard";
 import { EmptySessions } from "./components/EmptySession";
 import { useListSessions } from "@/shared/services/session/api-session";
-import { useUser } from "@clerk/clerk-react";
+import { SessionFilter, type SessionFilterValue } from "./components/SessionFilter";
+import { Pagination } from "./components/SessionPagination";
 
-const SESSION_FILTER_INIT = {
+const SESSION_FILTER_INIT: SessionFilterValue = {
   skill: "",
   quest: "",
   date: "",
 };
+
 export const SessionsListing = () => {
   const navigate = useNavigate();
-  const { user } = useUser();
-  const userId = user?.id ?? "";
 
-  const [sessionFilter, setSessionFilter] = useState(SESSION_FILTER_INIT);
+  const [filters, setFilters] = useState<SessionFilterValue>(SESSION_FILTER_INIT);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const [page, setPage] = useState(1);
-  const limit = 10;
+  const pageSize = 8;
 
-  const { sessions, loading } = useListSessions({
-    skill: sessionFilter.skill,
-    quest: sessionFilter.quest,
-    date: sessionFilter.date,
-    limit,
-    page,
-    userId,
+  const {
+    sessions,
+    total,
+    pageCount: totalPages,
+    loading,
+    limit: effectivePageSize,
+  } = useListSessions({
+    skill: filters.skill,
+    quest: filters.quest,
+    date: filters.date,
+    limit: pageSize,
+    page: currentPage,
   });
 
-  const hasActiveFilters = !!(sessionFilter.skill || sessionFilter.quest || sessionFilter.date);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters.skill, filters.quest, filters.date]);
 
-  const resetFilters = () => {
-    setSessionFilter(SESSION_FILTER_INIT);
-    setPage(1);
+  const handleFilterChange = (next: SessionFilterValue) => {
+    setFilters(next);
+    setCurrentPage(1);
   };
 
+  const handleResetFilters = () => {
+    setFilters(SESSION_FILTER_INIT);
+    setCurrentPage(1);
+  };
+
+  const computedTotalPages = totalPages || Math.max(1, Math.ceil((total || 0) / (effectivePageSize || pageSize)));
+
   return (
-    <div className="p-4 md:p-8 flex flex-col min-h-[calc(100vh-4rem)] w-full">
-      {/* Header: flèche + titre + sous-titre */}
+    <div className="p-4 md:p-8 flex flex-col min-h-[calc(100vh-4rem)] w-full has-fixed-pager">
+      {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-start gap-3">
           <Button
@@ -62,104 +76,7 @@ export const SessionsListing = () => {
         </div>
       </div>
 
-      {/* Barre de filtres (inputs contrôlés, pas de filtrage local) */}
-      <div className="mt-2 rounded-2xl border border-slate-700/60 bg-slate-900/50 p-4">
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {/* Filtre Skill */}
-          <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <input
-              value={sessionFilter.skill}
-              onChange={(e) => {
-                setSessionFilter({ ...sessionFilter, skill: e.target.value });
-                setPage(1);
-              }}
-              placeholder="Filtrer par skill…"
-              className="w-full rounded-lg border border-slate-700 bg-slate-900/70 pl-10 pr-9 py-2 text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
-            />
-            {sessionFilter.skill && (
-              <button
-                aria-label="Effacer le filtre skill"
-                onClick={() => {
-                  setSessionFilter({ ...sessionFilter, skill: "" });
-                  setPage(1);
-                }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-slate-400 hover:text-slate-200 hover:bg-slate-800/70"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            )}
-          </div>
-
-          {/* Filtre Quête */}
-          <div className="relative">
-            <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <input
-              value={sessionFilter.quest}
-              onChange={(e) => {
-                setSessionFilter({ ...sessionFilter, quest: e.target.value });
-                setPage(1);
-              }}
-              placeholder="Filtrer par quête…"
-              className="w-full rounded-lg border border-slate-700 bg-slate-900/70 pl-10 pr-9 py-2 text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
-            />
-            {sessionFilter.quest && (
-              <button
-                aria-label="Effacer le filtre quête"
-                onClick={() => {
-                  setSessionFilter({ ...sessionFilter, quest: "" });
-                  setPage(1);
-                }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-slate-400 hover:text-slate-200 hover:bg-slate-800/70"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            )}
-          </div>
-
-          {/* Filtre Date */}
-          <div className="relative">
-            <CalendarIcon className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <input
-              type="date"
-              value={sessionFilter.date}
-              onChange={(e) => {
-                setSessionFilter({ ...sessionFilter, date: e.target.value });
-                setPage(1);
-              }}
-              className="w-full rounded-lg border border-slate-700 bg-slate-900/70 pl-10 pr-3 py-2 text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
-            />
-            {sessionFilter.date && (
-              <button
-                aria-label="Effacer le filtre date"
-                onClick={() => {
-                  setSessionFilter({ ...sessionFilter, date: "" });
-                  setPage(1);
-                }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-slate-400 hover:text-slate-200 hover:bg-slate-800/70"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Actions/infos filtres */}
-        <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <div className="text-sm text-slate-400">
-            {sessions.length} résultat{sessions.length > 1 ? "s" : ""} affiché{sessions.length > 1 ? "s" : ""}.
-          </div>
-
-          {hasActiveFilters && (
-            <Button
-              onClick={resetFilters}
-              className="self-start sm:self-auto rounded-lg bg-slate-800/70 text-slate-200 hover:bg-slate-700"
-            >
-              Réinitialiser les filtres
-            </Button>
-          )}
-        </div>
-      </div>
+      <SessionFilter value={filters} onChange={handleFilterChange} onReset={handleResetFilters} resultsCount={total} />
 
       <div className="mt-6">
         {loading ? (
@@ -179,21 +96,10 @@ export const SessionsListing = () => {
           </div>
         )}
 
-        {!!sessions.length && (
-          <div className="mt-6 flex justify-center gap-3">
-            <Button
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              className="rounded-lg bg-slate-800/70 text-slate-200 hover:bg-slate-700"
-              disabled={page === 1}
-            >
-              Précédent
-            </Button>
-            <Button
-              onClick={() => setPage((p) => p + 1)}
-              className="rounded-lg bg-slate-800/70 text-slate-200 hover:bg-slate-700"
-            >
-              Suivant
-            </Button>
+        {/* Pagination : s'affiche seulement si le total dépasse la taille de page */}
+        {total > (effectivePageSize || pageSize) && (
+          <div className="pager-fixed">
+            <Pagination currentPage={currentPage} totalPages={computedTotalPages} onPageChange={setCurrentPage} />
           </div>
         )}
       </div>

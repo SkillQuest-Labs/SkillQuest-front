@@ -35,3 +35,9 @@ export type CalendarEvent = {
     linkedQuests: { id: string; title: string }[];
   };
 };
+
+export type SessionFilterValue = {
+  skill: string;
+  quest: string;
+  date: string;
+};

@@ -94,3 +94,8 @@ export const convertSessionsToEvents = (sessions: Sessions): CalendarEvent[] => 
     },
   }));
 };
+
+export const getDateToTime = (date: string) => {
+  const dateTime = new Date(date);
+  return `${String(dateTime.getUTCHours()).padStart(2, "0")}:${String(dateTime.getUTCMinutes()).padStart(2, "0")}`;
+};

@@ -2,6 +2,7 @@ import { Constants } from "@/shared/constante/api-constante";
 import type {
   CreateSessionInput,
   CreateSessionResponse,
+  ListSessionsResponse,
   Session,
   SessionsQuery,
   UpdateSessionInput,
@@ -83,10 +84,9 @@ export const useDeleteSession = (sessionId: string) => {
 };
 
 export const useListSessions = (params: SessionsQuery) => {
-  const { userId, skill = "", quest = "", date = "", page = 1, limit = 20 } = params;
+  const { skill = "", quest = "", date = "", page = 1, limit = 20 } = params;
 
   const search = new URLSearchParams();
-  search.set("userId", userId); // ← IMPORTANT
   if (skill) search.set("skill", skill);
   if (quest) search.set("quest", quest);
   if (date) search.set("date", date);
@@ -99,20 +99,17 @@ export const useListSessions = (params: SessionsQuery) => {
     data,
     isLoading: loading,
     error,
-  } = useApi<{
-    items: Session[];
-    hasMore: boolean;
-    nextCursor: string | null;
-  }>(
+  } = useApi<ListSessionsResponse>(
     { method: "GET", url, headers: { "Content-Type": "application/json; charset=UTF-8" } },
-    ["sessions", { userId, skill, quest, date, page, limit }],
-    Boolean(userId), // ← n’appelle pas si userId vide
+    ["sessions", { skill, quest, date, page, limit }],
   );
 
   return {
-    sessions: data?.items ?? [],
-    hasMore: data?.hasMore ?? false,
-    nextCursor: data?.nextCursor ?? null,
+    sessions: data?.items ?? ([] as Session[]),
+    total: data?.total ?? 0,
+    limit: data?.limit ?? limit,
+    page: data?.page ?? page,
+    pageCount: data?.pageCount ?? 0,
     loading,
     error,
   };
