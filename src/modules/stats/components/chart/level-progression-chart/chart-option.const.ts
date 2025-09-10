@@ -1,7 +1,7 @@
 import { baseBarChartOptions } from "@/shared/utils/base-bar-chart-options.const";
 import type { LevelProgression } from "@/modules/stats/types/stats.types";
 import { buildFormatterTooltip } from "./toolip-formatter.const";
-import { generateXpThresholds } from "./level-progression.const";
+import { generateXpThresholds } from "@/modules/stats/stats.const";
 
 export type ChartOptionsProps = {
   levelProgressionData: LevelProgression[];
