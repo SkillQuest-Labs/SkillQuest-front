@@ -83,23 +83,14 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
         )}
 
         {/* Footer actions (barre propre en bas) */}
-        <div className="mt-5 grid grid-cols-[1fr_1fr_1.25fr] overflow-hidden rounded-lg border border-slate-700/60">
-          <Button
-            onClick={handleCardClick}
-            aria-label="Voir le skill"
-            className="btn-action btn-edit h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white"
-          >
-            <Edit3 className="h-4 w-4" />
-            <span className="ml-2 hidden sm:inline">Voir</span>
-          </Button>
-
+        <div className="mt-5 grid grid-cols-2 overflow-hidden rounded-lg border border-slate-700/60">
           <Button
             onClick={handleCardClick}
             aria-label="Éditer le skill"
             className="btn-action btn-edit h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white"
           >
             <Edit3 className="h-4 w-4" />
-            <span className="ml-2 hidden sm:inline">Éditer</span>
+            <span className="ml-2 hidden sm:inline"></span>
           </Button>
 
           <Button
