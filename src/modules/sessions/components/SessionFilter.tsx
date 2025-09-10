@@ -60,7 +60,7 @@ export const SessionFilter = ({ value, onChange, onReset, resultsCount }: Sessio
             type="date"
             value={value.date}
             onChange={(e) => onChange({ ...value, date: e.target.value })}
-            className="w-full rounded-lg border border-slate-700 bg-slate-900/70 pl-10 pr-3 py-2 text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+            className="date-input w-full rounded-lg border border-slate-700 bg-slate-900/70 pl-10 pr-3 py-2 text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
           />
           {value.date && (
             <button

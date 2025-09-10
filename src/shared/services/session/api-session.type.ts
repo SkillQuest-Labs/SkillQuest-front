@@ -67,3 +67,25 @@ export type ListSessionsResponse = {
   limit: number;
   pageCount: number;
 };
+
+export type QuestData = {
+  id: string;
+  title: string;
+  xp: number;
+};
+
+export type ValidateSessionDto = {
+  sessionId: string;
+  completedQuests: QuestData[];
+};
+
+export type ValidateSessionResponse = {
+  success: boolean;
+  message: string;
+  xpGained: number;
+  newLevel: number;
+  xpToNextLevel: number;
+  levelUp: boolean;
+  currentXp: number;
+  xpForCurrentLevel: number;
+};

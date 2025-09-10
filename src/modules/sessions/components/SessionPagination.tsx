@@ -1,8 +1,9 @@
+import { Button } from "@/shared/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export type PaginationProps = {
-  currentPage: number; // 1-based
-  totalPages: number; // nombre total de pages
+  currentPage: number;
+  totalPages: number;
   onPageChange: (nextPage: number) => void;
   className?: string;
 };
@@ -33,8 +34,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange, className = 
 
   return (
     <div className={`pager ${className}`}>
-      {/* Précédent */}
-      <button
+      <Button
         type="button"
         aria-label="Page précédente"
         className={`pager__btn pager__btn--icon ${isPrevDisabled ? "is-disabled" : ""}`}
@@ -42,29 +42,27 @@ export const Pagination = ({ currentPage, totalPages, onPageChange, className = 
         onClick={() => !isPrevDisabled && onPageChange(currentPage - 1)}
       >
         <ChevronLeft className="h-4 w-4" />
-      </button>
+      </Button>
 
-      {/* Numéros + ellipses */}
-      {items.map((it, idx) =>
-        it === "..." ? (
-          <span key={`dots-${idx}`} className="pager__ellipsis">
+      {items.map((pageItem, itemIndex) =>
+        pageItem === "..." ? (
+          <span key={`dots-${itemIndex}`} className="pager__ellipsis">
             …
           </span>
         ) : (
-          <button
-            key={it}
+          <Button
+            key={pageItem}
             type="button"
-            aria-current={it === currentPage ? "page" : undefined}
-            className={`pager__btn ${it === currentPage ? "is-active" : ""}`}
-            onClick={() => onPageChange(it as number)}
+            aria-current={pageItem === currentPage ? "page" : undefined}
+            className={`pager__btn ${pageItem === currentPage ? "is-active" : ""}`}
+            onClick={() => onPageChange(pageItem as number)}
           >
-            {it}
-          </button>
+            {pageItem}
+          </Button>
         ),
       )}
 
-      {/* Suivant */}
-      <button
+      <Button
         type="button"
         aria-label="Page suivante"
         className={`pager__btn pager__btn--icon ${isNextDisabled ? "is-disabled" : ""}`}
@@ -72,7 +70,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange, className = 
         onClick={() => !isNextDisabled && onPageChange(currentPage + 1)}
       >
         <ChevronRight className="h-4 w-4" />
-      </button>
+      </Button>
     </div>
   );
 };

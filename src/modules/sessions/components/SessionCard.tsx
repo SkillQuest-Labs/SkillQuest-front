@@ -1,20 +1,61 @@
 import { ConfirmDeleteDialogue } from "@/component/confirm-dialogue/ConfirmDeleteDialogue";
 import { showToast } from "@/component/notification/show-toast";
 import { Button } from "@/shared/components/ui/button";
-import { useDeleteSession } from "@/shared/services/session/api-session";
+import { useDeleteSession, useValidateSession } from "@/shared/services/session/api-session";
 import type { Session } from "@/shared/services/session/api-session.type";
 import { Check, Play, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { getDateToTime } from "../utils/session.utils";
+import { SessionValidationModal } from "./SessionValidationModal";
 
-type SessionCardProps = { session: Session };
+type SessionCardProps = {
+  session: Session;
+};
 
 export const SessionCard = ({ session }: SessionCardProps) => {
   const { deleteSession } = useDeleteSession(session.id);
+  const { validateSession, loading: validationLoading } = useValidateSession();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isValidationModalOpen, setIsValidationModalOpen] = useState(false);
 
   const handlePlay = () => {};
-  const handleValidate = () => {};
+
+  const handleValidate = () => {
+    setIsValidationModalOpen(true);
+  };
+
+  const handleValidateSession = async (validatedQuests: string[]) => {
+    try {
+      const completedQuests = session.quests
+        .filter((quest) => validatedQuests.includes(quest.id))
+        .map((quest) => ({
+          id: quest.questId || quest.id,
+          title: quest.quest?.title || quest.title,
+          xp: 0,
+        }));
+
+      await validateSession({
+        sessionId: session.id,
+        completedQuests,
+      });
+
+      showToast({
+        title: "Session validée !",
+        description: "Votre session a été validée avec succès",
+        status: "success",
+      });
+
+      setIsValidationModalOpen(false);
+    } catch (error) {
+      console.error("Erreur lors de la validation de la session:", error);
+      showToast({
+        title: "Erreur",
+        description: "Erreur lors de la validation de la session",
+        status: "error",
+      });
+    }
+  };
+
   const handleDelete = async () => {
     try {
       await deleteSession();
@@ -98,6 +139,14 @@ export const SessionCard = ({ session }: SessionCardProps) => {
         setIsDeleteDialogOpen={setIsDeleteDialogOpen}
         messageDialogue="Êtes-vous sûr de vouloir supprimer la session ? Cette action est irréversible."
         handleConfirmDelete={handleDelete}
+      />
+
+      <SessionValidationModal
+        isOpen={isValidationModalOpen}
+        setIsOpen={setIsValidationModalOpen}
+        session={session}
+        onValidateSession={handleValidateSession}
+        validationLoading={validationLoading}
       />
     </>
   );

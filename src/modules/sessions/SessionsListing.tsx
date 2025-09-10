@@ -7,8 +7,9 @@ import "@/styles/sessions-listing.css";
 import { SessionCard } from "./components/SessionCard";
 import { EmptySessions } from "./components/EmptySession";
 import { useListSessions } from "@/shared/services/session/api-session";
-import { SessionFilter, type SessionFilterValue } from "./components/SessionFilter";
+import { SessionFilter } from "./components/SessionFilter";
 import { Pagination } from "./components/SessionPagination";
+import type { SessionFilterValue } from "./types/session-form.type";
 
 const SESSION_FILTER_INIT: SessionFilterValue = {
   skill: "",
@@ -56,7 +57,6 @@ export const SessionsListing = () => {
 
   return (
     <div className="p-4 md:p-8 flex flex-col min-h-[calc(100vh-4rem)] w-full has-fixed-pager">
-      {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-start gap-3">
           <Button
@@ -96,7 +96,6 @@ export const SessionsListing = () => {
           </div>
         )}
 
-        {/* Pagination : s'affiche seulement si le total dépasse la taille de page */}
         {total > (effectivePageSize || pageSize) && (
           <div className="pager-fixed">
             <Pagination currentPage={currentPage} totalPages={computedTotalPages} onPageChange={setCurrentPage} />

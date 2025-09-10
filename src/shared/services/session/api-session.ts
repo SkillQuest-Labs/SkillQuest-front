@@ -7,6 +7,8 @@ import type {
   SessionsQuery,
   UpdateSessionInput,
   UpdateSessionResponse,
+  ValidateSessionDto,
+  ValidateSessionResponse,
 } from "./api-session.type";
 import { useApi, useApiAsync } from "../useApi";
 
@@ -110,6 +112,28 @@ export const useListSessions = (params: SessionsQuery) => {
     limit: data?.limit ?? limit,
     page: data?.page ?? page,
     pageCount: data?.pageCount ?? 0,
+    loading,
+    error,
+  };
+};
+
+export const useValidateSession = () => {
+  const options = {
+    method: "POST",
+    url: `${Constants.API_BASE_URL}/sessions/validate`,
+    headers: {
+      "Content-Type": "application/json; charset=UTF-8",
+    },
+  };
+
+  const {
+    mutateAsync: validateSession,
+    isPending: loading,
+    error,
+  } = useApiAsync<ValidateSessionResponse, ValidateSessionDto>(options, ["sessions"]);
+
+  return {
+    validateSession,
     loading,
     error,
   };
