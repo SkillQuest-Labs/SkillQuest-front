@@ -78,25 +78,27 @@ export const generateXpThresholds = (maxLevel: number): XpThreshold[] => {
   return thresholds;
 };
 
-export const getUserLevel = (currentXp: number, batchSize = 10): number => {
+export const getUserLevel = (currentXp: number, batchSize = 10): { level: number; xpMaxForLevel: number } => {
   let maxLevel = batchSize;
   let level = 0;
+  let xpMaxForLevel = 0;
 
   while (true) {
     const thresholds = generateXpThresholds(maxLevel);
 
-    // if the user's xp is covered by this batch
-    if (currentXp < thresholds[thresholds.length - 1].xpCumulative) {
-      for (const threshold of thresholds) {
-        if (currentXp >= threshold.xpCumulative) {
-          level = threshold.level;
-        } else {
-          break;
-        }
+    for (let i = 0; i < thresholds.length; i++) {
+      const threshold = thresholds[i];
+      const nextThreshold = thresholds[i + 1];
+
+      if (currentXp >= threshold.xpRequired) {
+        level = threshold.level;
+        xpMaxForLevel = nextThreshold ? nextThreshold.xpRequired : threshold.xpRequired;
+      } else {
+        // as soon as we find a threshold the user hasn't reached, we return the current level
+        return { level, xpMaxForLevel };
       }
-      return level;
     }
-    // otherwise, increase the upper bound and try again
+
     maxLevel += batchSize;
   }
 };

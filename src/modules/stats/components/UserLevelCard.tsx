@@ -33,21 +33,21 @@ export const UserLevelCard = ({
       )}
       onClick={onClick}
     >
-      {/* Glow effect intense */}
-      <div className="absolute inset-0 rounded-2xl blur-2xl opacity-30 group-hover:opacity-60 transition-opacity duration-500 bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500 animate-pulse" />
+      {/* Glow effect soft & smooth */}
+      <div className="absolute inset-0 rounded-2xl blur-md opacity-10 group-hover:opacity-20 transition-opacity duration-500 bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500" />
 
       {/* Main card */}
       <div
         className={cn(
           "relative bg-gradient-to-br from-gray-900/95 via-purple-900/20 to-gray-900/95",
           "backdrop-blur-sm border-2 border-purple-500/40 rounded-2xl p-6",
-          "shadow-2xl hover:shadow-purple-500/25 transition-all duration-500",
+          "shadow-xl hover:shadow-purple-500/10 transition-all duration-500",
           "flex flex-col justify-between",
         )}
       >
         {/* Badge légendaire */}
         <div className="absolute -top-3 -right-3 z-10">
-          <div className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white text-xs px-3 py-1 rounded-full font-bold animate-pulse shadow-lg">
+          <div className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white text-xs px-3 py-1 rounded-full font-bold animate-pulse shadow-md">
             NIVEAU {currentLevel}
           </div>
         </div>
@@ -67,16 +67,13 @@ export const UserLevelCard = ({
 
           {/* Icon with special effects */}
           <div className="relative">
-            <div className="absolute inset-0 rounded-xl blur-lg opacity-60 bg-gradient-to-r from-purple-500 to-pink-500 animate-pulse" />
-            <div className="relative p-4 rounded-xl bg-gradient-to-br from-purple-500 via-pink-500 to-yellow-500 shadow-2xl">
-              <Icon className="h-8 w-8 text-white drop-shadow-lg" />
+            <div className="absolute inset-0 rounded-xl blur-sm opacity-30 bg-gradient-to-r from-purple-500 to-pink-500" />
+            <div className="relative p-4 rounded-xl bg-gradient-to-br from-purple-500 via-pink-500 to-yellow-500 shadow-xl">
+              <Icon className="h-8 w-8 text-white drop-shadow" />
             </div>
 
-            <div className="absolute inset-0 rounded-xl border-2 border-purple-400/30 animate-ping" />
-            <div
-              className="absolute inset-0 rounded-xl border border-pink-400/20 animate-pulse"
-              style={{ animationDelay: "0.5s" }}
-            />
+            <div className="absolute inset-0 rounded-xl border-2 border-purple-400/10" />
+            <div className="absolute inset-0 rounded-xl border border-pink-400/10" style={{ animationDelay: "0.5s" }} />
           </div>
         </div>
 
@@ -96,19 +93,19 @@ export const UserLevelCard = ({
                 className={cn(
                   "h-full rounded-full transition-all duration-2000 ease-out relative overflow-hidden",
                   "bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500",
-                  "shadow-lg shadow-purple-500/50",
+                  "shadow-md shadow-purple-500/20",
                 )}
                 style={{ width: `${progressPercentage}%` }}
               >
                 {/* Moving shine effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse" />
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white/40 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white/20 to-transparent" />
               </div>
             </div>
 
             {/* Progress indicator */}
             <div
-              className="absolute top-0 h-4 w-1 bg-white/80 rounded-full transition-all duration-2000 ease-out shadow-lg"
+              className="absolute top-0 h-4 w-1 bg-white/60 rounded-full transition-all duration-2000 ease-out shadow"
               style={{ left: `${progressPercentage}%`, transform: "translateX(-50%)" }}
             />
           </div>
@@ -120,14 +117,14 @@ export const UserLevelCard = ({
         </div>
 
         {/* Animated border effect */}
-        <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-yellow-500/20 p-[2px]">
+        <div className="absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500">
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-yellow-500/10 p-[2px]">
             <div className="w-full h-full bg-gray-900/90 rounded-2xl" />
           </div>
         </div>
 
         {/* Inner glow effect */}
-        <div className="absolute inset-4 rounded-xl bg-gradient-to-r from-purple-500/5 via-pink-500/5 to-yellow-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        <div className="absolute inset-4 rounded-xl bg-gradient-to-r from-purple-500/2 via-pink-500/2 to-yellow-500/2 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
     </div>
   );
