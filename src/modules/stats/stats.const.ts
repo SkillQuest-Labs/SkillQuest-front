@@ -1,3 +1,5 @@
+import type { XpThreshold } from "./types/stats.types";
+
 export const colorVariants = {
   blue: {
     bg: "from-blue-500/20 via-blue-600/10 to-blue-700/20",
@@ -55,4 +57,46 @@ export const badgeVariants = {
   rare: "bg-gradient-to-r from-purple-400 to-pink-500 text-white text-xs px-2 py-1 rounded-full font-bold",
   legendary:
     "bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white text-xs px-2 py-1 rounded-full font-bold animate-pulse",
+};
+
+export const generateXpThresholds = (maxLevel: number): XpThreshold[] => {
+  const thresholds: XpThreshold[] = [];
+  let cumulative = 0;
+
+  for (let level = 1; level <= maxLevel; level++) {
+    let alpha = 1.5;
+    if (level > 5 && level <= 10) alpha = 2;
+    else if (level > 10) alpha = 2.5;
+
+    const baseXp = 100;
+    const xpRequired = Math.round(baseXp * Math.pow(level, alpha));
+
+    cumulative += xpRequired;
+    thresholds.push({ level, xpRequired, xpCumulative: cumulative });
+  }
+
+  return thresholds;
+};
+
+export const getUserLevel = (currentXp: number, batchSize = 10): number => {
+  let maxLevel = batchSize;
+  let level = 0;
+
+  while (true) {
+    const thresholds = generateXpThresholds(maxLevel);
+
+    // if the user's xp is covered by this batch
+    if (currentXp < thresholds[thresholds.length - 1].xpCumulative) {
+      for (const threshold of thresholds) {
+        if (currentXp >= threshold.xpCumulative) {
+          level = threshold.level;
+        } else {
+          break;
+        }
+      }
+      return level;
+    }
+    // otherwise, increase the upper bound and try again
+    maxLevel += batchSize;
+  }
 };

@@ -1,8 +1,8 @@
 // Types
 export type { ChartData, UserStats } from "../../types/stats.types";
 
+export { QuestCompletionChart } from "./quest-completion-chart";
 export { SkillExperienceChart } from "./skill-experience-chart/SkillExperienceChart";
-export { QuestCompletionChart } from "./quest-completion-chart/QuestCompletionChart";
 export { SkillRadarChart } from "./skill-radar-chart/SkillRadarChart";
 
 // Mock Data

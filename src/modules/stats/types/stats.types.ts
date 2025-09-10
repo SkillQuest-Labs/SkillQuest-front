@@ -40,6 +40,7 @@ export interface QuestCompletionMetric {
   completedQuests: number;
   remainingQuests: number;
   totalQuests: number;
+  totalXp: number;
 }
 
 export interface SkillRadarData {
