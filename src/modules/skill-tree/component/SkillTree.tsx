@@ -11,7 +11,6 @@ import { RenderConcentricCircles } from "./concentric-circles/RenderConcentricCi
 import { NodeRenderer } from "./render-node-component/NodeRenderer";
 import { ConnectionsRenderer } from "./render-node-connections/ConnectionsRenderer";
 import { RenderNodeDetails } from "./NodeDetails";
-import { SkillTreeLegends } from "./SkillTreeLegends";
 import { useContainerSize } from "../hooks/useContainerSize";
 
 export type SkillTreeDataProps = {
@@ -233,7 +232,7 @@ export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreePro
       </div>
       {selectedNodeData && !minimalistView && <RenderNodeDetails selectedNodeData={selectedNodeData} />}
       {/* Skill Tree Legend */}
-      {circularSkillNodes.length > 0 && !minimalistView && <SkillTreeLegends />}
+      {/* {circularSkillNodes.length > 0 && !minimalistView && <SkillTreeLegends />} */}
     </div>
   );
 };

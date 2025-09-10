@@ -102,13 +102,15 @@ export class DependencyGraph {
     return Array.from(descendants);
   }
 
-  // method to get all nodes in the connected path (ancestors + descendants)
+  // method to get only direct connections (direct prerequisites + direct dependents)
   getConnectedPath(nodeId: string): string[] {
     const pathNodes = new Set<string>();
     pathNodes.add(nodeId); // Include the clicked node itself
 
-    this.getAncestors(nodeId).forEach((id) => pathNodes.add(id));
-    this.getDescendants(nodeId).forEach((id) => pathNodes.add(id));
+    // Add only direct prerequisites (parents)
+    this.getPrerequisites(nodeId).forEach((id) => pathNodes.add(id));
+    // Add only direct dependents (children)
+    this.getDependents(nodeId).forEach((id) => pathNodes.add(id));
 
     return Array.from(pathNodes);
   }
