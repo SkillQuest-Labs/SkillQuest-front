@@ -369,21 +369,9 @@ export const SkillDetail = () => {
               <CardContent className="space-y-2">
                 <Button
                   onClick={() => navigate(`/canvas?skillId=${skillId}`)}
-                  className="w-full cursor-pointer bg-slate-700 hover:bg-blue-700 text-white border border-slate-600"
+                  className="w-full cursor-pointer bg-slate-700 hover:bg-[#1D283D] text-white border border-slate-600"
                 >
                   Ouvrir dans le Canvas
-                </Button>
-                <Button
-                  onClick={() => navigate(`/live-view?skillId=${skillId}`)}
-                  className="w-full cursor-pointer bg-slate-700 hover:bg-purple-800 text-white border border-slate-600 relative"
-                >
-                  <div className="flex items-center justify-center gap-2">
-                    <div className="relative">
-                      <div className="w-2 h-2 bg-purple-400 rounded-full animate-[pulse_5s_ease-in-out_infinite]"></div>
-                      <div className="absolute inset-0 w-2 h-2 bg-purple-400 rounded-full animate-ping opacity-75"></div>
-                    </div>
-                    Live View
-                  </div>
                 </Button>
                 <Button
                   onClick={handleDelete}
