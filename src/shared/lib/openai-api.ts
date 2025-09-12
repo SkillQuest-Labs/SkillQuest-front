@@ -16,13 +16,13 @@ const withTimeout = <T>(promise: Promise<T>, timeoutMs: number): Promise<T> => {
 };
 
 export const callOpenaiApi = async (prompt: string): Promise<string> => {
-  console.log("🤖 [OpenAI API] Début de l'appel API");
+  (window as any).debugLogger?.info("🤖 [OpenAI API] Début de l'appel API");
 
   const OPENAI_API_KEY = openaiConfig.openaiApiKey || "";
   const BASE_URL = openaiConfig.openaiBaseUrl || "";
 
   if (!OPENAI_API_KEY) {
-    console.error("❌ [OpenAI API] Clé API manquante");
+    (window as any).debugLogger?.error("❌ [OpenAI API] Clé API manquante");
     throw new Error("Missing OpenAI API key");
   }
 
@@ -37,7 +37,7 @@ export const callOpenaiApi = async (prompt: string): Promise<string> => {
   const TIMEOUT_MS = 120000; // 2 minutes
 
   try {
-    console.log("📤 [OpenAI API] Envoi de la requête avec timeout de 2min", {
+    (window as any).debugLogger?.info("📤 [OpenAI API] Envoi de la requête avec timeout de 2min", {
       promptLength: prompt.length,
       timeout: TIMEOUT_MS,
       baseUrl: BASE_URL,
@@ -52,11 +52,11 @@ export const callOpenaiApi = async (prompt: string): Promise<string> => {
 
     const content = response?.choices?.[0]?.message?.content;
     if (typeof content !== "string") {
-      console.error("❌ [OpenAI API] Réponse invalide - pas de contenu texte");
+      (window as any).debugLogger?.error("❌ [OpenAI API] Réponse invalide - pas de contenu texte");
       throw new Error("OpenAI API did not return a text response.");
     }
 
-    console.log("✅ [OpenAI API] Réponse reçue avec succès", {
+    (window as any).debugLogger?.info("✅ [OpenAI API] Réponse reçue avec succès", {
       responseLength: content.length,
       model: "openai/gpt-oss-120b:novita",
     });
@@ -65,7 +65,7 @@ export const callOpenaiApi = async (prompt: string): Promise<string> => {
   } catch (error: any) {
     // Gestion spécifique des erreurs de timeout
     if (error.message && error.message.includes("Timeout")) {
-      console.error("⏰ [OpenAI API] Erreur de timeout", {
+      (window as any).debugLogger?.error("⏰ [OpenAI API] Erreur de timeout", {
         timeout: TIMEOUT_MS,
         promptLength: prompt.length,
         timestamp: new Date().toISOString(),
@@ -74,7 +74,7 @@ export const callOpenaiApi = async (prompt: string): Promise<string> => {
     }
 
     // Autres erreurs
-    console.error("💥 [OpenAI API] Erreur lors de l'appel", {
+    (window as any).debugLogger?.error("💥 [OpenAI API] Erreur lors de l'appel", {
       error: error.message || error,
       stack: error.stack,
       promptLength: prompt.length,
