@@ -16,7 +16,7 @@ export const SkillFilters = ({ difficulty, sort, status, onFilterChange }: Skill
           <label className="block text-xs font-medium mb-1 text-white">Difficulté</label>
           <div className="relative">
             <select
-              className="appearance-none border border-slate-700 rounded-lg px-3 py-2 bg-slate-900 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-150 pr-8 hover:border-blue-400"
+              className="cursor-pointer appearance-none border border-slate-700 rounded-lg px-3 py-2 bg-slate-900 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-150 pr-8 hover:border-blue-400"
               value={difficulty}
               onChange={(e) => onFilterChange({ difficulty: e.target.value as FilterSkillDifficulty, sort, status })}
             >
@@ -34,11 +34,11 @@ export const SkillFilters = ({ difficulty, sort, status, onFilterChange }: Skill
           <label className="block text-xs font-medium mb-1 text-white">Statut</label>
           <div className="relative">
             <select
-              className="appearance-none border border-slate-700 rounded-lg px-3 py-2 bg-slate-900 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-150 pr-8 hover:border-blue-400"
+              className="cursor-pointer appearance-none border border-slate-700 rounded-lg px-3 py-2 bg-slate-900 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-150 pr-8 hover:border-blue-400"
               value={status}
               onChange={(e) => onFilterChange({ difficulty, sort, status: e.target.value as FilterSkillStatus })}
             >
-              <option value="ALL">All</option>
+              <option value="ALL" >All</option>
               <option value="DRAFT">Draft</option>
               <option value="IN_PROGRESS">In progress</option>
               <option value="NOT_STARTED">Not started</option>
@@ -53,7 +53,7 @@ export const SkillFilters = ({ difficulty, sort, status, onFilterChange }: Skill
           <label className="block text-xs font-medium mb-1 text-white">Trier par</label>
           <div className="relative">
             <select
-              className="appearance-none border border-slate-700 rounded-lg px-3 py-2 bg-slate-900 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-150 pr-8 hover:border-blue-400"
+              className="cursor-pointer appearance-none border border-slate-700 rounded-lg px-3 py-2 bg-slate-900 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-150 pr-8 hover:border-blue-400"
               value={sort}
               onChange={(e) => onFilterChange({ difficulty, sort: e.target.value as SkillSort, status })}
             >

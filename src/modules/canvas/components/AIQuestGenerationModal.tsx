@@ -104,6 +104,22 @@ export const AIQuestGenerationModal = ({ onGenerate, setOpenAiModal }: AIQuestGe
   const setForm = useQuestGenerationFormStore((s) => s.setForm);
   const skill = useCanvasStore((s) => s.nodes.find(isSkillNode));
 
+  // Fonction pour auto-remplir tous les champs du formulaire
+  const handleAutoFill = () => {
+    form.setValue("manualContext", false);
+    form.setValue("aiProvider", "gemini");
+    form.setValue("skillDomain", SKILL_DOMAINS[0]);
+    form.setValue("customDomain", "");
+    form.setValue("goal", "Maîtriser Git et GitHub pour la collaboration");
+    form.setValue("selfLevel", "Novice");
+    form.setValue("relatedSkill", "");
+    form.setValue("autoEstimate", false);
+    form.setValue("numberOfQuests", 10);
+    form.setValue("styleApprentissage", "Equilibré");
+    form.setValue("ambianceQueteStyle", questAmbianceStylesData[0]);
+    form.setValue("ressourceType", getResourceTypesInFrench());
+  };
+
   const submit = async (data: QuestContextForm) => {
     // Auto-fill fields if autoEstimate is true
     if (data.autoEstimate) {
@@ -134,6 +150,18 @@ export const AIQuestGenerationModal = ({ onGenerate, setOpenAiModal }: AIQuestGe
         style={{ maxWidth: "650px" }}
         className=" w-[900px] max-h-[95vh] overflow-y-auto scrollbar-hide bg-gradient-to-br from-gray-900 to-gray-800 border-0 shadow-2xl left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 absolute"
       >
+        {/* Small auto-fill button at the top right */}
+        <Button
+          variant="ghost"
+          onClick={handleAutoFill}
+          title="Auto-remplir tous les champs"
+          className="absolute cursor-pointer top-3 right-3 z-20 bg-gray-800/80 hover:bg-blue-700/80 text-blue-200 hover:text-white rounded-full p-2 shadow transition-all border border-gray-700"
+          style={{ fontSize: 16, lineHeight: 1 }}
+        >
+          <span className="sr-only">Auto-remplir</span>
+          <Sparkles className="h-5 w-5" />
+        </Button>
+
         <DialogHeader className="text-center pb-1">
           <div className="flex flex-col items-center justify-center mb-3">
             <div className="p-3 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">

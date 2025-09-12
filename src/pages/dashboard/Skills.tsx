@@ -10,6 +10,7 @@ import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import { useGetSkills } from "@/shared/services/skill/api-skill";
 import { SKILLS_PER_PAGE } from "@/modules/skills/skills.const";
 import { useUser } from "@clerk/clerk-react";
+import { Button } from "@/shared/components/ui/button";
 
 export const Skills = () => {
   const { isCollapsed } = useSidebarStore();
@@ -70,14 +71,14 @@ export const Skills = () => {
           <h1 className="text-2xl font-bold text-white">Mes Skills</h1>
           {/* <p className="text-slate-400 text-sm mt-1">{skillsData && skillsData.length} skills au total</p> */}
         </div>
-        <button
-          className="flex items-center gap-1 bg-slate-700 hover:bg-slate-600 focus:ring-2 focus:ring-blue-400 text-white font-medium px-3 py-1.5 rounded-md shadow-sm transition-all duration-150 text-sm"
-          type="button"
+        <Button
+          variant="ghost"
+          className="flex items-center gap-1 bg-slate-700 cursor-pointer focus:ring-2 focus:ring-blue-400 text-white font-medium px-3 py-1.5 rounded-md shadow-sm transition-all duration-150 text-sm"
           onClick={handleCreateNewSkill}
         >
           <Plus size={18} />
           <span>Create a skill</span>
-        </button>
+        </Button>
       </div>
       <div className="flex-shrink-0">
         <SkillFilters
