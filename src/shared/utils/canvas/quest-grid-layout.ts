@@ -1,4 +1,4 @@
-import type { QuestLayoutConfig, QuestPosition, QuestLayoutInput } from './quest-layout.types';
+import type { QuestLayoutConfig, QuestPosition, QuestLayoutInput } from "./quest-layout.types";
 
 /**
  * Default configuration for quest grid layout
@@ -14,13 +14,13 @@ const DEFAULT_CONFIG: QuestLayoutConfig = {
 
 /**
  * Calculates positions for quests in a grid layout with alternating vertical/horizontal groups
- * 
+ *
  * @param input - Layout input parameters
  * @returns Array of quest positions
  */
 export function calculateQuestGridLayout(input: QuestLayoutInput): QuestPosition[] {
   const { skillPosition, questCount, config: userConfig = {} } = input;
-  
+
   // Merge user config with defaults
   const config: QuestLayoutConfig = {
     ...DEFAULT_CONFIG,
@@ -28,7 +28,7 @@ export function calculateQuestGridLayout(input: QuestLayoutInput): QuestPosition
   };
 
   const positions: QuestPosition[] = [];
-  
+
   // Calculate base positions
   const baseY = skillPosition.y + config.baseY;
   const baseX = skillPosition.x + config.baseX;
@@ -40,7 +40,7 @@ export function calculateQuestGridLayout(input: QuestLayoutInput): QuestPosition
     const isVerticalGroup = groupIndex % 2 === 0; // Even groups (0, 2, 4...) are vertical
 
     let position: QuestPosition;
-    
+
     if (isVerticalGroup) {
       // Vertical group: stack quests vertically
       position = {
@@ -63,17 +63,14 @@ export function calculateQuestGridLayout(input: QuestLayoutInput): QuestPosition
 
 /**
  * Calculates a single quest position by index
- * 
+ *
  * @param input - Layout input parameters
  * @param questIndex - Index of the quest to calculate position for
  * @returns Quest position
  */
-export function calculateSingleQuestPosition(
-  input: QuestLayoutInput,
-  questIndex: number
-): QuestPosition {
+export function calculateSingleQuestPosition(input: QuestLayoutInput, questIndex: number): QuestPosition {
   const { skillPosition, config: userConfig = {} } = input;
-  
+
   // Merge user config with defaults
   const config: QuestLayoutConfig = {
     ...DEFAULT_CONFIG,
