@@ -31,21 +31,16 @@ export const useAddAIQuests = () => {
 
   const addGeneratedQuests = useCallback(async () => {
     try {
-      console.log("🚀 [useAddAIQuest] Début de la génération de quêtes IA");
       setLoading(true);
       const quests = await generate();
 
       if (!Array.isArray(quests)) {
-        console.error("❌ [useAddAIQuest] La réponse n'est pas un tableau:", typeof quests, quests);
         throw new Error("Format de réponse invalide: attendu un tableau de quêtes");
       }
 
       if (quests.length === 0) {
-        console.warn("⚠️ [useAddAIQuest] Aucune quête générée");
         throw new Error("Aucune quête n'a pu être générée. Veuillez réessayer.");
       }
-
-      console.log(`✅ [useAddAIQuest] ${quests.length} quête(s) générée(s) avec succès`);
 
       const skillNode = currentNodes.find(isSkillNode);
 
@@ -130,19 +125,11 @@ export const useAddAIQuests = () => {
       // Update edges in the store
       setEdges([...currentEdges, ...newEdges]);
 
-      console.log("quests", quests);
-
       resetFormStore();
       if (skillNode?.id) {
         setCurrentSkillId(skillNode.id);
       }
     } catch (error) {
-      console.error("❌ [useAddAIQuest] Erreur lors de la génération de quêtes:", {
-        error: error instanceof Error ? error.message : String(error),
-        stack: error instanceof Error ? error.stack : undefined,
-        timestamp: new Date().toISOString(),
-      });
-
       // Rethrow l'erreur pour que le composant parent puisse l'afficher à l'utilisateur
       throw new Error(
         error instanceof Error
