@@ -7,6 +7,7 @@ import { useSkillStore } from "@/stores/skill/skill-store";
 import { createQuestNode } from "@/shared/utils/quetes/quest-node";
 import { useQuestGenerationFormStore } from "@/stores/canvas/quest-generation-form-store";
 import { MarkerType, type Edge } from "@xyflow/react";
+import { calculateQuestGridLayout } from "@/shared/utils/canvas";
 
 /**
  * Hook that generates quests via AI and adds them to the canvas.
@@ -48,42 +49,26 @@ export const useAddAIQuests = () => {
 
       const skillNode = currentNodes.find(isSkillNode);
 
-      // Calculate base position for new quest nodes with grid layout (vertical/horizontal groups)
-      const skillX = skillNode ? skillNode.position.x : 400;
-      const skillY = skillNode ? skillNode.position.y : 50;
+      // Calculate positions for new quest nodes using grid layout
+      const skillPosition = {
+        x: skillNode ? skillNode.position.x : 400,
+        y: skillNode ? skillNode.position.y : 50,
+      };
 
-      // Grid layout configuration
-      const baseY = skillY + 350;
-      const baseX = skillX - 200;
-      const questSpacingY = 525; // Vertical spacing between quests
-      const questSpacingX = 400; // Horizontal spacing between quests
-      const groupSpacingX = 800; // Spacing between groups
-      const questsPerGroup = 3;
+      // Calculate all quest positions using the extracted layout function
+      const questPositions = calculateQuestGridLayout({
+        skillPosition,
+        questCount: quests.length,
+      });
+
       const questIds: string[] = [];
 
       quests.forEach((quest, index) => {
         const id = `quest-${crypto.randomUUID()}`;
         questIds.push(id);
 
-        // Determine group and position within group
-        const groupIndex = Math.floor(index / questsPerGroup);
-        const positionInGroup = index % questsPerGroup;
-        const isVerticalGroup = groupIndex % 2 === 0; // Odd groups (1st, 3rd, 5th...) are vertical
-
-        let position;
-        if (isVerticalGroup) {
-          // Vertical group: stack quests vertically
-          position = {
-            x: baseX + groupIndex * groupSpacingX,
-            y: baseY + positionInGroup * questSpacingY,
-          };
-        } else {
-          // Horizontal group: arrange quests horizontally
-          position = {
-            x: baseX + groupIndex * groupSpacingX + positionInGroup * questSpacingX,
-            y: baseY,
-          };
-        }
+        // Get position from calculated positions
+        const position = questPositions[index];
 
         const handleUpdate = (field: string, value: any) => {
           const updated = useCanvasStore
