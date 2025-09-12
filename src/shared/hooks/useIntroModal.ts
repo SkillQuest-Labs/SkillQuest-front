@@ -5,10 +5,7 @@ import { useEffect, useMemo, useState } from "react";
  * - version : permet de “reset” l’intro si le texte change (v2, v3, …)
  */
 export function useIntroModal(userId?: string, version = "v1") {
-  const storageKey = useMemo(
-    () => (userId ? `sq:intro_seen:${version}:${userId}` : null),
-    [userId, version]
-  );
+  const storageKey = useMemo(() => (userId ? `sq:intro_seen:${version}:${userId}` : null), [userId, version]);
 
   const [open, setOpen] = useState(false);
 

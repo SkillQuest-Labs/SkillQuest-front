@@ -1,6 +1,11 @@
-export type UserRole = "mentor" | "apprenti";
+export const UserRole = {
+  MENTOR: "mentor",
+  APPRENTI: "apprenti",
+} as const;
+
+export type UserRoleType = (typeof UserRole)[keyof typeof UserRole];
 
 export type UserData = {
   username: string;
-  role: UserRole;
+  role: UserRoleType;
 };

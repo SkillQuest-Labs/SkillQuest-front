@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
 import { useIntroModal } from "@/shared/hooks/useIntroModal";
-import type { UserData, UserRole } from "@/shared/types/user.type";
+import type { UserData, UserRoleType } from "@/shared/types/user.type";
 import ProfileHud from "@/component/ProfileHud";
 import { useUserProgress } from "@/shared/hooks/useUserProgress";
 import { QuestHistory } from "@/component/QuestHistory";
@@ -18,7 +18,7 @@ export const DashboardUser = () => {
 
   useEffect(() => {
     if (!user) return;
-    const role = (user.unsafeMetadata?.role as UserRole) ?? "apprenti";
+    const role = (user.unsafeMetadata?.role as UserRoleType) ?? "apprenti";
     setUserData({
       username: fallbackUsername,
       role,

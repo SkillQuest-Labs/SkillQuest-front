@@ -1,3 +1,6 @@
+import type { Quest } from "@/shared/types/quest.type";
+import type { Skill } from "@/shared/types/skill.type";
+
 export interface SessionFormType {
   title: string;
   description: string;
@@ -5,48 +8,18 @@ export interface SessionFormType {
   startTime: string;
   endTime: string;
   linkedSkill: string;
-  linkedQuest: string;
+  linkedQuests: { id: string; title: string }[];
   color: string;
-}
-
-export interface SessionFormWithId extends SessionFormType {
-  id: string;
-  date: string;
-}
-
-export interface SessionPayload {
-  date: string;
-  startTime: string;
-  endTime: string;
-  userId: string;
-  questId: string;
-  title: string;
-  description?: string;
-  color: string;
-  linkedSkillId: string;
-  difficultyScore?: number;
-  focusLevel?: number;
 }
 
 export interface SessionFormProps {
-  form: SessionFormType;
+  currentSession: SessionFormType;
   setForm: (form: SessionFormType) => void;
-  skills: any[];
-  quests: any[];
+  skills: Skill[];
+  quests: Quest[];
   loadingSkills: boolean;
   loadingQuests: boolean;
 }
-
-export type SessionFormState = {
-  title: string;
-  description: string;
-  startDate: string;
-  startTime: string;
-  endTime: string;
-  linkedSkill: string;
-  linkedQuest: string;
-  color: string;
-};
 
 export type CalendarEvent = {
   id: string;
@@ -57,8 +30,8 @@ export type CalendarEvent = {
   end: string; // ISO
   backgroundColor: string;
   borderColor: string;
-  extendedProps?: {
-    linkedSkill?: string;
-    linkedQuest?: string;
+  extendedProps: {
+    linkedSkill: string;
+    linkedQuests: { id: string; title: string }[];
   };
 };

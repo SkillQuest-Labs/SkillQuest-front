@@ -9,13 +9,14 @@ import {
   useSaveQuestRelations,
   useUpdateQuests,
 } from "@/shared/services/quest/api-quest";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import { isQuestNode, isSkillNode } from "../canvas.const";
 import { showToast } from "@/component/notification/show-toast";
 import { useCreateSkill, useGetSkill } from "@/shared/services/skill/api-skill";
 import { useSearchParams } from "react-router-dom";
 import { useSkillStore } from "@/stores/skill/skill-store";
+import { useUser } from "@clerk/clerk-react";
 
 export const useSaveCanvas = () => {
   const { createQuest, error: createQuestError } = useCreateQuests();
@@ -28,6 +29,7 @@ export const useSaveCanvas = () => {
     useCanvasStore();
   const [searchParams] = useSearchParams();
   const currentSkillId = useSkillStore((state) => state.currentSkillId);
+  const { user } = useUser();
 
   const saveCanvas = async () => {
     const searchSkillId = searchParams.get("skillId");
@@ -62,7 +64,7 @@ export const useSaveCanvas = () => {
         status: skillNode.data.config.status,
         difficulty: skillNode.data.config.difficulty,
         // position: { x: skillNode.position.x, y: skillNode.position.y },
-        userId: "uuid-user-1234-5678-9012-345678901234",
+        userId: user?.id,
       };
 
     const toCreateEdge = edges
@@ -147,8 +149,8 @@ export const useCanvasLoader = () => {
 
   const skillId = searchParams.get("skillId");
 
-  const { quests, questRelations } = useGetQuests(skillId ?? "");
-  const { skill } = useGetSkill(skillId ?? "");
+  const { quests, questRelations, loading: questsLoading } = useGetQuests(skillId ?? "");
+  const { skill, loading: skillLoading } = useGetSkill(skillId ?? "");
 
   const setNodes = useCanvasStore((state) => state.setNodes);
   const setEdges = useCanvasStore((state) => state.setEdges);
@@ -167,7 +169,22 @@ export const useCanvasLoader = () => {
     [setNodes, markModifiedNode],
   );
 
+  const [loading, setLoading] = useState(false);
+
+  // Set loading state based on API calls
   useEffect(() => {
+    const isLoading = questsLoading || skillLoading;
+    setLoading(isLoading);
+  }, [questsLoading, skillLoading]);
+
+  useEffect(() => {
+    if (!skillId) {
+      setLoading(false);
+      return;
+    }
+
+    // Only proceed if we have all the data and are not loading
+    if (questsLoading || skillLoading) return;
     if (!quests || !skill || !questRelations) return;
 
     const questNodes: Node<QuestNodeData>[] = quests.map((quest) => ({
@@ -216,5 +233,19 @@ export const useCanvasLoader = () => {
     setEdges(questEdges);
     setNodes([...questNodes, skillNode]);
     setCurrentSkillId(skillNode.id);
-  }, [skill, quests, questRelations, setNodes, setEdges, addNode, removeNode, updateNodeData, setCurrentSkillId]);
+  }, [
+    skill,
+    skillId,
+    quests,
+    questRelations,
+    setNodes,
+    setEdges,
+    addNode,
+    removeNode,
+    updateNodeData,
+    setCurrentSkillId,
+    questsLoading,
+    skillLoading,
+  ]);
+  return { loading };
 };

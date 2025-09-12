@@ -6,11 +6,7 @@ type Props = {
   onClose: (dontShowAgain?: boolean) => void;
 };
 
-export default function SoloLevelingIntro({
-  open,
-  username = "Aventurier",
-  onClose,
-}: Props) {
+export default function SoloLevelingIntro({ open, username = "Aventurier", onClose }: Props) {
   const [visible, setVisible] = useState(open);
   const [phase, setPhase] = useState<"enter" | "exit">("enter");
 
@@ -64,9 +60,7 @@ export default function SoloLevelingIntro({
       />
 
       {/* Flash bleu à l’ouverture */}
-      {phase === "enter" && (
-        <div className="absolute inset-0 bg-blue-400/40 animate-flash pointer-events-none" />
-      )}
+      {phase === "enter" && <div className="absolute inset-0 bg-blue-400/40 animate-flash pointer-events-none" />}
 
       {/* Panel */}
       <div

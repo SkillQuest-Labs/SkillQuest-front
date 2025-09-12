@@ -1,5 +1,7 @@
 import { type Node } from "@xyflow/react";
 import type { QuestNodeData, SkillNodeData } from "../canvas/canvas.type";
+import type { QuestStatus } from "@/shared/types/quest.type";
+import type { SkillStatus } from "@/shared/types/skill.type";
 
 export type NodeShape = "circle" | "square" | "diamond" | "hexagon";
 export type SkillNodeType = "small" | "medium" | "large" | "keystone" | "mastery";
@@ -18,7 +20,7 @@ export type CircularSkillNode = {
   size: number;
   shape: NodeShape;
   nodeType: SkillNodeType;
-  status: QuestProgressStatus;
+  status: QuestStatus | SkillStatus;
   isLocked: boolean;
   connections: string[]; // IDs of nodes this node connects to (its dependents)
   prerequisites: string[]; // IDs of nodes this node depends on

@@ -1,5 +1,5 @@
 import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
-import { Home, LayoutTemplate, Star, User, CalendarRange } from "lucide-react";
+import { Home, Star, User, CalendarRange, BarChart3 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 export const SidebarBody = () => {
@@ -41,21 +41,6 @@ export const SidebarBody = () => {
         </li>
         <li>
           <NavLink
-            to="/canvas"
-            className={({ isActive }) =>
-              `px-4 py-2 flex items-center transition-all duration-300 ease-in-out transform hover:scale-96 ${
-                isCollapsed ? "justify-center" : "gap-3"
-              } hover:bg-gray-700 hover:shadow-lg ${
-                isActive ? "bg-gradient-to-r from-[#334155] to-[#141e32] rounded-l-xl shadow-md" : ""
-              }`
-            }
-          >
-            <LayoutTemplate size={20} />
-            {!isCollapsed && <span className="text-sm font-medium">Canvas</span>}
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
             to="/dashboard/work-session"
             className={({ isActive }) =>
               `px-4 py-2 flex items-center transition-all duration-300 ease-in-out transform hover:scale-96 ${
@@ -67,6 +52,21 @@ export const SidebarBody = () => {
           >
             <CalendarRange size={20} />
             {!isCollapsed && <span className="text-sm font-medium">Session de travail</span>}
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/dashboard/stats"
+            className={({ isActive }) =>
+              `px-4 py-2 flex items-center transition-all duration-300 ease-in-out transform hover:scale-96 ${
+                isCollapsed ? "justify-center" : "gap-3"
+              } hover:bg-gray-700 hover:shadow-lg ${
+                isActive ? "bg-gradient-to-r from-[#334155] to-[#141e32] rounded-l-xl shadow-md" : ""
+              }`
+            }
+          >
+            <BarChart3 size={20} />
+            {!isCollapsed && <span className="text-sm font-medium">Statistiques</span>}
           </NavLink>
         </li>
         <li>
