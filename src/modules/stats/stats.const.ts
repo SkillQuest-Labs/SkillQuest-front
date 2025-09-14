@@ -1,3 +1,5 @@
+import type { XpThreshold } from "./types/stats.types";
+
 export const colorVariants = {
   blue: {
     bg: "from-blue-500/20 via-blue-600/10 to-blue-700/20",
@@ -55,4 +57,48 @@ export const badgeVariants = {
   rare: "bg-gradient-to-r from-purple-400 to-pink-500 text-white text-xs px-2 py-1 rounded-full font-bold",
   legendary:
     "bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white text-xs px-2 py-1 rounded-full font-bold animate-pulse",
+};
+
+export const generateXpThresholds = (maxLevel: number): XpThreshold[] => {
+  const thresholds: XpThreshold[] = [];
+  let cumulative = 0;
+
+  for (let level = 1; level <= maxLevel; level++) {
+    let alpha = 1.5;
+    if (level > 5 && level <= 10) alpha = 2;
+    else if (level > 10) alpha = 2.5;
+
+    const baseXp = 100;
+    const xpRequired = Math.round(baseXp * Math.pow(level, alpha));
+
+    cumulative += xpRequired;
+    thresholds.push({ level, xpRequired, xpCumulative: cumulative });
+  }
+
+  return thresholds;
+};
+
+export const getUserLevel = (currentXp: number, batchSize = 10): { level: number; xpMaxForLevel: number } => {
+  let maxLevel = batchSize;
+  let level = 0;
+  let xpMaxForLevel = 0;
+
+  while (true) {
+    const thresholds = generateXpThresholds(maxLevel);
+
+    for (let i = 0; i < thresholds.length; i++) {
+      const threshold = thresholds[i];
+      const nextThreshold = thresholds[i + 1];
+
+      if (currentXp >= threshold.xpRequired) {
+        level = threshold.level;
+        xpMaxForLevel = nextThreshold ? nextThreshold.xpRequired : threshold.xpRequired;
+      } else {
+        // as soon as we find a threshold the user hasn't reached, we return the current level
+        return { level, xpMaxForLevel };
+      }
+    }
+
+    maxLevel += batchSize;
+  }
 };

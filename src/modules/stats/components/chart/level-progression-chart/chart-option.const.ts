@@ -1,11 +1,18 @@
 import { baseBarChartOptions } from "@/shared/utils/base-bar-chart-options.const";
-import { xpThresholds } from "./level-progression.const";
 import type { LevelProgression } from "@/modules/stats/types/stats.types";
 import { buildFormatterTooltip } from "./toolip-formatter.const";
+import { generateXpThresholds } from "@/modules/stats/stats.const";
 
-export const getChartOptions = (levelProgressionData: LevelProgression[]) => {
-  // For XP thresholds, display at least 10 levels or more if available
-  const minLevelsToShowForThresholds = Math.max(10, levelProgressionData.length);
+export type ChartOptionsProps = {
+  levelProgressionData: LevelProgression[];
+  maxLevel?: number;
+};
+
+export const getChartOptions = ({ levelProgressionData, maxLevel = 10 }: ChartOptionsProps) => {
+  if (levelProgressionData.length === 0 || maxLevel <= 0) return;
+  const xpThresholds = generateXpThresholds(maxLevel);
+
+  const minLevelsToShowForThresholds = Math.max(maxLevel, levelProgressionData.length);
   const maxLevelToShowForThresholds = Math.min(minLevelsToShowForThresholds, xpThresholds.length);
   const filteredXpThresholds = xpThresholds.slice(0, maxLevelToShowForThresholds);
 
