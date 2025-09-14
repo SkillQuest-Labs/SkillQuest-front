@@ -111,65 +111,10 @@ const buildInstruction = (
   return [...roleAndGoal, ...context, ...generalRules, ...resourceRules, ...formatInstructions].join("\n");
 };
 
-/**
- * Valide que le contexte généré contient toutes les informations nécessaires
- */
-const validateContext = (context: AiContextType): { isValid: boolean; errors: string[] } => {
-  const errors: string[] = [];
-
-  console.log("🔍 [getAiContext] Validation du contexte généré");
-
-  // Vérification de l'instruction
-  if (!context.instruction || context.instruction.trim().length === 0) {
-    errors.push("Instruction vide ou manquante");
-  } else if (context.instruction.trim().length < 50) {
-    errors.push("Instruction trop courte (moins de 50 caractères)");
-  }
-
-  // Vérification du provider AI
-  if (!context.aiProvider || !["openai", "gemini"].includes(context.aiProvider)) {
-    errors.push(`Provider AI invalide: ${context.aiProvider}`);
-  }
-
-  // Vérification du format
-  if (!context.format || typeof context.format !== "object") {
-    errors.push("Format de réponse manquant ou invalide");
-  }
-
-  const isValid = errors.length === 0;
-
-  if (isValid) {
-    console.log("✅ [getAiContext] Contexte valide", {
-      instructionLength: context.instruction.length,
-      provider: context.aiProvider,
-      existingQuestsCount: context.existingQuests?.length || 0,
-    });
-  } else {
-    console.error("❌ [getAiContext] Contexte invalide", {
-      errors,
-      instructionLength: context.instruction?.length || 0,
-      provider: context.aiProvider,
-    });
-  }
-
-  return { isValid, errors };
-};
-
 export const getAiContext = (): AiContextType => {
-  console.log("🎯 [getAiContext] Génération du contexte IA");
-
   const { nodes } = useCanvasStore.getState();
   const { form } = useQuestGenerationFormStore.getState();
   const skillNode = nodes.find(isSkillNode);
-
-  // Validation des prérequis
-  if (!form || Object.keys(form).length === 0) {
-    console.warn("⚠️ [getAiContext] Formulaire manquant ou vide");
-  }
-
-  if (!skillNode) {
-    console.warn("⚠️ [getAiContext] Aucun nœud de skill trouvé sur le canvas");
-  }
 
   const existingQuests: QuestAiType[] = nodes.filter(isQuestNode).map((node) => ({
     title: node.data.title,
@@ -177,27 +122,14 @@ export const getAiContext = (): AiContextType => {
     prerequisites: [],
   }));
 
-  console.log("📊 [getAiContext] État du contexte", {
-    hasForm: !!form,
-    hasSkillNode: !!skillNode,
-    existingQuestsCount: existingQuests.length,
-    skillTitle: skillNode?.data?.config?.title,
-  });
-
   let instruction = "";
 
   if (form && Object.keys(form).length > 0 && skillNode) {
     instruction = buildInstruction(form, skillNode, existingQuests);
-  } else {
-    console.error("❌ [getAiContext] Impossible de construire l'instruction", {
-      hasForm: !!form,
-      formKeysCount: form ? Object.keys(form).length : 0,
-      hasSkillNode: !!skillNode,
-    });
   }
 
-  const context: AiContextType = {
-    aiProvider: form?.aiProvider || "openai",
+  return {
+    aiProvider: form.aiProvider || "openai",
     existingQuests,
     format: {
       title: "string",
@@ -209,18 +141,4 @@ export const getAiContext = (): AiContextType => {
     },
     instruction,
   };
-
-  // Validation du contexte généré
-  const validation = validateContext(context);
-  if (!validation.isValid) {
-    console.error("💥 [getAiContext] Contexte généré invalide", {
-      errors: validation.errors,
-      context: {
-        instructionLength: context.instruction?.length || 0,
-        provider: context.aiProvider,
-      },
-    });
-  }
-
-  return context;
 };

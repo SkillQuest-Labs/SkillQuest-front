@@ -33,14 +33,10 @@ export const useAddAIQuests = () => {
 
   const addGeneratedQuests = useCallback(async () => {
     try {
-      console.log("🚀 [useAddAIQuest] Début de la génération de quêtes IA");
-
       setLoading(true);
       const quests = await generate();
 
       if (!Array.isArray(quests)) {
-        console.error("❌ [useAddAIQuest] La réponse n'est pas un tableau:", typeof quests, quests);
-
         if (isDev && (window as any).debugLogger) {
           (window as any).debugLogger.error("Format de réponse invalide de l'IA", {
             expectedType: "Array",
@@ -53,8 +49,6 @@ export const useAddAIQuests = () => {
       }
 
       if (quests.length === 0) {
-        console.warn("⚠️ [useAddAIQuest] Aucune quête générée");
-
         if (isDev && (window as any).debugLogger) {
           (window as any).debugLogger.warn("Aucune quête générée par l'IA", {
             questsLength: quests.length,
@@ -64,8 +58,6 @@ export const useAddAIQuests = () => {
 
         throw new Error("Aucune quête n'a pu être générée. Veuillez réessayer.");
       }
-
-      console.log(`✅ [useAddAIQuest] ${quests.length} quête(s) générée(s) avec succès`);
 
       if (isDev && (window as any).debugLogger) {
         (window as any).debugLogger.info(`${quests.length} quête(s) générée(s) avec succès`, {
@@ -157,19 +149,11 @@ export const useAddAIQuests = () => {
       // Update edges in the store
       setEdges([...currentEdges, ...newEdges]);
 
-      console.log("quests", quests);
-
       resetFormStore();
       if (skillNode?.id) {
         setCurrentSkillId(skillNode.id);
       }
     } catch (error) {
-      console.error("❌ [useAddAIQuest] Erreur lors de la génération de quêtes:", {
-        error: error instanceof Error ? error.message : String(error),
-        stack: error instanceof Error ? error.stack : undefined,
-        timestamp: new Date().toISOString(),
-      });
-
       // Log de debug pour les erreurs
       if (isDev && (window as any).debugLogger) {
         (window as any).debugLogger.error("Erreur lors de la génération de quêtes IA", {
