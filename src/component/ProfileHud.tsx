@@ -83,9 +83,9 @@ const ProfileHud: React.FC<Props> = ({
   return (
     <aside
       className={[
-        "w-72 shrink-0 h-[calc(100vh-56px)] sticky top-14",
-        "bg-black/30 backdrop-blur text-white flex flex-col",
-        "border-l border-yellow-400/30 shadow-[0_0_15px_rgba(255,215,0,0.15)]",
+        "w-72 shrink-0 h-full sticky",
+        "bg-gradient-to-br from-slate-900/95 via-blue-900/30 to-violet-900/25 backdrop-blur text-white flex flex-col",
+        "border-l border-blue-500/30 shadow-[0_20px_50px_rgba(59,130,246,0.15)]",
         className,
       ].join(" ")}
     >
@@ -97,13 +97,13 @@ const ProfileHud: React.FC<Props> = ({
               <img
                 src={currentAvatar}
                 alt={`Avatar de ${userName}`}
-                className="w-14 h-14 rounded-full ring-2 ring-yellow-400/70"
+                className="w-14 h-14 rounded-full ring-2 ring-blue-400/70"
               />
               <span className="absolute -right-1 -bottom-1 w-4 h-4 rounded-full bg-emerald-500 ring-2 ring-gray-900" />
             </div>
             <div>
-              <div className="font-semibold text-lg">{userName}</div>
-              <div className="text-xs text-yellow-300 uppercase tracking-wide">{title}</div>
+              <div className="font-semibold text-lg text-blue-50">{userName}</div>
+              <div className="text-xs text-amber-400 uppercase tracking-wide">{title}</div>
             </div>
           </div>
 
@@ -111,8 +111,8 @@ const ProfileHud: React.FC<Props> = ({
           {!isEditing ? (
             <button
               onClick={handleOpenEdit}
-              className="p-2 rounded-md border border-yellow-400/30 text-yellow-200/80 hover:text-yellow-100 hover:border-yellow-300/60 transition"
-              title="Modifier l’avatar"
+              className="p-2 rounded-md border border-blue-500/30 text-blue-200/80 hover:text-blue-100 hover:border-blue-300/60 transition"
+              title="Modifier l'avatar"
             >
               <Pencil size={16} />
             </button>
@@ -160,10 +160,10 @@ const ProfileHud: React.FC<Props> = ({
 
       {/* Niveau avec icône */}
       <div className="p-6">
-        <div className="rounded-xl border border-yellow-400/30 bg-black/40 p-4 shadow-inner flex items-center justify-between">
+        <div className="rounded-xl border border-blue-500/30 bg-black/40 p-4 shadow-inner flex items-center justify-between">
           <div>
-            <div className="text-xs text-yellow-200/70">Niveau</div>
-            <div className="mt-1 text-2xl font-bold text-yellow-300">{level}</div>
+            <div className="text-xs text-blue-200/70">Niveau</div>
+            <div className="mt-1 text-2xl font-bold text-amber-400">{level}</div>
           </div>
           <div className="text-3xl" title={getLevelIcon(level).label}>
             {getLevelIcon(level).icon}
@@ -173,18 +173,18 @@ const ProfileHud: React.FC<Props> = ({
 
       {/* Progression XP */}
       <div className="px-6">
-        <div className="rounded-xl border border-yellow-400/30 bg-black/40 p-4 shadow-inner">
-          <div className="flex items-center justify-between text-xs text-yellow-200/70">
+        <div className="rounded-xl border border-blue-500/30 bg-black/40 p-4 shadow-inner">
+          <div className="flex items-center justify-between text-xs text-blue-200/70">
             <span>Progression</span>
             <span>{pct}%</span>
           </div>
           <div className="mt-2 h-2 rounded-full bg-white/10 overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-yellow-400 via-amber-300 to-yellow-500 shadow-[0_0_8px_rgba(255,215,0,0.6)] transition-all duration-700 ease-out"
+              className="h-full bg-gradient-to-r from-blue-400 via-cyan-400 to-violet-400 shadow-[0_0_8px_rgba(59,130,246,0.6)] transition-all duration-700 ease-out"
               style={{ width: `${pct}%` }}
             />
           </div>
-          <div className="mt-1 text-[11px] text-yellow-200/60">
+          <div className="mt-1 text-[11px] text-blue-200/60">
             {xp.toLocaleString()} / {xpToNext.toLocaleString()} XP
           </div>
         </div>
@@ -192,16 +192,16 @@ const ProfileHud: React.FC<Props> = ({
 
       {/* Badges */}
       <div className="px-6 mt-6">
-        <div className="rounded-xl border border-yellow-400/30 bg-black/40 p-4 shadow-inner">
-          <div className="text-xs text-yellow-200/70 mb-2">Badges</div>
+        <div className="rounded-xl border border-blue-500/30 bg-black/40 p-4 shadow-inner">
+          <div className="text-xs text-blue-200/70 mb-2">Badges</div>
           {normalizedBadges.length === 0 ? (
-            <div className="text-sm text-yellow-100/40">Aucun badge pour l’instant</div>
+            <div className="text-sm text-blue-100/40">Aucun badge pour l'instant</div>
           ) : (
             <div className="flex flex-wrap gap-2">
               {normalizedBadges.map((b) => (
                 <span
                   key={b.id}
-                  className="text-[11px] px-2 py-1 rounded-full border border-yellow-400/40 text-yellow-200 bg-yellow-500/10 shadow-[0_0_6px_rgba(255,215,0,0.3)]"
+                  className="text-[11px] px-2 py-1 rounded-full border border-blue-400/40 text-blue-200 bg-blue-500/10 shadow-[0_0_6px_rgba(59,130,246,0.3)]"
                 >
                   {b.label}
                 </span>

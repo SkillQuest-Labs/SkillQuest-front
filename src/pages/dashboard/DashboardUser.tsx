@@ -1,18 +1,16 @@
-// src/pages/dashboard/DashboardUser.tsx
-import { useEffect, useState } from "react";
 import { useUser } from "@clerk/clerk-react";
-
-import { useIntroModal } from "@/shared/hooks/useIntroModal";
+import { useEffect, useState } from "react";
 import type { UserData, UserRoleType } from "@/shared/types/user.type";
 
 import ProfileHud from "@/component/ProfileHud";
-import { QuestHistory } from "@/component/QuestHistory";
+import WorkSessionChart from "@/modules/stats/components/chart/work-session-chart/WorkSessionChart";
 
-import { useGetSkills } from "@/shared/services/skill/api-skill";
 import { useUserProgressFromQuests } from "@/shared/hooks/useUserProgressFromQuests";
+import { useGetSkills } from "@/shared/services/skill/api-skill";
 
-import { TrendingUp, Target, BarChart3 } from "lucide-react";
+import { WelcomeSection } from "@/component/dashboard/WelcomeSection";
 import { FortniteStatCard } from "@/modules/stats/components/FortniteStatCard";
+import { BarChart3, Target, TrendingUp } from "lucide-react";
 
 export const DashboardUser = () => {
   const { user, isLoaded } = useUser();
@@ -31,10 +29,8 @@ export const DashboardUser = () => {
     });
   }, [user, fallbackUsername]);
 
-  useIntroModal(userId, "v1");
-
   // 🔹 Récupérer les skills de l’utilisateur
-  const { skills = [], loading: loadingSkills } = useGetSkills(isLoaded ? userId : "");
+  const { skills = [] } = useGetSkills(isLoaded ? userId : "");
   const firstSkillId = skills.length > 0 ? ((skills[0] as any).id ?? (skills[0] as any).skillId ?? "") : "";
 
   // 🔹 Progression basée sur les quêtes
@@ -46,56 +42,44 @@ export const DashboardUser = () => {
   const skillsCompleted = skills.filter((s: any) => s.status === "COMPLETED").length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      <div className="flex gap-6 px-6 py-8">
-        {/* Colonne principale */}
-        <div className="flex-1">
-          <h1 className="text-3xl font-bold text-white mb-8">Welcome back</h1>
+    <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
+      <div className="w-[95%] mx-auto  py-4 h-full">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 h-full items-start">
+          {/* Colonne principale */}
+          <div className="lg:col-span-4 space-y-4 flex flex-col h-full">
+            {/* Section de bienvenue */}
+            <div className="flex-shrink-0">
+              <WelcomeSection
+                userName={fallbackUsername}
+                userLevel={level}
+                streak={7} // Vous pouvez calculer cela basé sur vos données
+              />
+            </div>
 
-          {/* 🔹 Mini section Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-            <FortniteStatCard
-              title="XP Total"
-              value={totalXp} // ton calcul existant
-              icon={TrendingUp}
-              gradient="indigo"
-            />
-            <FortniteStatCard
-              title="Quêtes terminées"
-              value={questsCompleted} // ton calcul existant
-              icon={BarChart3}
-              gradient="amber"
-            />
-            <FortniteStatCard
-              title="Compétences validées"
-              value={skillsCompleted} // ton calcul existant
-              icon={Target}
-              gradient="rose"
-            />
+            {/* Statistiques Fortnite */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 flex-shrink-0">
+              <FortniteStatCard title="XP Total" value={totalXp} icon={TrendingUp} gradient="indigo" />
+              <FortniteStatCard title="Quêtes terminées" value={questsCompleted} icon={BarChart3} gradient="amber" />
+              <FortniteStatCard title="Compétences validées" value={skillsCompleted} icon={Target} gradient="rose" />
+            </div>
+
+            {/* Graphique des sessions de travail */}
+            <div className="flex-1 min-h-0">
+              <WorkSessionChart />
+            </div>
           </div>
 
-          {/* Historique des quêtes */}
-          <div className="flex flex-col w-full max-w-6xl mx-auto rounded-xl border border-slate-700 bg-slate-800/50 p-4 shadow mb-6">
-            <h3 className="text-lg font-semibold text-slate-200 mb-3">Historique des quêtes</h3>
-
-            {!isLoaded || loadingSkills ? (
-              <p className="text-slate-400">Chargement des quêtes…</p>
-            ) : firstSkillId ? (
-              <QuestHistory skillId={firstSkillId} />
-            ) : (
-              <p className="text-slate-500">Aucune quête trouvée.</p>
-            )}
+          {/* Sidebar droite */}
+          <div className="lg:col-span-1 h-full">
+            <ProfileHud
+              userName={user?.username || user?.firstName || "Aventurier"}
+              title={(user?.unsafeMetadata?.role as string) || "Aventurier"}
+              level={level}
+              xp={xpUser}
+              xpToNext={xpMax}
+            />
           </div>
         </div>
-
-        {/* HUD Profil */}
-        <ProfileHud
-          userName={user?.username || user?.firstName || "Aventurier"}
-          title={(user?.unsafeMetadata?.role as string) || "Aventurier"}
-          level={level}
-          xp={xpUser}
-          xpToNext={xpMax}
-        />
       </div>
     </div>
   );
