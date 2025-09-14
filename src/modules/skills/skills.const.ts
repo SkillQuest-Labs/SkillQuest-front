@@ -110,17 +110,17 @@ export const SKILL_CARD_CONSTANTS = {
   LINE_CLAMP: "line-clamp-2",
 } as const;
 
-// Classes CSS pour les actions de carte
+// CSS classes for card actions
 export const SKILL_CARD_ACTIONS = {
   CONTAINER: "mt-5 grid grid-cols-2 overflow-hidden rounded-lg border border-white/20 bg-black/40 backdrop-blur-sm",
   EDIT_BUTTON:
-    "btn-action btn-edit h-full w-full rounded-l-lg rounded-r-none bg-transparent text-white hover:text-white hover:bg-white/10 transition-colors",
+    "cursor-pointer btn-action btn-edit h-full w-full rounded-l-lg rounded-r-none bg-transparent text-white hover:text-white hover:bg-white/10 transition-colors",
   DELETE_BUTTON:
-    "btn-action btn-delete h-full w-full rounded-r-lg rounded-l-none bg-transparent text-white hover:text-white hover:bg-red-500/20 disabled:opacity-50 transition-colors",
+    "cursor-pointer btn-action btn-delete h-full w-full rounded-r-lg rounded-l-none bg-transparent text-white hover:text-white hover:bg-red-500/20 disabled:opacity-50 transition-colors",
   LOADING_SPINNER: "w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin",
 } as const;
 
-// Classes CSS pour les éléments de progression
+// CSS classes for progress elements
 export const SKILL_CARD_PROGRESS = {
   CONTAINER: "rounded-full bg-black/40 backdrop-blur-sm px-3 py-1 border border-white/20",
   BAR_CONTAINER: "w-full h-2 bg-black/30 rounded-full overflow-hidden border border-white/10",

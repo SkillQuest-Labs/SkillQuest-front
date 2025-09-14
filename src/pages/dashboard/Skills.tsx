@@ -83,7 +83,7 @@ export const Skills = () => {
         {filteredSkills.length > 0 && (
           <Button
             onClick={() => navigate(`${routes.canvas.path}?createSkill=true`)}
-            className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white"
+            className="px-4 py-2 cursor-pointer rounded-lg bg-blue-600 hover:bg-blue-500 text-white"
           >
             Créer un skill
           </Button>
