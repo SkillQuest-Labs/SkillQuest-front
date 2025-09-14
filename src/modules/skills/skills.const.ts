@@ -90,8 +90,10 @@ export const SKILL_CARD_CONSTANTS = {
 // Classes CSS pour les actions de carte
 export const SKILL_CARD_ACTIONS = {
   CONTAINER: "mt-5 grid grid-cols-2 overflow-hidden rounded-lg border border-white/20 bg-black/40 backdrop-blur-sm",
-  EDIT_BUTTON: "btn-action btn-edit h-full w-full rounded-l-lg rounded-r-none bg-transparent text-white hover:text-white hover:bg-white/10 transition-colors",
-  DELETE_BUTTON: "btn-action btn-delete h-full w-full rounded-r-lg rounded-l-none bg-transparent text-white hover:text-white hover:bg-red-500/20 disabled:opacity-50 transition-colors",
+  EDIT_BUTTON:
+    "btn-action btn-edit h-full w-full rounded-l-lg rounded-r-none bg-transparent text-white hover:text-white hover:bg-white/10 transition-colors",
+  DELETE_BUTTON:
+    "btn-action btn-delete h-full w-full rounded-r-lg rounded-l-none bg-transparent text-white hover:text-white hover:bg-red-500/20 disabled:opacity-50 transition-colors",
   LOADING_SPINNER: "w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin",
 } as const;
 

@@ -1,5 +1,5 @@
 import "../../../styles/skills.css";
-import "./SkillCard.css";
+import "../../../styles/SkillCard.css";
 import { SKILL_CARD_CONSTANTS, SKILL_CARD_ACTIONS, SKILL_CARD_PROGRESS } from "../skills.const";
 import { Button } from "@/shared/components/ui/button";
 import { Edit3, Trash2 } from "lucide-react";

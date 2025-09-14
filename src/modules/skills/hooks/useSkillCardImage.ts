@@ -5,7 +5,7 @@ import { SKILL_CARD_CONSTANTS } from "../skills.const";
 export const useSkillCardImage = (skill: Skill) => {
   const imageStyle = useMemo(() => {
     const imageUrl = skill.imageUrl || SKILL_CARD_CONSTANTS.DEFAULT_IMAGE;
-    
+
     return {
       backgroundImage: `url(${imageUrl})`,
       backgroundSize: "cover",

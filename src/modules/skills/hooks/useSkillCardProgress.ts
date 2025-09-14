@@ -5,7 +5,7 @@ export const useSkillCardProgress = (skill: Skill) => {
   const progressData = useMemo(() => {
     const progressValue = skill.progressValue;
     const hasProgress = typeof progressValue === "number";
-    
+
     return {
       progressValue,
       hasProgress,
