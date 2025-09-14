@@ -16,7 +16,7 @@ const GRADIENTS: Record<NonNullable<Props["gradient"]>, string> = {
   rose: "from-slate-900/90 via-violet-900/40 to-indigo-900/30",
 };
 
-export const FortniteStatCard = ({ title, value, icon: Icon, gradient = "indigo", className, onClick }: Props) => {
+export const AccueilStatCard = ({ title, value, icon: Icon, gradient = "indigo", className, onClick }: Props) => {
   return (
     <button
       onClick={onClick}

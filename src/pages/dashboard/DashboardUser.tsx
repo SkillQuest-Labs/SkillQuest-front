@@ -9,7 +9,7 @@ import { useUserProgressFromQuests } from "@/shared/hooks/useUserProgressFromQue
 import { useGetSkills } from "@/shared/services/skill/api-skill";
 
 import { WelcomeSection } from "@/component/dashboard/WelcomeSection";
-import { FortniteStatCard } from "@/modules/stats/components/FortniteStatCard";
+import { AccueilStatCard } from "@/modules/stats/components/AccueilStatsCard";
 import { BarChart3, Target, TrendingUp } from "lucide-react";
 
 export const DashboardUser = () => {
@@ -58,9 +58,9 @@ export const DashboardUser = () => {
 
             {/* Statistiques Fortnite */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 flex-shrink-0">
-              <FortniteStatCard title="XP Total" value={totalXp} icon={TrendingUp} gradient="indigo" />
-              <FortniteStatCard title="Quêtes terminées" value={questsCompleted} icon={BarChart3} gradient="amber" />
-              <FortniteStatCard title="Compétences validées" value={skillsCompleted} icon={Target} gradient="rose" />
+              <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} gradient="indigo" />
+              <AccueilStatCard title="Quêtes terminées" value={questsCompleted} icon={BarChart3} gradient="amber" />
+              <AccueilStatCard title="Compétences validées" value={skillsCompleted} icon={Target} gradient="rose" />
             </div>
 
             {/* Graphique des sessions de travail */}
