@@ -1,58 +1,59 @@
-name: Frontend Preview Deployment
 
-permissions:
-  contents: read
-  pull-requests: write
-  issues: write
+
+name: Deploy PR Preview to Scaleway
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, closed]
-    branches:
-      - develop
-      - main
-
-env:
-  SCW_ACCESS_KEY: ${{ secrets.SCW_ACCESS_KEY }}
-  SCW_SECRET_KEY: ${{ secrets.SCW_SECRET_KEY }}
-  SCW_DEFAULT_ORGANIZATION_ID: ${{ secrets.SCW_DEFAULT_ORGANIZATION_ID }}
-  SCW_DEFAULT_PROJECT_ID: ${{ secrets.SCW_DEFAULT_PROJECT_ID }}
-  SCW_DEFAULT_REGION: fr-par
-  BUCKET_NAME: skill-quest-previews
+    types: [opened, synchronize, reopened]
+    branches: [main]
 
 jobs:
   deploy-preview:
     runs-on: ubuntu-latest
-    if: github.event.action != 'closed'
+    
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
-
+        
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
-          cache: "npm"
-
+          node-version: '18'
+          cache: 'npm'
+          
       - name: Install dependencies
         run: npm ci
-
+        
       - name: Build application
         run: |
-          export VITE_API_URL=https://api.skillquest.com
-          export VITE_APP_ENV=preview
+          # Set production API URL
+          echo "VITE_API_URL=https://your-production-api.com" > .env.production
           npm run build
-
+          
       - name: Install Scaleway CLI
         run: |
-          curl -s https://raw.githubusercontent.com/scaleway/scaleway-cli/master/scripts/get.sh | sh
-          sudo mv /usr/local/bin/scw /usr/bin/scw
-
+          curl -o /tmp/scw -L "https://github.com/scaleway/scaleway-cli/releases/latest/download/scaleway-cli_$(uname -s | tr '[:upper:]' '[:lower:]')_amd64"
+          sudo install -o root -g root -m 755 /tmp/scw /usr/local/bin/scw
+          
       - name: Test Scaleway CLI
         run: scw version
-
+        env:
+          SCW_ACCESS_KEY: ${{ secrets.SCW_ACCESS_KEY }}
+          SCW_SECRET_KEY: ${{ secrets.SCW_SECRET_KEY }}
+          SCW_DEFAULT_ORGANIZATION_ID: ${{ secrets.SCW_DEFAULT_ORGANIZATION_ID }}
+          SCW_DEFAULT_PROJECT_ID: ${{ secrets.SCW_DEFAULT_PROJECT_ID }}
+          SCW_DEFAULT_REGION: fr-par
+          
+      - name: Install AWS CLI
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+          
       - name: Create / configure global preview bucket
         run: |
+          BUCKET_NAME="skill-quest-previews"
+          
           # Check if bucket exists first
           if ! scw object bucket get name=$BUCKET_NAME >/dev/null 2>&1; then
             echo "Creating bucket $BUCKET_NAME..."
@@ -60,52 +61,121 @@ jobs:
           else
             echo "Bucket $BUCKET_NAME already exists, skipping creation."
           fi
-          # Always configure website settings
+          
+          # Configure website settings using AWS CLI (S3-compatible)
           echo "Configuring website settings for bucket $BUCKET_NAME..."
-          scw object bucket website set $BUCKET_NAME index-document=index.html error-document=404.html || {
-            echo "Website configuration failed, checking if bucket supports website hosting..."
+          aws s3api put-bucket-website \
+            --bucket $BUCKET_NAME \
+            --website-configuration '{
+              "IndexDocument": {
+                "Suffix": "index.html"
+              },
+              "ErrorDocument": {
+                "Key": "404.html"
+              }
+            }' \
+            --endpoint-url https://s3.fr-par.scw.cloud || {
+            echo "Website configuration failed. Checking bucket details..."
             scw object bucket get name=$BUCKET_NAME
             exit 1
           }
+          
           echo "✅ Website configuration completed successfully"
-
-      - name: Deploy PR preview to bucket
+        env:
+          SCW_ACCESS_KEY: ${{ secrets.SCW_ACCESS_KEY }}
+          SCW_SECRET_KEY: ${{ secrets.SCW_SECRET_KEY }}
+          SCW_DEFAULT_ORGANIZATION_ID: ${{ secrets.SCW_DEFAULT_ORGANIZATION_ID }}
+          SCW_DEFAULT_PROJECT_ID: ${{ secrets.SCW_DEFAULT_PROJECT_ID }}
+          SCW_DEFAULT_REGION: fr-par
+          AWS_ACCESS_KEY_ID: ${{ secrets.SCW_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.SCW_SECRET_KEY }}
+          AWS_DEFAULT_REGION: fr-par
+          
+      - name: Deploy PR preview
         run: |
-          PREVIEW_PATH="pr-${{ github.event.number }}/"
-          aws s3 cp dist/ s3://$BUCKET_NAME/$PREVIEW_PATH --recursive \
-            --endpoint-url https://s3.fr-par.scw.cloud
+          PR_NUMBER=${{ github.event.number }}
+          BUCKET_NAME="skill-quest-previews"
+          PREFIX="pr-${PR_NUMBER}"
+          
+          echo "Deploying PR #${PR_NUMBER} to ${PREFIX}/..."
+          
+          # Upload files to S3-compatible storage
+          aws s3 sync dist/ s3://${BUCKET_NAME}/${PREFIX}/ \
+            --endpoint-url https://s3.fr-par.scw.cloud \
+            --delete \
+            --acl public-read
+          
+          echo "✅ Deployment completed"
+          echo "Preview URL: https://${BUCKET_NAME}.s3-website.fr-par.scw.cloud/${PREFIX}/"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.SCW_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SCW_SECRET_KEY }}
-
+          AWS_DEFAULT_REGION: fr-par
+          
       - name: Comment PR with preview URL
         uses: actions/github-script@v7
-        env:
-          BUCKET_NAME: ${{ env.BUCKET_NAME }}
         with:
           script: |
-            const prNumber = context.payload.pull_request.number;
-            const bucketName = process.env.BUCKET_NAME;
-            const previewUrl = `https://${bucketName}.s3-website.fr-par.scw.cloud/pr-${prNumber}/index.html`;
-
+            const prNumber = context.payload.number;
+            const bucketName = 'skill-quest-previews';
+            const previewUrl = `https://${bucketName}.s3-website.fr-par.scw.cloud/pr-${prNumber}/`;
+            
+            const comment = `🚀 **Preview deployed!**
+            
+            📱 **Preview URL:** ${previewUrl}
+            
+            This preview will be automatically cleaned up when the PR is closed.`;
+            
             github.rest.issues.createComment({
               issue_number: prNumber,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `🚀 **Preview déployée !**\n\n📱 Frontend: ${previewUrl}\n🔗 Backend: https://api.skillquest.com (stable)\n\n_Cette preview sera supprimée automatiquement à la fermeture de la PR._`
+              body: comment
             });
-
+            
   cleanup-preview:
     runs-on: ubuntu-latest
     if: github.event.action == 'closed'
+    
     steps:
-      - name: Delete PR preview folder
+      - name: Install AWS CLI
         run: |
-          PREVIEW_PATH="pr-${{ github.event.number }}/"
-          echo "Deleting preview folder: $PREVIEW_PATH"
-          aws s3 rm s3://$BUCKET_NAME/$PREVIEW_PATH --recursive \
-            --endpoint-url https://s3.fr-par.scw.cloud
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+          
+      - name: Clean up preview
+        run: |
+          PR_NUMBER=${{ github.event.number }}
+          BUCKET_NAME="skill-quest-previews"
+          PREFIX="pr-${PR_NUMBER}"
+          
+          echo "Cleaning up preview for PR #${PR_NUMBER}..."
+          
+          # Remove all files for this PR
+          aws s3 rm s3://${BUCKET_NAME}/${PREFIX}/ \
+            --endpoint-url https://s3.fr-par.scw.cloud \
+            --recursive
+          
+          echo "✅ Preview cleanup completed"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.SCW_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SCW_SECRET_KEY }}
-          BUCKET_NAME: ${{ env.BUCKET_NAME }}
+          AWS_DEFAULT_REGION: fr-par
+          
+      - name: Comment PR cleanup
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.payload.number;
+            
+            const comment = `🧹 **Preview cleaned up!**
+            
+            The preview for this PR has been automatically removed.`;
+            
+            github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
