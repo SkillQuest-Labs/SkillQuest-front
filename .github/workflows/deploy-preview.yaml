@@ -1,0 +1,84 @@
+name: Frontend Preview Deployment
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'package.json'
+      - 'vite.config.ts'
+
+env:
+  SCW_ACCESS_KEY: ${{ secrets.SCW_ACCESS_KEY }}
+  SCW_SECRET_KEY: ${{ secrets.SCW_SECRET_KEY }}
+  SCW_DEFAULT_REGION: fr-par
+
+jobs:
+  deploy-preview:
+    runs-on: ubuntu-latest
+    if: github.event.action != 'closed'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: |
+          export VITE_API_URL=https://api.skillquest.com   # Backend stable
+          export VITE_APP_ENV=preview
+          npm run build
+
+      - name: Install Scaleway CLI
+        run: |
+          curl -o /usr/local/bin/scw -L "https://github.com/scaleway/scaleway-cli/releases/latest/download/scaleway-cli_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/')"
+          chmod +x /usr/local/bin/scw
+
+      - name: Create global preview bucket
+        run: |
+          BUCKET_NAME="skillquest-previews"
+          scw object bucket create name=$BUCKET_NAME region=fr-par || true
+          scw object bucket website set bucket=$BUCKET_NAME index-document=index.html error-document=404.html
+
+      - name: Deploy PR preview to bucket
+        run: |
+          BUCKET_NAME="skillquest-previews"
+          PREVIEW_PATH="pr-${{ github.event.number }}/"
+          scw object cp dist/ s3://$BUCKET_NAME/$PREVIEW_PATH --recursive
+
+      - name: Comment PR with preview URL
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const previewUrl = `https://skillquest-previews.s3-website.fr-par.scw.cloud/pr-${prNumber}/index.html`;
+
+            github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🚀 **Preview déployée !**\n\n📱 Frontend: ${previewUrl}\n🔗 Backend: https://api.skillquest.com (stable)\n\n_Cette preview sera supprimée automatiquement à la fermeture de la PR._`
+            });
+
+  cleanup-preview:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'closed'
+    steps:
+      - name: Install Scaleway CLI
+        run: |
+          curl -o /usr/local/bin/scw -L "https://github.com/scaleway/scaleway-cli/releases/latest/download/scaleway-cli_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/')"
+          chmod +x /usr/local/bin/scw
+
+      - name: Delete PR preview folder
+        run: |
+          BUCKET_NAME="skillquest-previews"
+          PREVIEW_PATH="pr-${{ github.event.number }}/"
+          scw object object delete s3://$BUCKET_NAME/$PREVIEW_PATH --recursive || true
