@@ -53,10 +53,10 @@ jobs:
 
       - name: Create / configure global preview bucket
         run: |
-          set +e
-          scw object bucket create name=$BUCKET_NAME region=fr-par
-          echo "Bucket creation done"
-          set -e
+          if ! scw object bucket get $BUCKET_NAME >/dev/null 2>&1; then
+            scw object bucket create name=$BUCKET_NAME region=fr-par
+          fi
+
           scw object bucket website set bucket=$BUCKET_NAME index-document=index.html error-document=404.html
 
       - name: Deploy PR preview to bucket
