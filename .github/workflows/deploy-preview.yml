@@ -18,7 +18,7 @@ env:
   SCW_DEFAULT_ORGANIZATION_ID: ${{ secrets.SCW_DEFAULT_ORGANIZATION_ID }}
   SCW_DEFAULT_PROJECT_ID: ${{ secrets.SCW_DEFAULT_PROJECT_ID }}
   SCW_DEFAULT_REGION: fr-par
-  BUCKET_NAME: skill-quest-bucket-previews
+  BUCKET_NAME: skill-quest-previews
 
 jobs:
   deploy-preview:
@@ -61,7 +61,13 @@ jobs:
             echo "Bucket $BUCKET_NAME already exists, skipping creation."
           fi
           # Always configure website settings
-          scw object bucket website set bucket=$BUCKET_NAME index-document=index.html error-document=404.html
+          echo "Configuring website settings for bucket $BUCKET_NAME..."
+          scw object bucket website set $BUCKET_NAME index-document=index.html error-document=404.html || {
+            echo "Website configuration failed, checking if bucket supports website hosting..."
+            scw object bucket get name=$BUCKET_NAME
+            exit 1
+          }
+          echo "✅ Website configuration completed successfully"
 
       - name: Deploy PR preview to bucket
         run: |
@@ -74,10 +80,13 @@ jobs:
 
       - name: Comment PR with preview URL
         uses: actions/github-script@v7
+        env:
+          BUCKET_NAME: ${{ env.BUCKET_NAME }}
         with:
           script: |
             const prNumber = context.payload.pull_request.number;
-            const previewUrl = `https://skillquest-previews.s3-website.fr-par.scw.cloud/pr-${prNumber}/index.html`;
+            const bucketName = process.env.BUCKET_NAME;
+            const previewUrl = `https://${bucketName}.s3-website.fr-par.scw.cloud/pr-${prNumber}/index.html`;
 
             github.rest.issues.createComment({
               issue_number: prNumber,
@@ -93,8 +102,10 @@ jobs:
       - name: Delete PR preview folder
         run: |
           PREVIEW_PATH="pr-${{ github.event.number }}/"
+          echo "Deleting preview folder: $PREVIEW_PATH"
           aws s3 rm s3://$BUCKET_NAME/$PREVIEW_PATH --recursive \
             --endpoint-url https://s3.fr-par.scw.cloud
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.SCW_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.SCW_SECRET_KEY }}
+          BUCKET_NAME: ${{ env.BUCKET_NAME }}
