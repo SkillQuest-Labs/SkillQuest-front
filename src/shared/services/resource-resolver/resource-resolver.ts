@@ -7,22 +7,56 @@ const API_KEYS = {
 };
 
 export async function resolveResource(intention: ResourceIntention): Promise<ResolvedResource | null> {
+  (window as any).debugLogger?.info("🔍 [Resource Resolver] Début de résolution", {
+    type: intention.type,
+    query: intention.query,
+    domains: intention.preferred_domains,
+  });
+
   try {
+    let result: ResolvedResource | null = null;
+
     switch (intention.type) {
       case "video":
-        return await resolveVideo(intention);
+        result = await resolveVideo(intention);
+        break;
       case "documentation":
-        return await resolveDocumentation(intention);
+        result = await resolveDocumentation(intention);
+        break;
       case "article":
-        return await resolveArticle(intention);
+        result = await resolveArticle(intention);
+        break;
       case "course":
-        return await resolveCourse(intention);
+        result = await resolveCourse(intention);
+        break;
       case "forum":
-        return await resolveForum(intention);
+        result = await resolveForum(intention);
+        break;
       default:
-        return await resolveGeneric(intention);
+        result = await resolveGeneric(intention);
     }
-  } catch {
+
+    if (result) {
+      (window as any).debugLogger?.info("✅ [Resource Resolver] Ressource résolue avec succès", {
+        title: result.title,
+        url: result.url,
+        score: result.score,
+        domain: result.domain,
+      });
+    } else {
+      (window as any).debugLogger?.warn("⚠️ [Resource Resolver] Aucune ressource trouvée", {
+        type: intention.type,
+        query: intention.query,
+      });
+    }
+
+    return result;
+  } catch (error: any) {
+    (window as any).debugLogger?.error("💥 [Resource Resolver] Erreur lors de la résolution", {
+      error: error.message || error,
+      type: intention.type,
+      query: intention.query,
+    });
     throw new Error("Erreur lors de la résolution de ressource");
   }
 }
@@ -77,17 +111,27 @@ async function resolveGeneric(intention: ResourceIntention): Promise<ResolvedRes
 
 async function searchYouTube(intention: ResourceIntention): Promise<ResolvedResource | null> {
   if (!API_KEYS.YOUTUBE) {
-    console.warn("YouTube API key not configured");
+    (window as any).debugLogger?.warn("⚠️ [YouTube API] Clé API non configurée");
     return await searchGeneral(intention);
   }
 
+  let searchQuery;
   try {
-    const searchQuery = buildSearchQuery(intention);
+    searchQuery = buildSearchQuery(intention);
+    (window as any).debugLogger?.info("📺 [YouTube API] Recherche de vidéos", {
+      query: searchQuery,
+      maxResults: 5,
+    });
+
     const response = await fetch(
       `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(searchQuery)}&type=video&maxResults=5&key=${API_KEYS.YOUTUBE}`,
     );
 
     if (!response.ok) {
+      (window as any).debugLogger?.error("❌ [YouTube API] Erreur de réponse", {
+        status: response.status,
+        statusText: response.statusText,
+      });
       throw new Error(`YouTube API error: ${response.status}`);
     }
 
@@ -95,6 +139,12 @@ async function searchYouTube(intention: ResourceIntention): Promise<ResolvedReso
 
     if (data.items && data.items.length > 0) {
       const video = data.items[0];
+      (window as any).debugLogger?.info("✅ [YouTube API] Vidéo trouvée", {
+        title: video.snippet.title,
+        videoId: video.id.videoId,
+        channelTitle: video.snippet.channelTitle,
+      });
+
       return {
         title: video.snippet.title,
         url: `https://www.youtube.com/watch?v=${video.id.videoId}`,
@@ -103,9 +153,16 @@ async function searchYouTube(intention: ResourceIntention): Promise<ResolvedReso
         score: calculateScore(video.snippet, intention),
         domain: "youtube.com",
       };
+    } else {
+      (window as any).debugLogger?.warn("⚠️ [YouTube API] Aucune vidéo trouvée", {
+        query: searchQuery,
+      });
     }
-  } catch (error) {
-    console.error("Erreur YouTube API:", error);
+  } catch (error: any) {
+    (window as any).debugLogger?.error("💥 [YouTube API] Erreur lors de la recherche", {
+      error: error.message || error,
+      query: searchQuery,
+    });
   }
 
   return null;
@@ -113,19 +170,30 @@ async function searchYouTube(intention: ResourceIntention): Promise<ResolvedReso
 
 async function searchGeneral(intention: ResourceIntention): Promise<ResolvedResource | null> {
   if (!API_KEYS.GOOGLE_SEARCH || !API_KEYS.GOOGLE_SEARCH_ENGINE_ID) {
-    console.warn("Google Search API not configured");
+    (window as any).debugLogger?.warn("⚠️ [Google Search API] Clés API non configurées");
     return getFallbackResource(intention);
   }
-
+  let searchQuery;
   try {
-    const searchQuery = buildSearchQuery(intention);
+    searchQuery = buildSearchQuery(intention);
     const siteFilter = intention.preferred_domains.length > 0 ? ` site:${intention.preferred_domains[0]}` : "";
+    const fullQuery = searchQuery + siteFilter;
+
+    (window as any).debugLogger?.info("🔍 [Google Search API] Recherche générale", {
+      query: fullQuery,
+      domains: intention.preferred_domains,
+      type: intention.type,
+    });
 
     const response = await fetch(
-      `https://www.googleapis.com/customsearch/v1?key=${API_KEYS.GOOGLE_SEARCH}&cx=${API_KEYS.GOOGLE_SEARCH_ENGINE_ID}&q=${encodeURIComponent(searchQuery + siteFilter)}&num=5`,
+      `https://www.googleapis.com/customsearch/v1?key=${API_KEYS.GOOGLE_SEARCH}&cx=${API_KEYS.GOOGLE_SEARCH_ENGINE_ID}&q=${encodeURIComponent(fullQuery)}&num=5`,
     );
 
     if (!response.ok) {
+      (window as any).debugLogger?.error("❌ [Google Search API] Erreur de réponse", {
+        status: response.status,
+        statusText: response.statusText,
+      });
       throw new Error(`Google Search API error: ${response.status}`);
     }
 
@@ -135,6 +203,13 @@ async function searchGeneral(intention: ResourceIntention): Promise<ResolvedReso
       const result = data.items[0];
       const isValid = await validateUrl(result.link);
 
+      (window as any).debugLogger?.info("✅ [Google Search API] Résultat trouvé", {
+        title: result.title,
+        url: result.link,
+        isValid,
+        domain: new URL(result.link).hostname,
+      });
+
       return {
         title: result.title,
         url: result.link,
@@ -143,9 +218,16 @@ async function searchGeneral(intention: ResourceIntention): Promise<ResolvedReso
         score: calculateScore(result, intention),
         domain: new URL(result.link).hostname,
       };
+    } else {
+      (window as any).debugLogger?.warn("⚠️ [Google Search API] Aucun résultat trouvé", {
+        query: fullQuery,
+      });
     }
-  } catch (error) {
-    console.error("Erreur Google Search API:", error);
+  } catch (error: any) {
+    (window as any).debugLogger?.error("💥 [Google Search API] Erreur lors de la recherche", {
+      error: error.message || error,
+      query: searchQuery,
+    });
   }
 
   return getFallbackResource(intention);
