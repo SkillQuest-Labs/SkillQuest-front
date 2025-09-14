@@ -38,7 +38,7 @@ export const SkillFilters = ({ difficulty, sort, status, onFilterChange }: Skill
               value={status}
               onChange={(e) => onFilterChange({ difficulty, sort, status: e.target.value as FilterSkillStatus })}
             >
-              <option value="ALL" >All</option>
+              <option value="ALL">All</option>
               <option value="DRAFT">Draft</option>
               <option value="IN_PROGRESS">In progress</option>
               <option value="NOT_STARTED">Not started</option>

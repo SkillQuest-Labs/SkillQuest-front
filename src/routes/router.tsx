@@ -6,7 +6,7 @@ import { DashboardUser } from "@/pages/dashboard/DashboardUser";
 import { CanvasPage } from "@/pages/canvas/CanvasPage";
 import { Skills } from "@/pages/dashboard/Skills";
 import { SkillDetail } from "@/modules/skills/components/SkillDetail";
-import { Profil } from "@/pages/dashboard/Profil";
+import Profil from "@/pages/dashboard/Profil";
 import { Store } from "@/pages/dashboard/Store";
 import { NotFoundPage } from "@/pages/404";
 import { SignIn, SignUp } from "@clerk/clerk-react";
