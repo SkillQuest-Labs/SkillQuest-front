@@ -37,7 +37,8 @@ jobs:
 
       - name: Install Scaleway CLI
         run: |
-          run: curl -s https://raw.githubusercontent.com/scaleway/scaleway-cli/master/scripts/get.sh | sh
+          curl -s https://raw.githubusercontent.com/scaleway/scaleway-cli/master/scripts/get.sh | sh
+          sudo mv /usr/local/bin/scw /usr/bin/scw  # s'assurer que scw est dans le PATH
 
       - name: Test Scaleway CLI
         run: scw version
