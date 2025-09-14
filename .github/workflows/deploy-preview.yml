@@ -27,14 +27,11 @@ jobs:
           curl -s https://raw.githubusercontent.com/scaleway/scaleway-cli/master/scripts/get.sh | sh
           sudo mv /usr/local/bin/scw /usr/bin/scw
 
-      - name: Install AWS CLI
-        run: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          sudo ./aws/install
-          
       - name: Test Scaleway CLI
         run: scw version
+
+      - name: Check preinstalled AWS CLI version
+        run: aws --version
 
   deploy-preview:
     runs-on: ubuntu-latest
