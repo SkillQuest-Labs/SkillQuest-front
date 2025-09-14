@@ -188,7 +188,7 @@ export const QuestCompletionChart = () => {
       </div>
 
       {/* Progress Bars Container */}
-      <div className="mt-5 overflow-y-auto px-4  h-[65%] flex-shrink-0">
+      <div className="pt-10 overflow-y-auto px-4  h-[65%] flex-shrink-0">
         {paginatedMetrics.length > 0 ? (
           <div
             className={` ${
