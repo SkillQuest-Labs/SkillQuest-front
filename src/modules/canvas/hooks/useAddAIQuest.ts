@@ -29,17 +29,41 @@ export const useAddAIQuests = () => {
   } = useCanvasStore.getState();
   const setCurrentSkillId = useSkillStore.getState().setCurrentSkillId;
 
+  const isDev = import.meta.env.DEV;
+
   const addGeneratedQuests = useCallback(async () => {
     try {
       setLoading(true);
       const quests = await generate();
 
       if (!Array.isArray(quests)) {
+        if (isDev && (window as any).debugLogger) {
+          (window as any).debugLogger.error("Format de réponse invalide de l'IA", {
+            expectedType: "Array",
+            receivedType: typeof quests,
+            receivedValue: quests,
+          });
+        }
+
         throw new Error("Format de réponse invalide: attendu un tableau de quêtes");
       }
 
       if (quests.length === 0) {
+        if (isDev && (window as any).debugLogger) {
+          (window as any).debugLogger.warn("Aucune quête générée par l'IA", {
+            questsLength: quests.length,
+            questsContent: quests,
+          });
+        }
+
         throw new Error("Aucune quête n'a pu être générée. Veuillez réessayer.");
+      }
+
+      if (isDev && (window as any).debugLogger) {
+        (window as any).debugLogger.info(`${quests.length} quête(s) générée(s) avec succès`, {
+          questsCount: quests.length,
+          questTitles: quests.map((q: any) => q.title || q.name || "Sans titre"),
+        });
       }
 
       const skillNode = currentNodes.find(isSkillNode);
@@ -130,6 +154,19 @@ export const useAddAIQuests = () => {
         setCurrentSkillId(skillNode.id);
       }
     } catch (error) {
+      // Log de debug pour les erreurs
+      if (isDev && (window as any).debugLogger) {
+        (window as any).debugLogger.error("Erreur lors de la génération de quêtes IA", {
+          errorMessage: error instanceof Error ? error.message : String(error),
+          errorStack: error instanceof Error ? error.stack : undefined,
+          timestamp: new Date().toISOString(),
+          context: {
+            currentNodesCount: currentNodes.length,
+            currentEdgesCount: currentEdges.length,
+          },
+        });
+      }
+
       // Rethrow l'erreur pour que le composant parent puisse l'afficher à l'utilisateur
       throw new Error(
         error instanceof Error
@@ -153,6 +190,7 @@ export const useAddAIQuests = () => {
     markModifiedNode,
     markNewEdge,
     setCurrentSkillId,
+    isDev,
   ]);
 
   return { addGeneratedQuests };
