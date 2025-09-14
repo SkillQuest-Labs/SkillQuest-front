@@ -8,6 +8,7 @@ import { showToast } from "@/component/notification/show-toast";
 import { useState } from "react";
 import type { Skill } from "@/shared/types/skill.type";
 import { ConfirmDeleteDialogue } from "@/component/confirm-dialogue/ConfirmDeleteDialogue";
+import forestImage from "../../../assets/skills/forest.webp";
 
 type SkillCardProps = {
   skill: Skill;
@@ -44,15 +45,33 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
   return (
     <>
       {/* Carte en colonne: header → infos → footer */}
-      <div className="session-card flex h-full flex-col bg-slate-800 rounded-2xl p-4">
+      <div className="session-card flex h-full flex-col rounded-2xl overflow-hidden">
+        {/* Image de fond avec bords arrondis */}
+        <div 
+          className="absolute inset-0 rounded-2xl overflow-hidden"
+          style={{
+            backgroundImage: skill.imageUrl 
+              ? `url(${skill.imageUrl})` 
+              : `url(${forestImage})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        />
+        
+        {/* Overlay dégradé vers le bas */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/30 via-slate-900/50 to-slate-900/90 pointer-events-none rounded-2xl"></div>
+        
+        {/* Contenu avec z-index pour être au-dessus du dégradé */}
+        <div className="relative z-10 flex h-full flex-col p-4">
         {/* Header */}
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
-            <h3 className="truncate font-semibold text-slate-100 leading-tight">{skill.title}</h3>
+            <h3 className="truncate font-semibold text-white leading-tight drop-shadow-lg">{skill.title}</h3>
           </div>
 
           {/* Statut compact à droite */}
-          <span className="rounded-full bg-slate-800/60 px-3 py-1 text-xs text-slate-300">
+          <span className="rounded-full bg-black/40 backdrop-blur-sm px-3 py-1 text-xs text-white border border-white/20">
             {statusLabels[skill.status]}
           </span>
         </div>
@@ -60,20 +79,20 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
         {/* Infos */}
         <div className="mt-4 flex flex-wrap items-center gap-2 text-sm">
           {typeof skill.progressValue === "number" && (
-            <div className="rounded-full bg-slate-800/60 px-3 py-1">
-              <span className="text-slate-400">Progression :</span>{" "}
-              <span className="font-medium text-slate-100">{skill.progressValue}%</span>
+            <div className="rounded-full bg-black/40 backdrop-blur-sm px-3 py-1 border border-white/20">
+              <span className="text-slate-200">Progression :</span>{" "}
+              <span className="font-medium text-white">{skill.progressValue}%</span>
             </div>
           )}
         </div>
 
         {/* Description */}
-        {skill.description && <div className="mt-3 text-sm text-slate-400 line-clamp-2">{skill.description}</div>}
+        {skill.description && <div className="mt-3 text-sm text-slate-200 line-clamp-2 drop-shadow-md">{skill.description}</div>}
 
         {/* Barre de progression */}
         {typeof skill.progressValue === "number" && (
           <div className="mt-4">
-            <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
+            <div className="w-full h-2 bg-black/30 rounded-full overflow-hidden border border-white/10">
               <div
                 className="h-full bg-gradient-to-r from-blue-400 via-sky-400 to-cyan-400 transition-all duration-700 ease-out"
                 style={{ width: `${skill.progressValue}%` }}
@@ -83,11 +102,11 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
         )}
 
         {/* Footer actions (barre propre en bas) */}
-        <div className="mt-5 grid grid-cols-2 overflow-hidden rounded-lg border border-slate-700/60">
+        <div className="mt-5 grid grid-cols-2 overflow-hidden rounded-lg border border-white/20 bg-black/40 backdrop-blur-sm">
           <Button
             onClick={handleCardClick}
             aria-label="Éditer le skill"
-            className="btn-action btn-edit h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white"
+            className="btn-action btn-edit h-full w-full rounded-l-lg rounded-r-none bg-transparent text-white hover:text-white hover:bg-white/10 transition-colors"
           >
             <Edit3 className="h-4 w-4" />
             <span className="ml-2 hidden sm:inline"></span>
@@ -97,7 +116,7 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
             onClick={() => setIsDeleteDialogOpen(true)}
             aria-label="Supprimer le skill"
             disabled={deleteLoading}
-            className="btn-action btn-delete h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white disabled:opacity-50"
+            className="btn-action btn-delete h-full w-full rounded-r-lg rounded-l-none bg-transparent text-white hover:text-white hover:bg-red-500/20 disabled:opacity-50 transition-colors"
           >
             {deleteLoading ? (
               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -105,6 +124,7 @@ export const SkillCard = ({ skill }: SkillCardProps) => {
               <Trash2 className="h-4 w-4" />
             )}
           </Button>
+        </div>
         </div>
       </div>
 
