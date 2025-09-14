@@ -18,7 +18,7 @@ env:
   SCW_DEFAULT_ORGANIZATION_ID: ${{ secrets.SCW_DEFAULT_ORGANIZATION_ID }}
   SCW_DEFAULT_PROJECT_ID: ${{ secrets.SCW_DEFAULT_PROJECT_ID }}
   SCW_DEFAULT_REGION: fr-par
-  BUCKET_NAME: skillquest-bucket-previews
+  BUCKET_NAME: skill-quest-bucket-previews
 
 jobs:
   deploy-preview:
