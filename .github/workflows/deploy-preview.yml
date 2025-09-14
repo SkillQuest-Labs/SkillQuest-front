@@ -64,6 +64,13 @@ jobs:
           
           # Configure website settings using AWS CLI (S3-compatible)
           echo "Configuring website settings for bucket $BUCKET_NAME..."
+          echo "Using AWS credentials: Access Key ID = ${AWS_ACCESS_KEY_ID:0:10}..."
+          echo "Endpoint URL: https://s3.fr-par.scw.cloud"
+          
+          # Test AWS CLI configuration first
+          aws configure list --profile default
+          
+          # Apply website configuration
           aws s3api put-bucket-website \
             --bucket $BUCKET_NAME \
             --website-configuration '{
@@ -74,10 +81,23 @@ jobs:
                 "Key": "404.html"
               }
             }' \
-            --endpoint-url https://s3.fr-par.scw.cloud || {
-            echo "Website configuration failed. Checking bucket details..."
+            --endpoint-url https://s3.fr-par.scw.cloud \
+            --region fr-par || {
+            echo "❌ Website configuration failed. Debugging..."
+            echo "Bucket details:"
             scw object bucket get name=$BUCKET_NAME
+            echo "Testing AWS CLI connectivity:"
+            aws s3 ls --endpoint-url https://s3.fr-par.scw.cloud
             exit 1
+          }
+          
+          # Verify website configuration was applied
+          echo "Verifying website configuration..."
+          aws s3api get-bucket-website \
+            --bucket $BUCKET_NAME \
+            --endpoint-url https://s3.fr-par.scw.cloud \
+            --region fr-par || {
+            echo "⚠️ Warning: Could not verify website configuration, but continuing..."
           }
           
           echo "✅ Website configuration completed successfully"
@@ -94,7 +114,7 @@ jobs:
       - name: Deploy PR preview
         run: |
           PR_NUMBER=${{ github.event.number }}
-          BUCKET_NAME="skill-quest-previews"
+          BUCKET_NAME="skillquest-previews"
           PREFIX="pr-${PR_NUMBER}"
           
           echo "Deploying PR #${PR_NUMBER} to ${PREFIX}/..."
@@ -117,7 +137,7 @@ jobs:
         with:
           script: |
             const prNumber = context.payload.number;
-            const bucketName = 'skill-quest-previews';
+            const bucketName = 'skillquest-previews';
             const previewUrl = `https://${bucketName}.s3-website.fr-par.scw.cloud/pr-${prNumber}/`;
             
             const comment = `🚀 **Preview deployed!**
@@ -147,7 +167,7 @@ jobs:
       - name: Clean up preview
         run: |
           PR_NUMBER=${{ github.event.number }}
-          BUCKET_NAME="skill-quest-previews"
+          BUCKET_NAME="skillquest-previews"
           PREFIX="pr-${PR_NUMBER}"
           
           echo "Cleaning up preview for PR #${PR_NUMBER}..."
