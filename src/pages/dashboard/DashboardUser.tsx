@@ -1,21 +1,17 @@
 import { useUser } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
 import type { UserData, UserRoleType } from "@/shared/types/user.type";
-
 import ProfileHud from "@/component/ProfileHud";
 import WorkSessionChart from "@/modules/stats/components/chart/work-session-chart/WorkSessionChart";
-
-import { useUserProgressFromQuests } from "@/shared/hooks/useUserProgressFromQuests";
 import { useGetSkills } from "@/shared/services/skill/api-skill";
-
 import { WelcomeSection } from "@/component/dashboard/WelcomeSection";
 import { AccueilStatCard } from "@/modules/stats/components/AccueilStatsCard";
 import { BarChart3, Target, TrendingUp } from "lucide-react";
+import { computeUserProgress } from "@/shared/utils/compute-user-progress";
 
 export const DashboardUser = () => {
-  const { user, isLoaded } = useUser();
+  const { user } = useUser();
 
-  const userId = user?.id ?? "";
   const fallbackUsername = user?.username ?? user?.firstName ?? "Aventurier";
 
   const [, setUserData] = useState<UserData | null>(null);
@@ -29,17 +25,10 @@ export const DashboardUser = () => {
     });
   }, [user, fallbackUsername]);
 
-  // 🔹 Récupérer les skills de l’utilisateur
-  const { skills = [] } = useGetSkills(isLoaded ? userId : "");
-  const firstSkillId = skills.length > 0 ? ((skills[0] as any).id ?? (skills[0] as any).skillId ?? "") : "";
+  const { skills } = useGetSkills(user?.id || "");
 
-  // 🔹 Progression basée sur les quêtes
-  const { level, xpUser, xpMax } = useUserProgressFromQuests(firstSkillId);
-
-  // 🔹 Petites stats simplifiées
-  const totalXp = skills.reduce((acc, s: any) => acc + (s.totalXp || 0), 0);
-  const questsCompleted = skills.reduce((acc, s: any) => acc + (s.completedQuests || 0), 0);
-  const skillsCompleted = skills.filter((s: any) => s.status === "COMPLETED").length;
+  const { totalXp, totalQuestCompleted, totalSkillCompleted, userCurrentLevel, xpMaxForLevel } =
+    computeUserProgress(skills);
 
   return (
     <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
@@ -49,34 +38,27 @@ export const DashboardUser = () => {
           <div className="lg:col-span-4 space-y-4 flex flex-col h-full">
             {/* Section de bienvenue */}
             <div className="flex-shrink-0">
-              <WelcomeSection
-                userName={fallbackUsername}
-                userLevel={level}
-                streak={7} // Vous pouvez calculer cela basé sur vos données
-              />
+              <WelcomeSection userName={fallbackUsername} userLevel={userCurrentLevel} streak={7} />
             </div>
 
-            {/* Statistiques Fortnite */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 flex-shrink-0">
               <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} gradient="indigo" />
-              <AccueilStatCard title="Quêtes terminées" value={questsCompleted} icon={BarChart3} gradient="amber" />
-              <AccueilStatCard title="Compétences validées" value={skillsCompleted} icon={Target} gradient="rose" />
+              <AccueilStatCard title="Quêtes terminées" value={totalQuestCompleted} icon={BarChart3} gradient="amber" />
+              <AccueilStatCard title="Compétences validées" value={totalSkillCompleted} icon={Target} gradient="rose" />
             </div>
 
-            {/* Graphique des sessions de travail */}
             <div className="flex-1 min-h-0">
               <WorkSessionChart />
             </div>
           </div>
 
-          {/* Sidebar droite */}
           <div className="lg:col-span-1 h-full">
             <ProfileHud
               userName={user?.username || user?.firstName || "Aventurier"}
               title={(user?.unsafeMetadata?.role as string) || "Aventurier"}
-              level={level}
-              xp={xpUser}
-              xpToNext={xpMax}
+              level={userCurrentLevel}
+              xp={totalXp}
+              xpToNext={xpMaxForLevel}
             />
           </div>
         </div>

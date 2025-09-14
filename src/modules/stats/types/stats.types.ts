@@ -23,6 +23,7 @@ export type XpThreshold = {
   level: number;
   xpRequired: number;
   xpCumulative: number;
+  badge?: string;
 };
 
 export interface UserStats {

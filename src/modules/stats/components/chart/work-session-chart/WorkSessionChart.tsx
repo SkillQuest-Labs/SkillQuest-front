@@ -1,13 +1,13 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from "recharts";
 import { useGetSessions } from "@/shared/services/session/api-session";
 import { useUser } from "@clerk/clerk-react";
+import { useMemo } from "react";
 
 interface WorkSessionChartProps {
   className?: string;
 }
 
-// Fonction pour formater les durées
 const formatDuration = (minutes: number): string => {
   if (minutes < 60) {
     return `${minutes} min`;
@@ -40,10 +40,12 @@ const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) =
   const { user } = useUser();
   const { sessions, isPending, error } = useGetSessions(user?.id || "");
 
+  console.log("sessions", sessions);
+
   const chartData = useMemo(() => {
     if (!sessions || sessions.length === 0) return [];
 
-    // Group sessions by date
+    // Grouper les sessions par date
     const sessionsByDate = sessions.reduce(
       (acc, session) => {
         const date = session.date;
@@ -61,12 +63,12 @@ const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) =
       {} as Record<string, { date: string; sessions: number; totalDuration: number }>,
     );
 
-    // Convert to array and sort by date
+    // Convertir en tableau et trier par date
     return Object.values(sessionsByDate)
       .map((item) => ({
         date: new Date(item.date).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit" }),
         sessions: item.sessions,
-        duration: item.totalDuration,
+        duration: item.totalDuration, // Garder en minutes
       }))
       .sort(
         (a, b) =>
@@ -197,21 +199,18 @@ const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) =
         </ResponsiveContainer>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 flex-shrink-0">
-        <div className="text-center py-1.5 px-2 rounded-lg bg-gradient-to-br from-blue-500/20 to-violet-500/20 border border-blue-400/30">
-          <div className="text-base font-bold text-blue-400">{stats.totalSessions}</div>
-          <div className="text-[10px] text-slate-400">Sessions totales</div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 flex-shrink-0">
+        <div className="text-center p-3 rounded-xl bg-gradient-to-br from-blue-500/20 to-violet-500/20 border border-blue-400/30">
+          <div className="text-xl font-bold text-blue-400 mb-1">{stats.totalSessions}</div>
+          <div className="text-xs text-slate-400">Sessions totales</div>
         </div>
-        <div className="text-center py-1.5 px-2 rounded-lg bg-gradient-to-br from-violet-500/20 to-cyan-500/20 border border-violet-400/30">
-          <div className="text-base font-bold text-violet-400">{formatDuration(stats.averageDuration)}</div>
-          <div className="text-[10px] text-slate-400">Durée moyenne</div>
+        <div className="text-center p-3 rounded-xl bg-gradient-to-br from-violet-500/20 to-cyan-500/20 border border-violet-400/30">
+          <div className="text-xl font-bold text-violet-400 mb-1">{formatDuration(stats.averageDuration)}</div>
+          <div className="text-xs text-slate-400">Durée moyenne</div>
         </div>
-        <div className="text-center py-1.5 px-2 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-400/30">
-          <div className="flex items-center justify-center gap-0.5">
-            <div className="text-base font-bold text-cyan-400">{stats.bestStreak}</div>
-            <div className="text-[10px] text-cyan-400">jours</div>
-          </div>
-          <div className="text-[10px] text-slate-400">Plus longue série</div>
+        <div className="text-center p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-400/30">
+          <div className="text-xl font-bold text-cyan-400 mb-1">{stats.bestStreak}</div>
+          <div className="text-xs text-slate-400">Meilleure série</div>
         </div>
       </div>
     </div>
