@@ -73,9 +73,32 @@ export const getDifficultyLabel = (difficulty: FilterSkillDifficulty) => {
   return difficultyDetailLabels[difficulty as keyof typeof difficultyDetailLabels] || difficulty;
 };
 
+// Fonction pour obtenir une image par défaut aléatoire
+export const getRandomDefaultImage = (skillId?: string): string => {
+  if (!skillId) return DEFAULT_IMAGES[0];
+
+  // Utiliser l'ID du skill pour générer un index déterministe
+  const hash = skillId.split("").reduce((a, b) => {
+    a = (a << 5) - a + b.charCodeAt(0);
+    return a & a;
+  }, 0);
+
+  const index = Math.abs(hash) % DEFAULT_IMAGES.length;
+  return DEFAULT_IMAGES[index];
+};
+
+// Import des images par défaut
+import forestImage from "../../assets/skills/forest.webp";
+import forest2Image from "../../assets/skills/forest2.png";
+import forest3Image from "../../assets/skills/forest3.png";
+import forest4Image from "../../assets/skills/forest4.png";
+
+// Images par défaut disponibles
+export const DEFAULT_IMAGES = [forestImage, forest2Image, forest3Image, forest4Image] as const;
+
 // Constantes pour SkillCard
 export const SKILL_CARD_CONSTANTS = {
-  DEFAULT_IMAGE: "/src/assets/skills/forest.webp",
+  DEFAULT_IMAGE: forestImage, // Image par défaut principale
   PROGRESS_BAR_HEIGHT: "h-2",
   CARD_BORDER_RADIUS: "rounded-2xl",
   BUTTON_HEIGHT: "h-full",
