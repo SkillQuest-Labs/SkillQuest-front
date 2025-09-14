@@ -36,6 +36,9 @@ export type Session = {
   duration: number;
   userId: string;
   linkedSkillId: string;
+  linkedSkill: {
+    title: string;
+  };
   quests: {
     title: string;
     id: string;
@@ -48,3 +51,12 @@ export type Session = {
 };
 
 export type Sessions = Session[];
+
+export type SessionsQuery = {
+  userId: string; // ← requis
+  skill?: string;
+  quest?: string;
+  date?: string; // "YYYY-MM-DD"
+  limit?: number; // défaut 20
+  page?: number; // défaut 1 (si tu fais de la pagination par page)
+};

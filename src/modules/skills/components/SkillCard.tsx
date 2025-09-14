@@ -1,166 +1,128 @@
 import "../../../styles/skills.css";
-import { statusColors, statusLabels } from "../skills.const";
-import { Badge } from "@/shared/components/ui/badge";
+import "../../../styles/SkillCard.css";
+import { SKILL_CARD_CONSTANTS, SKILL_CARD_ACTIONS, SKILL_CARD_PROGRESS } from "../skills.const";
 import { Button } from "@/shared/components/ui/button";
 import { Edit3, Trash2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useDeleteSkill } from "@/shared/services/skill/api-skill";
-import { showToast } from "@/component/notification/show-toast";
-import { useState } from "react";
 import type { Skill } from "@/shared/types/skill.type";
 import { ConfirmDeleteDialogue } from "@/component/confirm-dialogue/ConfirmDeleteDialogue";
+import { useSkillCardActions } from "../hooks/useSkillCardActions";
+import { useSkillCardImage } from "../hooks/useSkillCardImage";
+import { useSkillCardProgress } from "../hooks/useSkillCardProgress";
+import { useSkillCardOptimization } from "../hooks/useSkillCardOptimization";
+import { memo } from "react";
 
 type SkillCardProps = {
   skill: Skill;
 };
 
-export const SkillCard = ({ skill }: SkillCardProps) => {
-  const navigate = useNavigate();
-  const { deleteSkill, loading: deleteLoading } = useDeleteSkill(skill.skillId || skill.id || "");
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+const SkillCardComponent = ({ skill }: SkillCardProps) => {
+  const {
+    handleCardClick,
+    handleDeleteClick,
+    handleConfirmDelete,
+    handleCloseDeleteDialog,
+    isDeleteDialogOpen,
+    deleteLoading,
+  } = useSkillCardActions(skill);
 
-  const handleEditClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    navigate(`/dashboard/skills/${skill.skillId || skill.id}`);
-  };
-
-  const handleCardClick = () => {
-    navigate(`/dashboard/skills/${skill.skillId || skill.id}`);
-  };
-
-  const handleDeleteClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDeleteDialogOpen(true);
-  };
-
-  const handleConfirmDelete = async () => {
-    try {
-      await deleteSkill();
-
-      showToast({
-        title: "Succès",
-        description: "Le skill a été supprimé avec succès",
-        status: "success",
-      });
-      setIsDeleteDialogOpen(false);
-    } catch {
-      showToast({
-        title: "Erreur",
-        description: "Erreur lors de la suppression du skill",
-        status: "error",
-      });
-    }
-  };
+  const { imageStyle, hasImage } = useSkillCardImage(skill);
+  const { progressValue, hasProgress, progressPercentage } = useSkillCardProgress(skill);
+  const { statusLabel, hasDescription, getDeleteMessage } = useSkillCardOptimization(skill);
 
   return (
     <>
-      <div
-        className="skill-card-custom skill-card-min group relative flex flex-col bg-slate-800 rounded-2xl shadow-sm transition-all duration-200 hover:shadow-xl hover:-translate-y-1 focus-within:ring-2 focus-within:ring-blue-300 min-h-[340px] h-full cursor-pointer"
-        tabIndex={0}
-        onClick={handleCardClick}
-      >
-        {/* Image de fond */}
-        {skill.imageUrl && (
-          <div className="relative w-full h-32">
-            <img
-              src={skill.imageUrl}
-              alt={skill.title}
-              className="absolute inset-0 w-full h-full object-cover object-center"
-              style={{ borderTopLeftRadius: "1rem", borderTopRightRadius: "1rem" }}
-            />
-            <div
-              className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent"
-              style={{ borderTopLeftRadius: "1rem", borderTopRightRadius: "1rem" }}
-            />
-            {/* Badges sur l'image */}
-            <div className="absolute top-3 right-3 flex flex-col items-end gap-2 z-10">
-              <span
-                className={`skill-badge-difficulty ${statusColors[skill.status]} rounded-lg px-3 py-0.5 text-xs font-semibold shadow border border-opacity-20 whitespace-nowrap bg-white/80 backdrop-blur-sm`}
+      {/* Carte en colonne: header → infos → footer */}
+      <div className={`session-card flex h-full flex-col ${SKILL_CARD_CONSTANTS.CARD_BORDER_RADIUS} overflow-hidden`}>
+        {/* Image de fond avec bords arrondis */}
+        <div
+          className={`skill-card-image absolute inset-0 ${SKILL_CARD_CONSTANTS.CARD_BORDER_RADIUS} overflow-hidden`}
+          style={imageStyle}
+          data-loading={!hasImage}
+        />
+
+        {/* Overlay dégradé vers le bas */}
+        <div
+          className={`skill-card-overlay absolute inset-0 bg-gradient-to-b ${SKILL_CARD_CONSTANTS.OVERLAY_GRADIENT} pointer-events-none ${SKILL_CARD_CONSTANTS.CARD_BORDER_RADIUS}`}
+        ></div>
+
+        {/* Contenu avec z-index pour être au-dessus du dégradé */}
+        <div className="skill-card-content relative z-10 flex h-full flex-col p-4">
+          {/* Header */}
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <h3
+                className={`skill-card-title truncate font-semibold text-white leading-tight ${SKILL_CARD_CONSTANTS.TEXT_SHADOW}`}
               >
-                {statusLabels[skill.status]}
-              </span>
+                {skill.title}
+              </h3>
             </div>
-          </div>
-        )}
-        {/* Contenu principal */}
-        <div className="p-5 flex flex-col flex-1">
-          <h3 className="font-extrabold text-base leading-tight line-clamp-2 mb-1 text-slate-200" title={skill.title}>
-            {skill.title}
-          </h3>
-          <div className="text-xs text-slate-400 mb-3 line-clamp-2" title={skill.description}>
-            {skill.description}
-          </div>
-          {/* Barre de progression */}
-          {typeof skill.progressValue === "number" && (
-            <div className="mb-3">
-              <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-blue-400 via-sky-400 to-cyan-400 transition-all duration-700 ease-out"
-                  style={{ width: `${skill.progressValue}%` }}
-                />
-              </div>
-              <div className="flex justify-between text-xs text-slate-300 mt-1 font-medium">
-                <span>Progression</span>
-                <span>{skill.progressValue}%</span>
-              </div>
-              <div className="absolute inset-0 rounded-xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5" />
-            </div>
-          )}
-          {/* Footer */}
-          <div className="flex items-center justify-between pt-4 border-t border-slate-700/50 text-xs">
-            <Badge className="bg-slate-700/50 text-slate-300 font-medium px-2 py-0.5 rounded-md text-xs max-w-[100px] whitespace-nowrap truncate">
-              {/* {skill.category.length > 12 ? skill.category.slice(0, 12) + "…" : skill.category} */}
-            </Badge>
-            <span className="text-slate-500">
-              {/* {new Date(skill.createdAt).toLocaleDateString("fr-FR", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })} */}
+
+            {/* Statut compact à droite */}
+            <span
+              className={`rounded-full bg-black/40 ${SKILL_CARD_CONSTANTS.BACKDROP_BLUR} px-3 py-1 text-xs text-white ${SKILL_CARD_CONSTANTS.BORDER_OPACITY}`}
+            >
+              {statusLabel}
             </span>
           </div>
-        </div>
 
-        {/* Bouton d'édition */}
-        <Button
-          size="sm"
-          variant="ghost"
-          className="absolute top-3 right-12 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-800/80 hover:bg-slate-700/80 text-white z-20 w-8 h-8 p-0"
-          onClick={handleEditClick}
-        >
-          <Edit3 size={12} />
-        </Button>
+          {/* Infos */}
+          <div className="mt-4 flex flex-wrap items-center gap-2 text-sm">
+            {hasProgress && (
+              <div className={SKILL_CARD_PROGRESS.CONTAINER}>
+                <span className="text-slate-200">Progression :</span>{" "}
+                <span className="font-medium text-white">{progressValue}%</span>
+              </div>
+            )}
+          </div>
 
-        {/* Bouton de suppression */}
-        <Button
-          size="sm"
-          variant="ghost"
-          disabled={deleteLoading}
-          className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-slate-800/80 hover:bg-slate-700/80 active:bg-red-600 active:text-white text-white z-40 w-8 h-8 p-0 rounded-md shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-          onClick={handleDeleteClick}
-        >
-          {deleteLoading ? (
-            <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
-          ) : (
-            <Trash2 size={14} />
+          {/* Description */}
+          {hasDescription && (
+            <div className={`mt-3 text-sm text-slate-200 ${SKILL_CARD_CONSTANTS.LINE_CLAMP} drop-shadow-md`}>
+              {skill.description}
+            </div>
           )}
-        </Button>
 
-        {/* Overlay lumineux fin autour de la carte */}
-        <span className="absolute inset-0 pointer-events-none z-10" aria-hidden="true" />
-        {/* Overlay lumineux au hover */}
+          {/* Barre de progression */}
+          {hasProgress && (
+            <div className="mt-4">
+              <div className={SKILL_CARD_PROGRESS.BAR_CONTAINER}>
+                <div
+                  className={`skill-card-progress-bar ${SKILL_CARD_PROGRESS.BAR_FILL}`}
+                  style={{ width: progressPercentage }}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Footer actions (barre propre en bas) */}
+          <div className={`skill-card-actions ${SKILL_CARD_ACTIONS.CONTAINER}`}>
+            <Button onClick={handleCardClick} aria-label="Éditer le skill" className={SKILL_CARD_ACTIONS.EDIT_BUTTON}>
+              <Edit3 className="h-4 w-4" />
+              <span className="ml-2 hidden sm:inline"></span>
+            </Button>
+
+            <Button
+              onClick={handleDeleteClick}
+              aria-label="Supprimer le skill"
+              disabled={deleteLoading}
+              className={SKILL_CARD_ACTIONS.DELETE_BUTTON}
+            >
+              {deleteLoading ? <div className={SKILL_CARD_ACTIONS.LOADING_SPINNER} /> : <Trash2 className="h-4 w-4" />}
+            </Button>
+          </div>
+        </div>
       </div>
 
-      {/* Boîte de dialogue de confirmation de suppression */}
       <ConfirmDeleteDialogue
         isDeleteDialogOpen={isDeleteDialogOpen}
-        setIsDeleteDialogOpen={setIsDeleteDialogOpen}
-        messageDialogue={`Êtes-vous sûr de vouloir supprimer le skill ${skill.title} ? Cette action est irréversible.`}
+        setIsDeleteDialogOpen={handleCloseDeleteDialog}
+        messageDialogue={getDeleteMessage()}
         deleteLoading={deleteLoading}
         handleConfirmDelete={handleConfirmDelete}
       />
     </>
   );
 };
+
+// Export du composant mémorisé pour optimiser les performances
+export const SkillCard = memo(SkillCardComponent);

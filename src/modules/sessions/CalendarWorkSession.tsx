@@ -27,8 +27,12 @@ import { INITIAL_SESSION_FORM } from "./const/session-form.const";
 import type { DateSelectArg, EventClickArg } from "@fullcalendar/core";
 import { ConfirmDeleteDialogue } from "@/component/confirm-dialogue/ConfirmDeleteDialogue";
 import { showToast } from "@/component/notification/show-toast";
+import { Button } from "@/shared/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { routes } from "@/routes/router.const";
 
 export const CalendarWorkSession = () => {
+  const navigate = useNavigate();
   const { isCollapsed } = useSidebarStore();
   const { createSession } = useCreateSession();
   const { user } = useUser();
@@ -49,7 +53,7 @@ export const CalendarWorkSession = () => {
 
   const { sessions } = useGetSessions(userId || "");
   const { updateSession } = useUpdateSession(editingSessionId);
-  const { deleteSession } = useDeleteSession();
+  const { deleteSession } = useDeleteSession(editingSessionId || "");
 
   const initialView = useCalendarResponsive();
 
@@ -188,8 +192,11 @@ export const CalendarWorkSession = () => {
 
   const handleDelete = useCallback(async () => {
     try {
+      if (!editingSessionId) {
+        throw new Error("Aucun id trouvé pour la session");
+      }
       setIsDeleting(true);
-      await deleteSession(editingSessionId);
+      await deleteSession();
 
       setWorkSessions((workSession) => workSession.filter((_, i) => i !== editingIndex));
 
@@ -212,84 +219,94 @@ export const CalendarWorkSession = () => {
     } finally {
       setIsDeleting(false);
     }
-  }, [editingSessionId, editingIndex, deleteSession]);
+  }, [deleteSession, editingIndex, editingSessionId]);
+
 
   return (
     <div className="transition-all duration-300 min-h-screen">
       <div className="p-4 md:p-8 flex flex-col min-h-[calc(100vh-4rem)] w-full">
-        <h1 className="text-2xl md:text-3xl font-semibold text-slate-100 tracking-tight mb-4">
-          Vos sessions de travail
-        </h1>
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-2xl md:text-3xl font-semibold text-slate-100 tracking-tight">
+            Planifier vos sessions de travail
+          </h1>
+          <Button
+            onClick={() => navigate(routes.sessionsListing.path)}
+            className="px-3 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-500 text-sm"
+          >
+            Afficher toutes vos sessions
+          </Button>
+        </div>
+        <div className="mt-8">
+          <CalendarHeader
+            calendarApi={calendarRef.current?.getApi() || null}
+            headerTitle={headerTitle}
+            currentView={currentView}
+            setCurrentView={(viewName) => calendarRef.current?.getApi().changeView(viewName)}
+            updateHeaderTitle={() => {
+              const api = calendarRef.current?.getApi();
+              if (api) setHeaderTitle(capitalizeFirstLetter(api.view.title));
+            }}
+            onAddSession={() => {
+              setEditingIndex(null);
+              setSessionForm(INITIAL_SESSION_FORM);
+              setIsDialogOpen(true);
+            }}
+          />
 
-        <CalendarHeader
-          calendarApi={calendarRef.current?.getApi() || null}
-          headerTitle={headerTitle}
-          currentView={currentView}
-          setCurrentView={(viewName) => calendarRef.current?.getApi().changeView(viewName)}
-          updateHeaderTitle={() => {
-            const api = calendarRef.current?.getApi();
-            if (api) setHeaderTitle(capitalizeFirstLetter(api.view.title));
-          }}
-          onAddSession={() => {
-            setEditingIndex(null);
-            setSessionForm(INITIAL_SESSION_FORM);
-            setIsDialogOpen(true);
-          }}
-        />
-
-        <div className="rounded-2xl border border-slate-700 overflow-hidden bg-slate-900/60">
-          <div className={currentView.startsWith("timeGrid") ? "h-[calc(100vh-220px)] overflow-auto" : ""}>
-            <FullCalendar
-              ref={calendarRef as any}
-              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-              locales={[frLocale]}
-              locale="fr"
-              initialView={initialView}
-              datesSet={handleDatesSet}
-              headerToolbar={false}
-              events={calendarEvents}
-              selectable
-              selectMirror
-              select={handleSelect}
-              unselectAuto
-              dateClick={handleDateClick}
-              eventClick={handleEventClick}
-              height={currentView.startsWith("timeGrid") ? "100%" : "auto"}
-              contentHeight={currentView.startsWith("timeGrid") ? "auto" : undefined}
-              expandRows={currentView.startsWith("timeGrid") ? undefined : false}
-              allDaySlot={false}
-              slotMinTime="00:00:00"
-              slotMaxTime="24:00:00"
-              slotLabelFormat={{ hour: "2-digit", minute: "2-digit", hour12: false }}
-              scrollTime="08:00:00"
-              dayHeaderFormat={{ weekday: "long" }}
-              eventDisplay="block"
-              displayEventTime={false}
-              timeZone="UTC"
-            />
+          <div className="rounded-2xl border border-slate-700 overflow-hidden bg-slate-900/60">
+            <div className={currentView.startsWith("timeGrid") ? "h-[calc(100vh-220px)] overflow-auto" : ""}>
+              <FullCalendar
+                ref={calendarRef as any}
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                locales={[frLocale]}
+                locale="fr"
+                initialView={initialView}
+                datesSet={handleDatesSet}
+                headerToolbar={false}
+                events={calendarEvents}
+                selectable
+                selectMirror
+                select={handleSelect}
+                unselectAuto
+                dateClick={handleDateClick}
+                eventClick={handleEventClick}
+                height={currentView.startsWith("timeGrid") ? "100%" : "auto"}
+                contentHeight={currentView.startsWith("timeGrid") ? "auto" : undefined}
+                expandRows={currentView.startsWith("timeGrid") ? undefined : false}
+                allDaySlot={false}
+                slotMinTime="00:00:00"
+                slotMaxTime="24:00:00"
+                slotLabelFormat={{ hour: "2-digit", minute: "2-digit", hour12: false }}
+                scrollTime="08:00:00"
+                dayHeaderFormat={{ weekday: "long" }}
+                eventDisplay="block"
+                displayEventTime={false}
+                timeZone="UTC"
+              />
+            </div>
           </div>
         </div>
+
+        <SessionDialog
+          open={isDialogOpen}
+          onOpenChange={setIsDialogOpen}
+          formSession={sessionForm}
+          setFormSession={setSessionForm}
+          onSave={handleSave}
+          isEditing={editingIndex !== null}
+          sessionSlots={convertCalendarEventsToDialogSessions(workSessions, sessionForm.startDate, editingIndex)}
+          editingSessionId={editingSessionId}
+          setIsDeleteDialogOpen={setIsDeleteDialogOpen}
+          isDeleting={isDeleting}
+        />
+
+        <ConfirmDeleteDialogue
+          isDeleteDialogOpen={isDeleteDialogOpen}
+          setIsDeleteDialogOpen={setIsDeleteDialogOpen}
+          messageDialogue="Êtes-vous sûr de vouloir supprimer la session ? Cette action est irréversible."
+          handleConfirmDelete={handleDelete}
+        />
       </div>
-
-      <SessionDialog
-        open={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
-        formSession={sessionForm}
-        setFormSession={setSessionForm}
-        onSave={handleSave}
-        isEditing={editingIndex !== null}
-        sessionSlots={convertCalendarEventsToDialogSessions(workSessions, sessionForm.startDate, editingIndex)}
-        editingSessionId={editingSessionId}
-        setIsDeleteDialogOpen={setIsDeleteDialogOpen}
-        isDeleting={isDeleting}
-      />
-
-      <ConfirmDeleteDialogue
-        isDeleteDialogOpen={isDeleteDialogOpen}
-        setIsDeleteDialogOpen={setIsDeleteDialogOpen}
-        messageDialogue="Êtes-vous sûr de vouloir supprimer la session ? Cette action est irréversible."
-        handleConfirmDelete={handleDelete}
-      />
     </div>
   );
 };
