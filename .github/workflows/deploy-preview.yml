@@ -6,11 +6,6 @@ on:
     branches:
       - develop
       - main
-    paths:
-      - "src/**"
-      - "public/**"
-      - "package.json"
-      - "vite.config.ts"
 
 env:
   SCW_ACCESS_KEY: ${{ secrets.SCW_ACCESS_KEY }}
