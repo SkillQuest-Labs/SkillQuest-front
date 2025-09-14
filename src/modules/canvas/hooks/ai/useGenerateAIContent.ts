@@ -29,7 +29,7 @@ export const useGenerateAIContent = () => {
       try {
         debugLogger.info(`🔄 Tentative ${attempt}/${maxRetries} de génération`);
 
-    const rawQuests = await generateQuestsFromAI(context);
+        const rawQuests = await generateQuestsFromAI(context);
 
         if (rawQuests.length > 0) {
           debugLogger.info(`✅ Génération réussie à la tentative ${attempt}`, {
@@ -38,30 +38,30 @@ export const useGenerateAIContent = () => {
             questTitles: rawQuests.map((q) => q.title),
           });
 
-    const questsWithResolvedResources = await Promise.all(
-      rawQuests.map(async (quest) => {
-        if (quest.resources && quest.resources.length > 0) {
-          // Validate that the resources are indeed ResourceIntention
-          const validResources = quest.resources.filter(isValidResourceIntention);
+          const questsWithResolvedResources = await Promise.all(
+            rawQuests.map(async (quest) => {
+              if (quest.resources && quest.resources.length > 0) {
+                // Validate that the resources are indeed ResourceIntention
+                const validResources = quest.resources.filter(isValidResourceIntention);
 
                 if (validResources.length > 0) {
                   totalValidResources += validResources.length;
                   const resolvedResources = await resolveResources(validResources);
                   totalResourcesResolved += resolvedResources.length;
 
-            // Update the description with the resolved links
-            if (resolvedResources.length > 0) {
-              const resourceLinks = resolvedResources
-                .filter((resource) => resource.isValid && resource.score > 40) // Quality threshold
-                .map((resource) => `- [${resource.title}](${resource.url})`)
-                .join("\n");
+                  // Update the description with the resolved links
+                  if (resolvedResources.length > 0) {
+                    const resourceLinks = resolvedResources
+                      .filter((resource) => resource.isValid && resource.score > 40) // Quality threshold
+                      .map((resource) => `- [${resource.title}](${resource.url})`)
+                      .join("\n");
 
-              if (resourceLinks) {
-                quest.description += `\n\n## 📚 Ressources recommandées\n${resourceLinks}`;
+                    if (resourceLinks) {
+                      quest.description += `\n\n## 📚 Ressources recommandées\n${resourceLinks}`;
+                    }
+                  }
+                }
               }
-            }
-          }
-        }
 
               return quest;
             }),
