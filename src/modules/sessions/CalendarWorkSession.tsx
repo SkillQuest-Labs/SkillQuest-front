@@ -57,10 +57,24 @@ export const CalendarWorkSession = () => {
 
   const initialView = useCalendarResponsive();
 
+  const debugLogger = (window as any).debugLogger;
+
   useEffect(() => {
-    if (!sessions || !Array.isArray(sessions)) return;
-    setWorkSessions(convertSessionsToEvents(sessions));
-  }, [sessions]);
+    if (!sessions || !Array.isArray(sessions)) {
+      debugLogger.warn("📅 Sessions non disponibles ou invalides", {
+        sessions,
+        isArray: Array.isArray(sessions),
+      });
+      return;
+    }
+    const events = convertSessionsToEvents(sessions);
+    debugLogger.info("📅 Sessions chargées dans le calendrier", {
+      sessionsCount: sessions.length,
+      eventsCount: events.length,
+      sessionTitles: sessions.map((s) => s.title),
+    });
+    setWorkSessions(events);
+  }, [sessions, debugLogger]);
 
   useEffect(() => {
     const api = calendarRef.current?.getApi();
@@ -152,7 +166,9 @@ export const CalendarWorkSession = () => {
         await createSession(payload);
       } else {
         const idToUpdate = workSessions[editingIndex]?.id;
-        if (!idToUpdate) throw new Error("Session id introuvable");
+        if (!idToUpdate) {
+          throw new Error("Session id introuvable");
+        }
         await updateSession(payload);
       }
 
@@ -204,6 +220,7 @@ export const CalendarWorkSession = () => {
       setIsDeleting(false);
     }
   }, [deleteSession, editingIndex, editingSessionId]);
+
 
   return (
     <div className="transition-all duration-300 min-h-screen">

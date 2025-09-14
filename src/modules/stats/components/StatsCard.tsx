@@ -36,7 +36,7 @@ export const StatsCard = ({
       <div
         className={cn(
           "relative bg-gradient-to-br backdrop-blur-sm border rounded-xl p-6",
-          "shadow-lg hover:shadow-2xl transition-all duration-300",
+          "shadow-lg hover:shadow-xl transition-all duration-300",
           "bg-gray-900/80 border-gray-700/50",
           colorConfig.border,
           colorConfig.glow,
@@ -101,7 +101,7 @@ export const StatsCard = ({
         {/* Animated border effect */}
         <div
           className={cn(
-            "absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100",
+            "absolute inset-0 rounded-xl opacity-0 ",
             "bg-gradient-to-r p-[1px] transition-opacity duration-300",
             colorConfig.bg,
           )}

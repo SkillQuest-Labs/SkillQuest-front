@@ -4,6 +4,7 @@ import {
 } from "@/shared/services/resource-resolver/resource-resolver";
 import type { ResolvedResource, ResourceIntention } from "@/shared/types/ai/ai.type";
 import { useCallback, useState } from "react";
+import { debugLogger } from "@/shared/utils/debug-logger";
 
 export const useResourceResolver = () => {
   const [isResolving, setIsResolving] = useState(false);
@@ -11,6 +12,7 @@ export const useResourceResolver = () => {
   const [error, setError] = useState<string | null>(null);
 
   const resolveResources = useCallback(async (intentions: ResourceIntention[]) => {
+    debugLogger.info(`🔍 Début de résolution de ${intentions.length} ressources`, { intentions });
     setIsResolving(true);
     setError(null);
 
@@ -18,8 +20,12 @@ export const useResourceResolver = () => {
       const resolved = await resolveMultipleResources(intentions);
       setResolvedResources(resolved);
       return resolved;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Erreur lors de la résolution des ressources";
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Erreur inconnue";
+      debugLogger.error("❌ Erreur lors de la résolution des ressources", {
+        error: errorMessage,
+        intentions,
+      });
       setError(errorMessage);
       return [];
     } finally {
@@ -28,18 +34,32 @@ export const useResourceResolver = () => {
   }, []);
 
   const resolveResource = useCallback(async (intention: ResourceIntention) => {
+    debugLogger.info("🔍 Tentative de résolution d'une ressource", {
+      intention,
+      type: intention.type,
+    });
     setIsResolving(true);
     setError(null);
 
     try {
-      const resolved = await resolveResourceIntention(intention);
-      if (resolved) {
-        setResolvedResources((prev) => [...prev, resolved]);
-        return resolved;
+      const resource = await resolveResourceIntention(intention);
+      if (resource) {
+        debugLogger.info("✅ Ressource résolue avec succès", {
+          intention,
+          resource,
+        });
+        setResolvedResources((prev) => [...prev, resource]);
+        return resource;
+      } else {
+        debugLogger.warn("⚠️ Aucune ressource trouvée", { intention });
+        return null;
       }
-      return null;
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Erreur lors de la résolution de la ressource";
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Erreur inconnue";
+      debugLogger.error("❌ Erreur lors de la résolution de la ressource", {
+        error: errorMessage,
+        intention,
+      });
       setError(errorMessage);
       return null;
     } finally {
