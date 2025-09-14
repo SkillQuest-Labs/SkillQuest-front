@@ -33,7 +33,7 @@ export const SessionsListing = () => {
     userId,
   });
 
-  const hasActiveFilters = !!(sessionFilter.quest || sessionFilter.quest || sessionFilter.date);
+  const hasActiveFilters = !!(sessionFilter.skill || sessionFilter.quest || sessionFilter.date);
 
   const resetFilters = () => {
     setSessionFilter(SESSION_FILTER_INIT);
