@@ -49,7 +49,7 @@ jobs:
         run: |
           BUCKET_NAME="skillquest-previews"
           scw object bucket create name=$BUCKET_NAME region=fr-par || true
-          scw object bucket website set bucket=$BUCKET_NAME index-document=index.html error-document=404.html
+          scw object bucket website set bucket=$BUCKET_NAME index-document=index.html error-document=404.html || true
 
       - name: Deploy PR preview to bucket
         run: |
