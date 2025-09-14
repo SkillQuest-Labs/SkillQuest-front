@@ -63,6 +63,7 @@ export const SkillFilters = ({ filters, onFilterChange }: SkillFiltersProps) => 
             <option value="RECENT">Plus récent</option>
             <option value="OLDEST">Moins récent</option>
           </select>
+
         </div>
       </div>
     </div>

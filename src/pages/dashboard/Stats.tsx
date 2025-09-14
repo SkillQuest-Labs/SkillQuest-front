@@ -1,11 +1,17 @@
-import { mockChartData } from "@/modules/stats/components/chart";
 import { StatsCard } from "@/modules/stats/components/StatsCard";
 import { StatsCharts } from "@/modules/stats/components/StatsCharts";
 import { UserLevelCard } from "@/modules/stats/components/UserLevelCard";
+import { useGetSkills } from "@/shared/services/skill/api-skill";
+import { computeUserProgress } from "@/shared/utils/compute-user-progress";
+import { useUser } from "@clerk/clerk-react";
 import { Award, BarChart3, Target, TrendingUp } from "lucide-react";
 
 export const Stats = () => {
-  const { userStats } = mockChartData;
+  const { user } = useUser();
+  const { skills: skillsData } = useGetSkills(user?.id || "");
+
+  const { totalXp, totalQuestCompleted, totalSkillCompleted, userCurrentLevel, xpMaxForLevel } =
+    computeUserProgress(skillsData);
 
   return (
     <div className="h-full overflow-hidden">
@@ -28,7 +34,7 @@ export const Stats = () => {
             <div className="flex-shrink-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
               <StatsCard
                 title="XP Total"
-                value={userStats.totalXp}
+                value={totalXp}
                 icon={TrendingUp}
                 color="blue"
                 change={{
@@ -40,7 +46,7 @@ export const Stats = () => {
 
               <StatsCard
                 title="Skills Complétées"
-                value={userStats.skillsCompleted}
+                value={totalSkillCompleted}
                 icon={Target}
                 color="green"
                 change={{
@@ -52,7 +58,7 @@ export const Stats = () => {
 
               <StatsCard
                 title="Quêtes Terminées"
-                value={userStats.questsCompleted}
+                value={totalQuestCompleted}
                 icon={BarChart3}
                 color="orange"
                 change={{
@@ -72,10 +78,10 @@ export const Stats = () => {
           <div className="w-full lg:w-80 flex-shrink-0">
             <div className="h-full">
               <UserLevelCard
-                currentLevel={userStats.currentLevel}
-                currentXp={userStats.totalXp % 2700}
-                maxXp={2700}
-                totalXp={userStats.totalXp}
+                currentLevel={userCurrentLevel}
+                currentXp={totalXp % 2700}
+                maxXp={xpMaxForLevel}
+                totalXp={totalXp}
                 icon={Award}
               />
             </div>
