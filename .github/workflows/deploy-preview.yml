@@ -18,7 +18,7 @@ env:
   SCW_DEFAULT_ORGANIZATION_ID: ${{ secrets.SCW_DEFAULT_ORGANIZATION_ID }}
   SCW_DEFAULT_PROJECT_ID: ${{ secrets.SCW_DEFAULT_PROJECT_ID }}
   SCW_DEFAULT_REGION: fr-par
-  BUCKET_NAME: skillquest-previews
+  BUCKET_NAME: skillquest-previews-bucket
 
 jobs:
   deploy-preview:
@@ -53,7 +53,7 @@ jobs:
 
       - name: Create / configure global preview bucket
         run: |
-          scw object bucket create name=$BUCKET_NAME region=fr-par || echo "Bucket exists, continue"
+          scw object bucket create name=$BUCKET_NAME region=fr-par
           scw object bucket website set bucket=$BUCKET_NAME index-document=index.html error-document=404.html
 
       - name: Deploy PR preview to bucket
