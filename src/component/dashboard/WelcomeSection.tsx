@@ -12,27 +12,60 @@ const MOTIVATIONAL_QUOTES = [
   "Seuls ceux qui osent échouer peuvent réussir grandement.",
 ];
 
+// Configuration optimisée des greetings par période
+const GREETING_CONFIGS = {
+  morning: {
+    message: "Bonjour",
+    icon: "🌅",
+    gradient: "from-slate-900/95 via-blue-900/30 to-violet-900/25",
+  },
+  afternoon: {
+    message: "Bon après-midi",
+    icon: "☀️",
+    gradient: "from-slate-900/95 via-cyan-900/30 to-blue-900/25",
+  },
+  evening: {
+    message: "Bonsoir",
+    icon: "🌙",
+    gradient: "from-slate-900/95 via-violet-900/30 to-indigo-900/25",
+  },
+} as const;
+
 const getTimeBasedGreeting = (): { message: string; icon: string; gradient: string } => {
   const hour = new Date().getHours();
 
-  if (hour < 12) {
-    return {
-      message: "Bon matin",
-      icon: "🌅",
-      gradient: "from-slate-900/95 via-blue-900/30 to-violet-900/25",
-    };
-  } else if (hour < 18) {
-    return {
-      message: "Bon après-midi",
-      icon: "☀️",
-      gradient: "from-slate-900/95 via-cyan-900/30 to-blue-900/25",
-    };
+  // Optimisation : utilisation d'une logique plus claire et efficace
+  if (hour >= 4 && hour < 13) {
+    return GREETING_CONFIGS.morning;
+  } else if (hour >= 13 && hour < 18) {
+    return GREETING_CONFIGS.afternoon;
   } else {
-    return {
-      message: "Bonsoir",
-      icon: "🌙",
-      gradient: "from-slate-900/95 via-violet-900/30 to-indigo-900/25",
-    };
+    return GREETING_CONFIGS.evening;
+  }
+};
+
+// Fonction optimisée pour calculer le prochain changement de greeting
+const getNextGreetingChange = (currentDate: Date): Date => {
+  const now = new Date(currentDate);
+  const hour = now.getHours();
+
+  // Heures de changement : 4h, 13h, 18h
+  const changeHours = [4, 13, 18];
+
+  // Trouver la prochaine heure de changement aujourd'hui
+  const nextHour = changeHours.find((h) => h > hour);
+
+  if (nextHour) {
+    // Prochain changement aujourd'hui
+    const nextChange = new Date(now);
+    nextChange.setHours(nextHour, 0, 0, 0);
+    return nextChange;
+  } else {
+    // Prochain changement demain à 4h
+    const nextChange = new Date(now);
+    nextChange.setDate(nextChange.getDate() + 1);
+    nextChange.setHours(4, 0, 0, 0);
+    return nextChange;
   }
 };
 
@@ -49,8 +82,30 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
     const randomQuote = MOTIVATIONAL_QUOTES[Math.floor(Math.random() * MOTIVATIONAL_QUOTES.length)];
     setQuote(randomQuote);
 
-    // Mise à jour du greeting
-    setGreeting(getTimeBasedGreeting());
+    // Fonction de mise à jour du greeting
+    const updateGreeting = () => {
+      setGreeting(getTimeBasedGreeting());
+    };
+
+    // Mise à jour immédiate
+    updateGreeting();
+
+    // Calculer le prochain changement de greeting
+    const nextChange = getNextGreetingChange(new Date());
+    const timeUntilNext = nextChange.getTime() - Date.now();
+
+    // Programmer la prochaine mise à jour
+    const timeoutId = setTimeout(() => {
+      updateGreeting();
+      
+      // Après le premier changement, programmer les mises à jour quotidiennes
+      setInterval(updateGreeting, 24 * 60 * 60 * 1000);
+    }, timeUntilNext);
+
+    // Nettoyage des timers au démontage du composant
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   return (

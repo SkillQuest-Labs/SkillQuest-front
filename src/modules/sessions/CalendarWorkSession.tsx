@@ -221,7 +221,6 @@ export const CalendarWorkSession = () => {
     }
   }, [deleteSession, editingIndex, editingSessionId]);
 
-
   return (
     <div className="transition-all duration-300 min-h-screen">
       <div className="p-4 md:p-8 flex flex-col min-h-[calc(100vh-4rem)] w-full">
