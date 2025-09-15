@@ -1,4 +1,4 @@
-import { Check, Pencil, X, ChevronUp, ChevronDown } from "lucide-react";
+import { Check, Pencil, X, ChevronUp } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import badgeApprenti from "@/assets/badges/badge-apprenti.png";
@@ -255,21 +255,28 @@ const ProfileHud = ({
         </div>
 
         {/* Bouton de toggle */}
-        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-700/60 hover:bg-slate-600/60 transition-colors duration-200">
-          {isExpanded ? (
-            <ChevronDown className="w-4 h-4 text-slate-300" />
-          ) : (
+        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-700/60 hover:bg-slate-600/60 transition-all duration-300 hover:scale-110">
+          <div className={`transition-transform duration-300 ease-in-out ${
+            isExpanded ? 'rotate-180' : 'rotate-0'
+          }`}>
             <ChevronUp className="w-4 h-4 text-slate-300" />
-          )}
+          </div>
         </div>
       </div>
 
       {/* État déplié */}
-      {isExpanded && (
-        <div className="absolute bottom-full left-0 right-0 bg-gradient-to-r from-slate-900/95 to-slate-800/95 backdrop-blur-md border border-slate-600/30 border-b-0 rounded-t-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden">
+      <div 
+        className={`absolute bottom-full left-0 right-0 bg-gradient-to-r from-slate-900/95 to-slate-800/95 backdrop-blur-md border border-slate-600/30 border-b-0 rounded-t-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden transition-all duration-500 ease-in-out transform ${
+          isExpanded 
+            ? 'opacity-100 translate-y-0 scale-100' 
+            : 'opacity-0 translate-y-4 scale-95 pointer-events-none'
+        }`}
+      >
           <div className="p-4 space-y-4">
             {/* Section Avatar et édition */}
-            <div className="space-y-3">
+            <div className={`space-y-3 transition-all duration-700 ease-out ${
+              isExpanded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+            }`} style={{ transitionDelay: isExpanded ? '100ms' : '0ms' }}>
               <div className="flex items-center justify-between">
                 <h4 className="text-sm font-semibold text-slate-300">Photo de profil</h4>
                 {!isEditing ? (
@@ -349,7 +356,9 @@ const ProfileHud = ({
             </div>
 
             {/* Section Niveau détaillé */}
-            <div className="space-y-3">
+            <div className={`space-y-3 transition-all duration-700 ease-out ${
+              isExpanded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+            }`} style={{ transitionDelay: isExpanded ? '200ms' : '0ms' }}>
               <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/40">
                 <div className="flex items-center justify-between">
                   <div>
@@ -364,7 +373,9 @@ const ProfileHud = ({
             </div>
 
             {/* Section Progression détaillée */}
-            <div className="space-y-3">
+            <div className={`space-y-3 transition-all duration-700 ease-out ${
+              isExpanded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+            }`} style={{ transitionDelay: isExpanded ? '300ms' : '0ms' }}>
               <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/40">
                 <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
                   <span>Progression</span>
@@ -383,7 +394,9 @@ const ProfileHud = ({
             </div>
 
             {/* Section Badges */}
-            <div className="space-y-3">
+            <div className={`space-y-3 transition-all duration-700 ease-out ${
+              isExpanded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
+            }`} style={{ transitionDelay: isExpanded ? '400ms' : '0ms' }}>
               <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/40">
                 <div className="flex items-center gap-3">
                   <img
@@ -400,7 +413,6 @@ const ProfileHud = ({
             </div>
           </div>
         </div>
-      )}
     </div>
   );
 };
