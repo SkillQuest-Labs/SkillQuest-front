@@ -52,7 +52,7 @@ export const DashboardUser = () => {
       </div>
 
       {/* ProfileHud Collapsible - Positionné en bas à droite */}
-      <div className="fixed bottom-4 right-4 z-50" style={{ marginBottom: '20px' }}>
+      <div className="fixed bottom-4 right-4 z-50" style={{ marginBottom: "20px" }}>
         <ProfileHud
           userName={user?.username || user?.firstName || "Aventurier"}
           title={(user?.unsafeMetadata?.role as string) || "Aventurier"}

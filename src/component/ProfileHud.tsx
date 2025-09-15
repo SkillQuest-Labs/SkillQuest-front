@@ -199,7 +199,11 @@ const ProfileHud = ({
           <div className="rounded-xl border border-blue-500/30 bg-black/40 p-4 shadow-inner">
             <div className="text-xs text-blue-200/70 mb-2">Badges</div>
             <div className="flex flex-col gap-3">
-              <img src={levelBadge.image} alt={`Badge ${levelBadge.title}`} className="w-12 h-12 rounded-lg shadow-lg" />
+              <img
+                src={levelBadge.image}
+                alt={`Badge ${levelBadge.title}`}
+                className="w-12 h-12 rounded-lg shadow-lg"
+              />
             </div>
           </div>
         </div>
@@ -220,7 +224,6 @@ const ProfileHud = ({
         {/* Avatar avec bordure bleue comme dans l'image */}
         <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-blue-400/60 shadow-[0_0_20px_rgba(59,130,246,0.4)]">
           <img src={currentAvatar} alt="avatar" className="w-full h-full object-cover" />
-          <span className="absolute -right-1 -bottom-1 w-4 h-4 rounded-full bg-emerald-500 ring-2 ring-slate-900" />
         </div>
 
         {/* Informations utilisateur */}
@@ -243,7 +246,9 @@ const ProfileHud = ({
             </div>
             <div className="flex justify-between mt-1 text-xs font-medium text-slate-300">
               <span>LVL {level}</span>
-              <span>{xp} / {xpToNext} XP</span>
+              <span>
+                {xp} / {xpToNext} XP
+              </span>
             </div>
           </div>
         </div>
@@ -305,8 +310,11 @@ const ProfileHud = ({
 
               {/* Avatar actuel */}
               <div className="flex items-center gap-3">
-                <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-blue-400/60">
-                  <img src={currentAvatar} alt="avatar" className="w-full h-full object-cover" />
+                <div className="relative">
+                  <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-blue-400/60">
+                    <img src={currentAvatar} alt="avatar" className="w-full h-full object-cover" />
+                  </div>
+                  <span className="absolute -right-1 -bottom-1 w-4 h-4 rounded-full bg-emerald-500 ring-2 ring-slate-900" />
                 </div>
                 <div>
                   <div className="text-sm font-medium text-white">{userName}</div>
@@ -345,7 +353,7 @@ const ProfileHud = ({
                 <Star className="w-4 h-4 text-amber-400" />
                 <span className="font-semibold">Niveau</span>
               </div>
-              
+
               <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/40">
                 <div className="flex items-center justify-between">
                   <div>
@@ -365,7 +373,7 @@ const ProfileHud = ({
                 <Target className="w-4 h-4 text-blue-400" />
                 <span className="font-semibold">Progression</span>
               </div>
-              
+
               <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/40">
                 <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
                   <span>Progression</span>
@@ -389,10 +397,14 @@ const ProfileHud = ({
                 <Award className="w-4 h-4 text-yellow-400" />
                 <span className="font-semibold">Badges</span>
               </div>
-              
+
               <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/40">
                 <div className="flex items-center gap-3">
-                  <img src={levelBadge.image} alt={`Badge ${levelBadge.title}`} className="w-12 h-12 rounded-lg shadow-lg" />
+                  <img
+                    src={levelBadge.image}
+                    alt={`Badge ${levelBadge.title}`}
+                    className="w-12 h-12 rounded-lg shadow-lg"
+                  />
                   <div>
                     <div className="text-white font-medium">{levelBadge.title}</div>
                     <div className="text-xs text-slate-400">Badge de niveau</div>

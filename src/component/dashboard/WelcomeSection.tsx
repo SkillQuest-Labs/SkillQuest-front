@@ -97,7 +97,7 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
     // Programmer la prochaine mise à jour
     const timeoutId = setTimeout(() => {
       updateGreeting();
-      
+
       // Après le premier changement, programmer les mises à jour quotidiennes
       setInterval(updateGreeting, 24 * 60 * 60 * 1000);
     }, timeUntilNext);
