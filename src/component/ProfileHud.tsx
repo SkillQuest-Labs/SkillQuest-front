@@ -256,163 +256,171 @@ const ProfileHud = ({
 
         {/* Bouton de toggle */}
         <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-700/60 hover:bg-slate-600/60 transition-all duration-300 hover:scale-110">
-          <div className={`transition-transform duration-300 ease-in-out ${
-            isExpanded ? 'rotate-180' : 'rotate-0'
-          }`}>
+          <div className={`transition-transform duration-300 ease-in-out ${isExpanded ? "rotate-180" : "rotate-0"}`}>
             <ChevronUp className="w-4 h-4 text-slate-300" />
           </div>
         </div>
       </div>
 
       {/* État déplié */}
-      <div 
+      <div
         className={`absolute bottom-full left-0 right-0 bg-gradient-to-r from-slate-900/95 to-slate-800/95 backdrop-blur-md border border-slate-600/30 border-b-0 rounded-t-2xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] overflow-hidden transition-all duration-500 ease-in-out transform ${
-          isExpanded 
-            ? 'opacity-100 translate-y-0 scale-100' 
-            : 'opacity-0 translate-y-4 scale-95 pointer-events-none'
+          isExpanded ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-4 scale-95 pointer-events-none"
         }`}
       >
-          <div className="p-4 space-y-4">
-            {/* Section Avatar et édition */}
-            <div className={`space-y-3 transition-all duration-700 ease-out ${
-              isExpanded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-            }`} style={{ transitionDelay: isExpanded ? '100ms' : '0ms' }}>
-              <div className="flex items-center justify-between">
-                <h4 className="text-sm font-semibold text-slate-300">Photo de profil</h4>
-                {!isEditing ? (
+        <div className="p-4 space-y-4">
+          {/* Section Avatar et édition */}
+          <div
+            className={`space-y-3 transition-all duration-700 ease-out ${
+              isExpanded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+            }`}
+            style={{ transitionDelay: isExpanded ? "100ms" : "0ms" }}
+          >
+            <div className="flex items-center justify-between">
+              <h4 className="text-sm font-semibold text-slate-300">Photo de profil</h4>
+              {!isEditing ? (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleOpenEdit();
+                  }}
+                  className="p-2 rounded-md border border-blue-500/30 text-blue-200/80 hover:text-blue-100 hover:border-blue-300/60 transition"
+                  title="Modifier l'avatar"
+                >
+                  <Pencil size={16} />
+                </button>
+              ) : (
+                <div className="flex items-center gap-2">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleOpenEdit();
+                      handleConfirmEdit();
                     }}
-                    className="p-2 rounded-md border border-blue-500/30 text-blue-200/80 hover:text-blue-100 hover:border-blue-300/60 transition"
-                    title="Modifier l'avatar"
+                    className="p-2 rounded-md bg-emerald-500/20 border border-emerald-400/40 text-emerald-200 hover:bg-emerald-500/30 transition"
+                    title="Valider"
                   >
-                    <Pencil size={16} />
+                    <Check size={16} />
                   </button>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleConfirmEdit();
-                      }}
-                      className="p-2 rounded-md bg-emerald-500/20 border border-emerald-400/40 text-emerald-200 hover:bg-emerald-500/30 transition"
-                      title="Valider"
-                    >
-                      <Check size={16} />
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleCancelEdit();
-                      }}
-                      className="p-2 rounded-md bg-rose-500/20 border border-rose-400/40 text-rose-200 hover:bg-rose-500/30 transition"
-                      title="Annuler"
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {/* Avatar actuel */}
-              <div className="flex items-center gap-3">
-                <div className="relative">
-                  <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-blue-400/60">
-                    <img src={currentAvatar} alt="avatar" className="w-full h-full object-cover" />
-                  </div>
-                  <span className="absolute -right-1 -bottom-1 w-4 h-4 rounded-full bg-emerald-500 ring-2 ring-slate-900" />
-                </div>
-                <div>
-                  <div className="text-sm font-medium text-white">{userName}</div>
-                  <div className="text-xs text-slate-400">{title}</div>
-                </div>
-              </div>
-
-              {/* Galerie avatars (visible en mode édition) */}
-              {isEditing && (
-                <div className="flex gap-2 overflow-x-auto scrollbar-thin">
-                  {avatarChoices.map((a) => {
-                    const isActive = pendingAvatar === a.url;
-                    return (
-                      <button
-                        key={a.id}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setPendingAvatar(a.url);
-                        }}
-                        className={`w-10 h-10 rounded-full overflow-hidden ring-2 transition ${
-                          isActive ? "ring-yellow-400" : "ring-transparent hover:ring-yellow-200"
-                        }`}
-                        title={a.label || a.id}
-                      >
-                        <img src={a.url} alt={a.label || a.id} className="w-full h-full object-cover" />
-                      </button>
-                    );
-                  })}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleCancelEdit();
+                    }}
+                    className="p-2 rounded-md bg-rose-500/20 border border-rose-400/40 text-rose-200 hover:bg-rose-500/30 transition"
+                    title="Annuler"
+                  >
+                    <X size={16} />
+                  </button>
                 </div>
               )}
             </div>
 
-            {/* Section Niveau détaillé */}
-            <div className={`space-y-3 transition-all duration-700 ease-out ${
-              isExpanded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-            }`} style={{ transitionDelay: isExpanded ? '200ms' : '0ms' }}>
-              <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/40">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-slate-400 text-xs">Niveau actuel</div>
-                    <div className="text-white font-bold text-2xl">{level}</div>
-                  </div>
-                  <div className="text-3xl" title={getLevelIcon(level).label}>
-                    {getLevelIcon(level).icon}
-                  </div>
+            {/* Avatar actuel */}
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-blue-400/60">
+                  <img src={currentAvatar} alt="avatar" className="w-full h-full object-cover" />
                 </div>
+                <span className="absolute -right-1 -bottom-1 w-4 h-4 rounded-full bg-emerald-500 ring-2 ring-slate-900" />
+              </div>
+              <div>
+                <div className="text-sm font-medium text-white">{userName}</div>
+                <div className="text-xs text-slate-400">{title}</div>
               </div>
             </div>
 
-            {/* Section Progression détaillée */}
-            <div className={`space-y-3 transition-all duration-700 ease-out ${
-              isExpanded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-            }`} style={{ transitionDelay: isExpanded ? '300ms' : '0ms' }}>
-              <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/40">
-                <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
-                  <span>Progression</span>
-                  <span>{pct}%</span>
+            {/* Galerie avatars (visible en mode édition) */}
+            {isEditing && (
+              <div className="flex gap-2 overflow-x-auto scrollbar-thin">
+                {avatarChoices.map((a) => {
+                  const isActive = pendingAvatar === a.url;
+                  return (
+                    <button
+                      key={a.id}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setPendingAvatar(a.url);
+                      }}
+                      className={`w-10 h-10 rounded-full overflow-hidden ring-2 transition ${
+                        isActive ? "ring-yellow-400" : "ring-transparent hover:ring-yellow-200"
+                      }`}
+                      title={a.label || a.id}
+                    >
+                      <img src={a.url} alt={a.label || a.id} className="w-full h-full object-cover" />
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {/* Section Niveau détaillé */}
+          <div
+            className={`space-y-3 transition-all duration-700 ease-out ${
+              isExpanded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+            }`}
+            style={{ transitionDelay: isExpanded ? "200ms" : "0ms" }}
+          >
+            <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/40">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-slate-400 text-xs">Niveau actuel</div>
+                  <div className="text-white font-bold text-2xl">{level}</div>
                 </div>
-                <div className="h-3 rounded-full bg-slate-700/60 overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-orange-400 via-red-400 to-pink-500 transition-all duration-700 ease-out shadow-[0_0_10px_rgba(251,191,36,0.5)]"
-                    style={{ width: `${pct}%` }}
-                  />
-                </div>
-                <div className="mt-2 text-xs text-slate-400 text-center">
-                  {xp.toLocaleString()} / {xpToNext.toLocaleString()} XP
+                <div className="text-3xl" title={getLevelIcon(level).label}>
+                  {getLevelIcon(level).icon}
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Section Badges */}
-            <div className={`space-y-3 transition-all duration-700 ease-out ${
-              isExpanded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
-            }`} style={{ transitionDelay: isExpanded ? '400ms' : '0ms' }}>
-              <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/40">
-                <div className="flex items-center gap-3">
-                  <img
-                    src={levelBadge.image}
-                    alt={`Badge ${levelBadge.title}`}
-                    className="w-12 h-12 rounded-lg shadow-lg"
-                  />
-                  <div>
-                    <div className="text-white font-medium">{levelBadge.title}</div>
-                    <div className="text-xs text-slate-400">Badge de niveau</div>
-                  </div>
+          {/* Section Progression détaillée */}
+          <div
+            className={`space-y-3 transition-all duration-700 ease-out ${
+              isExpanded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+            }`}
+            style={{ transitionDelay: isExpanded ? "300ms" : "0ms" }}
+          >
+            <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/40">
+              <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
+                <span>Progression</span>
+                <span>{pct}%</span>
+              </div>
+              <div className="h-3 rounded-full bg-slate-700/60 overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-orange-400 via-red-400 to-pink-500 transition-all duration-700 ease-out shadow-[0_0_10px_rgba(251,191,36,0.5)]"
+                  style={{ width: `${pct}%` }}
+                />
+              </div>
+              <div className="mt-2 text-xs text-slate-400 text-center">
+                {xp.toLocaleString()} / {xpToNext.toLocaleString()} XP
+              </div>
+            </div>
+          </div>
+
+          {/* Section Badges */}
+          <div
+            className={`space-y-3 transition-all duration-700 ease-out ${
+              isExpanded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+            }`}
+            style={{ transitionDelay: isExpanded ? "400ms" : "0ms" }}
+          >
+            <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/40">
+              <div className="flex items-center gap-3">
+                <img
+                  src={levelBadge.image}
+                  alt={`Badge ${levelBadge.title}`}
+                  className="w-12 h-12 rounded-lg shadow-lg"
+                />
+                <div>
+                  <div className="text-white font-medium">{levelBadge.title}</div>
+                  <div className="text-xs text-slate-400">Badge de niveau</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
     </div>
   );
 };

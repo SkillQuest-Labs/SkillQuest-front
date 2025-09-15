@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Flame } from "lucide-react";
+import nanobanaImage from "@/assets/images/nanobana.png";
 
 const MOTIVATIONAL_QUOTES = [
   "Chaque quête accomplie te rapproche de la maîtrise !",
@@ -73,6 +74,7 @@ type WelcomeSectionProps = {
   userName: string;
   streak: number;
 };
+
 export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) => {
   const [quote, setQuote] = useState("");
   const [greeting, setGreeting] = useState(getTimeBasedGreeting());
@@ -109,33 +111,49 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
   }, []);
 
   return (
-    <div
-      className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${greeting.gradient} border border-blue-500/20 backdrop-blur-md shadow-[0_20px_50px_rgba(59,130,246,0.15)] mb-8`}
-    >
-      <div className="relative z-10 p-4">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="text-4xl">{greeting.icon}</div>
-          <div>
-            <h1 className="text-2xl lg:text-3xl font-bold text-white mb-1">
-              {greeting.message}, {userName} !
-            </h1>
-            {streak > 0 && (
-              <div className="flex items-center gap-1 text-blue-100/80 text-sm">
-                <Flame className="w-4 h-4 text-cyan-400" />
-                {streak} jours de suite
-              </div>
-            )}
+    <div className="mb-10">
+      {/* Carte Welcome avec image de fond - Taille adaptée */}
+      <div
+        className="relative overflow-hidden rounded-2xl border border-blue-500/20 backdrop-blur-md shadow-[0_20px_50px_rgba(59,130,246,0.15)] mb-5"
+        style={{
+          backgroundImage: `url(${nanobanaImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          minHeight: '280px'
+        }}
+      >
+        {/* Overlay avec gradient pour la lisibilité */}
+        <div className={`absolute inset-0 bg-gradient-to-br ${greeting.gradient} mix-blend-overlay`} />
+        
+        {/* Overlay sombre pour améliorer la lisibilité du texte */}
+        <div className="absolute inset-0 bg-black/30" />
+        
+        <div className="relative z-10 p-6 flex items-center h-full">
+          <div className="flex items-center gap-4">
+            <div className="text-5xl">{greeting.icon}</div>
+            <div>
+              <h1 className="text-3xl lg:text-4xl font-bold text-white mb-1 drop-shadow-lg">
+                {greeting.message}, {userName} !
+              </h1>
+              {streak > 0 && (
+                <div className="flex items-center gap-2 text-blue-100/90 text-base drop-shadow-md">
+                  <Flame className="w-5 h-5 text-cyan-400" />
+                  {streak} jours de suite
+                </div>
+              )}
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Citation motivante */}
-        <div className="bg-slate-900/40 rounded-xl p-4 border border-blue-500/20 backdrop-blur-sm">
-          <div className="flex items-start gap-3">
-            <div className="text-2xl">💭</div>
-            <div>
-              <p className="text-blue-50/95 font-medium italic text-lg leading-relaxed">"{quote}"</p>
-              <p className="text-blue-200/60 text-sm mt-2">— Conseil du jour</p>
-            </div>
+      {/* Citation motivante - Taille adaptée */}
+      <div className="bg-slate-900/50 rounded-xl p-5 border border-blue-500/30 backdrop-blur-sm">
+        <div className="flex items-start gap-3">
+          <div className="text-2xl">💭</div>
+          <div>
+            <p className="text-blue-50/95 font-medium italic text-lg leading-relaxed drop-shadow-md">"{quote}"</p>
+            <p className="text-blue-200/70 text-sm mt-2 drop-shadow-sm">— Conseil du jour</p>
           </div>
         </div>
       </div>
