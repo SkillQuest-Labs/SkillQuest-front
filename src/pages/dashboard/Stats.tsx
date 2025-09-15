@@ -1,8 +1,8 @@
 import { StatsCard } from "@/modules/stats/components/StatsCard";
 import { StatsCharts } from "@/modules/stats/components/StatsCharts";
 import { UserLevelCard } from "@/modules/stats/components/UserLevelCard";
-import { getUserLevel } from "@/modules/stats/stats.const";
 import { useGetSkills } from "@/shared/services/skill/api-skill";
+import { computeUserProgress } from "@/shared/utils/compute-user-progress";
 import { useUser } from "@clerk/clerk-react";
 import { Award, BarChart3, Target, TrendingUp } from "lucide-react";
 
@@ -10,11 +10,8 @@ export const Stats = () => {
   const { user } = useUser();
   const { skills: skillsData } = useGetSkills(user?.id || "");
 
-  const totalXp = skillsData.reduce((acc, skill) => acc + (skill.totalXp || 0), 0);
-  const totalQuestCompleted = skillsData.reduce((acc, skill) => acc + (skill.completedQuests || 0), 0);
-  const totalSkillCompleted = skillsData.filter((skill) => skill.status === "COMPLETED").length;
-
-  const { level: userCurrentLevel, xpMaxForLevel } = getUserLevel(totalXp);
+  const { totalXp, totalQuestCompleted, totalSkillCompleted, userCurrentLevel, xpMaxForLevel } =
+    computeUserProgress(skillsData);
 
   return (
     <div className="h-full overflow-hidden">

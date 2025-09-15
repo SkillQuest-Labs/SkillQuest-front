@@ -1,34 +1,38 @@
-import type { SkillSort, FilterSkillDifficulty, FilterSkillStatus } from "../skills.types";
-import { ChevronDown } from "lucide-react";
+import type { SkillSort, FilterSkillDifficulty, FilterSkillStatus, SkillFiltersType } from "../skills.types";
+import { Search } from "lucide-react";
 
 type SkillFiltersProps = {
-  difficulty: FilterSkillDifficulty;
-  sort: SkillSort;
-  status: FilterSkillStatus;
-  onFilterChange: (filters: { difficulty: FilterSkillDifficulty; sort: SkillSort; status: FilterSkillStatus }) => void;
+  filters: SkillFiltersType;
+  onFilterChange: (filters: SkillFiltersType) => void;
 };
 
-export const SkillFilters = ({ difficulty, sort, status, onFilterChange }: SkillFiltersProps) => {
+export const SkillFilters = ({ filters, onFilterChange }: SkillFiltersProps) => {
   return (
-    <div className="bg-slate-800 rounded-xl shadow p-3 mb-6">
-      <div className="flex gap-2 items-end">
-        <div>
-          <label className="block text-xs font-medium mb-1 text-white">Difficulté</label>
-          <div className="relative">
-            <select
-              className="cursor-pointer appearance-none border border-slate-700 rounded-lg px-3 py-2 bg-slate-900 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-150 pr-8 hover:border-blue-400"
-              value={difficulty}
-              onChange={(e) => onFilterChange({ difficulty: e.target.value as FilterSkillDifficulty, sort, status })}
-            >
-              <option value="All">All</option>
-              <option value="EASY">Easy</option>
-              <option value="MEDIUM">Medium</option>
-              <option value="HARD">Hard</option>
-            </select>
-            <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2">
-              <ChevronDown color="white" />
-            </span>
-          </div>
+    <div className="my-4 rounded-2xl border border-slate-700/60 bg-slate-900/50 p-4">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Filtre par titre */}
+        <div className="relative">
+          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+          <input
+            placeholder="Filtrer par skill…"
+            value={filters.search}
+            onChange={(e) => onFilterChange({ ...filters, search: e.target.value })}
+            className="w-full rounded-lg border border-slate-700 bg-slate-900/70 pl-10 pr-9 py-2 text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+          />
+        </div>
+
+        {/* Filtre par difficulté */}
+        <div className="relative">
+          <select
+            value={filters.difficulty}
+            onChange={(e) => onFilterChange({ ...filters, difficulty: e.target.value as FilterSkillDifficulty })}
+            className="w-full cursor-pointer rounded-lg border border-slate-700 bg-slate-900/70 pl-4 pr-4 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40 appearance-none"
+          >
+            <option value="ALL">Toutes les difficultés</option>
+            <option value="EASY">Facile</option>
+            <option value="MEDIUM">Moyen</option>
+            <option value="HARD">Difficile</option>
+          </select>
         </div>
         <div>
           <label className="block text-xs font-medium mb-1 text-white">Statut</label>
@@ -49,21 +53,17 @@ export const SkillFilters = ({ difficulty, sort, status, onFilterChange }: Skill
             </span>
           </div>
         </div>
-        <div>
-          <label className="block text-xs font-medium mb-1 text-white">Trier par</label>
-          <div className="relative">
-            <select
-              className="cursor-pointer appearance-none border border-slate-700 rounded-lg px-3 py-2 bg-slate-900 text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-150 pr-8 hover:border-blue-400"
-              value={sort}
-              onChange={(e) => onFilterChange({ difficulty, sort: e.target.value as SkillSort, status })}
-            >
-              <option value="RECENT">Plus récent</option>
-              <option value="OLDEST">Moins récent</option>
-            </select>
-            <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2">
-              <ChevronDown color="white" />
-            </span>
-          </div>
+
+        {/* Filtre par tri */}
+        <div className="relative">
+          <select
+            value={filters.sort}
+            onChange={(e) => onFilterChange({ ...filters, sort: e.target.value as SkillSort })}
+            className="w-full cursor-pointer rounded-lg border border-slate-700 bg-slate-900/70 pl-4 pr-4 py-2 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500/40 appearance-none"
+          >
+            <option value="RECENT">Plus récent</option>
+            <option value="OLDEST">Moins récent</option>
+          </select>
         </div>
       </div>
     </div>

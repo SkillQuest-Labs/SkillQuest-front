@@ -1,11 +1,15 @@
-import React, { useMemo, useState } from "react";
-import { Pencil, Check, X } from "lucide-react";
+import { Check, Pencil, X } from "lucide-react";
+import { useMemo, useState } from "react";
 
-/** Types */
+import badgeApprenti from "@/assets/badges/badge-apprenti.png";
+import badgeIntermediaire from "@/assets/badges/badge-intermediare.png";
+import badgeExpert from "@/assets/badges/badge-expert.png";
+import badgeMentor from "@/assets/badges/badge-mentor.png";
+
 export type Badge = { id: string; label: string };
 export type AvatarChoice = { id: string; url: string; label?: string };
 
-type Props = {
+type ProfileHudProps = {
   userName: string;
   title?: string;
   level: number;
@@ -18,7 +22,6 @@ type Props = {
   className?: string;
 };
 
-/** Avatars par défaut */
 const DEFAULT_AVATARS: AvatarChoice[] = [
   { id: "knight", url: "src/shared/constants/avatar/profile.jpg", label: "Chevalier" },
   { id: "mage", url: "src/shared/constants/avatar/profile1.jpg", label: "Mage" },
@@ -26,48 +29,46 @@ const DEFAULT_AVATARS: AvatarChoice[] = [
   { id: "robot", url: "src/shared/constants/avatar/profile4.jpg", label: "Robot" },
 ];
 
-/** Icônes de niveau */
-function getLevelIcon(level: number): { icon: string; label: string } {
+const getLevelIcon = (level: number): { icon: string; label: string } => {
   if (level < 5) return { icon: "🌱", label: "Débutant" };
   if (level < 10) return { icon: "⚔️", label: "Aventurier" };
   if (level < 20) return { icon: "🛡️", label: "Guerrier" };
   if (level < 30) return { icon: "🔥", label: "Élite" };
   if (level < 50) return { icon: "👑", label: "Maître" };
   return { icon: "🌌", label: "Légende" };
-}
+};
 
-/** Normalise badges */
-function normalizeBadges(items?: Array<string | Badge>): Badge[] {
-  if (!items || items.length === 0) return [];
-  return items.map((b, i) => (typeof b === "string" ? { id: String(i), label: b } : b));
-}
+const getBadgeForLevel = (level: number): { image: string; title: string } => {
+  if (level >= 30) return { image: badgeMentor, title: "Mentor" };
+  if (level >= 20) return { image: badgeExpert, title: "Expert" };
+  if (level >= 10) return { image: badgeIntermediaire, title: "Intermédiaire" };
+  return { image: badgeApprenti, title: "Apprenti" };
+};
 
-/** % XP → barre */
-function toPct(xp: number, xpToNext: number): number {
+const toPct = (xp: number, xpToNext: number): number => {
   if (!Number.isFinite(xp) || !Number.isFinite(xpToNext) || xpToNext <= 0) return 0;
   return Math.max(0, Math.min(100, Math.round((xp / xpToNext) * 100)));
-}
+};
 
-const ProfileHud: React.FC<Props> = ({
+const ProfileHud = ({
   userName,
   title = "Aventurier",
   level,
   xp,
   xpToNext,
-  badges = [],
   avatarUrl,
   avatarChoices = DEFAULT_AVATARS,
   onAvatarChange,
   className = "",
-}) => {
-  /** Edition avatar */
+}: ProfileHudProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const initialAvatar = avatarUrl || (avatarChoices[0]?.url ?? "/avatar.png");
   const [pendingAvatar, setPendingAvatar] = useState<string>(initialAvatar);
   const currentAvatar = avatarUrl ?? pendingAvatar;
 
   const pct = useMemo(() => toPct(xp, xpToNext), [xp, xpToNext]);
-  const normalizedBadges = useMemo(() => normalizeBadges(badges), [badges]);
+
+  const levelBadge = useMemo(() => getBadgeForLevel(level), [level]);
 
   const handleOpenEdit = () => {
     setPendingAvatar(currentAvatar);
@@ -194,20 +195,9 @@ const ProfileHud: React.FC<Props> = ({
       <div className="px-6 mt-6">
         <div className="rounded-xl border border-blue-500/30 bg-black/40 p-4 shadow-inner">
           <div className="text-xs text-blue-200/70 mb-2">Badges</div>
-          {normalizedBadges.length === 0 ? (
-            <div className="text-sm text-blue-100/40">Aucun badge pour l'instant</div>
-          ) : (
-            <div className="flex flex-wrap gap-2">
-              {normalizedBadges.map((b) => (
-                <span
-                  key={b.id}
-                  className="text-[11px] px-2 py-1 rounded-full border border-blue-400/40 text-blue-200 bg-blue-500/10 shadow-[0_0_6px_rgba(59,130,246,0.3)]"
-                >
-                  {b.label}
-                </span>
-              ))}
-            </div>
-          )}
+          <div className="flex flex-col gap-3">
+            <img src={levelBadge.image} alt={`Badge ${levelBadge.title}`} className="w-12 h-12 rounded-lg shadow-lg" />
+          </div>
         </div>
       </div>
     </aside>

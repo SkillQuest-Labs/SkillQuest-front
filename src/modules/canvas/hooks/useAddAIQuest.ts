@@ -6,6 +6,8 @@ import { useLoadingStore } from "@/stores/loading-store";
 import { useSkillStore } from "@/stores/skill/skill-store";
 import { createQuestNode } from "@/shared/utils/quetes/quest-node";
 import { useQuestGenerationFormStore } from "@/stores/canvas/quest-generation-form-store";
+import { MarkerType, type Edge } from "@xyflow/react";
+import { calculateQuestGridLayout } from "@/shared/utils/canvas";
 
 /**
  * Hook that generates quests via AI and adds them to the canvas.
@@ -21,30 +23,71 @@ export const useAddAIQuests = () => {
     setNodes: updateNodes,
     markModifiedNode,
     nodes: currentNodes,
+    edges: currentEdges,
+    setEdges,
+    markNewEdge,
   } = useCanvasStore.getState();
   const setCurrentSkillId = useSkillStore.getState().setCurrentSkillId;
+
+  const isDev = import.meta.env.DEV;
 
   const addGeneratedQuests = useCallback(async () => {
     try {
       setLoading(true);
       const quests = await generate();
-      if (!Array.isArray(quests) || quests.length === 0) return;
+
+      if (!Array.isArray(quests)) {
+        if (isDev && (window as any).debugLogger) {
+          (window as any).debugLogger.error("Format de réponse invalide de l'IA", {
+            expectedType: "Array",
+            receivedType: typeof quests,
+            receivedValue: quests,
+          });
+        }
+
+        throw new Error("Format de réponse invalide: attendu un tableau de quêtes");
+      }
+
+      if (quests.length === 0) {
+        if (isDev && (window as any).debugLogger) {
+          (window as any).debugLogger.warn("Aucune quête générée par l'IA", {
+            questsLength: quests.length,
+            questsContent: quests,
+          });
+        }
+
+        throw new Error("Aucune quête n'a pu être générée. Veuillez réessayer.");
+      }
+
+      if (isDev && (window as any).debugLogger) {
+        (window as any).debugLogger.info(`${quests.length} quête(s) générée(s) avec succès`, {
+          questsCount: quests.length,
+          questTitles: quests.map((q: any) => q.title || q.name || "Sans titre"),
+        });
+      }
 
       const skillNode = currentNodes.find(isSkillNode);
 
-      // Calculate base position for new quest nodes
+      // Calculate positions for new quest nodes using grid layout
+      const skillPosition = {
+        x: skillNode ? skillNode.position.x : 400,
+        y: skillNode ? skillNode.position.y : 50,
+      };
 
-      const skillX = skillNode ? skillNode.position.x : 400;
-      const skillY = skillNode ? skillNode.position.y : 50;
+      // Calculate all quest positions using the extracted layout function
+      const questPositions = calculateQuestGridLayout({
+        skillPosition,
+        questCount: quests.length,
+      });
 
-      // Place quests starting from x = skillX - 100, y = skillY + 150
-      const baseY = skillY + 370;
-      const baseX = skillX - 320;
-      const questSpacingX = 470;
+      const questIds: string[] = [];
 
       quests.forEach((quest, index) => {
         const id = `quest-${crypto.randomUUID()}`;
-        const position = { x: baseX + index * questSpacingX, y: baseY };
+        questIds.push(id);
+
+        // Get position from calculated positions
+        const position = questPositions[index];
 
         const handleUpdate = (field: string, value: any) => {
           const updated = useCanvasStore
@@ -57,27 +100,97 @@ export const useAddAIQuests = () => {
         const newNode = createQuestNode(id, position, removeNode, handleUpdate, quest);
         addNode(newNode);
         markNodeNew(id);
-        resetFormStore();
-        if (skillNode?.id) {
-          setCurrentSkillId(skillNode.id);
+      });
+
+      // Create automatic connections between quests and skill node
+      const newEdges: Edge[] = [];
+
+      questIds.forEach((questId, index) => {
+        if (index === 0 && skillNode?.id) {
+          // Connect first quest to skill node
+          const edgeId = `edge_${skillNode.id}_${questId}`;
+          const newEdge: Edge = {
+            id: edgeId,
+            source: skillNode.id,
+            target: questId,
+            type: "custom",
+            animated: true,
+            style: { stroke: "#fde68a", strokeWidth: 3 },
+            markerEnd: {
+              type: MarkerType.ArrowClosed,
+              color: "#6366f1",
+            },
+          };
+          newEdges.push(newEdge);
+          markNewEdge(edgeId);
+        }
+
+        if (index > 0) {
+          // Connect each quest to the previous one
+          const previousQuestId = questIds[index - 1];
+          const edgeId = `edge_${previousQuestId}_${questId}`;
+          const newEdge: Edge = {
+            id: edgeId,
+            source: previousQuestId,
+            target: questId,
+            type: "custom",
+            animated: true,
+            style: { stroke: "#fde68a", strokeWidth: 3 },
+            markerEnd: {
+              type: MarkerType.ArrowClosed,
+              color: "#6366f1",
+            },
+          };
+          newEdges.push(newEdge);
+          markNewEdge(edgeId);
         }
       });
+
+      // Update edges in the store
+      setEdges([...currentEdges, ...newEdges]);
+
+      resetFormStore();
+      if (skillNode?.id) {
+        setCurrentSkillId(skillNode.id);
+      }
     } catch (error) {
-      return error;
+      // Log de debug pour les erreurs
+      if (isDev && (window as any).debugLogger) {
+        (window as any).debugLogger.error("Erreur lors de la génération de quêtes IA", {
+          errorMessage: error instanceof Error ? error.message : String(error),
+          errorStack: error instanceof Error ? error.stack : undefined,
+          timestamp: new Date().toISOString(),
+          context: {
+            currentNodesCount: currentNodes.length,
+            currentEdgesCount: currentEdges.length,
+          },
+        });
+      }
+
+      // Rethrow l'erreur pour que le composant parent puisse l'afficher à l'utilisateur
+      throw new Error(
+        error instanceof Error
+          ? `Échec de la génération de quêtes: ${error.message}`
+          : "Une erreur inattendue s'est produite lors de la génération de quêtes",
+      );
     } finally {
       setLoading(false);
     }
   }, [
+    setLoading,
     generate,
     currentNodes,
-    setLoading,
+    setEdges,
+    currentEdges,
+    resetFormStore,
+    removeNode,
     addNode,
     markNodeNew,
-    removeNode,
     updateNodes,
     markModifiedNode,
+    markNewEdge,
     setCurrentSkillId,
-    resetFormStore,
+    isDev,
   ]);
 
   return { addGeneratedQuests };
