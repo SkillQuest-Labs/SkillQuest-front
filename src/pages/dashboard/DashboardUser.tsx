@@ -32,36 +32,36 @@ export const DashboardUser = () => {
 
   return (
     <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
-      <div className="w-[95%] mx-auto  py-4 h-full">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 h-full items-start">
-          {/* Colonne principale */}
-          <div className="lg:col-span-4 space-y-4 flex flex-col h-full">
-            {/* Section de bienvenue */}
-            <div className="flex-shrink-0">
-              <WelcomeSection userName={fallbackUsername} userLevel={userCurrentLevel} streak={7} />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 flex-shrink-0">
-              <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} gradient="indigo" />
-              <AccueilStatCard title="Quêtes terminées" value={totalQuestCompleted} icon={BarChart3} gradient="amber" />
-              <AccueilStatCard title="Compétences validées" value={totalSkillCompleted} icon={Target} gradient="rose" />
-            </div>
-
-            <div className="flex-1 min-h-0">
-              <WorkSessionChart />
-            </div>
+      <div className="w-[95%] mx-auto py-4 h-full">
+        <div className="space-y-4 flex flex-col h-full">
+          {/* Section de bienvenue */}
+          <div className="flex-shrink-0">
+            <WelcomeSection userName={fallbackUsername} streak={7} />
           </div>
 
-          <div className="lg:col-span-1 h-full">
-            <ProfileHud
-              userName={user?.username || user?.firstName || "Aventurier"}
-              title={(user?.unsafeMetadata?.role as string) || "Aventurier"}
-              level={userCurrentLevel}
-              xp={totalXp}
-              xpToNext={xpMaxForLevel}
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 flex-shrink-0">
+            <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} gradient="indigo" />
+            <AccueilStatCard title="Quêtes terminées" value={totalQuestCompleted} icon={BarChart3} gradient="amber" />
+            <AccueilStatCard title="Compétences validées" value={totalSkillCompleted} icon={Target} gradient="rose" />
+          </div>
+
+          <div className="flex-1 min-h-0">
+            <WorkSessionChart />
           </div>
         </div>
+      </div>
+
+      {/* ProfileHud Collapsible - Positionné en bas à droite */}
+      <div className="fixed bottom-4 right-4 z-50" style={{ marginBottom: '20px' }}>
+        <ProfileHud
+          userName={user?.username || user?.firstName || "Aventurier"}
+          title={(user?.unsafeMetadata?.role as string) || "Aventurier"}
+          level={userCurrentLevel}
+          xp={totalXp}
+          xpToNext={xpMaxForLevel}
+          isCollapsible={true}
+          defaultExpanded={false}
+        />
       </div>
     </div>
   );
