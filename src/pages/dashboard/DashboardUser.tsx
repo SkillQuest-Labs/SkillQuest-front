@@ -11,6 +11,8 @@ import { useGetSkills } from "@/shared/services/skill/api-skill";
 import { WelcomeSection } from "@/component/dashboard/WelcomeSection";
 import { FortniteStatCard } from "@/modules/stats/components/FortniteStatCard";
 import { BarChart3, Target, TrendingUp } from "lucide-react";
+import IntroRobotOverlay from "@/component/intro/IntroRobotOverlay";
+import { ROBOT_INTRO_LINES } from "@/shared/constants/voiceLines";
 
 export const DashboardUser = () => {
   const { user, isLoaded } = useUser();
@@ -43,6 +45,11 @@ export const DashboardUser = () => {
 
   return (
     <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
+      <IntroRobotOverlay
+        splineUrl="https://prod.spline.design/91E4RJArwH81QjTV/scene.splinecode"
+        lines={ROBOT_INTRO_LINES.map(line => line.src)}
+        height="40vh"
+        onFinish={() => { } } storageKey={""}      />
       <div className="w-[95%] mx-auto  py-4 h-full">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 h-full items-start">
           {/* Colonne principale */}

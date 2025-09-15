@@ -20,7 +20,7 @@ export const Profil = () => {
                     variables: {
                       colorPrimary: "#f59e0b", // amber
                       borderRadius: "1rem",
-                      fontFamily: "\"Cinzel\", ui-serif, Georgia, serif",
+                      fontFamily: '"Cinzel", ui-serif, Georgia, serif',
                     },
                     elements: {
                       card: "bg-slate-900/80 text-white border border-amber-400/30 rounded-2xl shadow-xl backdrop-blur-md",
@@ -54,7 +54,7 @@ export const Profil = () => {
                   variables: {
                     colorPrimary: "#f59e0b",
                     borderRadius: "12px",
-                    fontFamily: "\"Cinzel\", ui-serif, Georgia, serif",
+                    fontFamily: '"Cinzel", ui-serif, Georgia, serif',
                   },
                   elements: {
                     card: "bg-transparent border-0 shadow-none",
