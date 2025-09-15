@@ -29,6 +29,7 @@ const DEFAULT_AVATARS: AvatarChoice[] = [
   { id: "mage", url: "src/shared/constants/avatar/profile1.jpg", label: "Mage" },
   { id: "archer", url: "src/shared/constants/avatar/profile2.jpg", label: "Archer" },
   { id: "robot", url: "src/shared/constants/avatar/profile4.jpg", label: "Robot" },
+  { id: "avatar", url: "src/assets/avatar.svg", label: "Avatar" },
 ];
 
 const getLevelIcon = (level: number): { icon: string; label: string } => {
