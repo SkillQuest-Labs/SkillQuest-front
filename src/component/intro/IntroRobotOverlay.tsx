@@ -3,10 +3,10 @@ import React, { useEffect, useRef, useState } from "react";
 import SplineViewer from "@/shared/components/SplineViewer";
 
 type Props = {
-  userId: string;                 // ← requis pour le "show once" par utilisateur
-  versionKey?: string;            // change-la pour ré-afficher à tout le monde (ex: "v1", "v2")
-  splineUrl: string;              // scene.splinecode
-  lines: string[];                // ex: ROBOT_INTRO_LINES.map(l => l.src)
+  userId: string; // ← requis pour le "show once" par utilisateur
+  versionKey?: string; // change-la pour ré-afficher à tout le monde (ex: "v1", "v2")
+  splineUrl: string; // scene.splinecode
+  lines: string[]; // ex: ROBOT_INTRO_LINES.map(l => l.src)
   height?: string | number;
   onClose?: () => void;
 };
@@ -63,9 +63,7 @@ const IntroRobotOverlay: React.FC<Props> = ({
     media.currentTime = 0;
     const playPromise = media.play();
     if (playPromise && typeof playPromise.then === "function") {
-      playPromise
-        .then(() => setNeedsGesture(false))
-        .catch(() => setNeedsGesture(true)); // autoplay bloqué
+      playPromise.then(() => setNeedsGesture(false)).catch(() => setNeedsGesture(true)); // autoplay bloqué
     }
   }, [open, currentSrc, isVideo]);
 
@@ -89,8 +87,14 @@ const IntroRobotOverlay: React.FC<Props> = ({
   const handleClose = () => {
     const a = audioRef.current;
     const v = videoRef.current;
-    if (a) { a.pause(); a.currentTime = 0; }
-    if (v) { v.pause(); v.currentTime = 0; }
+    if (a) {
+      a.pause();
+      a.currentTime = 0;
+    }
+    if (v) {
+      v.pause();
+      v.currentTime = 0;
+    }
     setOpen(false);
     onClose?.();
   };
@@ -121,14 +125,18 @@ const IntroRobotOverlay: React.FC<Props> = ({
             src={currentSrc}
             playsInline
             className="hidden"
-            onEnded={() => {/* on ne close pas auto */}}
+            onEnded={() => {
+              /* on ne close pas auto */
+            }}
           />
         ) : (
           <audio
             ref={audioRef}
             src={currentSrc}
             className="hidden"
-            onEnded={() => {/* on ne close pas auto */}}
+            onEnded={() => {
+              /* on ne close pas auto */
+            }}
           />
         )}
 

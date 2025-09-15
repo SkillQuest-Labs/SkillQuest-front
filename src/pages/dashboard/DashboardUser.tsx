@@ -46,10 +46,10 @@ export const DashboardUser = () => {
   return (
     <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
       <IntroRobotOverlay
-        userId={user?.id ?? ""}                     // ← important pour le “show once”
-        versionKey="v1"                             // change en "v2" pour rejouer à tous
+        userId={user?.id ?? ""} // ← important pour le “show once”
+        versionKey="v1" // change en "v2" pour rejouer à tous
         splineUrl="https://prod.spline.design/91E4RJArwH81QjTV/scene.splinecode"
-        lines={ROBOT_INTRO_LINES.map(l => l.src)}   // on passe directement les mp4/mp3
+        lines={ROBOT_INTRO_LINES.map((l) => l.src)} // on passe directement les mp4/mp3
         height="40vh"
       />
       <div className="w-[95%] mx-auto  py-4 h-full">
