@@ -1,17 +1,17 @@
-import { RenderConcentricCircles } from "./concentric-circles/RenderConcentricCircles";
-import type { Edge, Node } from "@xyflow/react";
-import { useContainerSize } from "../hooks/useContainerSize";
-import { SkillTreeNavigation } from "./SkillTreeNavigation";
-import { LayoutToggle } from "./LayoutToggle";
-import { generateCircularSkillTreeData } from "../circular-skill-tree-logic/generate-circular-skill-tree-logic";
-import type { CircularSkillNode } from "../skill-tree.type";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { NodeRenderer } from "./render-node-component/NodeRenderer";
-import { ConnectionsRenderer } from "./render-node-connections/ConnectionsRenderer";
-import { RenderNodeDetails } from "./NodeDetails";
-import type { DependencyGraph } from "../circular-skill-tree-logic/generate-circular-skill-tree-logic/dependency-graph";
 import { SkillTreeLoader } from "@/component/SkillTreeLoader";
 import type { QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
+import type { Edge, Node } from "@xyflow/react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { generateCircularSkillTreeData } from "../circular-skill-tree-logic/generate-circular-skill-tree-logic";
+import type { DependencyGraph } from "../circular-skill-tree-logic/generate-circular-skill-tree-logic/dependency-graph";
+import { useContainerSize } from "../hooks/useContainerSize";
+import type { CircularSkillNode } from "../skill-tree.type";
+import { RenderConcentricCircles } from "./concentric-circles/RenderConcentricCircles";
+import { LayoutToggle } from "./LayoutToggle";
+import { RenderNodeDetails } from "./NodeDetails";
+import { NodeRenderer } from "./render-node-component/NodeRenderer";
+import { ConnectionsRenderer } from "./render-node-connections/ConnectionsRenderer";
+import { SkillTreeNavigation } from "./SkillTreeNavigation";
 
 export type SkillTreeDataProps = {
   nodes: CircularSkillNode[];
@@ -147,7 +147,7 @@ export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreePro
       // Calculer le nombre total de quêtes (exclure les nœuds de compétence)
       const questNodes = nodes.filter((n) => n.data.kind !== "skill");
       const totalQuestCount = questNodes.length;
-      
+
       return NodeRenderer({
         node,
         activeNodePath,
@@ -160,7 +160,7 @@ export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreePro
       });
     },
     [activeNodePath, hoveredNode, selectedNode, highlightedPathNodes, handleNodeClick, nodes],
-   );
+  );
 
   const handleSkillTreeCanvasClick = () => {
     setSelectedNode(null);

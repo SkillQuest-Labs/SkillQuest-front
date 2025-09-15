@@ -1,5 +1,5 @@
 import { Button } from "@/shared/components/ui/button";
-import { ArrowLeft, Play, Pause } from "lucide-react";
+import { ArrowLeft, Pause, Play } from "lucide-react";
 
 type SkillTreeNavigationProps = {
   onBack?: () => void;
