@@ -1,4 +1,4 @@
-import { Check, Pencil, X, ChevronUp, ChevronDown, Star, Award, Target } from "lucide-react";
+import { Check, Pencil, X, ChevronUp, ChevronDown } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import badgeApprenti from "@/assets/badges/badge-apprenti.png";
@@ -349,11 +349,6 @@ const ProfileHud = ({
 
             {/* Section Niveau détaillé */}
             <div className="space-y-3">
-              <div className="flex items-center gap-2 text-slate-300">
-                <Star className="w-4 h-4 text-amber-400" />
-                <span className="font-semibold">Niveau</span>
-              </div>
-
               <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/40">
                 <div className="flex items-center justify-between">
                   <div>
@@ -369,11 +364,6 @@ const ProfileHud = ({
 
             {/* Section Progression détaillée */}
             <div className="space-y-3">
-              <div className="flex items-center gap-2 text-slate-300">
-                <Target className="w-4 h-4 text-blue-400" />
-                <span className="font-semibold">Progression</span>
-              </div>
-
               <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/40">
                 <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
                   <span>Progression</span>
@@ -393,11 +383,6 @@ const ProfileHud = ({
 
             {/* Section Badges */}
             <div className="space-y-3">
-              <div className="flex items-center gap-2 text-slate-300">
-                <Award className="w-4 h-4 text-yellow-400" />
-                <span className="font-semibold">Badges</span>
-              </div>
-
               <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/40">
                 <div className="flex items-center gap-3">
                   <img
