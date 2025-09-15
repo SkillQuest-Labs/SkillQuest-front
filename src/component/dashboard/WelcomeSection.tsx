@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Sparkles, Flame, Star } from "lucide-react";
+import { Flame } from "lucide-react";
 
 const MOTIVATIONAL_QUOTES = [
   "Chaque quête accomplie te rapproche de la maîtrise !",
@@ -38,10 +38,9 @@ const getTimeBasedGreeting = (): { message: string; icon: string; gradient: stri
 
 type WelcomeSectionProps = {
   userName: string;
-  userLevel: number;
   streak: number;
 };
-export const WelcomeSection = ({ userName, userLevel, streak = 0 }: WelcomeSectionProps) => {
+export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) => {
   const [quote, setQuote] = useState("");
   const [greeting, setGreeting] = useState(getTimeBasedGreeting());
 
@@ -58,39 +57,19 @@ export const WelcomeSection = ({ userName, userLevel, streak = 0 }: WelcomeSecti
     <div
       className={`relative overflow-hidden rounded-2xl bg-gradient-to-br ${greeting.gradient} border border-blue-500/20 backdrop-blur-md shadow-[0_20px_50px_rgba(59,130,246,0.15)] mb-8`}
     >
-      {/* Effets de particules */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-4 left-8 w-2 h-2 bg-blue-400/70 rounded-full animate-pulse" />
-        <div className="absolute top-12 right-12 w-1 h-1 bg-cyan-400/70 rounded-full animate-ping" />
-        <div className="absolute bottom-8 left-16 w-1.5 h-1.5 bg-violet-400/70 rounded-full animate-bounce" />
-        <div className="absolute bottom-16 right-8 w-1 h-1 bg-blue-300/70 rounded-full animate-pulse" />
-      </div>
-
       <div className="relative z-10 p-4">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <div className="text-4xl animate-bounce">{greeting.icon}</div>
-            <div>
-              <h1 className="text-2xl lg:text-3xl font-bold text-white mb-1">
-                {greeting.message}, {userName} !
-              </h1>
-              <div className="flex items-center gap-2 text-blue-100/80 text-sm">
-                <span className="flex items-center gap-1">
-                  <Star className="w-4 h-4 text-amber-400" />
-                  Niveau {userLevel}
-                </span>
-                {streak > 0 && (
-                  <span className="flex items-center gap-1">
-                    <Flame className="w-4 h-4 text-cyan-400" />
-                    {streak} jours de suite
-                  </span>
-                )}
+        <div className="flex items-center gap-3 mb-4">
+          <div className="text-4xl">{greeting.icon}</div>
+          <div>
+            <h1 className="text-2xl lg:text-3xl font-bold text-white mb-1">
+              {greeting.message}, {userName} !
+            </h1>
+            {streak > 0 && (
+              <div className="flex items-center gap-1 text-blue-100/80 text-sm">
+                <Flame className="w-4 h-4 text-cyan-400" />
+                {streak} jours de suite
               </div>
-            </div>
-          </div>
-
-          <div className="hidden md:block">
-            <Sparkles className="w-12 h-12 text-blue-400/70 animate-spin" style={{ animationDuration: "3s" }} />
+            )}
           </div>
         </div>
 
@@ -103,17 +82,6 @@ export const WelcomeSection = ({ userName, userLevel, streak = 0 }: WelcomeSecti
               <p className="text-blue-200/60 text-sm mt-2">— Conseil du jour</p>
             </div>
           </div>
-        </div>
-
-        {/* Indicateurs de progression */}
-        <div className="mt-6 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="bg-cyan-500/20 px-2 py-1 rounded-full border border-cyan-400/40">
-              <span className="text-cyan-200 text-xs font-medium">🎯 Prêt pour l'aventure</span>
-            </div>
-          </div>
-
-          <div className="text-blue-200/60 text-xs">Dernière connexion: {new Date().toLocaleDateString("fr-FR")}</div>
         </div>
       </div>
     </div>
