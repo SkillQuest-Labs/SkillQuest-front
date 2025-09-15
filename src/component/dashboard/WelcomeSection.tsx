@@ -117,18 +117,18 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
         className="relative overflow-hidden rounded-2xl border border-blue-500/20 backdrop-blur-md shadow-[0_20px_50px_rgba(59,130,246,0.15)] mb-5"
         style={{
           backgroundImage: `url(${nanobanaImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          minHeight: '280px'
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          minHeight: "280px",
         }}
       >
         {/* Overlay avec gradient pour la lisibilité */}
         <div className={`absolute inset-0 bg-gradient-to-br ${greeting.gradient} mix-blend-overlay`} />
-        
+
         {/* Overlay sombre pour améliorer la lisibilité du texte */}
         <div className="absolute inset-0 bg-black/30" />
-        
+
         <div className="relative z-10 p-6 flex items-center h-full">
           <div className="flex items-center gap-4">
             <div className="text-5xl">{greeting.icon}</div>
