@@ -1,17 +1,17 @@
-import { SkillTreeLoader } from "@/component/SkillTreeLoader";
-import type { QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
-import { Button } from "@/shared/components/ui/button";
-import type { Edge, Node } from "@xyflow/react";
-import { ChevronLeft, PauseIcon, PlayIcon } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { generateCircularSkillTreeData } from "../circular-skill-tree-logic/generate-circular-skill-tree-logic";
-import type { DependencyGraph } from "../circular-skill-tree-logic/generate-circular-skill-tree-logic/dependency-graph";
-import type { CircularSkillNode } from "../skill-tree.type";
 import { RenderConcentricCircles } from "./concentric-circles/RenderConcentricCircles";
+import type { Edge, Node } from "@xyflow/react";
+import { useContainerSize } from "../hooks/useContainerSize";
+import { SkillTreeNavigation } from "./SkillTreeNavigation";
+import { LayoutToggle } from "./LayoutToggle";
+import { generateCircularSkillTreeData } from "../circular-skill-tree-logic/generate-circular-skill-tree-logic";
+import type { CircularSkillNode } from "../skill-tree.type";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { NodeRenderer } from "./render-node-component/NodeRenderer";
 import { ConnectionsRenderer } from "./render-node-connections/ConnectionsRenderer";
 import { RenderNodeDetails } from "./NodeDetails";
-import { useContainerSize } from "../hooks/useContainerSize";
+import type { DependencyGraph } from "../circular-skill-tree-logic/generate-circular-skill-tree-logic/dependency-graph";
+import { SkillTreeLoader } from "@/component/SkillTreeLoader";
+import type { QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
 
 export type SkillTreeDataProps = {
   nodes: CircularSkillNode[];
@@ -30,8 +30,13 @@ export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreePro
   const [isLoading, setIsLoading] = useState(true);
   const [circularSkillNodes, setCircularSkillNodes] = useState<CircularSkillNode[]>([]);
   const [dependencyGraph, setDependencyGraph] = useState<DependencyGraph>();
+  const [layoutType, setLayoutType] = useState<"spiral" | "concentric">(nodes.length >= 10 ? "spiral" : "concentric");
 
-  const [zoom, setZoom] = useState(1);
+  const handleLayoutChange = (newLayoutType: "spiral" | "concentric") => {
+    setLayoutType(newLayoutType);
+  };
+
+  const [zoom, setZoom] = useState<number>(0.5);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [panStart, setPanStart] = useState({ x: 0, y: 0 });
   const [isPanning, setIsPanning] = useState(false);
@@ -47,6 +52,24 @@ export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreePro
   const centerY = containerSize.height / 2;
 
   const hasGenerated = useRef(false);
+
+  useEffect(() => {
+    if (layoutType === "spiral") {
+      setZoom(1);
+    } else if (layoutType === "concentric") {
+      if (nodes.length < 10) {
+        setZoom(1);
+      } else {
+        setZoom(0.5);
+      }
+    }
+  }, [nodes, layoutType]);
+
+  // Reset generation flag when layout type changes
+  useEffect(() => {
+    hasGenerated.current = false;
+  }, [layoutType]);
+
   useEffect(() => {
     if (hasGenerated.current) return;
 
@@ -62,6 +85,7 @@ export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreePro
         edges,
         centerX: containerSize.width / 2,
         centerY: containerSize.height / 2,
+        forceLayoutType: layoutType,
       });
 
       setCircularSkillNodes(circularSkillNodes);
@@ -71,7 +95,7 @@ export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreePro
     };
 
     generateNodes();
-  }, [nodes, edges, containerSize, minimalistView]);
+  }, [nodes, edges, containerSize, minimalistView, layoutType]);
 
   const handleNodeClick = useCallback(
     (e: React.MouseEvent, nodeId: string) => {
@@ -120,6 +144,10 @@ export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreePro
 
   const renderNode = useCallback(
     (node: CircularSkillNode) => {
+      // Calculer le nombre total de quêtes (exclure les nœuds de compétence)
+      const questNodes = nodes.filter((n) => n.data.kind !== "skill");
+      const totalQuestCount = questNodes.length;
+      
       return NodeRenderer({
         node,
         activeNodePath,
@@ -128,10 +156,11 @@ export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreePro
         highlightedPathNodes,
         handleNodeClick,
         setHoveredNode,
+        totalQuestCount,
       });
     },
-    [activeNodePath, hoveredNode, selectedNode, highlightedPathNodes, handleNodeClick],
-  );
+    [activeNodePath, hoveredNode, selectedNode, highlightedPathNodes, handleNodeClick, nodes],
+   );
 
   const handleSkillTreeCanvasClick = () => {
     setSelectedNode(null);
@@ -143,35 +172,13 @@ export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreePro
 
   return (
     <div className="w-full h-screen relative overflow-auto flex items-center justify-center bg-slate-900">
-      {onBack && (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onBack}
-          className="absolute cursor-pointer top-4 left-4 z-10 bg-slate-700/80 backdrop-blur-sm border-slate-500 hover:bg-slate-600/80 text-slate-200 hover:text-white transition-all duration-200 font-medium shadow-lg flex items-center gap-2"
-        >
-          <ChevronLeft className="w-4 h-4" />
-          Back
-        </Button>
-      )}
-      {!minimalistView && (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setAnimationEnabled(!animationEnabled)}
-          className="absolute cursor-pointer top-15 right-4 z-10 bg-slate-700/80 backdrop-blur-sm border-slate-500 hover:bg-slate-600/80 text-slate-200 hover:text-white transition-all duration-200 font-medium shadow-lg"
-        >
-          {animationEnabled ? (
-            <>
-              <PauseIcon className="inline-block w-4 h-4 mr-1" /> Pause
-            </>
-          ) : (
-            <>
-              <PlayIcon className="inline-block w-4 h-4 mr-1" /> Play
-            </>
-          )}
-        </Button>
-      )}
+      <SkillTreeNavigation
+        onBack={onBack}
+        animationEnabled={animationEnabled}
+        onToggleAnimation={() => setAnimationEnabled(!animationEnabled)}
+      />
+
+      <LayoutToggle layoutType={layoutType} onLayoutChange={handleLayoutChange} />
       <div
         ref={skillTreeContainerRef}
         className="w-full h-[400px] cursor-grab active:cursor-grabbing"

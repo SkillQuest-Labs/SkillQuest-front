@@ -12,6 +12,7 @@ type GenerateCircularNodesDataProps = {
   ringRadii: number[];
   centerX: number;
   centerY: number;
+  totalQuestCount?: number;
 };
 
 export const generateCircularNodesData = ({
@@ -21,6 +22,7 @@ export const generateCircularNodesData = ({
   ringRadii,
   centerX,
   centerY,
+  totalQuestCount = 0,
 }: GenerateCircularNodesDataProps) => {
   const circularSkillNodes: CircularSkillNode[] = [];
   const nodesPerLevel = countNodesPerLevel({ nodes, visitedLevels });
@@ -59,12 +61,15 @@ export const generateCircularNodesData = ({
       status: node.data.status,
     });
 
+    // Augmenter la taille des nœuds pour les layouts concentriques avec ≥10 quêtes
+    const adjustedSize = totalQuestCount >= 10 ? nodeVisualsProperties.size + 40 : nodeVisualsProperties.size;
+
     const circularNode: CircularSkillNode = {
       id: node.id,
       title: node.data.title,
       description: "",
       position: { x, y },
-      size: nodeVisualsProperties.size,
+      size: adjustedSize,
       shape: nodeVisualsProperties.shape,
       nodeType: nodeVisualsProperties.nodeType,
       status: node.data.status,
