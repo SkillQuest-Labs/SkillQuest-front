@@ -7,6 +7,6 @@ export type SkillSort = "RECENT" | "OLDEST";
 export type SkillFiltersType = {
   search: string;
   difficulty: FilterSkillDifficulty;
-  sort: SkillSort;
+  sortBy: SkillSort;
   status: FilterSkillStatus;
 };

@@ -71,7 +71,6 @@ export type ListSessionsResponse = {
 export type QuestData = {
   id: string;
   title: string;
-  xp: number;
 };
 
 export type ValidateSessionDto = {

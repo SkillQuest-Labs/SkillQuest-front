@@ -12,8 +12,8 @@ import { Pagination } from "./components/SessionPagination";
 import type { SessionFilterValue } from "./types/session-form.type";
 
 const SESSION_FILTER_INIT: SessionFilterValue = {
-  skill: "",
-  quest: "",
+  skillTitle: "",
+  questTitle: "",
   date: "",
 };
 
@@ -32,8 +32,8 @@ export const SessionsListing = () => {
     loading,
     limit: effectivePageSize,
   } = useListSessions({
-    skill: filters.skill,
-    quest: filters.quest,
+    skill: filters.skillTitle,
+    quest: filters.questTitle,
     date: filters.date,
     limit: pageSize,
     page: currentPage,
@@ -41,7 +41,7 @@ export const SessionsListing = () => {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [filters.skill, filters.quest, filters.date]);
+  }, [filters.skillTitle, filters.questTitle, filters.date]);
 
   const handleFilterChange = (next: SessionFilterValue) => {
     setFilters(next);

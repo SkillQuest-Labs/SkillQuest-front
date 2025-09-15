@@ -31,7 +31,6 @@ export const SessionCard = ({ session }: SessionCardProps) => {
         .map((quest) => ({
           id: quest.questId || quest.id,
           title: quest.quest?.title || quest.title,
-          xp: 0,
         }));
 
       await validateSession({
@@ -46,8 +45,7 @@ export const SessionCard = ({ session }: SessionCardProps) => {
       });
 
       setIsValidationModalOpen(false);
-    } catch (error) {
-      console.error("Erreur lors de la validation de la session:", error);
+    } catch {
       showToast({
         title: "Erreur",
         description: "Erreur lors de la validation de la session",

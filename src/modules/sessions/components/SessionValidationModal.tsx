@@ -16,7 +16,7 @@ type SessionValidationModalProps = {
   isOpen: boolean;
   setIsOpen: (open: boolean) => void;
   session: Session;
-  onValidateSession: (validatedQuests: string[]) => Promise<void> | void;
+  onValidateSession: (validatedQuests: string[]) => Promise<void>;
   validationLoading?: boolean;
 };
 

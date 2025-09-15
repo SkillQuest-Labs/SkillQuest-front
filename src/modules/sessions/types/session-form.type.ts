@@ -26,8 +26,8 @@ export type CalendarEvent = {
   title: string;
   description?: string;
   color: string;
-  start: string; // ISO
-  end: string; // ISO
+  start: string;
+  end: string;
   backgroundColor: string;
   borderColor: string;
   extendedProps: {
@@ -37,7 +37,7 @@ export type CalendarEvent = {
 };
 
 export type SessionFilterValue = {
-  skill: string;
-  quest: string;
+  skillTitle: string;
+  questTitle: string;
   date: string;
 };

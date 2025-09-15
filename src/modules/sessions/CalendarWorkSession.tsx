@@ -30,6 +30,7 @@ import { showToast } from "@/component/notification/show-toast";
 import { Button } from "@/shared/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { routes } from "@/routes/router.const";
+import { debugLogger } from "@/shared/utils/debug-logger";
 
 export const CalendarWorkSession = () => {
   const navigate = useNavigate();
@@ -57,8 +58,6 @@ export const CalendarWorkSession = () => {
 
   const initialView = useCalendarResponsive();
 
-  const debugLogger = (window as any).debugLogger;
-
   useEffect(() => {
     if (!sessions || !Array.isArray(sessions)) {
       debugLogger.warn("📅 Sessions non disponibles ou invalides", {
@@ -74,7 +73,7 @@ export const CalendarWorkSession = () => {
       sessionTitles: sessions.map((s) => s.title),
     });
     setWorkSessions(events);
-  }, [sessions, debugLogger]);
+  }, [sessions]);
 
   useEffect(() => {
     const api = calendarRef.current?.getApi();
@@ -221,6 +220,10 @@ export const CalendarWorkSession = () => {
     }
   }, [deleteSession, editingIndex, editingSessionId]);
 
+  const handleUpdateHeaderTitle = () => {
+    const api = calendarRef.current?.getApi();
+    if (api) setHeaderTitle(capitalizeFirstLetter(api.view.title));
+  };
 
   return (
     <div className="transition-all duration-300 min-h-screen">
@@ -242,10 +245,7 @@ export const CalendarWorkSession = () => {
             headerTitle={headerTitle}
             currentView={currentView}
             setCurrentView={(viewName) => calendarRef.current?.getApi().changeView(viewName)}
-            updateHeaderTitle={() => {
-              const api = calendarRef.current?.getApi();
-              if (api) setHeaderTitle(capitalizeFirstLetter(api.view.title));
-            }}
+            updateHeaderTitle={() => handleUpdateHeaderTitle()}
             onAddSession={() => {
               setEditingIndex(null);
               setSessionForm(INITIAL_SESSION_FORM);
