@@ -6,6 +6,7 @@ import WorkSessionChart from "@/modules/stats/components/chart/work-session-char
 import { useGetSkills } from "@/shared/services/skill/api-skill";
 import { WelcomeSection } from "@/component/dashboard/WelcomeSection";
 import { AccueilStatCard } from "@/modules/stats/components/AccueilStatsCard";
+import { StreakComponent } from "@/component/dashboard/StreakComponent";
 import { BarChart3, Target, TrendingUp } from "lucide-react";
 import { computeUserProgress } from "@/shared/utils/compute-user-progress";
 
@@ -37,7 +38,7 @@ export const DashboardUser = () => {
           {/* Section de bienvenue - Hero Section */}
           <div className="space-y-6">
             <WelcomeSection userName={fallbackUsername} streak={7} />
-            
+
             {/* Cartes statistiques - Section de métriques */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
               <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} />
@@ -51,8 +52,21 @@ export const DashboardUser = () => {
             {/* Composant principal - WorkSessionChart */}
             <div className="lg:col-span-2 space-y-6">
               <WorkSessionChart />
-              
-              {/* ProfileHud en dessous du composant de session */}
+
+              {/* Composant de streak */}
+              <StreakComponent currentStreak={7} maxStreak={7} />
+            </div>
+
+            {/* Sidebar pour composants futurs */}
+            <div className="space-y-6">
+              <div className="h-64 bg-slate-800/30 rounded-xl border border-slate-600/30 p-6 flex items-center justify-center">
+                <p className="text-slate-400 text-sm">Composant 1 - À implémenter</p>
+              </div>
+              <div className="h-64 bg-slate-800/30 rounded-xl border border-slate-600/30 p-6 flex items-center justify-center">
+                <p className="text-slate-400 text-sm">Composant 2 - À implémenter</p>
+              </div>
+
+              {/* ProfileHud aligné sous le composant 2 */}
               <ProfileHud
                 userName={user?.username || user?.firstName || "Aventurier"}
                 title={(user?.unsafeMetadata?.role as string) || "Aventurier"}
@@ -62,16 +76,6 @@ export const DashboardUser = () => {
                 isCollapsible={true}
                 defaultExpanded={false}
               />
-            </div>
-            
-            {/* Sidebar pour composants futurs */}
-            <div className="space-y-6">
-              <div className="h-64 bg-slate-800/30 rounded-xl border border-slate-600/30 p-6 flex items-center justify-center">
-                <p className="text-slate-400 text-sm">Composant 1 - À implémenter</p>
-              </div>
-              <div className="h-64 bg-slate-800/30 rounded-xl border border-slate-600/30 p-6 flex items-center justify-center">
-                <p className="text-slate-400 text-sm">Composant 2 - À implémenter</p>
-              </div>
             </div>
           </div>
         </div>
