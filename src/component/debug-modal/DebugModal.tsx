@@ -95,9 +95,7 @@ const DebugModal: React.FC<DebugModalProps> = ({ isOpen, onToggle }) => {
             {state.logs.length === 0 ? (
               <div className="debug-modal-empty">
                 <p>Aucun log pour le moment</p>
-                <p className="debug-modal-help">
-                  Utilisez la console du navigateur pour ajouter des logs
-                </p>
+                <p className="debug-modal-help">Utilisez la console du navigateur pour ajouter des logs</p>
               </div>
             ) : (
               <div className="debug-modal-logs">

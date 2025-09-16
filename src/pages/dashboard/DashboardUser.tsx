@@ -6,6 +6,9 @@ import WorkSessionChart from "@/modules/stats/components/chart/work-session-char
 import { useGetSkills } from "@/shared/services/skill/api-skill";
 import { WelcomeSection } from "@/component/dashboard/WelcomeSection";
 import { AccueilStatCard } from "@/modules/stats/components/AccueilStatsCard";
+import { StreakComponent } from "@/component/dashboard/StreakComponent";
+import { RecentSkillsComponent } from "@/component/dashboard/RecentSkillsComponent";
+import { WeeklySessionsReminder } from "@/component/dashboard/WeeklySessionsReminder";
 import { BarChart3, Target, TrendingUp } from "lucide-react";
 import { useComputeUserProgress } from "@/modules/stats/hooks/use-compute-user-progress";
 import { useGetUserStats } from "@/shared/services/user/api-user";
@@ -33,41 +36,53 @@ export const DashboardUser = () => {
   const { totalXp, totalQuestCompleted, totalSkillCompleted, userCurrentLevel, xpThreshold, xpToNextLevel } =
     useComputeUserProgress({ skills, userStats });
 
+    console.log(totalXp, totalQuestCompleted, totalSkillCompleted, userCurrentLevel, xpThreshold, xpToNextLevel)
+
   return (
-    <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
-      <div className="w-[95%] mx-auto  py-4 h-full">
-        <div className="flex gap-4 h-full">
-          {/* Colonne principale */}
-          <div className="w-[85%] lg:col-span-4 space-y-4 flex flex-col h-full">
-            {/* Section de bienvenue */}
-            <div className="flex-shrink-0">
-              <WelcomeSection userName={fallbackUsername} userLevel={userCurrentLevel} streak={7} />
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <div className="max-w-8xl mx-auto px-3 sm:px-5 lg:px-7 py-6">
+        <div className="space-y-8">
+          {/* Section de bienvenue - Hero Section */}
+          <div className="space-y-6">
+            <WelcomeSection userName={fallbackUsername} streak={7} />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 flex-shrink-0">
-              <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} gradient="indigo" />
-              <AccueilStatCard
-                title="Quêtes terminées"
-                value={totalQuestCompleted}
-                icon={BarChart3}
-                gradient="indigo"
-              />
-              <AccueilStatCard title="Compétences validées" value={totalSkillCompleted} icon={Target} gradient="rose" />
-            </div>
-
-            <div className="flex-1 min-h-0">
-              <WorkSessionChart />
+            {/* Cartes statistiques - Section de métriques */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 lg:gap-4">
+              <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} />
+              <AccueilStatCard title="Quêtes terminées" value={totalQuestCompleted} icon={BarChart3} />
+              <AccueilStatCard title="Compétences validées" value={totalSkillCompleted} icon={Target} />
             </div>
           </div>
 
-          <div className="lg:col-span-1 w-[15%] h-full">
-            <ProfileHud
-              userName={user?.username || user?.firstName || "Aventurier"}
-              title={(user?.unsafeMetadata?.role as string) || "Aventurier"}
-              level={userCurrentLevel}
-              xp={xpThreshold - xpToNextLevel}
-              xpToNext={xpThreshold}
-            />
+          {/* Zone principale de contenu */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            {/* Composant principal - WorkSessionChart */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Composant de streak */}
+              <StreakComponent currentStreak={7} maxStreak={7} />
+
+              <WorkSessionChart />
+            </div>
+
+            {/* Sidebar pour composants futurs */}
+            <div className="space-y-4">
+              {/* Composant des dernières compétences */}
+              <RecentSkillsComponent skills={skills} />
+
+              {/* Rappels des sessions de la semaine */}
+              <WeeklySessionsReminder />
+
+              {/* ProfileHud aligné sous le composant 2 */}
+              <ProfileHud
+                userName={user?.username || user?.firstName || "Aventurier"}
+                title={(user?.unsafeMetadata?.role as string) || "Aventurier"}
+                level={userCurrentLevel}
+                xp={xpThreshold - xpToNextLevel}
+                xpToNext={xpThreshold}
+                isCollapsible={true}
+                defaultExpanded={false}
+              />
+            </div>
           </div>
         </div>
       </div>
