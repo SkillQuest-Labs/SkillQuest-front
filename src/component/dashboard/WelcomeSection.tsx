@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Flame } from "lucide-react";
+import { Flame, Sunrise, Sun, Sunset, Moon } from "lucide-react";
 import backgroundVideo from "@/assets/images/journey-through-the-mountains.1920x1080.webm";
 import { MOTIVATIONAL_QUOTES, type MotivationalQuote } from "@/shared/constants/motivational-quotes";
 
@@ -7,22 +7,22 @@ import { MOTIVATIONAL_QUOTES, type MotivationalQuote } from "@/shared/constants/
 const GREETING_CONFIGS = {
   morning: {
     message: "Bonjour",
-    icon: "🌅",
+    icon: Sunrise,
     gradient: "from-slate-900/95 via-blue-900/30 to-violet-900/25",
   },
   afternoon: {
     message: "Bon après-midi",
-    icon: "☀️",
+    icon: Sun,
     gradient: "from-slate-900/95 via-cyan-900/30 to-blue-900/25",
   },
   evening: {
     message: "Bonsoir",
-    icon: "🌙",
+    icon: Sunset,
     gradient: "from-slate-900/95 via-violet-900/30 to-indigo-900/25",
   },
 } as const;
 
-const getTimeBasedGreeting = (): { message: string; icon: string; gradient: string } => {
+const getTimeBasedGreeting = (): { message: string; icon: React.ComponentType<any>; gradient: string } => {
   const hour = new Date().getHours();
 
   // Optimisation : utilisation d'une logique plus claire et efficace
@@ -69,6 +69,7 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
   const [quote, setQuote] = useState<MotivationalQuote | null>(null);
   const [greeting, setGreeting] = useState(getTimeBasedGreeting());
   const [isQuoteVisible, setIsQuoteVisible] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
     // Citation aléatoire au chargement
@@ -100,12 +101,40 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
       setInterval(updateGreeting, 24 * 60 * 60 * 1000);
     }, timeUntilNext);
 
+    // Timer pour l'heure
+    const timeTimer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
     // Nettoyage des timers au démontage du composant
     return () => {
       clearTimeout(timeoutId);
       clearTimeout(quoteTimer);
+      clearInterval(timeTimer);
     };
   }, []);
+
+  const getTimeIcon = () => {
+    const hour = currentTime.getHours();
+    
+    if (hour >= 4 && hour < 8) {
+      return <Sunrise className="w-4 h-4 text-orange-400" />;
+    } else if (hour >= 8 && hour < 17) {
+      return <Sun className="w-4 h-4 text-yellow-400" />;
+    } else if (hour >= 17 && hour < 20) {
+      return <Sunset className="w-4 h-4 text-orange-500" />;
+    } else {
+      return <Moon className="w-4 h-4 text-blue-300" />;
+    }
+  };
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('fr-FR', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+  };
 
   return (
     <div className="space-y-6">
@@ -124,10 +153,12 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
 
         <div className="relative z-10 p-6 flex items-center h-full">
           <div className="flex items-center gap-4">
-            <div className="text-5xl">{greeting.icon}</div>
+            <div className="text-5xl text-yellow-400">
+              <greeting.icon className="w-12 h-12" />
+            </div>
             <div>
               <h1 className="text-3xl lg:text-4xl font-bold text-white mb-1 drop-shadow-lg">
-                {greeting.message}, {userName} !
+                {greeting.message} {userName} !
               </h1>
               {streak > 0 && (
                 <div className="flex items-center gap-2 text-blue-100/90 text-base drop-shadow-md">
@@ -135,6 +166,16 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
                   {streak} jours de suite
                 </div>
               )}
+            </div>
+          </div>
+
+          {/* Widget d'heure en haut à droite */}
+          <div className="absolute top-4 right-4 bg-slate-800/80 backdrop-blur-sm border border-slate-600/30 rounded-lg px-3 py-2 shadow-lg">
+            <div className="flex items-center gap-2">
+              {getTimeIcon()}
+              <span className="text-white text-sm font-medium">
+                {formatTime(currentTime)}
+              </span>
             </div>
           </div>
         </div>
