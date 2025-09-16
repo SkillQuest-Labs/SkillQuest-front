@@ -96,7 +96,7 @@ const DebugModal: React.FC<DebugModalProps> = ({ isOpen, onToggle }) => {
               <div className="debug-modal-empty">
                 <p>Aucun log pour le moment</p>
                 <p className="debug-modal-help">
-                  Utilisez <code>window.debugLogger.info('message')</code> pour ajouter des logs
+                  Utilisez la console du navigateur pour ajouter des logs
                 </p>
               </div>
             ) : (

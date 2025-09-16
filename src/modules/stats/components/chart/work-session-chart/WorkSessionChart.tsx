@@ -40,8 +40,6 @@ const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) =
   const { user } = useUser();
   const { sessions, isPending, error } = useGetSessions(user?.id || "");
 
-  console.log("sessions", sessions);
-
   const chartData = useMemo(() => {
     if (!sessions || sessions.length === 0) return [];
 

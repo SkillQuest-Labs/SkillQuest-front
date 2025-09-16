@@ -57,24 +57,13 @@ export const CalendarWorkSession = () => {
 
   const initialView = useCalendarResponsive();
 
-  const debugLogger = (window as any).debugLogger;
-
   useEffect(() => {
     if (!sessions || !Array.isArray(sessions)) {
-      debugLogger.warn("📅 Sessions non disponibles ou invalides", {
-        sessions,
-        isArray: Array.isArray(sessions),
-      });
       return;
     }
     const events = convertSessionsToEvents(sessions);
-    debugLogger.info("📅 Sessions chargées dans le calendrier", {
-      sessionsCount: sessions.length,
-      eventsCount: events.length,
-      sessionTitles: sessions.map((s) => s.title),
-    });
     setWorkSessions(events);
-  }, [sessions, debugLogger]);
+  }, [sessions]);
 
   useEffect(() => {
     const api = calendarRef.current?.getApi();
@@ -221,6 +210,10 @@ export const CalendarWorkSession = () => {
     }
   }, [deleteSession, editingIndex, editingSessionId]);
 
+  const handleUpdateHeaderTitle = () => {
+    const api = calendarRef.current?.getApi();
+    if (api) setHeaderTitle(capitalizeFirstLetter(api.view.title));
+  };
 
   return (
     <div className="transition-all duration-300 min-h-screen">
@@ -242,10 +235,7 @@ export const CalendarWorkSession = () => {
             headerTitle={headerTitle}
             currentView={currentView}
             setCurrentView={(viewName) => calendarRef.current?.getApi().changeView(viewName)}
-            updateHeaderTitle={() => {
-              const api = calendarRef.current?.getApi();
-              if (api) setHeaderTitle(capitalizeFirstLetter(api.view.title));
-            }}
+            updateHeaderTitle={() => handleUpdateHeaderTitle()}
             onAddSession={() => {
               setEditingIndex(null);
               setSessionForm(INITIAL_SESSION_FORM);

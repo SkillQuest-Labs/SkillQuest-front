@@ -1,8 +1,9 @@
 import { StatsCard } from "@/modules/stats/components/StatsCard";
 import { StatsCharts } from "@/modules/stats/components/StatsCharts";
 import { UserLevelCard } from "@/modules/stats/components/UserLevelCard";
+import { useComputeUserProgress } from "@/modules/stats/hooks/use-compute-user-progress";
 import { useGetSkills } from "@/shared/services/skill/api-skill";
-import { computeUserProgress } from "@/shared/utils/compute-user-progress";
+import { useGetUserStats } from "@/shared/services/user/api-user";
 import { useUser } from "@clerk/clerk-react";
 import { Award, BarChart3, Target, TrendingUp } from "lucide-react";
 
@@ -10,12 +11,14 @@ export const Stats = () => {
   const { user } = useUser();
   const { skills: skillsData } = useGetSkills(user?.id || "");
 
-  const { totalXp, totalQuestCompleted, totalSkillCompleted, userCurrentLevel, xpMaxForLevel } =
-    computeUserProgress(skillsData);
+  const { userStats } = useGetUserStats(user?.id || "");
+
+  const { totalXp, totalQuestCompleted, totalSkillCompleted, userCurrentLevel, xpThreshold, xpToNextLevel } =
+    useComputeUserProgress({ skills: skillsData, userStats });
 
   return (
-    <div className="h-full overflow-hidden">
-      <div className="w-[95%] max-w-full mx-auto p-4 h-full flex flex-col">
+    <div className="h-screen overflow-hidden ">
+      <div className="w-[95%] mx-auto py-4 h-full flex flex-col">
         {/* Header */}
         <div className="flex-shrink-0 mb-4">
           <div className="flex items-center gap-3">
@@ -29,7 +32,7 @@ export const Stats = () => {
         </div>
 
         <div className="flex-1 flex flex-col lg:flex-row gap-4 min-h-0">
-          <div className="flex-1 flex flex-col min-h-0">
+          <div className="flex-1 flex flex-col w-[80%] min-h-0">
             {/* Stats Cards sections */}
             <div className="flex-shrink-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
               <StatsCard
@@ -74,13 +77,12 @@ export const Stats = () => {
             </div>
           </div>
 
-          {/* second partie */}
-          <div className="w-full lg:w-80 flex-shrink-0">
+          <div className="w-[20%] flex-shrink-0">
             <div className="h-full">
               <UserLevelCard
                 currentLevel={userCurrentLevel}
-                currentXp={totalXp % 2700}
-                maxXp={xpMaxForLevel}
+                currentXp={xpThreshold - xpToNextLevel}
+                maxXp={xpThreshold}
                 totalXp={totalXp}
                 icon={Award}
               />

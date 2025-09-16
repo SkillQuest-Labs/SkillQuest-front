@@ -84,7 +84,7 @@ const ProfileHud = ({
   return (
     <aside
       className={[
-        "w-72 shrink-0 h-full sticky",
+        "w-full rounded-2xl shrink-0 h-full sticky",
         "bg-gradient-to-br from-slate-900/95 via-blue-900/30 to-violet-900/25 backdrop-blur text-white flex flex-col",
         "border-l border-blue-500/30 shadow-[0_20px_50px_rgba(59,130,246,0.15)]",
         className,
@@ -186,7 +186,7 @@ const ProfileHud = ({
             />
           </div>
           <div className="mt-1 text-[11px] text-blue-200/60">
-            {xp.toLocaleString()} / {xpToNext.toLocaleString()} XP
+            {xp} / {xpToNext} XP
           </div>
         </div>
       </div>

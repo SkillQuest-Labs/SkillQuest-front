@@ -2,12 +2,16 @@ import { Constants } from "@/shared/constante/api-constante";
 import type {
   CreateSessionInput,
   CreateSessionResponse,
+  ListSessionsResponse,
   Session,
   SessionsQuery,
   UpdateSessionInput,
   UpdateSessionResponse,
+  ValidateSessionDto,
+  ValidateSessionResponse,
 } from "./api-session.type";
 import { useApi, useApiAsync } from "../useApi";
+import { buildSessionQueryUrl } from "@/modules/sessions/utils/session.utils";
 
 export const useCreateSession = () => {
   const options = {
@@ -83,36 +87,47 @@ export const useDeleteSession = (sessionId: string) => {
 };
 
 export const useListSessions = (params: SessionsQuery) => {
-  const { userId, skill = "", quest = "", date = "", page = 1, limit = 20 } = params;
+  const { page = 1, limit = 20 } = params;
 
-  const search = new URLSearchParams();
-  search.set("userId", userId); // ← IMPORTANT
-  if (skill) search.set("skill", skill);
-  if (quest) search.set("quest", quest);
-  if (date) search.set("date", date);
-  search.set("page", String(page));
-  search.set("limit", String(limit));
-
-  const url = `${Constants.API_BASE_URL}/sessions/filter?${search.toString()}`;
+  const url = buildSessionQueryUrl(Constants.API_BASE_URL, params);
 
   const {
     data,
     isLoading: loading,
     error,
-  } = useApi<{
-    items: Session[];
-    hasMore: boolean;
-    nextCursor: string | null;
-  }>(
+  } = useApi<ListSessionsResponse>(
     { method: "GET", url, headers: { "Content-Type": "application/json; charset=UTF-8" } },
-    ["sessions", { userId, skill, quest, date, page, limit }],
-    Boolean(userId), // ← n’appelle pas si userId vide
+    ["sessions"],
   );
 
   return {
-    sessions: data?.items ?? [],
-    hasMore: data?.hasMore ?? false,
-    nextCursor: data?.nextCursor ?? null,
+    sessions: data?.items ?? ([] as Session[]),
+    total: data?.total ?? 0,
+    limit: data?.limit ?? limit,
+    page: data?.page ?? page,
+    pageCount: data?.pageCount ?? 0,
+    loading,
+    error,
+  };
+};
+
+export const useValidateSession = () => {
+  const options = {
+    method: "POST",
+    url: `${Constants.API_BASE_URL}/sessions/validate`,
+    headers: {
+      "Content-Type": "application/json; charset=UTF-8",
+    },
+  };
+
+  const {
+    mutateAsync: validateSession,
+    isPending: loading,
+    error,
+  } = useApiAsync<ValidateSessionResponse, ValidateSessionDto>(options, ["sessions"]);
+
+  return {
+    validateSession,
     loading,
     error,
   };
