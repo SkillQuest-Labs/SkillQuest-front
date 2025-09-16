@@ -1,7 +1,7 @@
-import { type Node } from "@xyflow/react";
-import type { QuestNodeData, SkillNodeData } from "../canvas/canvas.type";
 import type { QuestStatus } from "@/shared/types/quest.type";
 import type { SkillStatus } from "@/shared/types/skill.type";
+import { type Node } from "@xyflow/react";
+import type { QuestNodeData, SkillNodeData } from "../canvas/canvas.type";
 
 export type NodeShape = "circle" | "square" | "diamond" | "hexagon";
 export type SkillNodeType = "small" | "medium" | "large" | "keystone" | "mastery";
@@ -27,6 +27,9 @@ export type CircularSkillNode = {
   ring: number; // Which ring/level from center
   angle: number; // Position in ring
   icon?: string;
+  // Propriétés pour le layout en spirale
+  spiralRadius?: number; // Rayon de la spirale pour ce nœud
+  spiralIndex?: number; // Index du nœud dans la spirale
 };
 
 export type SkillTreeOptions = {
