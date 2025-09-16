@@ -31,38 +31,50 @@ export const DashboardUser = () => {
     computeUserProgress(skills);
 
   return (
-    <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
-      <div className="w-[95%] mx-auto py-4 h-full">
-        <div className="flex flex-col h-full">
-          {/* Section de bienvenue */}
-          <div className="flex-shrink-0">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="space-y-8">
+          {/* Section de bienvenue - Hero Section */}
+          <div className="space-y-6">
             <WelcomeSection userName={fallbackUsername} streak={7} />
+            
+            {/* Cartes statistiques - Section de métriques */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
+              <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} />
+              <AccueilStatCard title="Quêtes terminées" value={totalQuestCompleted} icon={BarChart3} />
+              <AccueilStatCard title="Compétences validées" value={totalSkillCompleted} icon={Target} />
+            </div>
           </div>
 
-          {/* Cartes statistiques entre la citation et le composant de session */}
-          <div className="flex gap-2 flex-shrink-0 w-full mt-6">
-            <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} />
-            <AccueilStatCard title="Quêtes terminées" value={totalQuestCompleted} icon={BarChart3} />
-            <AccueilStatCard title="Compétences validées" value={totalSkillCompleted} icon={Target} />
-          </div>
-
-          <div className="flex-1 min-h-0 mt-6">
-            <WorkSessionChart />
+          {/* Zone principale de contenu */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Composant principal - WorkSessionChart */}
+            <div className="lg:col-span-2 space-y-6">
+              <WorkSessionChart />
+              
+              {/* ProfileHud en dessous du composant de session */}
+              <ProfileHud
+                userName={user?.username || user?.firstName || "Aventurier"}
+                title={(user?.unsafeMetadata?.role as string) || "Aventurier"}
+                level={userCurrentLevel}
+                xp={totalXp}
+                xpToNext={xpMaxForLevel}
+                isCollapsible={true}
+                defaultExpanded={false}
+              />
+            </div>
+            
+            {/* Sidebar pour composants futurs */}
+            <div className="space-y-6">
+              <div className="h-64 bg-slate-800/30 rounded-xl border border-slate-600/30 p-6 flex items-center justify-center">
+                <p className="text-slate-400 text-sm">Composant 1 - À implémenter</p>
+              </div>
+              <div className="h-64 bg-slate-800/30 rounded-xl border border-slate-600/30 p-6 flex items-center justify-center">
+                <p className="text-slate-400 text-sm">Composant 2 - À implémenter</p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* ProfileHud Collapsible - Positionné en bas à droite */}
-      <div className="fixed bottom-4 right-4 z-50" style={{ marginBottom: "20px" }}>
-        <ProfileHud
-          userName={user?.username || user?.firstName || "Aventurier"}
-          title={(user?.unsafeMetadata?.role as string) || "Aventurier"}
-          level={userCurrentLevel}
-          xp={totalXp}
-          xpToNext={xpMaxForLevel}
-          isCollapsible={true}
-          defaultExpanded={false}
-        />
       </div>
     </div>
   );

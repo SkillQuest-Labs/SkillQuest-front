@@ -108,9 +108,9 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
   }, []);
 
   return (
-    <div className="mb-10">
-      {/* Carte Welcome avec vidéo de fond - Taille adaptée */}
-      <div className="relative overflow-hidden rounded-2xl border border-blue-500/20 backdrop-blur-md shadow-[0_20px_50px_rgba(59,130,246,0.15)] mb-5 min-h-[280px]">
+    <div className="space-y-6">
+      {/* Carte Welcome avec vidéo de fond - Hero Section */}
+      <div className="relative overflow-hidden rounded-2xl border border-blue-500/20 backdrop-blur-md shadow-[0_20px_50px_rgba(59,130,246,0.15)] min-h-[320px]">
         {/* Vidéo de fond */}
         <video className="absolute inset-0 w-full h-full object-cover" autoPlay loop muted playsInline>
           <source src={backgroundVideo} type="video/webm" />
@@ -140,16 +140,18 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
         </div>
       </div>
 
-      {/* Citation motivante - Taille adaptée avec animation */}
+      {/* Citation motivante - Section inspirante */}
       <div
-        className={`bg-slate-900/50 rounded-xl p-3 border border-blue-500/30 backdrop-blur-sm transition-all duration-1000 ease-out transform ${
+        className={`bg-slate-900/50 rounded-xl p-4 border border-blue-500/30 backdrop-blur-sm transition-all duration-1000 ease-out transform ${
           isQuoteVisible ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"
         }`}
       >
         <div className="flex items-start gap-2">
           <div className="text-xl">💭</div>
           <div>
-            <p className="text-blue-50/95 font-medium italic text-base leading-relaxed drop-shadow-md">"{quote?.text}"</p>
+            <p className="text-blue-50/95 font-medium italic text-base leading-relaxed drop-shadow-md">
+              "{quote?.text}"
+            </p>
             <p className="text-blue-200/70 text-xs mt-1 drop-shadow-sm">— {quote?.author}</p>
           </div>
         </div>
