@@ -26,12 +26,18 @@ export type CalendarEvent = {
   title: string;
   description?: string;
   color: string;
-  start: string; // ISO
-  end: string; // ISO
+  start: string;
+  end: string;
   backgroundColor: string;
   borderColor: string;
   extendedProps: {
     linkedSkill: string;
     linkedQuests: { id: string; title: string }[];
   };
+};
+
+export type SessionFilterValue = {
+  skillTitle: string;
+  questTitle: string;
+  date: string;
 };
