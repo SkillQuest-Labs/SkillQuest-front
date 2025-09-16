@@ -39,14 +39,15 @@ export const DashboardUser = () => {
             <WelcomeSection userName={fallbackUsername} streak={7} />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 flex-shrink-0">
-            <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} gradient="indigo" />
-            <AccueilStatCard title="Quêtes terminées" value={totalQuestCompleted} icon={BarChart3} gradient="amber" />
-            <AccueilStatCard title="Compétences validées" value={totalSkillCompleted} icon={Target} gradient="rose" />
-          </div>
-
           <div className="flex-1 min-h-0">
             <WorkSessionChart />
+          </div>
+
+          {/* Cartes statistiques en bas du contenu */}
+          <div className="flex gap-3 flex-shrink-0 justify-end pb-4 pr-96">
+            <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} />
+            <AccueilStatCard title="Quêtes terminées" value={totalQuestCompleted} icon={BarChart3} />
+            <AccueilStatCard title="Compétences validées" value={totalSkillCompleted} icon={Target} />
           </div>
         </div>
       </div>
