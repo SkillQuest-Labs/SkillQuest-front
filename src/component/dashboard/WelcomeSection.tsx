@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Flame } from "lucide-react";
-import nanobanaImage from "@/assets/images/nanobana.png";
+import backgroundVideo from "@/assets/images/journey-through-the-mountains.1920x1080.webm";
 
 const MOTIVATIONAL_QUOTES = [
   "Chaque quête accomplie te rapproche de la maîtrise !",
@@ -70,6 +70,63 @@ const getNextGreetingChange = (currentDate: Date): Date => {
   }
 };
 
+// Composant d'animation des fleurs de sakura
+const SakuraAnimation = () => {
+  const [petals, setPetals] = useState<Array<{
+    id: number;
+    x: number;
+    y: number;
+    delay: number;
+    duration: number;
+    size: number;
+    rotation: number;
+  }>>([]);
+
+  useEffect(() => {
+    // Générer des pétales de sakura
+    const generatePetals = () => {
+      const newPetals = Array.from({ length: 12 }, (_, i) => ({
+        id: Date.now() + i,
+        x: Math.random() * 100,
+        y: -10,
+        delay: Math.random() * 3,
+        duration: 6 + Math.random() * 4,
+        size: 10 + Math.random() * 8,
+        rotation: Math.random() * 360,
+      }));
+      setPetals(newPetals);
+    };
+
+    generatePetals();
+    const interval = setInterval(generatePetals, 2000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      {petals.map((petal) => (
+        <div
+          key={petal.id}
+          className="absolute text-pink-300/70 animate-bounce"
+          style={{
+            left: `${petal.x}%`,
+            top: `${petal.y}%`,
+            fontSize: `${petal.size}px`,
+            animationDelay: `${petal.delay}s`,
+            animationDuration: `${petal.duration}s`,
+            animationIterationCount: 'infinite',
+            animationTimingFunction: 'ease-in-out',
+            transform: `rotate(${petal.rotation}deg)`,
+          }}
+        >
+          🌸
+        </div>
+      ))}
+    </div>
+  );
+};
+
 type WelcomeSectionProps = {
   userName: string;
   streak: number;
@@ -112,17 +169,22 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
 
   return (
     <div className="mb-10">
-      {/* Carte Welcome avec image de fond - Taille adaptée */}
-      <div
-        className="relative overflow-hidden rounded-2xl border border-blue-500/20 backdrop-blur-md shadow-[0_20px_50px_rgba(59,130,246,0.15)] mb-5"
-        style={{
-          backgroundImage: `url(${nanobanaImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          minHeight: "280px",
-        }}
-      >
+      {/* Carte Welcome avec vidéo de fond - Taille adaptée */}
+      <div className="relative overflow-hidden rounded-2xl border border-blue-500/20 backdrop-blur-md shadow-[0_20px_50px_rgba(59,130,246,0.15)] mb-5 min-h-[280px]">
+        {/* Vidéo de fond */}
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          loop
+          muted
+          playsInline
+        >
+          <source src={backgroundVideo} type="video/webm" />
+        </video>
+
+        {/* Animation des fleurs de sakura */}
+        <SakuraAnimation />
+
         {/* Overlay avec gradient pour la lisibilité */}
         <div className={`absolute inset-0 bg-gradient-to-br ${greeting.gradient} mix-blend-overlay`} />
 
