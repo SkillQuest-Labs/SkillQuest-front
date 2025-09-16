@@ -1,7 +1,9 @@
 import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { Calendar, Clock, BookOpen, ChevronRight } from "lucide-react";
 import { useGetSessions } from "@/shared/services/session/api-session";
 import { useUser } from "@clerk/clerk-react";
+import { routes } from "@/routes/router.const";
 import type { Session } from "@/shared/services/session/api-session.type";
 
 interface WeeklySessionsReminderProps {
@@ -71,6 +73,7 @@ const getStatusLabel = (status: "upcoming" | "today" | "past") => {
 export const WeeklySessionsReminder = ({ className = "" }: WeeklySessionsReminderProps) => {
   const { user } = useUser();
   const { sessions, isPending, error } = useGetSessions(user?.id || "");
+  const navigate = useNavigate();
 
   const weeklySessions = useMemo(() => {
     if (!sessions || sessions.length === 0) return [];
@@ -224,7 +227,10 @@ export const WeeklySessionsReminder = ({ className = "" }: WeeklySessionsReminde
 
       {/* Lien vers le calendrier complet */}
       <div className="mt-4 pt-4 border-t border-slate-600/20">
-        <button className="w-full flex items-center justify-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors">
+        <button 
+          className="w-full flex items-center justify-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors"
+          onClick={() => navigate(routes.workSession.path)}
+        >
           Voir le calendrier complet
           <ChevronRight className="w-4 h-4" />
         </button>
