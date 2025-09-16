@@ -1,17 +1,7 @@
 import { useEffect, useState } from "react";
 import { Flame } from "lucide-react";
 import backgroundVideo from "@/assets/images/journey-through-the-mountains.1920x1080.webm";
-
-const MOTIVATIONAL_QUOTES = [
-  "Chaque quête accomplie te rapproche de la maîtrise !",
-  "Les vrais héros se forgent dans l'adversité.",
-  "Ton potentiel n'a pas de limites, aventurier !",
-  "Chaque niveau gagné est une victoire sur toi-même.",
-  "L'excellence n'est pas un acte, mais une habitude.",
-  "Les légendes commencent par un premier pas.",
-  "Transforme tes défis en opportunités de croissance.",
-  "Seuls ceux qui osent échouer peuvent réussir grandement.",
-];
+import { MOTIVATIONAL_QUOTES, type MotivationalQuote } from "@/shared/constants/motivational-quotes";
 
 // Configuration optimisée des greetings par période
 const GREETING_CONFIGS = {
@@ -70,14 +60,13 @@ const getNextGreetingChange = (currentDate: Date): Date => {
   }
 };
 
-
 type WelcomeSectionProps = {
   userName: string;
   streak: number;
 };
 
 export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) => {
-  const [quote, setQuote] = useState("");
+  const [quote, setQuote] = useState<MotivationalQuote | null>(null);
   const [greeting, setGreeting] = useState(getTimeBasedGreeting());
   const [isQuoteVisible, setIsQuoteVisible] = useState(false);
 
@@ -127,7 +116,6 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
           <source src={backgroundVideo} type="video/webm" />
         </video>
 
-
         {/* Overlay avec gradient pour la lisibilité */}
         <div className={`absolute inset-0 bg-gradient-to-br ${greeting.gradient} mix-blend-overlay`} />
 
@@ -153,18 +141,16 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
       </div>
 
       {/* Citation motivante - Taille adaptée avec animation */}
-      <div 
+      <div
         className={`bg-slate-900/50 rounded-xl p-5 border border-blue-500/30 backdrop-blur-sm transition-all duration-1000 ease-out transform ${
-          isQuoteVisible 
-            ? 'translate-x-0 opacity-100' 
-            : '-translate-x-full opacity-0'
+          isQuoteVisible ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"
         }`}
       >
         <div className="flex items-start gap-3">
           <div className="text-2xl">💭</div>
           <div>
-            <p className="text-blue-50/95 font-medium italic text-lg leading-relaxed drop-shadow-md">"{quote}"</p>
-            <p className="text-blue-200/70 text-sm mt-2 drop-shadow-sm">— Conseil du jour</p>
+            <p className="text-blue-50/95 font-medium italic text-lg leading-relaxed drop-shadow-md">"{quote?.text}"</p>
+            <p className="text-blue-200/70 text-sm mt-2 drop-shadow-sm">— {quote?.author}</p>
           </div>
         </div>
       </div>
