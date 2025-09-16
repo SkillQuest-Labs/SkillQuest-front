@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { Flame, Sunrise, Sun, Sunset, Moon } from "lucide-react";
-import backgroundVideo from "@/assets/images/journey-through-the-mountains.1920x1080.webm";
+import lds1 from "@/assets/images/lds1.webp";
+import lds2 from "@/assets/images/lds2.webp";
+import lds3 from "@/assets/images/lds3.webp";
+import lds4 from "@/assets/images/lds4.webp";
 import { MOTIVATIONAL_QUOTES, type MotivationalQuote } from "@/shared/constants/motivational-quotes";
 
 // Configuration optimisée des greetings par période
@@ -8,18 +11,26 @@ const GREETING_CONFIGS = {
   morning: {
     message: "Bonjour",
     gradient: "from-slate-900/95 via-blue-900/30 to-violet-900/25",
+    background: lds1,
   },
   afternoon: {
     message: "Bon après-midi",
     gradient: "from-slate-900/95 via-cyan-900/30 to-blue-900/25",
+    background: lds2,
   },
   evening: {
     message: "Bonsoir",
     gradient: "from-slate-900/95 via-violet-900/30 to-indigo-900/25",
+    background: lds3,
+  },
+  night: {
+    message: "Bonsoir",
+    gradient: "from-slate-900/95 via-indigo-900/30 to-purple-900/25",
+    background: lds4,
   },
 } as const;
 
-const getTimeBasedGreeting = (): { message: string; gradient: string } => {
+const getTimeBasedGreeting = (): { message: string; gradient: string; background: string } => {
   const hour = new Date().getHours();
 
   // Optimisation : utilisation d'une logique plus claire et efficace
@@ -27,8 +38,10 @@ const getTimeBasedGreeting = (): { message: string; gradient: string } => {
     return GREETING_CONFIGS.morning;
   } else if (hour >= 13 && hour < 18) {
     return GREETING_CONFIGS.afternoon;
-  } else {
+  } else if (hour >= 18 && hour < 20) {
     return GREETING_CONFIGS.evening;
+  } else {
+    return GREETING_CONFIGS.night;
   }
 };
 
@@ -37,8 +50,8 @@ const getNextGreetingChange = (currentDate: Date): Date => {
   const now = new Date(currentDate);
   const hour = now.getHours();
 
-  // Heures de changement : 4h, 13h, 18h
-  const changeHours = [4, 13, 18];
+  // Heures de changement : 4h, 13h, 18h, 20h
+  const changeHours = [4, 13, 18, 20];
 
   // Trouver la prochaine heure de changement aujourd'hui
   const nextHour = changeHours.find((h) => h > hour);
@@ -135,12 +148,13 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
 
   return (
     <div className="space-y-6">
-      {/* Carte Welcome avec vidéo de fond - Hero Section */}
+      {/* Carte Welcome avec image de fond - Hero Section */}
       <div className="relative overflow-hidden rounded-2xl border border-blue-500/20 backdrop-blur-md shadow-[0_20px_50px_rgba(59,130,246,0.15)] min-h-[320px]">
-        {/* Vidéo de fond */}
-        <video className="absolute inset-0 w-full h-full object-cover" autoPlay loop muted playsInline>
-          <source src={backgroundVideo} type="video/webm" />
-        </video>
+        {/* Image de fond dynamique */}
+        <div 
+          className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-all duration-1000 ease-in-out"
+          style={{ backgroundImage: `url(${greeting.background})` }}
+        />
 
         {/* Overlay avec gradient pour la lisibilité */}
         <div className={`absolute inset-0 bg-gradient-to-br ${greeting.gradient} mix-blend-overlay`} />
@@ -161,22 +175,16 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
               {getTimeIcon()}
               <span className="text-white text-sm font-medium">{formatTime(currentTime)}</span>
             </div>
-            
+
             {/* Streak sous le widget d'heure */}
             {streak > 0 && (
               <div className="flex items-center gap-2 mt-2 pt-2 border-t border-slate-600/30">
-                <Flame 
+                <Flame
                   className={`w-4 h-4 transition-all duration-300 ${
-                    streak >= 7 
-                      ? "text-orange-500 drop-shadow-lg" 
-                      : streak >= 3 
-                      ? "text-orange-400" 
-                      : "text-orange-300"
-                  }`} 
+                    streak >= 7 ? "text-orange-500 drop-shadow-lg" : streak >= 3 ? "text-orange-400" : "text-orange-300"
+                  }`}
                 />
-                <span className="text-white/80 text-xs font-medium">
-                  x{streak}
-                </span>
+                <span className="text-white/80 text-xs font-medium">x{streak}</span>
               </div>
             )}
           </div>
