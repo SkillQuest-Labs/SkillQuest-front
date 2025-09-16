@@ -152,7 +152,7 @@ const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) =
   }
   return (
     <div
-      className={`rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-md border border-slate-700/50 shadow-2xl p-4 h-full flex flex-col ${className}`}
+      className={`rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-md border border-slate-700/50 shadow-2xl p-4 h-176 flex flex-col ${className}`}
     >
       {/* En-tête compact */}
       <div className="flex items-center justify-between mb-3 flex-shrink-0">
@@ -171,7 +171,7 @@ const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) =
       </div>
 
       {/* Graphique compact */}
-      <div className="mb-3 flex-1 min-h-0" style={{ height: "200px" }}>
+      <div className="mb-3 flex-1 min-h-0" style={{ height: "50px" }}>
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={chartData} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
             <defs>
@@ -199,9 +199,15 @@ const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) =
 
       {/* Statistiques simples */}
       <div className="flex justify-between items-center text-sm text-slate-400 flex-shrink-0">
-        <span>Total: <span className="text-orange-400 font-semibold">{stats.totalSessions}</span></span>
-        <span>Moyenne: <span className="text-red-400 font-semibold">{formatDuration(stats.averageDuration)}</span></span>
-        <span>Série: <span className="text-yellow-400 font-semibold">{stats.bestStreak}</span></span>
+        <span>
+          Total: <span className="text-orange-400 font-semibold">{stats.totalSessions}</span>
+        </span>
+        <span>
+          Moyenne: <span className="text-red-400 font-semibold">{formatDuration(stats.averageDuration)}</span>
+        </span>
+        <span>
+          Série: <span className="text-yellow-400 font-semibold">{stats.bestStreak}</span>
+        </span>
       </div>
     </div>
   );
