@@ -30,7 +30,6 @@ import { showToast } from "@/component/notification/show-toast";
 import { Button } from "@/shared/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { routes } from "@/routes/router.const";
-import { debugLogger } from "@/shared/utils/debug-logger";
 
 export const CalendarWorkSession = () => {
   const navigate = useNavigate();
@@ -60,18 +59,9 @@ export const CalendarWorkSession = () => {
 
   useEffect(() => {
     if (!sessions || !Array.isArray(sessions)) {
-      debugLogger.warn("📅 Sessions non disponibles ou invalides", {
-        sessions,
-        isArray: Array.isArray(sessions),
-      });
       return;
     }
     const events = convertSessionsToEvents(sessions);
-    debugLogger.info("📅 Sessions chargées dans le calendrier", {
-      sessionsCount: sessions.length,
-      eventsCount: events.length,
-      sessionTitles: sessions.map((s) => s.title),
-    });
     setWorkSessions(events);
   }, [sessions]);
 

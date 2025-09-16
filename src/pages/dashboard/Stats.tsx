@@ -14,8 +14,8 @@ export const Stats = () => {
     computeUserProgress(skillsData);
 
   return (
-    <div className="h-full overflow-hidden">
-      <div className="w-[95%] max-w-full mx-auto p-4 h-full flex flex-col">
+    <div className="h-screen overflow-hidden ">
+      <div className="w-[95%] mx-auto py-4 h-full flex flex-col">
         {/* Header */}
         <div className="flex-shrink-0 mb-4">
           <div className="flex items-center gap-3">
@@ -29,7 +29,7 @@ export const Stats = () => {
         </div>
 
         <div className="flex-1 flex flex-col lg:flex-row gap-4 min-h-0">
-          <div className="flex-1 flex flex-col min-h-0">
+          <div className="flex-1 flex flex-col w-[80%] min-h-0">
             {/* Stats Cards sections */}
             <div className="flex-shrink-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
               <StatsCard
@@ -75,7 +75,7 @@ export const Stats = () => {
           </div>
 
           {/* second partie */}
-          <div className="w-full lg:w-80 flex-shrink-0">
+          <div className="w-[20%] flex-shrink-0">
             <div className="h-full">
               <UserLevelCard
                 currentLevel={userCurrentLevel}

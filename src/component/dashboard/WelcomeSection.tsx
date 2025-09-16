@@ -18,7 +18,7 @@ const getTimeBasedGreeting = (): { message: string; icon: string; gradient: stri
   if (hour < 12) {
     return {
       message: "Bon matin",
-      icon: "🌅",
+      icon: "🌄",
       gradient: "from-slate-900/95 via-blue-900/30 to-violet-900/25",
     };
   } else if (hour < 18) {

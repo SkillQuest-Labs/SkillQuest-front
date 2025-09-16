@@ -33,9 +33,9 @@ export const DashboardUser = () => {
   return (
     <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
       <div className="w-[95%] mx-auto  py-4 h-full">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 h-full items-start">
+        <div className="flex gap-4 h-full">
           {/* Colonne principale */}
-          <div className="lg:col-span-4 space-y-4 flex flex-col h-full">
+          <div className="w-[85%] lg:col-span-4 space-y-4 flex flex-col h-full">
             {/* Section de bienvenue */}
             <div className="flex-shrink-0">
               <WelcomeSection userName={fallbackUsername} userLevel={userCurrentLevel} streak={7} />
@@ -43,7 +43,7 @@ export const DashboardUser = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 flex-shrink-0">
               <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} gradient="indigo" />
-              <AccueilStatCard title="Quêtes terminées" value={totalQuestCompleted} icon={BarChart3} gradient="amber" />
+              <AccueilStatCard title="Quêtes terminées" value={totalQuestCompleted} icon={BarChart3} gradient="indigo" />
               <AccueilStatCard title="Compétences validées" value={totalSkillCompleted} icon={Target} gradient="rose" />
             </div>
 
@@ -52,7 +52,7 @@ export const DashboardUser = () => {
             </div>
           </div>
 
-          <div className="lg:col-span-1 h-full">
+          <div className="lg:col-span-1 w-[15%] h-full">
             <ProfileHud
               userName={user?.username || user?.firstName || "Aventurier"}
               title={(user?.unsafeMetadata?.role as string) || "Aventurier"}
