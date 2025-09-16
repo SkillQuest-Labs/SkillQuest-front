@@ -62,7 +62,7 @@ export const DashboardUser = () => {
             <div className="space-y-6">
               {/* Composant des dernières compétences */}
               <RecentSkillsComponent skills={skills} />
-              
+
               <div className="h-64 bg-slate-800/30 rounded-xl border border-slate-600/30 p-6 flex items-center justify-center">
                 <p className="text-slate-400 text-sm">Composant 2 - À implémenter</p>
               </div>
