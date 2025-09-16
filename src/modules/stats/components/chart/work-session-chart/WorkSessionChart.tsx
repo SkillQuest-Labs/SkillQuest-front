@@ -120,7 +120,7 @@ const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) =
       <div
         className={`bg-gradient-to-br from-slate-900/50 to-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-6 shadow-2xl ${className}`}
       >
-        <div className="flex items-center justify-center" style={{ height: '345px' }}>
+        <div className="flex items-center justify-center" style={{ height: "345px" }}>
           <div className="text-slate-400">Chargement des données...</div>
         </div>
       </div>
@@ -132,7 +132,7 @@ const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) =
       <div
         className={`bg-gradient-to-br from-slate-900/50 to-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-6 shadow-2xl ${className}`}
       >
-        <div className="flex items-center justify-center" style={{ height: '345px' }}>
+        <div className="flex items-center justify-center" style={{ height: "345px" }}>
           <div className="text-red-400">Erreur lors du chargement des données</div>
         </div>
       </div>
@@ -144,7 +144,7 @@ const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) =
       <div
         className={`bg-gradient-to-br from-slate-900/50 to-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-6 shadow-2xl ${className}`}
       >
-        <div className="flex items-center justify-center" style={{ height: '345px' }}>
+        <div className="flex items-center justify-center" style={{ height: "345px" }}>
           <div className="text-slate-400">Aucune session trouvée</div>
         </div>
       </div>
@@ -173,7 +173,7 @@ const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) =
         </div>
       </div>
 
-      <div className="mb-4 flex-1 min-h-0" style={{ height: '450px' }}>
+      <div className="mb-4 flex-1 min-h-0" style={{ height: "450px" }}>
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
             <defs>

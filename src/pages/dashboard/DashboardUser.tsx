@@ -34,14 +34,14 @@ export const DashboardUser = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="max-w-8xl mx-auto px-3 sm:px-5 lg:px-7 py-6">
         <div className="space-y-8">
           {/* Section de bienvenue - Hero Section */}
           <div className="space-y-6">
             <WelcomeSection userName={fallbackUsername} streak={7} />
 
             {/* Cartes statistiques - Section de métriques */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 lg:gap-4">
               <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} />
               <AccueilStatCard title="Quêtes terminées" value={totalQuestCompleted} icon={BarChart3} />
               <AccueilStatCard title="Compétences validées" value={totalSkillCompleted} icon={Target} />
@@ -49,7 +49,7 @@ export const DashboardUser = () => {
           </div>
 
           {/* Zone principale de contenu */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
             {/* Composant principal - WorkSessionChart */}
             <div className="lg:col-span-2 space-y-6">
               {/* Composant de streak */}
@@ -59,7 +59,7 @@ export const DashboardUser = () => {
             </div>
 
             {/* Sidebar pour composants futurs */}
-            <div className="space-y-6">
+            <div className="space-y-4">
               {/* Composant des dernières compétences */}
               <RecentSkillsComponent skills={skills} />
 
