@@ -53,10 +53,38 @@ export type Session = {
 export type Sessions = Session[];
 
 export type SessionsQuery = {
-  userId: string; // ← requis
   skill?: string;
   quest?: string;
-  date?: string; // "YYYY-MM-DD"
-  limit?: number; // défaut 20
-  page?: number; // défaut 1 (si tu fais de la pagination par page)
+  date?: string;
+  limit?: number;
+  page?: number;
+};
+
+export type ListSessionsResponse = {
+  items: Session[];
+  total: number;
+  page: number;
+  limit: number;
+  pageCount: number;
+};
+
+export type QuestData = {
+  id: string;
+  title: string;
+};
+
+export type ValidateSessionDto = {
+  sessionId: string;
+  completedQuests: QuestData[];
+};
+
+export type ValidateSessionResponse = {
+  success: boolean;
+  message: string;
+  xpGained: number;
+  newLevel: number;
+  xpToNextLevel: number;
+  levelUp: boolean;
+  currentXp: number;
+  xpForCurrentLevel: number;
 };

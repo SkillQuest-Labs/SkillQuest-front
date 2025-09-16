@@ -10,7 +10,8 @@ import { StreakComponent } from "@/component/dashboard/StreakComponent";
 import { RecentSkillsComponent } from "@/component/dashboard/RecentSkillsComponent";
 import { WeeklySessionsReminder } from "@/component/dashboard/WeeklySessionsReminder";
 import { BarChart3, Target, TrendingUp } from "lucide-react";
-import { computeUserProgress } from "@/shared/utils/compute-user-progress";
+import { useComputeUserProgress } from "@/modules/stats/hooks/use-compute-user-progress";
+import { useGetUserStats } from "@/shared/services/user/api-user";
 
 export const DashboardUser = () => {
   const { user } = useUser();
@@ -30,8 +31,12 @@ export const DashboardUser = () => {
 
   const { skills } = useGetSkills(user?.id || "");
 
-  const { totalXp, totalQuestCompleted, totalSkillCompleted, userCurrentLevel, xpMaxForLevel } =
-    computeUserProgress(skills);
+  const { userStats } = useGetUserStats(user?.id || "");
+
+  const { totalXp, totalQuestCompleted, totalSkillCompleted, userCurrentLevel, xpThreshold, xpToNextLevel } =
+    useComputeUserProgress({ skills, userStats });
+
+    console.log(totalXp, totalQuestCompleted, totalSkillCompleted, userCurrentLevel, xpThreshold, xpToNextLevel)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
@@ -72,8 +77,8 @@ export const DashboardUser = () => {
                 userName={user?.username || user?.firstName || "Aventurier"}
                 title={(user?.unsafeMetadata?.role as string) || "Aventurier"}
                 level={userCurrentLevel}
-                xp={totalXp}
-                xpToNext={xpMaxForLevel}
+                xp={xpThreshold - xpToNextLevel}
+                xpToNext={xpThreshold}
                 isCollapsible={true}
                 defaultExpanded={false}
               />

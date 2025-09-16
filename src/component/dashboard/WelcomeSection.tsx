@@ -112,7 +112,6 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
     }, timeUntilNext);
     let dailyUpdateInterval: NodeJS.Timeout;
 
-
     // Timer pour l'heure
     const timeTimer = setInterval(() => {
       setCurrentTime(new Date());

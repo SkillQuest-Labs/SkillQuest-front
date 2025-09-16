@@ -23,7 +23,7 @@ export const Skills = () => {
   const [filters, setFilters] = useState<SkillFiltersType>({
     search: "",
     difficulty: "ALL",
-    sort: "RECENT",
+    sortBy: "RECENT",
     status: "ALL",
   });
   const [page, setPage] = useState(1);
@@ -50,7 +50,7 @@ export const Skills = () => {
 
     // Tri par date
     result.sort((a, b) => {
-      if (filters.sort === "RECENT") {
+      if (filters.sortBy === "RECENT") {
         return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
       } else {
         return new Date(a.createdAt || 0).getTime() - new Date(b.createdAt || 0).getTime();
