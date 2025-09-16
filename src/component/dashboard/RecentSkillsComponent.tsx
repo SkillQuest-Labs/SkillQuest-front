@@ -1,6 +1,8 @@
 import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { BookOpen, Clock, Star, ArrowRight } from "lucide-react";
 import type { Skill } from "@/shared/types/skill.type";
+import { routes } from "@/routes/router.const";
 
 interface RecentSkillsComponentProps {
   skills: Skill[];
@@ -64,6 +66,8 @@ const getStatusLabel = (status: string) => {
 };
 
 export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsComponentProps) => {
+  const navigate = useNavigate();
+  
   const recentSkills = useMemo(() => {
     // Filtrer les skills qui ont un titre
     const filteredSkills = skills.filter((skill) => skill.title);
@@ -115,6 +119,7 @@ export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsCo
           <div
             key={skill.id || index}
             className="group p-2 rounded-lg bg-slate-700/30 border border-slate-600/20 hover:bg-slate-700/50 hover:border-slate-500/30 transition-all duration-200 cursor-pointer"
+            onClick={() => navigate(routes.skillDetail.path.replace(':skillId', skill.id || ''))}
           >
             <div className="flex items-start justify-between">
               {/* Informations principales */}
@@ -174,7 +179,10 @@ export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsCo
 
       {/* Lien vers toutes les compétences */}
       <div className="mt-4 pt-4 border-t border-slate-600/20">
-        <button className="w-full flex items-center justify-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors">
+        <button 
+          className="w-full flex items-center justify-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors"
+          onClick={() => navigate(routes.skills.path)}
+        >
           Voir toutes les compétences
           <ArrowRight className="w-4 h-4" />
         </button>
