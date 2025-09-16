@@ -7,22 +7,19 @@ import { MOTIVATIONAL_QUOTES, type MotivationalQuote } from "@/shared/constants/
 const GREETING_CONFIGS = {
   morning: {
     message: "Bonjour",
-    icon: Sunrise,
     gradient: "from-slate-900/95 via-blue-900/30 to-violet-900/25",
   },
   afternoon: {
     message: "Bon après-midi",
-    icon: Sun,
     gradient: "from-slate-900/95 via-cyan-900/30 to-blue-900/25",
   },
   evening: {
     message: "Bonsoir",
-    icon: Sunset,
     gradient: "from-slate-900/95 via-violet-900/30 to-indigo-900/25",
   },
 } as const;
 
-const getTimeBasedGreeting = (): { message: string; icon: React.ComponentType<any>; gradient: string } => {
+const getTimeBasedGreeting = (): { message: string; gradient: string } => {
   const hour = new Date().getHours();
 
   // Optimisation : utilisation d'une logique plus claire et efficace
@@ -116,7 +113,7 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
 
   const getTimeIcon = () => {
     const hour = currentTime.getHours();
-    
+
     if (hour >= 4 && hour < 8) {
       return <Sunrise className="w-4 h-4 text-orange-400" />;
     } else if (hour >= 8 && hour < 17) {
@@ -129,10 +126,10 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
   };
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('fr-FR', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false
+    return date.toLocaleTimeString("fr-FR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
     });
   };
 
@@ -152,30 +149,23 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
         <div className="absolute inset-0 bg-black/30" />
 
         <div className="relative z-10 p-6 flex items-center h-full">
-          <div className="flex items-center gap-4">
-            <div className="text-5xl text-yellow-400">
-              <greeting.icon className="w-12 h-12" />
-            </div>
-            <div>
-              <h1 className="text-3xl lg:text-4xl font-bold text-white mb-1 drop-shadow-lg">
-                {greeting.message} {userName} !
-              </h1>
-              {streak > 0 && (
-                <div className="flex items-center gap-2 text-blue-100/90 text-base drop-shadow-md">
-                  <Flame className="w-5 h-5 text-cyan-400" />
-                  {streak} jours de suite
-                </div>
-              )}
-            </div>
+          <div>
+            <h1 className="text-3xl lg:text-4xl font-bold text-white mb-1 drop-shadow-lg">
+              {greeting.message} {userName} !
+            </h1>
+            {streak > 0 && (
+              <div className="flex items-center gap-2 text-blue-100/90 text-base drop-shadow-md">
+                <Flame className="w-5 h-5 text-cyan-400" />
+                {streak} jours de suite
+              </div>
+            )}
           </div>
 
           {/* Widget d'heure en haut à droite */}
           <div className="absolute top-4 right-4 bg-slate-800/80 backdrop-blur-sm border border-slate-600/30 rounded-lg px-3 py-2 shadow-lg">
             <div className="flex items-center gap-2">
               {getTimeIcon()}
-              <span className="text-white text-sm font-medium">
-                {formatTime(currentTime)}
-              </span>
+              <span className="text-white text-sm font-medium">{formatTime(currentTime)}</span>
             </div>
           </div>
         </div>
