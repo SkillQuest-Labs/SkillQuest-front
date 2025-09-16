@@ -67,7 +67,7 @@ const getStatusLabel = (status: string) => {
 
 export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsComponentProps) => {
   const navigate = useNavigate();
-  
+
   const recentSkills = useMemo(() => {
     // Filtrer les skills qui ont un titre
     const filteredSkills = skills.filter((skill) => skill.title);
@@ -92,12 +92,12 @@ export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsCo
           <div className="p-2 rounded-lg bg-blue-500/20 border border-blue-400/30">
             <BookOpen className="w-5 h-5 text-blue-400" />
           </div>
-          <h3 className="text-lg font-semibold text-white">Dernières compétences</h3>
+          <h3 className="text-lg font-semibold text-white">Derniers skills</h3>
         </div>
         <div className="text-center py-8">
           <BookOpen className="w-12 h-12 text-slate-500 mx-auto mb-3" />
-          <p className="text-slate-400 text-sm">Aucune compétence trouvée</p>
-          <p className="text-slate-500 text-xs mt-1">Créez votre première compétence pour commencer !</p>
+          <p className="text-slate-400 text-sm">Aucun skill trouvé</p>
+          <p className="text-slate-500 text-xs mt-1">Créez votre premier skill pour commencer !</p>
         </div>
       </div>
     );
@@ -110,16 +110,16 @@ export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsCo
         <div className="p-2 rounded-lg bg-blue-500/20 border border-blue-400/30">
           <BookOpen className="w-5 h-5 text-blue-400" />
         </div>
-        <h3 className="text-lg font-semibold text-white">Dernières compétences</h3>
+        <h3 className="text-lg font-semibold text-white">Derniers skills</h3>
       </div>
 
-      {/* Liste des compétences */}
+      {/* Liste des skills */}
       <div className="space-y-2">
         {recentSkills.map((skill, index) => (
           <div
             key={skill.id || index}
             className="group p-2 rounded-lg bg-slate-700/30 border border-slate-600/20 hover:bg-slate-700/50 hover:border-slate-500/30 transition-all duration-200 cursor-pointer"
-            onClick={() => navigate(routes.skillDetail.path.replace(':skillId', skill.id || ''))}
+            onClick={() => navigate(routes.skillDetail.path.replace(":skillId", skill.id || ""))}
           >
             <div className="flex items-start justify-between">
               {/* Informations principales */}
@@ -177,13 +177,13 @@ export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsCo
         ))}
       </div>
 
-      {/* Lien vers toutes les compétences */}
+      {/* Lien vers tous les skills */}
       <div className="mt-4 pt-4 border-t border-slate-600/20">
-        <button 
+        <button
           className="w-full flex items-center justify-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors"
           onClick={() => navigate(routes.skills.path)}
         >
-          Voir toutes les compétences
+          Voir tous les skills
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>
