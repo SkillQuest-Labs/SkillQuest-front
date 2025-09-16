@@ -7,6 +7,7 @@ import { useGetSkills } from "@/shared/services/skill/api-skill";
 import { WelcomeSection } from "@/component/dashboard/WelcomeSection";
 import { AccueilStatCard } from "@/modules/stats/components/AccueilStatsCard";
 import { StreakComponent } from "@/component/dashboard/StreakComponent";
+import { RecentSkillsComponent } from "@/component/dashboard/RecentSkillsComponent";
 import { BarChart3, Target, TrendingUp } from "lucide-react";
 import { computeUserProgress } from "@/shared/utils/compute-user-progress";
 
@@ -59,9 +60,9 @@ export const DashboardUser = () => {
 
             {/* Sidebar pour composants futurs */}
             <div className="space-y-6">
-              <div className="h-64 bg-slate-800/30 rounded-xl border border-slate-600/30 p-6 flex items-center justify-center">
-                <p className="text-slate-400 text-sm">Composant 1 - À implémenter</p>
-              </div>
+              {/* Composant des dernières compétences */}
+              <RecentSkillsComponent skills={skills} />
+              
               <div className="h-64 bg-slate-800/30 rounded-xl border border-slate-600/30 p-6 flex items-center justify-center">
                 <p className="text-slate-400 text-sm">Composant 2 - À implémenter</p>
               </div>
