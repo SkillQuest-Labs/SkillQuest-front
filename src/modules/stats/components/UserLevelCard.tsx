@@ -62,7 +62,7 @@ export const UserLevelCard = ({
               </p>
               <p className="text-lg text-white font-medium">/ ∞</p>
             </div>
-            <p className="text-xs text-white mt-1">{totalXp.toLocaleString()} XP Total</p>
+            <p className="text-xs text-white mt-1">{totalXp} XP Total</p>
           </div>
 
           {/* Icon with special effects */}

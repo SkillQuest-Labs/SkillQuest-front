@@ -186,7 +186,7 @@ const ProfileHud = ({
             />
           </div>
           <div className="mt-1 text-[11px] text-blue-200/60">
-            {xp.toLocaleString()} / {xpToNext.toLocaleString()} XP
+            {xp} / {xpToNext} XP
           </div>
         </div>
       </div>
