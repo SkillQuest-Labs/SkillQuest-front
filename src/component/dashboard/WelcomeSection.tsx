@@ -103,13 +103,15 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
     const nextChange = getNextGreetingChange(new Date());
     const timeUntilNext = nextChange.getTime() - Date.now();
 
-    // Programmer la prochaine mise à jour
-    const timeoutId = setTimeout(() => {
+    // Variables pour stocker les IDs des timers
+    const timeoutId: NodeJS.Timeout = setTimeout(() => {
       updateGreeting();
 
       // Après le premier changement, programmer les mises à jour quotidiennes
-      setInterval(updateGreeting, 24 * 60 * 60 * 1000);
+      dailyUpdateInterval = setInterval(updateGreeting, 24 * 60 * 60 * 1000);
     }, timeUntilNext);
+    let dailyUpdateInterval: NodeJS.Timeout;
+
 
     // Timer pour l'heure
     const timeTimer = setInterval(() => {
@@ -121,6 +123,9 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
       clearTimeout(timeoutId);
       clearTimeout(quoteTimer);
       clearInterval(timeTimer);
+      if (dailyUpdateInterval) {
+        clearInterval(dailyUpdateInterval);
+      }
     };
   }, []);
 
