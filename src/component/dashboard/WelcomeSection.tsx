@@ -151,7 +151,7 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
       {/* Carte Welcome avec image de fond - Hero Section */}
       <div className="relative overflow-hidden rounded-2xl border border-blue-500/20 backdrop-blur-md shadow-[0_20px_50px_rgba(59,130,246,0.15)] min-h-[320px]">
         {/* Image de fond dynamique */}
-        <div 
+        <div
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-all duration-1000 ease-in-out"
           style={{ backgroundImage: `url(${greeting.background})` }}
         />

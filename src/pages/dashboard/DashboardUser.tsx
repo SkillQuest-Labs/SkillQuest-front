@@ -8,6 +8,7 @@ import { WelcomeSection } from "@/component/dashboard/WelcomeSection";
 import { AccueilStatCard } from "@/modules/stats/components/AccueilStatsCard";
 import { StreakComponent } from "@/component/dashboard/StreakComponent";
 import { RecentSkillsComponent } from "@/component/dashboard/RecentSkillsComponent";
+import { WeeklySessionsReminder } from "@/component/dashboard/WeeklySessionsReminder";
 import { BarChart3, Target, TrendingUp } from "lucide-react";
 import { computeUserProgress } from "@/shared/utils/compute-user-progress";
 
@@ -63,9 +64,8 @@ export const DashboardUser = () => {
               {/* Composant des dernières compétences */}
               <RecentSkillsComponent skills={skills} />
 
-              <div className="h-64 bg-slate-800/30 rounded-xl border border-slate-600/30 p-6 flex items-center justify-center">
-                <p className="text-slate-400 text-sm">Composant 2 - À implémenter</p>
-              </div>
+              {/* Rappels des sessions de la semaine */}
+              <WeeklySessionsReminder />
 
               {/* ProfileHud aligné sous le composant 2 */}
               <ProfileHud
