@@ -142,15 +142,15 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
 
       {/* Citation motivante - Taille adaptée avec animation */}
       <div
-        className={`bg-slate-900/50 rounded-xl p-5 border border-blue-500/30 backdrop-blur-sm transition-all duration-1000 ease-out transform ${
+        className={`bg-slate-900/50 rounded-xl p-3 border border-blue-500/30 backdrop-blur-sm transition-all duration-1000 ease-out transform ${
           isQuoteVisible ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"
         }`}
       >
-        <div className="flex items-start gap-3">
-          <div className="text-2xl">💭</div>
+        <div className="flex items-start gap-2">
+          <div className="text-xl">💭</div>
           <div>
-            <p className="text-blue-50/95 font-medium italic text-lg leading-relaxed drop-shadow-md">"{quote?.text}"</p>
-            <p className="text-blue-200/70 text-sm mt-2 drop-shadow-sm">— {quote?.author}</p>
+            <p className="text-blue-50/95 font-medium italic text-base leading-relaxed drop-shadow-md">"{quote?.text}"</p>
+            <p className="text-blue-200/70 text-xs mt-1 drop-shadow-sm">— {quote?.author}</p>
           </div>
         </div>
       </div>

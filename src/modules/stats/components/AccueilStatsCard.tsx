@@ -9,7 +9,6 @@ type Props = {
   onClick?: () => void;
 };
 
-
 export const AccueilStatCard = ({ title, value, icon: Icon, className, onClick }: Props) => {
   return (
     <button
@@ -19,7 +18,7 @@ export const AccueilStatCard = ({ title, value, icon: Icon, className, onClick }
         "bg-slate-800/50 border border-slate-600/30",
         "backdrop-blur-sm shadow-sm",
         "hover:border-slate-500/50 hover:bg-slate-700/50 transition-all duration-300",
-        "h-[100px] w-[200px] overflow-hidden",
+        "h-[100px] flex-1 overflow-hidden",
         className,
       )}
     >

@@ -33,21 +33,21 @@ export const DashboardUser = () => {
   return (
     <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
       <div className="w-[95%] mx-auto py-4 h-full">
-        <div className="space-y-4 flex flex-col h-full">
+        <div className="flex flex-col h-full">
           {/* Section de bienvenue */}
           <div className="flex-shrink-0">
             <WelcomeSection userName={fallbackUsername} streak={7} />
           </div>
 
-          <div className="flex-1 min-h-0">
-            <WorkSessionChart />
-          </div>
-
-          {/* Cartes statistiques en bas du contenu */}
-          <div className="flex gap-3 flex-shrink-0 justify-end pb-4 pr-96">
+          {/* Cartes statistiques entre la citation et le composant de session */}
+          <div className="flex gap-2 flex-shrink-0 w-full mt-6">
             <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} />
             <AccueilStatCard title="Quêtes terminées" value={totalQuestCompleted} icon={BarChart3} />
             <AccueilStatCard title="Compétences validées" value={totalSkillCompleted} icon={Target} />
+          </div>
+
+          <div className="flex-1 min-h-0 mt-6">
+            <WorkSessionChart />
           </div>
         </div>
       </div>
