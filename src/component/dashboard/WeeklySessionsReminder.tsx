@@ -227,7 +227,7 @@ export const WeeklySessionsReminder = ({ className = "" }: WeeklySessionsReminde
 
       {/* Lien vers le calendrier complet */}
       <div className="mt-4 pt-4 border-t border-slate-600/20">
-        <button 
+        <button
           className="w-full flex items-center justify-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors"
           onClick={() => navigate(routes.workSession.path)}
         >
