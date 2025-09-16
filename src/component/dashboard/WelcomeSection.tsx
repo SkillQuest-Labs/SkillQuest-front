@@ -70,62 +70,6 @@ const getNextGreetingChange = (currentDate: Date): Date => {
   }
 };
 
-// Composant d'animation des fleurs de sakura
-const SakuraAnimation = () => {
-  const [petals, setPetals] = useState<Array<{
-    id: number;
-    x: number;
-    y: number;
-    delay: number;
-    duration: number;
-    size: number;
-    rotation: number;
-  }>>([]);
-
-  useEffect(() => {
-    // Générer des pétales de sakura
-    const generatePetals = () => {
-      const newPetals = Array.from({ length: 12 }, (_, i) => ({
-        id: Date.now() + i,
-        x: Math.random() * 100,
-        y: -10,
-        delay: Math.random() * 3,
-        duration: 6 + Math.random() * 4,
-        size: 10 + Math.random() * 8,
-        rotation: Math.random() * 360,
-      }));
-      setPetals(newPetals);
-    };
-
-    generatePetals();
-    const interval = setInterval(generatePetals, 2000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className="absolute inset-0 pointer-events-none overflow-hidden">
-      {petals.map((petal) => (
-        <div
-          key={petal.id}
-          className="absolute text-pink-300/70 animate-bounce"
-          style={{
-            left: `${petal.x}%`,
-            top: `${petal.y}%`,
-            fontSize: `${petal.size}px`,
-            animationDelay: `${petal.delay}s`,
-            animationDuration: `${petal.duration}s`,
-            animationIterationCount: 'infinite',
-            animationTimingFunction: 'ease-in-out',
-            transform: `rotate(${petal.rotation}deg)`,
-          }}
-        >
-          🌸
-        </div>
-      ))}
-    </div>
-  );
-};
 
 type WelcomeSectionProps = {
   userName: string;
@@ -135,11 +79,17 @@ type WelcomeSectionProps = {
 export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) => {
   const [quote, setQuote] = useState("");
   const [greeting, setGreeting] = useState(getTimeBasedGreeting());
+  const [isQuoteVisible, setIsQuoteVisible] = useState(false);
 
   useEffect(() => {
     // Citation aléatoire au chargement
     const randomQuote = MOTIVATIONAL_QUOTES[Math.floor(Math.random() * MOTIVATIONAL_QUOTES.length)];
     setQuote(randomQuote);
+
+    // Animation de la citation avec délai
+    const quoteTimer = setTimeout(() => {
+      setIsQuoteVisible(true);
+    }, 1000); // Délai de 1 seconde après le chargement
 
     // Fonction de mise à jour du greeting
     const updateGreeting = () => {
@@ -164,6 +114,7 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
     // Nettoyage des timers au démontage du composant
     return () => {
       clearTimeout(timeoutId);
+      clearTimeout(quoteTimer);
     };
   }, []);
 
@@ -172,18 +123,10 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
       {/* Carte Welcome avec vidéo de fond - Taille adaptée */}
       <div className="relative overflow-hidden rounded-2xl border border-blue-500/20 backdrop-blur-md shadow-[0_20px_50px_rgba(59,130,246,0.15)] mb-5 min-h-[280px]">
         {/* Vidéo de fond */}
-        <video
-          className="absolute inset-0 w-full h-full object-cover"
-          autoPlay
-          loop
-          muted
-          playsInline
-        >
+        <video className="absolute inset-0 w-full h-full object-cover" autoPlay loop muted playsInline>
           <source src={backgroundVideo} type="video/webm" />
         </video>
 
-        {/* Animation des fleurs de sakura */}
-        <SakuraAnimation />
 
         {/* Overlay avec gradient pour la lisibilité */}
         <div className={`absolute inset-0 bg-gradient-to-br ${greeting.gradient} mix-blend-overlay`} />
@@ -209,8 +152,14 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
         </div>
       </div>
 
-      {/* Citation motivante - Taille adaptée */}
-      <div className="bg-slate-900/50 rounded-xl p-5 border border-blue-500/30 backdrop-blur-sm">
+      {/* Citation motivante - Taille adaptée avec animation */}
+      <div 
+        className={`bg-slate-900/50 rounded-xl p-5 border border-blue-500/30 backdrop-blur-sm transition-all duration-1000 ease-out transform ${
+          isQuoteVisible 
+            ? 'translate-x-0 opacity-100' 
+            : '-translate-x-full opacity-0'
+        }`}
+      >
         <div className="flex items-start gap-3">
           <div className="text-2xl">💭</div>
           <div>
