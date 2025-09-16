@@ -150,15 +150,9 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
 
         <div className="relative z-10 p-6 flex items-center h-full">
           <div>
-            <h1 className="text-3xl lg:text-4xl font-bold text-white mb-1 drop-shadow-lg">
+            <h1 className="text-3xl lg:text-4xl font-semibold text-white mb-1 drop-shadow-lg">
               {greeting.message} {userName} !
             </h1>
-            {streak > 0 && (
-              <div className="flex items-center gap-2 text-blue-100/90 text-base drop-shadow-md">
-                <Flame className="w-5 h-5 text-cyan-400" />
-                {streak} jours de suite
-              </div>
-            )}
           </div>
 
           {/* Widget d'heure en haut à droite */}
@@ -167,6 +161,24 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
               {getTimeIcon()}
               <span className="text-white text-sm font-medium">{formatTime(currentTime)}</span>
             </div>
+            
+            {/* Streak sous le widget d'heure */}
+            {streak > 0 && (
+              <div className="flex items-center gap-2 mt-2 pt-2 border-t border-slate-600/30">
+                <Flame 
+                  className={`w-4 h-4 transition-all duration-300 ${
+                    streak >= 7 
+                      ? "text-orange-500 drop-shadow-lg" 
+                      : streak >= 3 
+                      ? "text-orange-400" 
+                      : "text-orange-300"
+                  }`} 
+                />
+                <span className="text-white/80 text-xs font-medium">
+                  x{streak}
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </div>
