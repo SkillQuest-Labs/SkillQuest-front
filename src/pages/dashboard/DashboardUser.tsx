@@ -52,10 +52,10 @@ export const DashboardUser = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Composant principal - WorkSessionChart */}
             <div className="lg:col-span-2 space-y-6">
-              <WorkSessionChart />
-
               {/* Composant de streak */}
               <StreakComponent currentStreak={7} maxStreak={7} />
+
+              <WorkSessionChart />
             </div>
 
             {/* Sidebar pour composants futurs */}
