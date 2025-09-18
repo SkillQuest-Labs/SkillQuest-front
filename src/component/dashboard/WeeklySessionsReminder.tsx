@@ -162,7 +162,7 @@ export const WeeklySessionsReminder = ({ className = "" }: WeeklySessionsReminde
       </div>
 
       {/* Liste des sessions */}
-      <div className="space-y-3">
+      <div className="space-y-2">
         {weeklySessions.map((session) => {
           const status = getSessionStatus(session);
           const isPast = status === "past";
@@ -170,7 +170,7 @@ export const WeeklySessionsReminder = ({ className = "" }: WeeklySessionsReminde
           return (
             <div
               key={session.id}
-              className={`group p-3 rounded-lg border transition-all duration-200 ${
+              className={`group p-2 rounded-md border transition-all duration-200 ${
                 isPast
                   ? "bg-slate-700/20 border-slate-600/20 opacity-60"
                   : "bg-slate-700/30 border-slate-600/20 hover:bg-slate-700/50 hover:border-slate-500/30"
@@ -179,25 +179,25 @@ export const WeeklySessionsReminder = ({ className = "" }: WeeklySessionsReminde
               <div className="flex items-start justify-between">
                 {/* Informations principales */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h4 className={`text-sm font-medium truncate ${isPast ? "text-slate-400" : "text-white"}`}>
+                  <div className="flex items-center gap-2 mb-1">
+                    <h4 className={`text-xs font-medium truncate ${isPast ? "text-slate-400" : "text-white"}`}>
                       {session.title}
                     </h4>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(status)}`}>
+                    <span className={`px-1.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(status)}`}>
                       {getStatusLabel(status)}
                     </span>
                   </div>
 
                   {/* Compétence liée */}
                   {session.linkedSkill && (
-                    <div className="flex items-center gap-1 mb-2">
+                    <div className="flex items-center gap-1 mb-1">
                       <BookOpen className="w-3 h-3 text-slate-400" />
                       <span className="text-xs text-slate-400 truncate">{session.linkedSkill.title}</span>
                     </div>
                   )}
 
                   {/* Date et heure */}
-                  <div className="flex items-center gap-3 text-xs">
+                  <div className="flex items-center gap-2 text-xs">
                     <div className="flex items-center gap-1 text-slate-400">
                       <Calendar className="w-3 h-3" />
                       {formatDate(session.date)}
@@ -212,7 +212,7 @@ export const WeeklySessionsReminder = ({ className = "" }: WeeklySessionsReminde
                 {/* Indicateur de durée */}
                 <div className="flex-shrink-0 ml-2">
                   <div
-                    className={`text-xs px-2 py-1 rounded-full ${
+                    className={`text-xs px-1.5 py-0.5 rounded-full ${
                       isPast ? "bg-slate-600/50 text-slate-400" : "bg-blue-500/20 text-blue-400"
                     }`}
                   >
