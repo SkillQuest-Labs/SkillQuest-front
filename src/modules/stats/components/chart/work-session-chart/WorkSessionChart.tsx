@@ -118,7 +118,7 @@ const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) =
       <div
         className={`bg-gradient-to-br from-slate-900/50 to-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4 shadow-2xl ${className}`}
       >
-        <div className="flex items-center justify-center h-48">
+        <div className="flex items-center justify-center h-32 md:h-40 lg:h-44">
           <div className="text-slate-400">Chargement...</div>
         </div>
       </div>
@@ -130,7 +130,7 @@ const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) =
       <div
         className={`bg-gradient-to-br from-slate-900/50 to-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4 shadow-2xl ${className}`}
       >
-        <div className="flex items-center justify-center h-48">
+        <div className="flex items-center justify-center h-32 md:h-40 lg:h-44">
           <div className="text-red-400">Erreur de chargement</div>
         </div>
       </div>
@@ -142,7 +142,7 @@ const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) =
       <div
         className={`bg-gradient-to-br from-slate-900/50 to-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4 shadow-2xl ${className}`}
       >
-        <div className="flex items-center justify-center h-48">
+        <div className="flex items-center justify-center h-32 md:h-40 lg:h-44">
           <div className="text-slate-400">Aucune session</div>
         </div>
       </div>
@@ -150,7 +150,7 @@ const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) =
   }
   return (
     <div
-      className={`rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-md border border-slate-700/50 shadow-2xl p-4 h-176 flex flex-col ${className}`}
+      className={`rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-md border border-slate-700/50 shadow-2xl p-4 h-64 md:h-80 lg:h-88 xl:h-96 flex flex-col ${className}`}
     >
       {/* En-tête compact */}
       <div className="flex items-center justify-between mb-3 flex-shrink-0">
