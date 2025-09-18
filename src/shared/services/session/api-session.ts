@@ -35,10 +35,10 @@ export const useCreateSession = () => {
   };
 };
 
-export const useGetSessions = (userId: string) => {
+export const useGetSessions = (userId: string, isValidated: boolean = false) => {
   const options = {
     method: "GET",
-    url: `${Constants.API_BASE_URL}/sessions/user/${userId}`,
+    url: `${Constants.API_BASE_URL}/sessions/user/${userId}?isValidated=${isValidated}`,
     headers: {
       "Content-Type": "application/json; charset=UTF-8",
     },
