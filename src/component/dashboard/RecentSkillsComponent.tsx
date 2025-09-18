@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { BookOpen, Clock, Star, ArrowRight } from "lucide-react";
+import { BookOpen, Clock, ArrowRight } from "lucide-react";
 import type { Skill } from "@/shared/types/skill.type";
 import { routes } from "@/routes/router.const";
 
@@ -12,13 +12,13 @@ interface RecentSkillsComponentProps {
 const getDifficultyColor = (difficulty: string) => {
   switch (difficulty) {
     case "EASY":
-      return "text-green-400 bg-green-400/20 border-green-400/30";
+      return "text-green-400 bg-green-400/20 border-green-400";
     case "MEDIUM":
-      return "text-yellow-400 bg-yellow-400/20 border-yellow-400/30";
+      return "text-yellow-400 bg-yellow-400/20 border-yellow-400";
     case "HARD":
-      return "text-red-400 bg-red-400/20 border-red-400/30";
+      return "text-red-400 bg-red-400/20 border-red-400";
     default:
-      return "text-slate-400 bg-slate-400/20 border-slate-400/30";
+      return "text-slate-400 bg-slate-400/20 border-slate-400";
   }
 };
 
@@ -38,15 +38,15 @@ const getDifficultyLabel = (difficulty: string) => {
 const getStatusColor = (status: string) => {
   switch (status) {
     case "COMPLETED":
-      return "text-green-400 bg-green-400/20";
+      return "text-green-400 bg-green-400/20 border-green-400";
     case "IN_PROGRESS":
-      return "text-blue-400 bg-blue-400/20";
+      return "text-blue-400 bg-blue-400/20 border-blue-400";
     case "NOT_STARTED":
-      return "text-slate-400 bg-slate-400/20";
+      return "text-slate-400 bg-slate-400/20 border-slate-400";
     case "DRAFT":
-      return "text-yellow-400 bg-yellow-400/20";
+      return "text-yellow-400 bg-yellow-400/20 border-yellow-400";
     default:
-      return "text-slate-400 bg-slate-400/20";
+      return "text-slate-400 bg-slate-400/20 border-slate-400";
   }
 };
 
@@ -114,33 +114,27 @@ export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsCo
       </div>
 
       {/* Liste des skills */}
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         {recentSkills.map((skill, index) => (
           <div
             key={skill.id || index}
-            className="group p-2 rounded-lg bg-slate-700/30 border border-slate-600/20 hover:bg-slate-700/50 hover:border-slate-500/30 transition-all duration-200 cursor-pointer"
+            className="group p-2 rounded-md bg-slate-700/30 border border-slate-600/20 hover:bg-slate-700/50 hover:border-slate-500/30 transition-all duration-200 cursor-pointer"
             onClick={() => navigate(routes.skillDetail.path.replace(":skillId", skill.id || ""))}
           >
             <div className="flex items-start justify-between">
               {/* Informations principales */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <h4 className="text-sm font-medium text-white truncate">{skill.title}</h4>
-                  {skill.totalXp && (
-                    <div className="flex items-center gap-1 text-xs text-slate-400">
-                      <Star className="w-3 h-3" />
-                      {skill.totalXp} XP
-                    </div>
-                  )}
+                  <h4 className="text-xs font-medium text-white truncate">{skill.title}</h4>
                 </div>
 
                 {/* Badges de statut et difficulté */}
-                <div className="flex items-center gap-2">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(skill.status)}`}>
+                <div className="flex items-center gap-1.5">
+                  <span className={`px-1.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(skill.status)}`}>
                     {getStatusLabel(skill.status)}
                   </span>
                   <span
-                    className={`px-2 py-1 rounded-full text-xs font-medium border ${getDifficultyColor(skill.difficulty)}`}
+                    className={`px-1.5 py-0.5 rounded-full text-xs font-medium border ${getDifficultyColor(skill.difficulty)}`}
                   >
                     {getDifficultyLabel(skill.difficulty)}
                   </span>
@@ -149,8 +143,8 @@ export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsCo
             </div>
 
             {/* Informations supplémentaires */}
-            <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-600/20">
-              <div className="flex items-center gap-4 text-xs text-slate-400">
+            <div className="flex items-center justify-between mt-1.5 pt-1.5 border-t border-slate-600/20">
+              <div className="flex items-center gap-3 text-xs text-slate-400">
                 <div className="flex items-center gap-1">
                   <BookOpen className="w-3 h-3" />
                   {skill.completedQuests || 0}/{skill.totalQuests || 0} quêtes
@@ -171,7 +165,7 @@ export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsCo
                 )}
               </div>
 
-              <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-slate-300 transition-colors" />
+              <ArrowRight className="w-3 h-3 text-slate-500 group-hover:text-slate-300 transition-colors" />
             </div>
           </div>
         ))}
