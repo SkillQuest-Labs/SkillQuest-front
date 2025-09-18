@@ -151,9 +151,9 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Carte Welcome avec image de fond - Hero Section */}
-      <div className="relative overflow-hidden rounded-2xl border border-blue-500/20 backdrop-blur-md shadow-[0_20px_50px_rgba(59,130,246,0.15)] min-h-[320px]">
+      <div className="relative overflow-hidden rounded-2xl border border-blue-500/20 backdrop-blur-md shadow-[0_20px_50px_rgba(59,130,246,0.15)] min-h-[224px]">
         {/* Image de fond dynamique */}
         <div
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-all duration-1000 ease-in-out"
@@ -166,25 +166,25 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
         {/* Overlay sombre pour améliorer la lisibilité du texte */}
         <div className="absolute inset-0 bg-black/30" />
 
-        <div className="relative z-10 p-6 flex items-center h-full">
+        <div className="relative z-10 p-4 flex items-center h-full">
           <div>
-            <h1 className="text-3xl lg:text-4xl font-semibold text-white mb-1 drop-shadow-lg">
+            <h1 className="text-2xl lg:text-3xl font-semibold text-white mb-1 drop-shadow-lg">
               {greeting.message} {userName} !
             </h1>
           </div>
 
           {/* Widget d'heure en haut à droite */}
-          <div className="absolute top-4 right-4 bg-slate-800/80 backdrop-blur-sm border border-slate-600/30 rounded-lg px-3 py-2 shadow-lg">
-            <div className="flex items-center gap-2">
+          <div className="absolute top-3 right-3 bg-slate-800/80 backdrop-blur-sm border border-slate-600/30 rounded-lg px-2 py-1.5 shadow-lg">
+            <div className="flex items-center gap-1.5">
               {getTimeIcon()}
-              <span className="text-white text-sm font-medium">{formatTime(currentTime)}</span>
+              <span className="text-white text-xs font-medium">{formatTime(currentTime)}</span>
             </div>
 
             {/* Streak sous le widget d'heure */}
             {streak > 0 && (
-              <div className="flex items-center gap-2 mt-2 pt-2 border-t border-slate-600/30">
+              <div className="flex items-center gap-1.5 mt-1.5 pt-1.5 border-t border-slate-600/30">
                 <Flame
-                  className={`w-4 h-4 transition-all duration-300 ${
+                  className={`w-3 h-3 transition-all duration-300 ${
                     streak >= 7 ? "text-orange-500 drop-shadow-lg" : streak >= 3 ? "text-orange-400" : "text-orange-300"
                   }`}
                 />
@@ -193,21 +193,23 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
             )}
           </div>
         </div>
-      </div>
 
-      {/* Citation motivante - Section inspirante */}
-      <div
-        className={`bg-slate-900/50 rounded-xl p-4 border border-blue-500/30 backdrop-blur-sm transition-all duration-1000 ease-out transform ${
-          isQuoteVisible ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"
-        }`}
-      >
-        <div className="flex items-start gap-2">
-          <div className="text-xl">💭</div>
-          <div>
-            <p className="text-blue-50/95 font-medium italic text-base leading-relaxed drop-shadow-md">
-              "{quote?.text}"
-            </p>
-            <p className="text-blue-200/70 text-xs mt-1 drop-shadow-sm">— {quote?.author}</p>
+        {/* Citation motivante en bas */}
+        <div className="absolute bottom-4 left-4 right-4 flex justify-center">
+          <div
+            className={`bg-slate-900/70 backdrop-blur-sm border border-blue-500/30 rounded-xl p-3 transition-all duration-1000 ease-out transform ${
+              isQuoteVisible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
+            }`}
+          >
+            <div className="flex items-start gap-2">
+              <div className="text-lg">💭</div>
+              <div>
+                <p className="text-blue-50/95 font-medium italic text-sm leading-relaxed drop-shadow-md">
+                  "{quote?.text}"
+                </p>
+                <p className="text-blue-200/70 text-xs mt-1 drop-shadow-sm">— {quote?.author}</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
