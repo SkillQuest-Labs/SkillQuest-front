@@ -30,7 +30,6 @@ export const buildSessionPayload = (sessionForm: SessionFormType, userId: string
     userId: userId,
     questIds: (sessionForm.linkedQuests || []).map((quest) => quest.id),
     title: sessionForm.title,
-    description: sessionForm.description,
     color: sessionForm.color,
     linkedSkillId: sessionForm.linkedSkill,
   };
@@ -77,7 +76,6 @@ export const convertSessionsToEvents = (sessions: Sessions): CalendarEvent[] => 
   return sessions.map((session) => ({
     id: session.id,
     title: session.title,
-    description: session.description ?? "",
     start: session.startTime,
     end: session.endTime,
     color: session.color ?? "#3B82F6",

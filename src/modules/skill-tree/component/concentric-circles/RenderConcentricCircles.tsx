@@ -20,8 +20,8 @@ export const RenderConcentricCircles = ({
   containerHeight,
 }: RenderConcentricCirclesProps) => {
   // Vérifier si les nœuds ont des propriétés de spirale
-  const hasSpiralNodes = skillnodes.some(node => node.spiralRadius !== undefined);
-  
+  const hasSpiralNodes = skillnodes.some((node) => node.spiralRadius !== undefined);
+
   if (hasSpiralNodes) {
     // Utiliser le nouveau layout en spirale
     return (
@@ -35,7 +35,7 @@ export const RenderConcentricCircles = ({
       />
     );
   }
-  
+
   // Fallback vers les cercles concentriques pour la compatibilité
   const maxRing = skillnodes.reduce((max, node) => Math.max(max, node.ring), 0);
   const rings = Array.from({ length: maxRing }, (_, i) => (i + 1) * 100);

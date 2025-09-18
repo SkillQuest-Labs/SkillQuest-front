@@ -9,20 +9,22 @@ interface SelectSkillProps {
 }
 
 export const SelectSkillField = ({ currentSession, setForm, skills, loading }: SelectSkillProps) => {
+  const handleSkillChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedSkill = skills.find((skill) => skill.id === e.target.value);
+    setForm({
+      ...currentSession,
+      linkedSkill: e.target.value,
+      title: selectedSkill?.title || "",
+      linkedQuests: [],
+    });
+  };
+
   return (
     <div className="mb-4 min-w-0">
-      {" "}
-      {/* min-w-0 pour autoriser la réduction dans un flex/grid */}
       <label className="text-sm text-white mb-1 block">Choisir un skill</label>
       <select
         value={currentSession.linkedSkill}
-        onChange={(e) =>
-          setForm({
-            ...currentSession,
-            linkedSkill: e.target.value,
-            linkedQuests: [],
-          })
-        }
+        onChange={handleSkillChange}
         className="
           block w-full h-10
           rounded-md bg-slate-800 text-white

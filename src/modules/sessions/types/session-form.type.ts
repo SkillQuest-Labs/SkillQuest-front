@@ -3,7 +3,6 @@ import type { Skill } from "@/shared/types/skill.type";
 
 export interface SessionFormType {
   title: string;
-  description: string;
   startDate: string;
   startTime: string;
   endTime: string;
@@ -24,7 +23,6 @@ export interface SessionFormProps {
 export type CalendarEvent = {
   id: string;
   title: string;
-  description?: string;
   color: string;
   start: string;
   end: string;

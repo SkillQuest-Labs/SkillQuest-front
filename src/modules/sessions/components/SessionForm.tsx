@@ -1,5 +1,4 @@
 import { Input } from "@/shared/components/ui/input";
-import { Textarea } from "@/shared/components/ui/textarea";
 import type { SessionFormProps } from "../types/session-form.type";
 import { SelectSkillField } from "./SelectSkillField";
 import { SelectQuestField } from "./SelectQuestField";
@@ -15,20 +14,6 @@ export const SessionForm = ({
 }: SessionFormProps) => {
   return (
     <>
-      <Input
-        placeholder="Titre"
-        value={currentSession.title}
-        onChange={(e) => setForm({ ...currentSession, title: e.target.value })}
-        className="mb-2"
-      />
-
-      <Textarea
-        placeholder="Description"
-        value={currentSession.description}
-        onChange={(e) => setForm({ ...currentSession, description: e.target.value })}
-        className="mb-4"
-      />
-
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <div className="sm:col-span-2">
           <label className="text-sm text-white mb-1 block">Date</label>
