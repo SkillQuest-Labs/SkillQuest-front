@@ -1,4 +1,4 @@
-import { SkillTreeLoader } from "@/component/SkillTreeLoader";
+﻿import { SkillTreeLoader } from "@/component/SkillTreeLoader";
 import type { QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
 import type { Edge, Node } from "@xyflow/react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -6,12 +6,14 @@ import { generateCircularSkillTreeData } from "../circular-skill-tree-logic/gene
 import type { DependencyGraph } from "../circular-skill-tree-logic/generate-circular-skill-tree-logic/dependency-graph";
 import { useContainerSize } from "../hooks/useContainerSize";
 import type { CircularSkillNode } from "../skill-tree.type";
-import { RenderConcentricCircles } from "./concentric-circles/RenderConcentricCircles";
 import { LayoutToggle } from "./LayoutToggle";
 import { RenderNodeDetails } from "./NodeDetails";
 import { NodeRenderer } from "./render-node-component/NodeRenderer";
 import { ConnectionsRenderer } from "./render-node-connections/ConnectionsRenderer";
 import { SkillTreeNavigation } from "./SkillTreeNavigation";
+import { RenderConcentricCircles } from "./concentric-circles/RenderConcentricCircles";
+
+type LayoutType = "spiral" | "concentric";
 
 export type SkillTreeDataProps = {
   nodes: CircularSkillNode[];
@@ -30,9 +32,9 @@ export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreePro
   const [isLoading, setIsLoading] = useState(true);
   const [circularSkillNodes, setCircularSkillNodes] = useState<CircularSkillNode[]>([]);
   const [dependencyGraph, setDependencyGraph] = useState<DependencyGraph>();
-  const [layoutType, setLayoutType] = useState<"spiral" | "concentric">(nodes.length >= 10 ? "spiral" : "concentric");
+  const [layoutType, setLayoutType] = useState<LayoutType>(nodes.length >= 10 ? "spiral" : "concentric");
 
-  const handleLayoutChange = (newLayoutType: "spiral" | "concentric") => {
+  const handleLayoutChange = (newLayoutType: LayoutType) => {
     setLayoutType(newLayoutType);
   };
 
@@ -58,14 +60,15 @@ export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreePro
       setZoom(1);
     } else if (layoutType === "concentric") {
       if (nodes.length < 10) {
-        setZoom(1);
+        setZoom(0.8);
       } else {
         setZoom(0.5);
       }
+    } else {
+      setZoom(0.75);
     }
   }, [nodes, layoutType]);
 
-  // Reset generation flag when layout type changes
   useEffect(() => {
     hasGenerated.current = false;
   }, [layoutType]);
@@ -85,7 +88,7 @@ export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreePro
         edges,
         centerX: containerSize.width / 2,
         centerY: containerSize.height / 2,
-        forceLayoutType: layoutType,
+        forceLayoutType: layoutType === "spiral" ? "spiral" : "concentric",
       });
 
       setCircularSkillNodes(circularSkillNodes);
@@ -237,9 +240,9 @@ export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreePro
           </div>
         )}
       </div>
-      {selectedNodeData && !minimalistView && <RenderNodeDetails selectedNodeData={selectedNodeData} />}
-      {/* Skill Tree Legend */}
-      {/* {circularSkillNodes.length > 0 && !minimalistView && <SkillTreeLegends />} */}
+      {selectedNodeData && !minimalistView && (
+        <RenderNodeDetails selectedNodeData={selectedNodeData as CircularSkillNode} />
+      )}
     </div>
   );
 };

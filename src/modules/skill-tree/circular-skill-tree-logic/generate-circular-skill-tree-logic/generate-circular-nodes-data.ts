@@ -1,4 +1,4 @@
-import type { QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
+﻿import type { QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
 import { type Node } from "@xyflow/react";
 import type { CircularSkillNode } from "../../skill-tree.type";
 import { calculateNodePosition, countNodesPerLevel, sortQuestNodesByLevel } from "../skill-tree.const";
@@ -27,6 +27,10 @@ export const generateCircularNodesData = ({
   const circularSkillNodes: CircularSkillNode[] = [];
   const nodesPerLevel = countNodesPerLevel({ nodes, visitedLevels });
   const sortedQuestNodes = sortQuestNodesByLevel({ nodes, visitedLevels });
+
+  // When the layout has an outer radius of ~600 and 6+ nodes,
+  // each concentric ring carries a single node – upscale them globally.
+  const boostAllRings = totalQuestCount >= 6 && ringRadii.some((radius) => radius >= 600);
 
   const placedNodesCount: Record<number, number> = {};
   Object.keys(nodesPerLevel).forEach((level) => {
@@ -61,8 +65,7 @@ export const generateCircularNodesData = ({
       status: node.data.status,
     });
 
-    // Augmenter la taille des nœuds pour les layouts concentriques avec ≥10 quêtes
-    const adjustedSize = totalQuestCount >= 10 ? nodeVisualsProperties.size + 40 : nodeVisualsProperties.size;
+    const adjustedSize = nodeVisualsProperties.size + (boostAllRings ? 28 : 0);
 
     const circularNode: CircularSkillNode = {
       id: node.id,
