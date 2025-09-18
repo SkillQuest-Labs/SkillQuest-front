@@ -123,7 +123,6 @@ export const CalendarWorkSession = () => {
       setEditingIndex(index);
       setSessionForm({
         title: selected.title ?? "",
-        description: selected.description ?? "",
         startDate: selected.start?.slice(0, 10) ?? "",
         startTime: selected.start?.slice(11, 16) ?? "",
         endTime: selected.end?.slice(11, 16) ?? "",

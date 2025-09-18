@@ -34,10 +34,10 @@ export const SessionDialog = ({
   isDeleting = false,
 }: SessionDialogProps) => {
   const isFormValid =
-    formSession.title.trim() &&
     formSession.startDate &&
     formSession.startTime &&
     formSession.endTime &&
+    formSession.linkedSkill &&
     (formSession.linkedQuests?.length ?? 0) > 0;
 
   const hasTimeConflict = Boolean(

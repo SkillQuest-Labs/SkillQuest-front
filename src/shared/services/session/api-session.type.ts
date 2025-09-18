@@ -5,7 +5,6 @@ export type CreateSessionInput = {
   userId: string;
   questIds: string[];
   title: string;
-  description?: string;
   color: string;
   linkedSkillId: string;
 };
@@ -28,7 +27,6 @@ export type UpdateSessionResponse = CreateSessionResponse;
 export type Session = {
   id: string;
   title: string;
-  description: string;
   color: string;
   date: string;
   startTime: string;

@@ -80,14 +80,14 @@ export const generateCircularSkillTreeData = ({
   } else {
     // Utiliser le layout en cercles concentriques
     const ringRadii = Array.from({ length: maxLevel + 1 }, (_, i) => i * 100);
-    circularSkillNodes = generateCircularNodesData({ 
-      nodes, 
-      visitedLevels, 
-      graph, 
-      ringRadii, 
-      centerX, 
-      centerY, 
-      totalQuestCount 
+    circularSkillNodes = generateCircularNodesData({
+      nodes,
+      visitedLevels,
+      graph,
+      ringRadii,
+      centerX,
+      centerY,
+      totalQuestCount,
     });
   }
 
