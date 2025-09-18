@@ -1,5 +1,9 @@
 import type { Quest } from "@/shared/types/quest.type";
 import type { SessionFormType } from "../types/session-form.type";
+import { useState, useEffect, useRef } from "react";
+import { ChevronDown, ChevronUp, X } from "lucide-react";
+import { Button } from "@/shared/components/ui/button";
+import { Checkbox } from "@/shared/components/ui/checkbox";
 
 interface SelectQuestProps {
   currentSession: SessionFormType;
@@ -10,45 +14,166 @@ interface SelectQuestProps {
 }
 
 export const SelectQuestField = ({ currentSession, setForm, quests, loading, disabled = false }: SelectQuestProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const questCount = currentSession.linkedQuests.length;
+  const questText =
+    questCount === 0
+      ? "Aucune quête sélectionnée"
+      : `${questCount} quête${questCount > 1 ? "s" : ""} sélectionnée${questCount > 1 ? "s" : ""}`;
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
+  const handleQuestToggle = (questId: string, questTitle: string) => {
+    const isSelected = currentSession.linkedQuests.some((quest) => quest.id === questId);
+
+    if (isSelected) {
+      setForm({
+        ...currentSession,
+        linkedQuests: currentSession.linkedQuests.filter((quest) => quest.id !== questId),
+      });
+      return;
+    }
+
+    setForm({
+      ...currentSession,
+      linkedQuests: [...currentSession.linkedQuests, { id: questId, title: questTitle }],
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (currentSession.linkedQuests.length === quests.length) {
+      setForm({
+        ...currentSession,
+        linkedQuests: [],
+      });
+      return;
+    }
+
+    setForm({
+      ...currentSession,
+      linkedQuests: quests.map((quest) => ({ id: quest.questId, title: quest.title })),
+    });
+  };
+
   return (
     <div className="mb-4 min-w-0">
-      <label className="text-sm text-white mb-1 block">Choisir une quête</label>
-      <select
-        value={currentSession.linkedQuests?.[0]?.id ?? ""}
-        onChange={(e) => {
-          const selectedId = e.currentTarget.value;
-          setForm({
-            ...currentSession,
-            linkedQuests: selectedId
-              ? quests
-                  .filter((quest) => quest.questId === selectedId)
-                  .map((quest) => ({ id: quest.questId, title: quest.title }))
-              : [],
-          });
-        }}
-        disabled={disabled}
-        className="
-          block w-full h-10
-          rounded-md bg-slate-800 text-white
-          border border-slate-600
-          px-3 pr-8
-          overflow-hidden text-ellipsis whitespace-nowrap
-          outline-none ring-2 ring-transparent
-          focus:border-sky-400 focus:ring-sky-500/40
-          disabled:bg-slate-700 disabled:text-slate-400 disabled:cursor-not-allowed
-        "
-      >
-        <option value="">Aucune</option>
-        {loading ? (
-          <option disabled>Chargement...</option>
-        ) : (
-          quests?.map((q) => (
-            <option key={q.questId} value={q.questId}>
-              {q.title}
-            </option>
-          ))
+      <label className="text-sm text-white mb-1 block">Choisir des quêtes</label>
+      <div className="relative" ref={containerRef}>
+        <Button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          disabled={disabled}
+          variant="outline"
+          className="
+            w-full h-10 justify-between
+            bg-slate-800 text-white border-slate-600
+            hover:bg-slate-700
+            disabled:bg-slate-700 disabled:text-slate-400
+          "
+        >
+          {questText}
+          <span className="absolute right-2 top-1/2 transform -translate-y-1/2">
+            {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+          </span>
+        </Button>
+
+        {isOpen && (
+          <div
+            className="
+            absolute z-10 w-full mt-1
+            bg-slate-800 border border-slate-600 rounded-md
+            shadow-lg max-h-60 overflow-y-auto
+          "
+          >
+            <div className="p-2 border-b border-slate-600">
+              <Button
+                type="button"
+                onClick={handleSelectAll}
+                variant="ghost"
+                className="
+                  w-full justify-start px-2 py-1 h-auto
+                  hover:bg-slate-700 text-sm
+                  text-sky-400 font-medium
+                "
+              >
+                {currentSession.linkedQuests.length === quests.length ? "Tout désélectionner" : "Tout sélectionner"}
+              </Button>
+            </div>
+
+            {loading ? (
+              <div className="p-3 text-center text-slate-400">Chargement...</div>
+            ) : (
+              quests?.map((quest) => {
+                const isSelected = currentSession.linkedQuests.some(
+                  (selectedQuest) => selectedQuest.id === quest.questId,
+                );
+                return (
+                  <label
+                    key={quest.questId}
+                    className="
+                      flex items-center px-3 py-2 cursor-pointer
+                      hover:bg-slate-700
+                    "
+                  >
+                    <Checkbox
+                      checked={isSelected}
+                      onCheckedChange={() => handleQuestToggle(quest.questId, quest.title)}
+                      className="mr-3"
+                    />
+                    <span className="text-sm text-white truncate">{quest.title}</span>
+                  </label>
+                );
+              })
+            )}
+          </div>
         )}
-      </select>
+      </div>
+
+      {/* Affichage des quêtes sélectionnées */}
+      {currentSession.linkedQuests.length > 0 && (
+        <div className="mt-2">
+          <div className="text-xs text-slate-400 mb-1">Quêtes sélectionnées :</div>
+          <div className="flex flex-wrap gap-1">
+            {currentSession.linkedQuests.map((quest) => (
+              <span
+                key={quest.id}
+                className="
+                  inline-flex items-center px-2 py-1 rounded-full
+                  bg-sky-500/20 text-sky-300 text-xs
+                  border border-sky-500/30
+                "
+              >
+                {quest.title}
+                <Button
+                  type="button"
+                  onClick={() => handleQuestToggle(quest.id, quest.title)}
+                  variant="ghost"
+                  size="sm"
+                  className="ml-1 h-auto p-1 text-sky-400 hover:text-sky-200"
+                >
+                  <X className="w-3 h-3" />
+                </Button>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
