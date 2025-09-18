@@ -130,7 +130,9 @@ export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsCo
 
                 {/* Badges de statut et difficulté */}
                 <div className="flex items-center gap-1.5">
-                  <span className={`px-1.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(skill.status)}`}>
+                  <span
+                    className={`px-1.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(skill.status)}`}
+                  >
                     {getStatusLabel(skill.status)}
                   </span>
                   <span
