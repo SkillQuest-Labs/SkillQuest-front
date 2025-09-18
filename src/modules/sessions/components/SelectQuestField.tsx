@@ -57,17 +57,10 @@ export const SelectQuestField = ({ currentSession, setForm, quests, loading, dis
   };
 
   const handleSelectAll = () => {
-    if (currentSession.linkedQuests.length === quests.length) {
-      setForm({
-        ...currentSession,
-        linkedQuests: [],
-      });
-      return;
-    }
-
+    const allQuestsSelected = currentSession.linkedQuests.length === quests.length;
     setForm({
       ...currentSession,
-      linkedQuests: quests.map((quest) => ({ id: quest.questId, title: quest.title })),
+      linkedQuests: allQuestsSelected ? [] : quests.map((quest) => ({ id: quest.questId, title: quest.title })),
     });
   };
 
@@ -83,7 +76,7 @@ export const SelectQuestField = ({ currentSession, setForm, quests, loading, dis
           className="
             w-full h-10 justify-between
             bg-slate-800 text-white border-slate-600
-            hover:bg-slate-700
+            hover:bg-slate-700 hover:text-slate-100
             disabled:bg-slate-700 disabled:text-slate-400
           "
         >
@@ -108,11 +101,11 @@ export const SelectQuestField = ({ currentSession, setForm, quests, loading, dis
                 variant="ghost"
                 className="
                   w-full justify-start px-2 py-1 h-auto
-                  hover:bg-slate-700 text-sm
+                  hover:bg-slate-700 hover:text-sky-200 text-sm
                   text-sky-400 font-medium
                 "
               >
-                {currentSession.linkedQuests.length === quests.length ? "Tout désélectionner" : "Tout sélectionner"}
+                {questCount === quests.length ? "Tout désélectionner" : "Tout sélectionner"}
               </Button>
             </div>
 
@@ -134,7 +127,7 @@ export const SelectQuestField = ({ currentSession, setForm, quests, loading, dis
                     <Checkbox
                       checked={isSelected}
                       onCheckedChange={() => handleQuestToggle(quest.questId, quest.title)}
-                      className="mr-3"
+                      className="mr-3 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
                     />
                     <span className="text-sm text-white truncate">{quest.title}</span>
                   </label>
@@ -145,8 +138,7 @@ export const SelectQuestField = ({ currentSession, setForm, quests, loading, dis
         )}
       </div>
 
-      {/* Affichage des quêtes sélectionnées */}
-      {currentSession.linkedQuests.length > 0 && (
+      {questCount > 0 && (
         <div className="mt-2">
           <div className="text-xs text-slate-400 mb-1">Quêtes sélectionnées :</div>
           <div className="flex flex-wrap gap-1">
@@ -165,7 +157,7 @@ export const SelectQuestField = ({ currentSession, setForm, quests, loading, dis
                   onClick={() => handleQuestToggle(quest.id, quest.title)}
                   variant="ghost"
                   size="sm"
-                  className="ml-1 h-auto p-1 text-sky-400 hover:text-sky-200"
+                  className="ml-1 h-auto p-1 text-sky-400 hover:text-red-400"
                 >
                   <X className="w-3 h-3" />
                 </Button>

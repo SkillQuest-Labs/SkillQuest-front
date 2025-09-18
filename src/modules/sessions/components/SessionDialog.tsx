@@ -33,7 +33,12 @@ export const SessionDialog = ({
   setIsDeleteDialogOpen,
   isDeleting = false,
 }: SessionDialogProps) => {
-  const isFormValid = formSession.startDate && formSession.startTime && formSession.endTime && formSession.linkedSkill;
+  const isFormValid =
+    formSession.startDate &&
+    formSession.startTime &&
+    formSession.endTime &&
+    formSession.linkedSkill &&
+    formSession.linkedQuests?.length > 0;
 
   const hasTimeConflict = Boolean(
     formSession.startTime &&
@@ -54,7 +59,7 @@ export const SessionDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-slate-900 text-white">
+      <DialogContent className="bg-slate-900 text-white max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{isEditing ? "Modifier la session" : "Nouvelle session"}</DialogTitle>
           <DialogDescription>{isEditing ? "Modifiez votre session" : "Ajoutez une nouvelle session"}</DialogDescription>
@@ -71,7 +76,7 @@ export const SessionDialog = ({
 
         {hasTimeConflict && (
           <p className="text-red-500 text-sm mt-2 flex items-center gap-1">
-            <CircleAlert className="w-4 h-4" /> L’heure de fin doit être après l’heure de début.
+            <CircleAlert className="w-4 h-4" /> L'heure de fin doit être après l'heure de début.
           </p>
         )}
 
