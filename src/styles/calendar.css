@@ -109,3 +109,43 @@
 }
 
 .fc-timeGridDay-view { --fc-today-bg-color: transparent; }
+
+/* Styles pour les sessions validées */
+.validated-session {
+  opacity: 0.6 !important;
+  text-decoration: line-through !important;
+  position: relative !important;
+}
+
+.validated-session::before {
+  content: "✓";
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #10b981;
+  text-shadow: 0 0 2px rgba(16, 185, 129, 0.5);
+}
+
+.validated-session .fc-event-title {
+  text-decoration: line-through !important;
+  opacity: 0.8 !important;
+}
+
+.validated-session .fc-event-time {
+  text-decoration: line-through !important;
+  opacity: 0.8 !important;
+}
+
+/* Styles spécifiques pour les vues du calendrier */
+.fc-dayGridMonth-view .validated-session {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05)) !important;
+  border-left: 3px solid #10b981 !important;
+}
+
+.fc-timeGridDay-view .validated-session,
+.fc-timeGridWeek-view .validated-session {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.08)) !important;
+  border-left: 4px solid #10b981 !important;
+}

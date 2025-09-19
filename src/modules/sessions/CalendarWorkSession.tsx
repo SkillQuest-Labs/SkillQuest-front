@@ -51,7 +51,7 @@ export const CalendarWorkSession = () => {
 
   const editingSessionId = editingIndex !== null ? workSessions[editingIndex]?.id : "";
 
-  const { sessions } = useGetSessions(userId || "");
+  const { sessions } = useGetSessions(userId || "", true);
   const { updateSession } = useUpdateSession(editingSessionId);
   const { deleteSession } = useDeleteSession(editingSessionId || "");
 
@@ -120,6 +120,7 @@ export const CalendarWorkSession = () => {
       if (index < 0) return;
 
       const selected = workSessions[index];
+
       setEditingIndex(index);
       setSessionForm({
         title: selected.title ?? "",
@@ -287,6 +288,7 @@ export const CalendarWorkSession = () => {
           editingSessionId={editingSessionId}
           setIsDeleteDialogOpen={setIsDeleteDialogOpen}
           isDeleting={isDeleting}
+          isSessionValidated={editingIndex !== null ? workSessions[editingIndex]?.extendedProps?.isValidated : false}
         />
 
         <ConfirmDeleteDialogue

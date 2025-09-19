@@ -18,6 +18,7 @@ export interface SessionFormProps {
   quests: Quest[];
   loadingSkills: boolean;
   loadingQuests: boolean;
+  disabled?: boolean;
 }
 
 export type CalendarEvent = {
@@ -28,8 +29,10 @@ export type CalendarEvent = {
   end: string;
   backgroundColor: string;
   borderColor: string;
+  className?: string;
   extendedProps: {
     linkedSkill: string;
+    isValidated: boolean;
     linkedQuests: { id: string; title: string }[];
   };
 };

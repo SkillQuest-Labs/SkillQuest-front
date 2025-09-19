@@ -8,6 +8,7 @@ type SessionDialogActionsProps = {
   isDeleting?: boolean;
   saveDisabled: boolean;
   setIsDeleteDialogOpen: (open: boolean) => void;
+  isSessionValidated?: boolean;
 };
 
 export const SessionDialogActions = ({
@@ -18,10 +19,11 @@ export const SessionDialogActions = ({
   editingSessionId,
   isDeleting = false,
   saveDisabled,
+  isSessionValidated = false,
 }: SessionDialogActionsProps) => {
   return (
     <div className="flex items-center mt-4 justify-end">
-      {isEditing && !!editingSessionId && (
+      {isEditing && !!editingSessionId && !isSessionValidated && (
         <Button
           variant="destructive"
           onClick={() => setIsDeleteDialogOpen(true)}
@@ -34,12 +36,12 @@ export const SessionDialogActions = ({
 
       <div className="flex gap-2">
         <Button variant="ghost" onClick={onClose}>
-          Annuler
+          {isSessionValidated ? "Fermer" : "Annuler"}
         </Button>
         <Button
           onClick={onSave}
-          disabled={saveDisabled}
-          className={`${!saveDisabled ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-600 cursor-not-allowed"} text-white`}
+          disabled={saveDisabled || isSessionValidated}
+          className={`${!saveDisabled && !isSessionValidated ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-600 cursor-not-allowed"} text-white`}
         >
           {isEditing ? "Mettre à jour" : "Enregistrer"}
         </Button>

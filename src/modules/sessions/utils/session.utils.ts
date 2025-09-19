@@ -81,8 +81,10 @@ export const convertSessionsToEvents = (sessions: Sessions): CalendarEvent[] => 
     color: session.color ?? "#3B82F6",
     backgroundColor: session.color ?? "#3B82F6",
     borderColor: session.color ?? "#3B82F6",
+    className: session.isValidated ? "validated-session" : "",
     extendedProps: {
       linkedSkill: session.linkedSkillId ?? "",
+      isValidated: session.isValidated ?? false,
       linkedQuests: Array.isArray(session.quests)
         ? session.quests.map((sessionQuest) => ({
             id: sessionQuest.questId ?? sessionQuest.id,

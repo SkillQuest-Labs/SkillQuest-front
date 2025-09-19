@@ -99,11 +99,13 @@ export const SelectQuestField = ({ currentSession, setForm, quests, loading, dis
                 type="button"
                 onClick={handleSelectAll}
                 variant="ghost"
-                className="
-                  w-full justify-start px-2 py-1 h-auto
-                  hover:bg-slate-700 hover:text-sky-200 text-sm
-                  text-sky-400 font-medium
-                "
+                disabled={disabled}
+                className={`
+                  w-full justify-start px-2 py-1 h-auto text-sm font-medium
+                  ${
+                    disabled ? "text-gray-500 cursor-not-allowed" : "hover:bg-slate-700 hover:text-sky-200 text-sky-400"
+                  }
+                `}
               >
                 {questCount === quests.length ? "Tout désélectionner" : "Tout sélectionner"}
               </Button>
@@ -127,6 +129,7 @@ export const SelectQuestField = ({ currentSession, setForm, quests, loading, dis
                     <Checkbox
                       checked={isSelected}
                       onCheckedChange={() => handleQuestToggle(quest.questId, quest.title)}
+                      disabled={disabled}
                       className="mr-3 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
                     />
                     <span className="text-sm text-white truncate">{quest.title}</span>
@@ -157,7 +160,8 @@ export const SelectQuestField = ({ currentSession, setForm, quests, loading, dis
                   onClick={() => handleQuestToggle(quest.id, quest.title)}
                   variant="ghost"
                   size="sm"
-                  className="ml-1 h-auto p-1 text-sky-400 hover:text-red-400"
+                  className={`ml-1 h-auto p-1 ${disabled ? "text-gray-500 cursor-not-allowed" : "text-sky-400 hover:text-red-400"}`}
+                  disabled={disabled}
                 >
                   <X className="w-3 h-3" />
                 </Button>
