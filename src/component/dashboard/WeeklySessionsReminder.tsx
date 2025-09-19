@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { Calendar, Clock, BookOpen, ChevronRight } from "lucide-react";
+import { Calendar, ChevronRight, Check } from "lucide-react";
 import { useGetSessions } from "@/shared/services/session/api-session";
 import { useUser } from "@clerk/clerk-react";
 import { routes } from "@/routes/router.const";
@@ -11,26 +11,43 @@ interface WeeklySessionsReminderProps {
 }
 
 const formatTime = (timeString: string): string => {
+  // Si c'est un timestamp ISO, extraire seulement l'heure
+  if (timeString.includes("T")) {
+    const date = new Date(timeString);
+    return date.toLocaleTimeString("fr-FR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  }
+  // Si c'est déjà au format HH:MM, le retourner tel quel
   const [hours, minutes] = timeString.split(":");
   return `${hours}:${minutes}`;
 };
 
-const formatDate = (dateString: string): string => {
+const formatDateWithTime = (dateString: string, timeString: string): string => {
   const date = new Date(dateString);
   const today = new Date();
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
 
+  const time = formatTime(timeString);
+
   if (date.toDateString() === today.toDateString()) {
-    return "Aujourd'hui";
+    return `Aujourd'hui ${time}`;
   } else if (date.toDateString() === tomorrow.toDateString()) {
-    return "Demain";
+    return `Demain ${time}`;
   } else {
-    return date.toLocaleDateString("fr-FR", {
-      weekday: "short",
-      day: "numeric",
-      month: "short",
-    });
+    // Pour toutes les autres dates, utiliser le format relatif
+    const diffTime = date.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (diffDays === -1) {
+      return `Hier ${time}`;
+    } else if (diffDays > 1) {
+      return `Dans ${diffDays} jours ${time}`;
+    } else {
+      return `Il y a ${Math.abs(diffDays)} jours ${time}`;
+    }
   }
 };
 
@@ -45,28 +62,6 @@ const getSessionStatus = (session: Session): "upcoming" | "today" | "past" => {
     return "upcoming";
   } else {
     return "past";
-  }
-};
-
-const getStatusColor = (status: "upcoming" | "today" | "past") => {
-  switch (status) {
-    case "today":
-      return "text-orange-400 bg-orange-400/20 border-orange-400/30";
-    case "upcoming":
-      return "text-blue-400 bg-blue-400/20 border-blue-400/30";
-    case "past":
-      return "text-slate-400 bg-slate-400/20 border-slate-400/30";
-  }
-};
-
-const getStatusLabel = (status: "upcoming" | "today" | "past") => {
-  switch (status) {
-    case "today":
-      return "Aujourd'hui";
-    case "upcoming":
-      return "À venir";
-    case "past":
-      return "Terminé";
   }
 };
 
@@ -152,68 +147,54 @@ export const WeeklySessionsReminder = ({ className = "" }: WeeklySessionsReminde
   }
 
   return (
-    <div className={`bg-slate-800/30 rounded-xl border border-slate-600/30 p-6 ${className}`}>
+    <div className={`bg-slate-800/30 rounded-xl border border-slate-600/30 p-3 flex flex-col h-full ${className}`}>
       {/* En-tête */}
-      <div className="flex items-center gap-3 mb-4">
-        <div className="p-2 rounded-lg bg-blue-500/20 border border-blue-400/30">
-          <Calendar className="w-5 h-5 text-blue-400" />
+      <div className="flex items-center gap-1.5 mb-2 flex-shrink-0">
+        <div className="p-1 rounded-md bg-blue-500/20 border border-blue-400/30">
+          <Calendar className="w-3 h-3 text-blue-400" />
         </div>
-        <h3 className="text-lg font-semibold text-white">Sessions de la semaine</h3>
+        <h3 className="text-xs font-semibold text-white">Sessions de la semaine</h3>
       </div>
 
-      {/* Liste des sessions */}
-      <div className="space-y-3">
+      {/* Liste des sessions - Prend l'espace disponible */}
+      <div className="space-y-1 flex-1 min-h-0 overflow-y-auto">
         {weeklySessions.map((session) => {
           const status = getSessionStatus(session);
-          const isPast = status === "past";
+          const isCompleted = status === "past";
 
           return (
             <div
               key={session.id}
-              className={`group p-3 rounded-lg border transition-all duration-200 ${
-                isPast
-                  ? "bg-slate-700/20 border-slate-600/20 opacity-60"
-                  : "bg-slate-700/30 border-slate-600/20 hover:bg-slate-700/50 hover:border-slate-500/30"
-              }`}
+              className="group p-2 rounded-md bg-slate-800/40 border border-slate-600/30 hover:bg-slate-800/60 hover:border-slate-500/40 transition-all duration-200"
             >
-              <div className="flex items-start justify-between">
-                {/* Informations principales */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-2">
-                    <h4 className={`text-sm font-medium truncate ${isPast ? "text-slate-400" : "text-white"}`}>
-                      {session.title}
-                    </h4>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(status)}`}>
-                      {getStatusLabel(status)}
-                    </span>
+              <div className="flex items-center justify-between">
+                {/* Statut de completion et contenu principal */}
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  {/* Point de notification */}
+                  <div className="flex-shrink-0">
+                    {isCompleted ? (
+                      <div className="w-3 h-3 rounded-full bg-slate-500/50 flex items-center justify-center">
+                        <Check className="w-2 h-2 text-slate-300" />
+                      </div>
+                    ) : (
+                      <div className="w-3 h-3 rounded-full border border-blue-400"></div>
+                    )}
                   </div>
 
-                  {/* Compétence liée */}
-                  {session.linkedSkill && (
-                    <div className="flex items-center gap-1 mb-2">
-                      <BookOpen className="w-3 h-3 text-slate-400" />
-                      <span className="text-xs text-slate-400 truncate">{session.linkedSkill.title}</span>
-                    </div>
-                  )}
-
-                  {/* Date et heure */}
-                  <div className="flex items-center gap-3 text-xs">
-                    <div className="flex items-center gap-1 text-slate-400">
-                      <Calendar className="w-3 h-3" />
-                      {formatDate(session.date)}
-                    </div>
-                    <div className="flex items-center gap-1 text-slate-400">
-                      <Clock className="w-3 h-3" />
-                      {formatTime(session.startTime)} - {formatTime(session.endTime)}
-                    </div>
+                  {/* Contenu principal */}
+                  <div className="flex-1 min-w-0">
+                    <h4 className={`text-xs font-medium truncate ${isCompleted ? "text-slate-400" : "text-white"}`}>
+                      {session.title}
+                    </h4>
+                    <p className="text-xs text-slate-400">{formatDateWithTime(session.date, session.startTime)}</p>
                   </div>
                 </div>
 
-                {/* Indicateur de durée */}
+                {/* Badge de durée */}
                 <div className="flex-shrink-0 ml-2">
                   <div
-                    className={`text-xs px-2 py-1 rounded-full ${
-                      isPast ? "bg-slate-600/50 text-slate-400" : "bg-blue-500/20 text-blue-400"
+                    className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${
+                      isCompleted ? "bg-slate-600/50 text-slate-400" : "bg-blue-500/20 text-blue-400"
                     }`}
                   >
                     {Math.round(session.duration / 60)}h
@@ -226,13 +207,13 @@ export const WeeklySessionsReminder = ({ className = "" }: WeeklySessionsReminde
       </div>
 
       {/* Lien vers le calendrier complet */}
-      <div className="mt-4 pt-4 border-t border-slate-600/20">
+      <div className="mt-2 pt-2 border-t border-slate-600/20 flex-shrink-0">
         <button
-          className="w-full flex items-center justify-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors"
+          className="w-full flex items-center justify-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 transition-colors"
           onClick={() => navigate(routes.workSession.path)}
         >
           Voir le calendrier complet
-          <ChevronRight className="w-4 h-4" />
+          <ChevronRight className="w-3 h-3" />
         </button>
       </div>
     </div>
