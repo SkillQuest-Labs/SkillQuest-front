@@ -97,7 +97,7 @@ export const useListSessions = (params: SessionsQuery) => {
     error,
   } = useApi<ListSessionsResponse>(
     { method: "GET", url, headers: { "Content-Type": "application/json; charset=UTF-8" } },
-    ["sessions"],
+    ["sessions", params],
   );
 
   return {

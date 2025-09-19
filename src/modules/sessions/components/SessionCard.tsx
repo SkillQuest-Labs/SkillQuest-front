@@ -75,7 +75,7 @@ export const SessionCard = ({ session }: SessionCardProps) => {
   return (
     <>
       <div className="flex h-full flex-col">
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <span
               aria-label="Couleur"
@@ -83,15 +83,15 @@ export const SessionCard = ({ session }: SessionCardProps) => {
               style={{ backgroundColor: session.color }}
               title={session.color}
             />
-            <div className="flex items-center gap-2 min-w-0">
-              <h3 className="truncate font-semibold text-slate-100 leading-tight">{session.linkedSkill.title}</h3>
-              <QuestIndicator session={session} />
-            </div>
+            <h3 className="truncate font-semibold text-slate-100 leading-tight">{session.linkedSkill.title}</h3>
           </div>
 
-          <span className="rounded-full bg-slate-800/60 px-3 py-1 text-xs text-slate-300">
-            {session.date.slice(0, 10)}
-          </span>
+          <div className="flex flex-col items-end gap-2">
+            <span className="rounded-full bg-slate-800/60 px-3 py-1 text-xs text-slate-300">
+              {session.date.slice(0, 10)}
+            </span>
+            <QuestIndicator session={session} />
+          </div>
         </div>
 
         <div className="mt-4 flex flex-wrap items-center gap-2 text-sm">
