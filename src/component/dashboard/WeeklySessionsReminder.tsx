@@ -41,11 +41,7 @@ const formatDateWithTime = (dateString: string, timeString: string): string => {
     // Pour toutes les autres dates, utiliser le format relatif
     const diffTime = date.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    if (diffDays === 1) {
-      return `Demain ${time}`;
-    } else if (diffDays === 0) {
-      return `Aujourd'hui ${time}`;
-    } else if (diffDays === -1) {
+    if (diffDays === -1) {
       return `Hier ${time}`;
     } else if (diffDays > 1) {
       return `Dans ${diffDays} jours ${time}`;
