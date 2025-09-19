@@ -47,7 +47,6 @@ export const DashboardUser = () => {
           - Écran large (≥1280px): affichage en 3 colonnes (header en haut, contenu gauche, sidebar droite)
         */}
         <div className="h-full grid grid-rows-[auto_1fr] grid-cols-1 md:grid-cols-[1fr_300px] xl:grid-cols-[1fr_350px] gap-4">
-          
           {/* HEADER - Message de bienvenue, streak, stats, citation */}
           <div className="col-span-1 md:col-span-2 xl:col-span-2">
             <div className="grid grid-rows-[auto_auto] gap-4">
@@ -55,34 +54,19 @@ export const DashboardUser = () => {
               <div>
                 <WelcomeSection userName={fallbackUsername} streak={7} />
               </div>
-              
+
               {/* Section des statistiques - Streak + Stats Cards (plus compactes) */}
               <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-4 items-center">
                 {/* Streak Component */}
                 <div className="flex justify-center lg:justify-start">
                   <StreakComponent currentStreak={7} maxStreak={7} className="h-16" />
                 </div>
-                
+
                 {/* Stats Cards - XP, Skills, Quêtes (plus petites et poussées à gauche) */}
                 <div className="grid grid-cols-3 gap-3 max-w-2xl">
-                  <AccueilStatCard
-                    title="XP Total"
-                    value={totalXp}
-                    icon={TrendingUp}
-                    className="w-full h-16"
-                  />
-                  <AccueilStatCard
-                    title="Skills"
-                    value={totalSkillCompleted}
-                    icon={Target}
-                    className="w-full h-16"
-                  />
-                  <AccueilStatCard
-                    title="Quêtes"
-                    value={totalQuestCompleted}
-                    icon={Award}
-                    className="w-full h-16"
-                  />
+                  <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} className="w-full h-16" />
+                  <AccueilStatCard title="Skills" value={totalSkillCompleted} icon={Target} className="w-full h-16" />
+                  <AccueilStatCard title="Quêtes" value={totalQuestCompleted} icon={Award} className="w-full h-16" />
                 </div>
               </div>
             </div>
@@ -95,7 +79,6 @@ export const DashboardUser = () => {
 
           {/* SIDEBAR - Derniers skills + Sessions de la semaine (équilibrés) */}
           <div className="flex flex-col gap-4 min-h-0">
-            
             {/* RecentSkillsComponent - Commence au niveau des stats */}
             <div className="flex-1 min-h-0">
               <RecentSkillsComponent skills={skills} className="h-full" />
