@@ -193,9 +193,7 @@ export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreePro
   );
 
   return (
-    <div className="relative flex min-h-screen w-full overflow-hidden bg-[#030712] text-slate-100">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(30,58,138,0.28)_0%,_rgba(3,7,18,0.95)_55%,_rgba(2,6,23,1)_100%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom,_rgba(22,101,214,0.18),transparent_60%)] mix-blend-screen" />
+    <div className="relative flex min-h-screen w-full overflow-hidden  bg-slate-900 text-slate-100">
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.07] mix-blend-soft-light"
         style={{

@@ -18,10 +18,12 @@ import type { UpdateSkillInput } from "@/shared/services/skill/api-skill.type";
 import type { SkillDifficulty, SkillStatus } from "@/shared/types/skill.type";
 import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
 import { ArrowLeft, Maximize2, PencilLine, Save, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getDifficultyColor, getDifficultyLabel, getStatusColor, getStatusLabel } from "../skills.const";
 import { useNodesDataLoader } from "../hooks/useNodesDataLoader";
+import { SkillQuestStatsCard } from "./SkillQuestStatsCard";
+import { isQuestNode } from "@/modules/canvas/canvas.const";
 
 export const SkillDetail = () => {
   const { skillId } = useParams<{ skillId: string }>();
@@ -121,6 +123,32 @@ export const SkillDetail = () => {
     }
   };
 
+  const questStats = useMemo(() => {
+    const questNodes = nodesData?.filter((node) => isQuestNode(node)) ?? [];
+
+    return questNodes?.reduce(
+      (acc, node) => {
+        const status = node.data.status;
+
+        if (status === "COMPLETED") {
+          acc.completed += 1;
+        } else if (status === "LOCKED") {
+          acc.locked += 1;
+        } else {
+          acc.available += 1;
+        }
+
+        return acc;
+      },
+      {
+        total: questNodes.length,
+        completed: 0,
+        available: 0,
+        locked: 0,
+      },
+    );
+  }, [nodesData]);
+
   if (skillLoading) {
     return (
       <div
@@ -174,14 +202,11 @@ export const SkillDetail = () => {
 
   return (
     <div
-      className={`relative min-h-screen  bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 transition-all duration-300 ${
-        isCollapsed ? "pl-20" : "pl-64"
-      } overflow-hidden`}
+      className={
+        "relative min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 transition-all duration-300 overflow-hidden"
+      }
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(30,64,175,0.25)_0%,rgba(2,6,23,0.95)_45%,rgba(2,6,23,1)_100%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom,_rgba(56,189,248,0.18)_0%,transparent_65%)]" />
-
-      <div className="relative z-10 mx-auto flex w-[98%] flex-col gap-5 pt-6">
+      <div className="relative flex w-[97%] mx-auto flex-col gap-5 pt-6">
         <div className="flex flex-wrap items-center justify-between gap-4 text-slate-200">
           <div className="flex items-center gap-3">
             <Button
@@ -229,9 +254,6 @@ export const SkillDetail = () => {
         </div>
 
         <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-slate-900/60 p-6 md:p-6 shadow-[0_50px_150px_-80px_rgba(14,23,42,0.9)] backdrop-blur-xl">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(14,165,233,0.25),transparent_55%)]" />
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,_rgba(99,102,241,0.25),transparent_55%)]" />
-
           <div className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div className="max-w-2xl space-y-4">
               {isEditing ? (
@@ -324,8 +346,8 @@ export const SkillDetail = () => {
           </div>
         </div>
 
-        <div className="relative flex w-full max-w-7xl flex-col gap-6 lg:flex-row lg:items-start">
-          <div className="flex w-full max-w-sm flex-col gap-6 lg:flex-[0_0_18%]">
+        <div className="relative flex w-full flex-col gap-6 lg:flex-row lg:items-start">
+          <div className="flex w-[18%] flex-col gap-6">
             {progressValue !== null && (
               <div className="rounded-3xl border border-white/5 bg-slate-900/40 p-5 shadow-[0_20px_60px_-50px_rgba(15,23,42,0.85)] backdrop-blur-xl">
                 <div className="flex items-center justify-between text-sm text-slate-300">
@@ -343,7 +365,7 @@ export const SkillDetail = () => {
 
             <div className="rounded-3xl border border-white/5 bg-slate-900/40 p-5 shadow-[0_20px_60px_-50px_rgba(15,23,42,0.85)] backdrop-blur-xl">
               <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-300">Actions rapides</h3>
-              <div className="mt-4 space-y-3">
+              <div className="mt-4 space-y-6">
                 <Button
                   onClick={() => navigate(`/canvas?skillId=${skillId}`)}
                   className="w-full cursor-pointer rounded-xl border border-sky-500/40 bg-sky-500/10 text-sky-200 transition-all hover:-translate-y-0.5 hover:bg-sky-500/20"
@@ -362,7 +384,7 @@ export const SkillDetail = () => {
             </div>
           </div>
 
-          <div className="flex-1 space-y-6">
+          <div className="flex-1 w-[80%] space-y-6">
             <div className="rounded-3xl border border-white/5 bg-slate-900/40 p-6 shadow-[0_25px_80px_-60px_rgba(15,23,42,0.85)] backdrop-blur-xl">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-slate-100">Description</h2>
@@ -394,39 +416,44 @@ export const SkillDetail = () => {
               </div>
             </div>
 
-            <div className="rounded-3xl border border-white/5 bg-slate-900/40 p-6 shadow-[0_25px_80px_-60px_rgba(15,23,42,0.85)] backdrop-blur-xl">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <h2 className="text-lg font-semibold text-slate-100">Arbre de compétence</h2>
-                  <p className="text-sm text-slate-400">Aperçu rapide du parcours associé à ce skill.</p>
+            <div className="flex flex-col w-full">
+              <div className="rounded-3xl border border-white/5 bg-slate-900/40 p-6 shadow-[0_25px_80px_-60px_rgba(15,23,42,0.85)] backdrop-blur-xl">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <h2 className="text-lg font-semibold text-slate-100">Arbre de compétence</h2>
+                    <p className="text-sm text-slate-400">Aperçu rapide du parcours associé à ce skill.</p>
+                  </div>
+                  <Button
+                    onClick={() => setIsFullscreenOpen(true)}
+                    variant="outline"
+                    size="sm"
+                    className="cursor-pointer rounded-full border border-slate-600/70 bg-slate-800/60 text-slate-200 transition-all hover:text-white hover:-translate-y-0.5 hover:bg-slate-800"
+                    disabled={!nodesData || nodesData.length === 0}
+                  >
+                    <Maximize2 size={16} className="mr-2" />
+                    Agrandir
+                  </Button>
                 </div>
-                <Button
-                  onClick={() => setIsFullscreenOpen(true)}
-                  variant="outline"
-                  size="sm"
-                  className="cursor-pointer rounded-full border border-slate-600/70 bg-slate-800/60 text-slate-200 transition-all hover:text-white hover:-translate-y-0.5 hover:bg-slate-800"
-                  disabled={!nodesData || nodesData.length === 0}
+                <div
+                  className="mt-6 overflow-hidden rounded-2xl border border-white/5 bg-slate-950/60"
+                  style={{ minHeight: "360px" }}
                 >
-                  <Maximize2 size={16} className="mr-2" />
-                  Agrandir
-                </Button>
-              </div>
-              <div
-                className="mt-6 overflow-hidden rounded-2xl border border-white/5 bg-slate-950/60"
-                style={{ minHeight: "380px" }}
-              >
-                {nodesData && nodesData.length > 0 && edgesData && edgesData.length > 0 ? (
-                  <div className="flex h-[380px] items-center justify-center">
-                    <SkillTree nodes={nodesData} edges={edgesData} minimalistView />
-                  </div>
-                ) : (
-                  <div className="flex h-[380px] flex-col items-center justify-center gap-2 text-slate-400">
-                    <div className="text-4xl">🌱</div>
-                    <p>Aucun arbre de compétence disponible pour le moment.</p>
-                  </div>
-                )}
+                  {nodesData && nodesData.length > 0 && edgesData && edgesData.length > 0 ? (
+                    <div className="flex h-[360px] items-center justify-center">
+                      <SkillTree nodes={nodesData} edges={edgesData} minimalistView />
+                    </div>
+                  ) : (
+                    <div className="flex h-[360px] flex-col items-center justify-center gap-2 text-slate-400">
+                      <div className="text-4xl">🌱</div>
+                      <p>Aucun arbre de compétence disponible pour le moment.</p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
+          </div>
+          <div className="w-[18%]">
+            <SkillQuestStatsCard stats={questStats} />
           </div>
         </div>
       </div>
