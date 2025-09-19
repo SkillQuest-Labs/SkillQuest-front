@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Flame, Sunrise, Sun, Sunset, Moon } from "lucide-react";
 import lds1 from "@/assets/images/lds1.webp";
 import lds2 from "@/assets/images/lds2.webp";
@@ -81,6 +81,7 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
   const [isQuoteVisible, setIsQuoteVisible] = useState(false);
   const [isQuoteFading, setIsQuoteFading] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const quoteHideTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     // Citation aléatoire au chargement
@@ -97,9 +98,12 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
       () => {
         setIsQuoteFading(true);
         // Après l'animation de disparition, masquer complètement la citation
-        setTimeout(() => {
+        const quoteHideTimer = setTimeout(() => {
           setIsQuoteVisible(false);
         }, 1000); // Durée de l'animation de disparition
+        
+        // Stocker le timer pour le nettoyage
+        quoteHideTimerRef.current = quoteHideTimer;
       },
       10 * 60 * 1000,
     ); // 10 minutes
@@ -138,6 +142,9 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
       clearInterval(timeTimer);
       if (dailyUpdateInterval) {
         clearInterval(dailyUpdateInterval);
+      }
+      if (quoteHideTimerRef.current) {
+        clearTimeout(quoteHideTimerRef.current);
       }
     };
   }, []);
