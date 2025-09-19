@@ -19,4 +19,5 @@ export type Skill = {
   averageQuestXp?: number;
   color?: string;
   createdAt?: string;
+  updatedAt?: string;
 };
