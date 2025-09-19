@@ -6,7 +6,7 @@ import { Button } from "@/shared/components/ui/button";
 import { useGetSessions } from "@/shared/services/session/api-session";
 import { useUser } from "@clerk/clerk-react";
 import { periodLabels, type TimePeriod } from "./type";
-import { buildXpSeries, calculateTrend, TrendInfo } from "./skill-experience-chart.const";
+import { buildXpSeries } from "./skill-experience-chart.const";
 
 export const SkillExperienceChart = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<TimePeriod>("days");
@@ -18,15 +18,15 @@ export const SkillExperienceChart = () => {
   const { sessions } = useGetSessions(user?.id || "", true);
 
   const chartData = useMemo(() => buildXpSeries(sessions, selectedPeriod), [sessions, selectedPeriod]);
-  const trend = calculateTrend(chartData);
+  // const trend = calculateTrend(chartData);
   const chartOptions = useMemo(() => getLineChartOption({ data: chartData }), [chartData]);
   const hasXpData = chartData.some((point) => point.xp > 0);
 
-  const periodLabel = (periodLabels[selectedPeriod] ?? "période").toLowerCase();
+  // const periodLabel = (periodLabels[selectedPeriod] ?? "période").toLowerCase();
 
-  const trendInfoData = useMemo(() => {
-    return TrendInfo(trend, hasXpData, periodLabel);
-  }, [hasXpData, periodLabel, trend]);
+  // const trendInfoData = useMemo(() => {
+  //   return TrendInfo(trend, hasXpData, periodLabel);
+  // }, [hasXpData, periodLabel, trend]);
 
   const handlePeriodChange = (period: TimePeriod) => {
     if (period === selectedPeriod) {
@@ -53,7 +53,7 @@ export const SkillExperienceChart = () => {
     }
   }, [selectedPeriod, isTransitioning]);
 
-  const TrendIcon = trendInfoData.icon;
+  // const TrendIcon = trendInfoData.icon;
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden rounded-xl border border-slate-600/40 bg-gradient-to-br from-slate-900/70 via-slate-900/45 to-slate-900/80 shadow-lg shadow-black/30">
@@ -72,7 +72,7 @@ export const SkillExperienceChart = () => {
         </div>
 
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
-          <div
+          {/* <div
             className={`flex min-w-[220px] flex-col rounded-lg border px-4 py-3 shadow-inner ${trendInfoData.chipClass}`}
           >
             <div className="flex items-center justify-between">
@@ -83,7 +83,7 @@ export const SkillExperienceChart = () => {
               <span className={`text-sm font-semibold ${trendInfoData.colorClass}`}>{trendInfoData.valueLabel}</span>
             </div>
             <p className="mt-1 text-xs text-slate-300">{trendInfoData.description}</p>
-          </div>
+          </div> */}
 
           <div className="relative">
             <Button
