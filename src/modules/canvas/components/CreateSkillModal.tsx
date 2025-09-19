@@ -4,6 +4,8 @@ import { Input } from "@/shared/components/ui/input";
 import { Textarea } from "@/shared/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { routes } from "@/routes/router.const";
 import type { Skill, SkillDifficulty, SkillStatus } from "@/shared/types/skill.type";
 
 type CreateSkillModalProps = {
@@ -13,6 +15,7 @@ type CreateSkillModalProps = {
 };
 
 export const CreateSkillModal = ({ open, onClose, onCreate }: CreateSkillModalProps) => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -34,7 +37,7 @@ export const CreateSkillModal = ({ open, onClose, onCreate }: CreateSkillModalPr
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
       <div className="backdrop-blur-md bg-white/10 border border-white/20 text-white p-6 rounded-2xl shadow-lg shadow-blue-500/20 w-full max-w-md relative">
         <Button
-          //   onClick={onBack}
+          onClick={() => navigate(routes.skills.path)}
           variant="ghost"
           className="absolute top-3 left-3 cursor-pointer text-white hover:text-blue-300 bg-transparent hover:bg-transparent"
         >
