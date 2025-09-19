@@ -220,7 +220,7 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
             }`}
           >
             <div className="flex items-start gap-2">
-              <div className="text-lg">💭</div>
+              <div className="text-lg">🎐</div>
               <div>
                 <p className="text-blue-50/95 font-medium italic text-sm leading-relaxed drop-shadow-md">
                   "{quote?.text}"
