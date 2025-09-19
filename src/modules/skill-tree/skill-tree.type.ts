@@ -27,6 +27,11 @@ export type CircularSkillNode = {
   ring: number; // Which ring/level from center
   angle: number; // Position in ring
   icon?: string;
+  questDetails?: {
+    type?: string;
+    number?: number;
+    isStarting?: boolean;
+  };
   // Propriétés pour le layout en spirale
   spiralRadius?: number; // Rayon de la spirale pour ce nœud
   spiralIndex?: number; // Index du nœud dans la spirale
