@@ -12,20 +12,18 @@ interface WeeklySessionsReminderProps {
 
 const formatTime = (timeString: string): string => {
   // Si c'est un timestamp ISO, extraire seulement l'heure
-  if (timeString.includes('T')) {
+  if (timeString.includes("T")) {
     const date = new Date(timeString);
     return date.toLocaleTimeString("fr-FR", {
       hour: "2-digit",
       minute: "2-digit",
-      hour12: false
+      hour12: false,
     });
   }
-  
   // Si c'est déjà au format HH:MM, le retourner tel quel
   const [hours, minutes] = timeString.split(":");
   return `${hours}:${minutes}`;
 };
-
 
 const formatDateWithTime = (dateString: string, timeString: string): string => {
   const date = new Date(dateString);
@@ -43,7 +41,6 @@ const formatDateWithTime = (dateString: string, timeString: string): string => {
     // Pour toutes les autres dates, utiliser le format relatif
     const diffTime = date.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
     if (diffDays === 1) {
       return `Demain ${time}`;
     } else if (diffDays === 0) {
@@ -71,7 +68,6 @@ const getSessionStatus = (session: Session): "upcoming" | "today" | "past" => {
     return "past";
   }
 };
-
 
 export const WeeklySessionsReminder = ({ className = "" }: WeeklySessionsReminderProps) => {
   const { user } = useUser();
@@ -157,15 +153,15 @@ export const WeeklySessionsReminder = ({ className = "" }: WeeklySessionsReminde
   return (
     <div className={`bg-slate-800/30 rounded-xl border border-slate-600/30 p-3 flex flex-col h-full ${className}`}>
       {/* En-tête */}
-      <div className="flex items-center gap-2 mb-3 flex-shrink-0">
-        <div className="p-1.5 rounded-lg bg-blue-500/20 border border-blue-400/30">
-          <Calendar className="w-4 h-4 text-blue-400" />
+      <div className="flex items-center gap-1.5 mb-2 flex-shrink-0">
+        <div className="p-1 rounded-md bg-blue-500/20 border border-blue-400/30">
+          <Calendar className="w-3 h-3 text-blue-400" />
         </div>
-        <h3 className="text-sm font-semibold text-white">Sessions de la semaine</h3>
+        <h3 className="text-xs font-semibold text-white">Sessions de la semaine</h3>
       </div>
 
       {/* Liste des sessions - Prend l'espace disponible */}
-      <div className="space-y-2 flex-1 min-h-0 overflow-y-auto">
+      <div className="space-y-1 flex-1 min-h-0 overflow-y-auto">
         {weeklySessions.map((session) => {
           const status = getSessionStatus(session);
           const isCompleted = status === "past";
@@ -173,40 +169,38 @@ export const WeeklySessionsReminder = ({ className = "" }: WeeklySessionsReminde
           return (
             <div
               key={session.id}
-              className="group p-3 rounded-lg bg-slate-800/40 border border-slate-600/30 hover:bg-slate-800/60 hover:border-slate-500/40 transition-all duration-200"
+              className="group p-2 rounded-md bg-slate-800/40 border border-slate-600/30 hover:bg-slate-800/60 hover:border-slate-500/40 transition-all duration-200"
             >
               <div className="flex items-center justify-between">
                 {/* Statut de completion et contenu principal */}
-                <div className="flex items-center gap-3 flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-1 min-w-0">
                   {/* Icône de statut */}
                   <div className="flex-shrink-0">
                     {isCompleted ? (
-                      <div className="w-5 h-5 rounded-full bg-green-500/20 border border-green-400/30 flex items-center justify-center">
-                        <Check className="w-3 h-3 text-green-400" />
+                      <div className="w-4 h-4 rounded-full bg-green-500/20 border border-green-400/30 flex items-center justify-center">
+                        <Check className="w-2.5 h-2.5 text-green-400" />
                       </div>
                     ) : (
-                      <div className="w-5 h-5 rounded-full border border-slate-400/50"></div>
+                      <div className="w-4 h-4 rounded-full border border-slate-400/50"></div>
                     )}
                   </div>
 
                   {/* Contenu principal */}
                   <div className="flex-1 min-w-0">
-                    <h4 className={`text-sm font-medium truncate ${isCompleted ? "text-slate-400" : "text-white"}`}>
+                    <h4 className={`text-xs font-medium truncate ${isCompleted ? "text-slate-400" : "text-white"}`}>
                       {session.title}
                     </h4>
-                    <p className="text-xs text-slate-400 mt-0.5">
+                    <p className="text-xs text-slate-400">
                       {formatDateWithTime(session.date, session.startTime)}
                     </p>
                   </div>
                 </div>
 
                 {/* Badge de durée */}
-                <div className="flex-shrink-0 ml-3">
+                <div className="flex-shrink-0 ml-2">
                   <div
-                    className={`text-xs px-2 py-1 rounded-full font-medium ${
-                      isCompleted 
-                        ? "bg-slate-600/50 text-slate-400" 
-                        : "bg-blue-500/20 text-blue-400"
+                    className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${
+                      isCompleted ? "bg-slate-600/50 text-slate-400" : "bg-blue-500/20 text-blue-400"
                     }`}
                   >
                     {Math.round(session.duration / 60)}h
@@ -219,13 +213,13 @@ export const WeeklySessionsReminder = ({ className = "" }: WeeklySessionsReminde
       </div>
 
       {/* Lien vers le calendrier complet */}
-      <div className="mt-3 pt-3 border-t border-slate-600/20 flex-shrink-0">
+      <div className="mt-2 pt-2 border-t border-slate-600/20 flex-shrink-0">
         <button
-          className="w-full flex items-center justify-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors"
+          className="w-full flex items-center justify-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 transition-colors"
           onClick={() => navigate(routes.workSession.path)}
         >
           Voir le calendrier complet
-          <ChevronRight className="w-4 h-4" />
+          <ChevronRight className="w-3 h-3" />
         </button>
       </div>
     </div>

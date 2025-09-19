@@ -106,11 +106,11 @@ export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsCo
   return (
     <div className={`bg-slate-800/30 rounded-xl border border-slate-600/30 p-3 flex flex-col h-full ${className}`}>
       {/* En-tête */}
-      <div className="flex items-center gap-2 mb-3 flex-shrink-0">
-        <div className="p-1.5 rounded-lg bg-blue-500/20 border border-blue-400/30">
-          <Star className="w-4 h-4 text-blue-400" />
+      <div className="flex items-center gap-1.5 mb-2 flex-shrink-0">
+        <div className="p-1 rounded-md bg-blue-500/20 border border-blue-400/30">
+          <Star className="w-3 h-3 text-blue-400" />
         </div>
-        <h3 className="text-sm font-semibold text-white">Derniers skills</h3>
+        <h3 className="text-xs font-semibold text-white">Derniers skills</h3>
       </div>
 
       {/* Liste des skills - Prend l'espace disponible */}
@@ -121,66 +121,64 @@ export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsCo
             className="group p-1.5 rounded-md bg-slate-700/30 border border-slate-600/20 hover:bg-slate-700/50 hover:border-slate-500/30 transition-all duration-200 cursor-pointer"
             onClick={() => navigate(routes.skillDetail.path.replace(":skillId", skill.id || ""))}
           >
-            <div className="flex items-start justify-between">
+            <div className="flex items-center justify-between">
               {/* Informations principales */}
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <h4 className="text-xs font-medium text-white truncate">{skill.title}</h4>
+                <div className="flex items-center gap-1.5 mb-0.5">
+                  <h4 className="text-xs font-medium text-white truncate flex-1">{skill.title}</h4>
+                  
+                  {/* Badges de statut et difficulté */}
+                  <div className="flex items-center gap-1 flex-shrink-0">
+                    <span
+                      className={`px-1 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(skill.status)}`}
+                    >
+                      {getStatusLabel(skill.status)}
+                    </span>
+                    <span
+                      className={`px-1 py-0.5 rounded-full text-xs font-medium border ${getDifficultyColor(skill.difficulty)}`}
+                    >
+                      {getDifficultyLabel(skill.difficulty)}
+                    </span>
+                  </div>
                 </div>
 
-                {/* Badges de statut et difficulté */}
-                <div className="flex items-center gap-1">
-                  <span
-                    className={`px-1 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(skill.status)}`}
-                  >
-                    {getStatusLabel(skill.status)}
-                  </span>
-                  <span
-                    className={`px-1 py-0.5 rounded-full text-xs font-medium border ${getDifficultyColor(skill.difficulty)}`}
-                  >
-                    {getDifficultyLabel(skill.difficulty)}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Informations supplémentaires */}
-            <div className="flex items-center justify-between mt-1 pt-1 border-t border-slate-600/20">
-                <div className="flex items-center gap-2 text-xs text-slate-400">
+                {/* Informations supplémentaires */}
+                <div className="flex items-center gap-1.5 text-xs text-slate-400">
                   <div className="flex items-center gap-1">
                     <Star className="w-3 h-3" />
                     {skill.completedQuests || 0}/{skill.totalQuests || 0} quêtes
                   </div>
-                {skill.createdAt ? (
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    {new Date(skill.createdAt).toLocaleDateString("fr-FR", {
-                      day: "numeric",
-                      month: "short",
-                    })}
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-3 h-3" />
-                    Récent
-                  </div>
-                )}
+                  {skill.createdAt ? (
+                    <div className="flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      {new Date(skill.createdAt).toLocaleDateString("fr-FR", {
+                        day: "numeric",
+                        month: "short",
+                      })}
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      Récent
+                    </div>
+                  )}
+                </div>
               </div>
 
-              <ArrowRight className="w-3 h-3 text-slate-500 group-hover:text-slate-300 transition-colors" />
+              <ArrowRight className="w-3 h-3 text-slate-500 group-hover:text-slate-300 transition-colors flex-shrink-0 ml-2" />
             </div>
           </div>
         ))}
       </div>
 
       {/* Lien vers tous les skills */}
-      <div className="mt-3 pt-3 border-t border-slate-600/20 flex-shrink-0">
+      <div className="mt-2 pt-2 border-t border-slate-600/20 flex-shrink-0">
         <button
-          className="w-full flex items-center justify-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors"
+          className="w-full flex items-center justify-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 transition-colors"
           onClick={() => navigate(routes.skills.path)}
         >
           Voir tous les skills
-          <ArrowRight className="w-4 h-4" />
+          <ArrowRight className="w-3 h-3" />
         </button>
       </div>
     </div>
