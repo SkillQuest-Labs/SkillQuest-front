@@ -190,9 +190,7 @@ export const WeeklySessionsReminder = ({ className = "" }: WeeklySessionsReminde
                     <h4 className={`text-xs font-medium truncate ${isCompleted ? "text-slate-400" : "text-white"}`}>
                       {session.title}
                     </h4>
-                    <p className="text-xs text-slate-400">
-                      {formatDateWithTime(session.date, session.startTime)}
-                    </p>
+                    <p className="text-xs text-slate-400">{formatDateWithTime(session.date, session.startTime)}</p>
                   </div>
                 </div>
 

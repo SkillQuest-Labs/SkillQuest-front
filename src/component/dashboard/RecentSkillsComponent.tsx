@@ -126,7 +126,7 @@ export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsCo
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5 mb-0.5">
                   <h4 className="text-xs font-medium text-white truncate flex-1">{skill.title}</h4>
-                  
+
                   {/* Badges de statut et difficulté */}
                   <div className="flex items-center gap-1 flex-shrink-0">
                     <span
