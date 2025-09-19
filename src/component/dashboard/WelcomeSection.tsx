@@ -101,7 +101,7 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
         const quoteHideTimer = setTimeout(() => {
           setIsQuoteVisible(false);
         }, 1000); // Durée de l'animation de disparition
-        
+
         // Stocker le timer pour le nettoyage
         quoteHideTimerRef.current = quoteHideTimer;
       },
