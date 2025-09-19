@@ -57,14 +57,14 @@ export const DashboardUser = () => {
             {/* ZONE PRINCIPALE - Stats + Sessions */}
             <div className="grid grid-rows-[auto_1fr] gap-4 min-h-0">
               {/* Section des statistiques - Streak + Stats Cards */}
-              <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-4 items-center w-full">
+              <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.8fr] gap-4 items-center w-full">
                 {/* Streak Component */}
                 <div className="flex justify-center lg:justify-start">
-                  <StreakComponent currentStreak={7} maxStreak={7} className="h-16" />
+                  <StreakComponent currentStreak={7} maxStreak={7} />
                 </div>
 
                 {/* Stats Cards - XP, Skills, Quêtes */}
-                <div className="grid grid-cols-3 gap-3 w-full">
+                <div className="grid grid-cols-3 gap-2 w-full">
                   <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} className="w-full h-16" />
                   <AccueilStatCard title="Skills" value={totalSkillCompleted} icon={Target} className="w-full h-16" />
                   <AccueilStatCard title="Quêtes" value={totalQuestCompleted} icon={Award} className="w-full h-16" />
