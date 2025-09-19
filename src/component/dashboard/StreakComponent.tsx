@@ -22,7 +22,7 @@ export const StreakComponent = ({ currentStreak, maxStreak = 7, className = "" }
           {currentStreak} jour{currentStreak > 1 ? "s" : ""}
         </p>
       </div>
-      
+
       {/* Barre avec les cercles et les jours */}
       <div className="flex items-center gap-0.5 sm:gap-1 flex-1 justify-center">
         {streakData.map((day, index) => (
@@ -40,16 +40,16 @@ export const StreakComponent = ({ currentStreak, maxStreak = 7, className = "" }
               </div>
             </div>
 
-              {/* Ligne de connexion (sauf pour le dernier élément) */}
-              {index < streakData.length - 1 && (
-                <div
-                  className={`w-1 sm:w-1.5 h-0.5 mx-0.5 transition-all duration-300 ${
-                    day.isActive && streakData[index + 1].isActive
-                      ? "bg-gradient-to-r from-orange-400 to-orange-500"
-                      : "bg-slate-600"
-                  }`}
-                />
-              )}
+            {/* Ligne de connexion (sauf pour le dernier élément) */}
+            {index < streakData.length - 1 && (
+              <div
+                className={`w-1 sm:w-1.5 h-0.5 mx-0.5 transition-all duration-300 ${
+                  day.isActive && streakData[index + 1].isActive
+                    ? "bg-gradient-to-r from-orange-400 to-orange-500"
+                    : "bg-slate-600"
+                }`}
+              />
+            )}
           </div>
         ))}
       </div>
