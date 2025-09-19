@@ -228,24 +228,24 @@ const ProfileHud = ({
         </div>
 
         {/* Informations utilisateur */}
-        <div className="flex flex-col gap-2 min-w-[200px]">
+        <div className="flex flex-col gap-2 flex-1 min-w-0">
           {/* Nom et rôle */}
-          <div className="flex items-center justify-between">
-            <h3 className="text-xl font-bold text-white">{userName}</h3>
-            <div className="bg-blue-600/80 px-3 py-1 rounded-full border border-blue-400/40">
+          <div className="flex items-center justify-between w-full">
+            <h3 className="text-xl font-bold text-white truncate">{userName}</h3>
+            <div className="bg-blue-600/80 px-3 py-1 rounded-full border border-blue-400/40 flex-shrink-0">
               <span className="text-sm font-semibold text-white">{title}</span>
             </div>
           </div>
 
           {/* Barre de progression avec gradient orange-rouge comme dans l'image */}
-          <div className="relative">
+          <div className="relative w-full">
             <div className="w-full h-3 bg-slate-700/60 rounded-full overflow-hidden border border-slate-600/40">
               <div
                 className="h-full bg-gradient-to-r from-orange-400 via-red-400 to-pink-500 transition-all duration-700 ease-out shadow-[0_0_10px_rgba(251,191,36,0.5)]"
                 style={{ width: `${pct}%` }}
               />
             </div>
-            <div className="flex justify-between mt-1 text-xs font-medium text-slate-300">
+            <div className="flex justify-between mt-1 text-xs font-medium text-slate-300 w-full">
               <span>LVL {level}</span>
               <span>
                 {xp} / {xpToNext} XP
@@ -361,8 +361,8 @@ const ProfileHud = ({
             }`}
             style={{ transitionDelay: isExpanded ? "200ms" : "0ms" }}
           >
-            <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/40">
-              <div className="flex items-center justify-between">
+            <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/40 w-full">
+              <div className="flex items-center justify-between w-full">
                 <div>
                   <div className="text-slate-400 text-xs">Niveau actuel</div>
                   <div className="text-white font-bold text-2xl">{level}</div>
@@ -381,18 +381,18 @@ const ProfileHud = ({
             }`}
             style={{ transitionDelay: isExpanded ? "300ms" : "0ms" }}
           >
-            <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/40">
-              <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
+            <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/40 w-full">
+              <div className="flex items-center justify-between text-xs text-slate-400 mb-2 w-full">
                 <span>Progression</span>
                 <span>{pct}%</span>
               </div>
-              <div className="h-3 rounded-full bg-slate-700/60 overflow-hidden">
+              <div className="h-3 rounded-full bg-slate-700/60 overflow-hidden w-full">
                 <div
                   className="h-full bg-gradient-to-r from-orange-400 via-red-400 to-pink-500 transition-all duration-700 ease-out shadow-[0_0_10px_rgba(251,191,36,0.5)]"
                   style={{ width: `${pct}%` }}
                 />
               </div>
-              <div className="mt-2 text-xs text-slate-400 text-center">
+              <div className="mt-2 text-xs text-slate-400 text-center w-full">
                 {xp.toLocaleString()} / {xpToNext.toLocaleString()} XP
               </div>
             </div>
@@ -405,14 +405,14 @@ const ProfileHud = ({
             }`}
             style={{ transitionDelay: isExpanded ? "400ms" : "0ms" }}
           >
-            <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/40">
-              <div className="flex items-center gap-3">
+            <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-600/40 w-full">
+              <div className="flex items-center gap-3 w-full">
                 <img
                   src={levelBadge.image}
                   alt={`Badge ${levelBadge.title}`}
-                  className="w-12 h-12 rounded-lg shadow-lg"
+                  className="w-12 h-12 rounded-lg shadow-lg flex-shrink-0"
                 />
-                <div>
+                <div className="flex-1 min-w-0">
                   <div className="text-white font-medium">{levelBadge.title}</div>
                   <div className="text-xs text-slate-400">Badge de niveau</div>
                 </div>

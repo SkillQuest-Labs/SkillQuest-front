@@ -1,13 +1,11 @@
 import { useUser } from "@clerk/clerk-react";
-import { useEffect, useState } from "react";
-import type { UserData, UserRoleType } from "@/shared/types/user.type";
 import ProfileHud from "@/component/ProfileHud";
 import WorkSessionChart from "@/modules/stats/components/chart/work-session-chart/WorkSessionChart";
 import { useGetSkills } from "@/shared/services/skill/api-skill";
 import { WelcomeSection } from "@/component/dashboard/WelcomeSection";
-import { StreakComponent } from "@/component/dashboard/StreakComponent";
 import { RecentSkillsComponent } from "@/component/dashboard/RecentSkillsComponent";
 import { WeeklySessionsReminder } from "@/component/dashboard/WeeklySessionsReminder";
+import { StreakComponent } from "@/component/dashboard/StreakComponent";
 import { useComputeUserProgress } from "@/modules/stats/hooks/use-compute-user-progress";
 import { useGetUserStats } from "@/shared/services/user/api-user";
 
@@ -16,69 +14,141 @@ export const DashboardUser = () => {
 
   const fallbackUsername = user?.username ?? user?.firstName ?? "Aventurier";
 
-  const [, setUserData] = useState<UserData | null>(null);
-
-  useEffect(() => {
-    if (!user) return;
-    const role = (user.unsafeMetadata?.role as UserRoleType) ?? "apprenti";
-    setUserData({
-      username: fallbackUsername,
-      role,
-    });
-  }, [user, fallbackUsername]);
-
   const { skills } = useGetSkills(user?.id || "");
 
   const { userStats } = useGetUserStats(user?.id || "");
 
-  const { userCurrentLevel, xpThreshold, xpToNextLevel } = useComputeUserProgress({ skills, userStats });
+  const { userCurrentLevel, xpThreshold, xpToNextLevel, totalXp } = useComputeUserProgress({ skills, userStats });
 
   return (
-    <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
-      <div className="max-w-8xl mx-auto px-3 sm:px-5 lg:px-7 py-4 h-full">
-        <div className="h-full flex flex-col space-y-4">
-          {/* Section de bienvenue - Hero Section compacte */}
-          <div className="flex-shrink-0">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative">
+      <div className="w-full px-1 sm:px-4 lg:px-6 py-2 sm:py-6">
+        <div className="space-y-2 sm:space-y-4 lg:space-y-6">
+          {/* Welcome Section */}
+          <div className="w-full">
             <WelcomeSection userName={fallbackUsername} streak={7} />
           </div>
 
-          {/* Zone principale de contenu - utilise l'espace restant */}
-          <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {/* Colonne principale - WorkSessionChart */}
-            <div className="lg:col-span-2 flex flex-col space-y-4">
-              {/* Composant de streak - hauteur compacte */}
-              <div className="h-16 flex-shrink-0">
-                <StreakComponent currentStreak={7} maxStreak={7} className="h-full" />
+          {/* Main Layout: Stats on left, Sidebar on right */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 sm:gap-4 lg:gap-6">
+            {/* Left Side: Streak, Stats and WorkSessionChart */}
+            <div className="lg:col-span-2 space-y-2 sm:space-y-4 lg:space-y-6">
+              {/* Streak and Stats Row */}
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-2 sm:gap-4 lg:gap-6">
+                <div className="lg:col-span-2">
+                  <StreakComponent currentStreak={7} className="w-full" />
+                </div>
+
+                <div className="lg:col-span-3 grid grid-cols-3 gap-2 sm:gap-3">
+                  {/* XP Total */}
+                  <div className="bg-slate-800/50 rounded-xl p-2 sm:p-3 border border-slate-600/30 backdrop-blur-sm flex items-center gap-2 sm:gap-3 w-full h-full">
+                    <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-slate-600/50 border border-slate-500/30 flex items-center justify-center flex-shrink-0">
+                      <svg
+                        className="w-5 h-5 sm:w-6 sm:h-6 text-slate-300"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                        />
+                      </svg>
+                    </div>
+
+                    <div className="flex flex-col min-w-0">
+                      <p className="text-slate-400 text-sm font-medium">XP</p>
+                      <p className="text-slate-200 text-lg sm:text-xl font-bold truncate">{userStats?.totalXP || 0}</p>
+                    </div>
+                  </div>
+
+                  {/* Skills Completed */}
+                  <div className="bg-slate-800/50 rounded-xl p-2 sm:p-3 border border-slate-600/30 backdrop-blur-sm flex items-center gap-2 sm:gap-3 w-full h-full">
+                    <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-slate-600/50 border border-slate-500/30 flex items-center justify-center flex-shrink-0">
+                      <svg
+                        className="w-5 h-5 sm:w-6 sm:h-6 text-slate-300"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    </div>
+
+                    <div className="flex flex-col min-w-0">
+                      <p className="text-slate-400 text-sm font-medium">Skills</p>
+                      <p className="text-slate-200 text-lg sm:text-xl font-bold truncate">
+                        {skills.filter((skill) => skill.status === "COMPLETED").length}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Quests Completed */}
+                  <div className="bg-slate-800/50 rounded-xl p-2 sm:p-3 border border-slate-600/30 backdrop-blur-sm flex items-center gap-2 sm:gap-3 w-full h-full">
+                    <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-slate-600/50 border border-slate-500/30 flex items-center justify-center flex-shrink-0">
+                      <svg
+                        className="w-5 h-5 sm:w-6 sm:h-6 text-slate-300"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
+                        />
+                      </svg>
+                    </div>
+
+                    <div className="flex flex-col min-w-0">
+                      <p className="text-slate-400 text-sm font-medium">Quêtes</p>
+                      <p className="text-slate-200 text-lg sm:text-xl font-bold truncate">
+                        {skills.reduce((total, skill) => total + (skill.completedQuests || 0), 0)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              {/* WorkSessionChart - utilise l'espace restant */}
-              <div className="flex-1 min-h-0">
-                <WorkSessionChart className="h-full" />
+              {/* WorkSessionChart */}
+              <div className="w-full">
+                <div className="w-full h-[350px] sm:h-[450px] lg:h-[532px]">
+                  <WorkSessionChart className="w-full h-full" />
+                </div>
               </div>
             </div>
 
-            {/* Sidebar droite - alignement vertical harmonieux */}
-            <div className="flex flex-col space-y-4">
-              {/* RecentSkillsComponent - hauteur compacte */}
-              <div className="h-40 flex-shrink-0">
-                <RecentSkillsComponent skills={skills} className="h-full" />
+            {/* Right Sidebar */}
+            <div className="lg:col-span-1 space-y-2 sm:space-y-4 lg:space-y-6">
+              {/* Recent Skills */}
+              <div className="w-full">
+                <RecentSkillsComponent skills={skills} className="w-full" />
               </div>
 
-              {/* WeeklySessionsReminder - hauteur compacte */}
-              <div className="h-40 flex-shrink-0">
-                <WeeklySessionsReminder className="h-full" />
+              {/* Weekly Sessions */}
+              <div className="w-full">
+                <WeeklySessionsReminder className="w-full" />
               </div>
 
-              {/* ProfileHud - utilise l'espace restant */}
-              <div className="flex-1 min-h-0">
+              {/* Profile HUD */}
+              <div className="w-full">
                 <ProfileHud
                   userName={user?.username || user?.firstName || "Aventurier"}
                   title={(user?.unsafeMetadata?.role as string) || "Aventurier"}
                   level={userCurrentLevel}
-                  xp={xpThreshold - xpToNextLevel}
-                  xpToNext={xpThreshold}
+                  xp={totalXp % xpThreshold}
+                  xpToNext={xpToNextLevel}
                   isCollapsible={true}
                   defaultExpanded={false}
+                  className="w-full"
                 />
               </div>
             </div>

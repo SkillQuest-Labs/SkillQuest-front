@@ -151,9 +151,9 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
   };
 
   return (
-    <div className="space-y-4">
-      {/* Carte Welcome avec image de fond - Hero Section */}
-      <div className="relative overflow-hidden rounded-2xl border border-blue-500/20 backdrop-blur-md shadow-[0_20px_50px_rgba(59,130,246,0.15)] min-h-[224px]">
+    <div className="w-full">
+      {/* Carte Welcome avec image de fond - Hero Section responsive */}
+      <div className="relative overflow-hidden rounded-xl sm:rounded-2xl border border-blue-500/20 backdrop-blur-md shadow-[0_20px_50px_rgba(59,130,246,0.15)] min-h-[200px] sm:min-h-[224px] lg:min-h-[250px]">
         {/* Image de fond dynamique */}
         <div
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat transition-all duration-1000 ease-in-out"
@@ -166,15 +166,15 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
         {/* Overlay sombre pour améliorer la lisibilité du texte */}
         <div className="absolute inset-0 bg-black/30" />
 
-        <div className="relative z-10 p-4 flex items-center h-full">
-          <div>
-            <h1 className="text-2xl lg:text-3xl font-semibold text-white mb-1 drop-shadow-lg">
+        <div className="relative z-10 p-4 sm:p-6 flex items-center h-full">
+          <div className="flex-1">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-white mb-1 drop-shadow-lg">
               {greeting.message} {userName} !
             </h1>
           </div>
 
           {/* Widget d'heure en haut à droite */}
-          <div className="absolute top-3 right-3 bg-slate-800/80 backdrop-blur-sm border border-slate-600/30 rounded-lg px-2 py-1.5 shadow-lg">
+          <div className="bg-slate-800/80 backdrop-blur-sm border border-slate-600/30 rounded-lg px-2 py-1.5 shadow-lg">
             <div className="flex items-center gap-1.5">
               {getTimeIcon()}
               <span className="text-white text-xs font-medium">{formatTime(currentTime)}</span>
@@ -194,17 +194,17 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
           </div>
         </div>
 
-        {/* Citation motivante en bas */}
-        <div className="absolute bottom-4 left-4 right-4 flex justify-center">
+        {/* Citation motivante en bas - responsive */}
+        <div className="absolute bottom-2 sm:bottom-4 left-2 sm:left-4 right-2 sm:right-4 flex justify-center">
           <div
-            className={`bg-slate-900/70 backdrop-blur-sm border border-blue-500/30 rounded-xl p-3 transition-all duration-1000 ease-out transform ${
+            className={`bg-slate-900/70 backdrop-blur-sm border border-blue-500/30 rounded-lg sm:rounded-xl p-2 sm:p-3 transition-all duration-1000 ease-out transform max-w-full ${
               isQuoteVisible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
             }`}
           >
             <div className="flex items-start gap-2">
-              <div className="text-lg">💭</div>
-              <div>
-                <p className="text-blue-50/95 font-medium italic text-sm leading-relaxed drop-shadow-md">
+              <div className="text-sm sm:text-lg flex-shrink-0">💭</div>
+              <div className="min-w-0 flex-1">
+                <p className="text-blue-50/95 font-medium italic text-xs sm:text-sm leading-relaxed drop-shadow-md">
                   "{quote?.text}"
                 </p>
                 <p className="text-blue-200/70 text-xs mt-1 drop-shadow-sm">— {quote?.author}</p>
