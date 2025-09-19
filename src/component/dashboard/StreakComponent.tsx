@@ -23,7 +23,6 @@ export const StreakComponent = ({ currentStreak, maxStreak = 7, className = "" }
             {currentStreak} jour{currentStreak > 1 ? "s" : ""}
           </p>
         </div>
- 
         {/* Barre avec les cercles et les jours */}
         <div className="flex items-center gap-0.5">
           {streakData.map((day, index) => (

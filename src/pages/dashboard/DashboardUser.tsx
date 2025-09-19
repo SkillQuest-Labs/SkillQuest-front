@@ -33,7 +33,8 @@ export const DashboardUser = () => {
 
   const { userStats } = useGetUserStats(user?.id || "");
 
-  const { userCurrentLevel, xpThreshold, xpToNextLevel, totalXp, totalQuestCompleted, totalSkillCompleted } = useComputeUserProgress({ skills, userStats });
+  const { userCurrentLevel, xpThreshold, xpToNextLevel, totalXp, totalQuestCompleted, totalSkillCompleted } =
+    useComputeUserProgress({ skills, userStats });
 
   return (
     <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
@@ -52,7 +53,6 @@ export const DashboardUser = () => {
               <div className="h-20 sm:h-16 flex-shrink-0 flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full overflow-hidden">
                 {/* StreakComponent */}
                 <StreakComponent currentStreak={7} maxStreak={7} className="h-16 flex-shrink-0" />
-                
                 {/* Cartes de statistiques */}
                 <div className="flex gap-1 sm:gap-2 flex-1 justify-start sm:justify-end w-full sm:w-auto min-w-0">
                   <AccueilStatCard
