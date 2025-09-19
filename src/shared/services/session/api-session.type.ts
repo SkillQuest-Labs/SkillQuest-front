@@ -34,6 +34,7 @@ export type Session = {
   duration: number;
   userId: string;
   linkedSkillId: string;
+  totalXpEarned: number;
   linkedSkill: {
     title: string;
   };

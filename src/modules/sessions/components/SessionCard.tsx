@@ -4,6 +4,7 @@ import { Button } from "@/shared/components/ui/button";
 import { useDeleteSession, useValidateSession } from "@/shared/services/session/api-session";
 import type { Session } from "@/shared/services/session/api-session.type";
 import { Check, Play, Trash2 } from "lucide-react";
+import { QuestIndicator } from "./QuestIndicator";
 import { useState } from "react";
 import { getDateToTime } from "../utils/session.utils";
 import { SessionValidationModal } from "./SessionValidationModal";
@@ -82,7 +83,10 @@ export const SessionCard = ({ session }: SessionCardProps) => {
               style={{ backgroundColor: session.color }}
               title={session.color}
             />
-            <h3 className="truncate font-semibold text-slate-100 leading-tight">{session.linkedSkill.title}</h3>
+            <div className="flex items-center gap-2 min-w-0">
+              <h3 className="truncate font-semibold text-slate-100 leading-tight">{session.linkedSkill.title}</h3>
+              <QuestIndicator session={session} />
+            </div>
           </div>
 
           <span className="rounded-full bg-slate-800/60 px-3 py-1 text-xs text-slate-300">
