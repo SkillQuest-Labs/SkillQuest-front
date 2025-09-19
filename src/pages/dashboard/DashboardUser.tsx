@@ -47,7 +47,6 @@ export const DashboardUser = () => {
           - Écran large (≥1280px): affichage en 2 colonnes (contenu gauche, sidebar droite)
         */}
         <div className="h-full grid grid-rows-[auto_1fr] gap-4">
-          
           {/* HEADER - Message de bienvenue (pleine largeur) */}
           <div>
             <WelcomeSection userName={fallbackUsername} streak={7} />
@@ -55,7 +54,6 @@ export const DashboardUser = () => {
 
           {/* CONTENU PRINCIPAL - Stats + Sessions + Sidebar */}
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_360px] gap-4 min-h-0">
-            
             {/* ZONE PRINCIPALE - Stats + Sessions */}
             <div className="grid grid-rows-[auto_1fr] gap-4 min-h-0">
               {/* Section des statistiques - Streak + Stats Cards */}
@@ -80,7 +78,7 @@ export const DashboardUser = () => {
             </div>
 
             {/* SIDEBAR - Derniers skills + Sessions de la semaine (alignée avec les cartes de stats) */}
-            <div className="grid grid-rows-[1fr_1fr] gap-4 min-h-0" style={{ paddingBottom: '120px' }}>
+            <div className="grid grid-rows-[1fr_1fr] gap-4 min-h-0" style={{ paddingBottom: "120px" }}>
               {/* RecentSkillsComponent - Taille égale */}
               <div className="min-h-0">
                 <RecentSkillsComponent skills={skills} className="h-full" />
@@ -95,10 +93,13 @@ export const DashboardUser = () => {
         </div>
 
         {/* FOOTER - Avatar utilisateur (aligné avec la colonne de droite) */}
-        <div className="fixed bottom-4 z-50" style={{ 
-          right: 'calc(1rem + 1rem)', // Aligné avec le padding de la sidebar
-          marginBottom: 'env(safe-area-inset-bottom)' 
-        }}>
+        <div
+          className="fixed bottom-4 z-50"
+          style={{
+            right: "calc(1rem + 1rem)", // Aligné avec le padding de la sidebar
+            marginBottom: "env(safe-area-inset-bottom)",
+          }}
+        >
           <ProfileHud
             userName={user?.username || user?.firstName || "Aventurier"}
             title={(user?.unsafeMetadata?.role as string) || "Aventurier"}

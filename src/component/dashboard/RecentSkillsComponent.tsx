@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { BookOpen, Clock, ArrowRight } from "lucide-react";
+import { Star, Clock, ArrowRight } from "lucide-react";
 import type { Skill } from "@/shared/types/skill.type";
 import { routes } from "@/routes/router.const";
 
@@ -90,12 +90,12 @@ export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsCo
       <div className={`bg-slate-800/30 rounded-xl border border-slate-600/30 p-6 ${className}`}>
         <div className="flex items-center gap-3 mb-4">
           <div className="p-2 rounded-lg bg-blue-500/20 border border-blue-400/30">
-            <BookOpen className="w-5 h-5 text-blue-400" />
+            <Star className="w-5 h-5 text-blue-400" />
           </div>
           <h3 className="text-lg font-semibold text-white">Derniers skills</h3>
         </div>
         <div className="text-center py-8">
-          <BookOpen className="w-12 h-12 text-slate-500 mx-auto mb-3" />
+          <Star className="w-12 h-12 text-slate-500 mx-auto mb-3" />
           <p className="text-slate-400 text-sm">Aucun skill trouvé</p>
           <p className="text-slate-500 text-xs mt-1">Créez votre premier skill pour commencer !</p>
         </div>
@@ -108,7 +108,7 @@ export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsCo
       {/* En-tête */}
       <div className="flex items-center gap-2 mb-3 flex-shrink-0">
         <div className="p-1.5 rounded-lg bg-blue-500/20 border border-blue-400/30">
-          <BookOpen className="w-4 h-4 text-blue-400" />
+          <Star className="w-4 h-4 text-blue-400" />
         </div>
         <h3 className="text-sm font-semibold text-white">Derniers skills</h3>
       </div>
@@ -146,11 +146,11 @@ export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsCo
 
             {/* Informations supplémentaires */}
             <div className="flex items-center justify-between mt-1 pt-1 border-t border-slate-600/20">
-              <div className="flex items-center gap-2 text-xs text-slate-400">
-                <div className="flex items-center gap-1">
-                  <BookOpen className="w-3 h-3" />
-                  {skill.completedQuests || 0}/{skill.totalQuests || 0} quêtes
-                </div>
+                <div className="flex items-center gap-2 text-xs text-slate-400">
+                  <div className="flex items-center gap-1">
+                    <Star className="w-3 h-3" />
+                    {skill.completedQuests || 0}/{skill.totalQuests || 0} quêtes
+                  </div>
                 {skill.createdAt ? (
                   <div className="flex items-center gap-1">
                     <Clock className="w-3 h-3" />
