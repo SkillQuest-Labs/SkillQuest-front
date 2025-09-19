@@ -15,6 +15,19 @@ type GenerateCircularNodesDataProps = {
   totalQuestCount?: number;
 };
 
+const getDeterministicJitter = (seed: string, angleStep: number) => {
+  if (!angleStep) return 0;
+
+  let hash = 0;
+  for (let i = 0; i < seed.length; i += 1) {
+    hash = (hash << 5) - hash + seed.charCodeAt(i);
+    hash |= 0; // Convert to 32bit integer
+  }
+
+  const normalized = ((Math.sin(hash) + 1) / 2 - 0.5) * 0.5; // Range approx [-0.25, 0.25]
+  return normalized * angleStep;
+};
+
 export const generateCircularNodesData = ({
   nodes,
   visitedLevels,
@@ -46,9 +59,8 @@ export const generateCircularNodesData = ({
     const angleStep = (2 * Math.PI) / totalCountPerLevel;
     let finalAngle = currentCountPerLevel * angleStep;
 
-    // Add a slight random jitter to the angle to avoid perfect alignment
-    const jitter = (Math.random() - 0.5) * (angleStep / 2); // Jitter is half the angle step
-    finalAngle += jitter;
+    // Add a deterministic jitter per node to avoid perfect alignment while keeping positions stable
+    finalAngle += getDeterministicJitter(node.id, angleStep / 2);
 
     // Avoid angles that are multiples of 90 degrees (0, π/2, π, 3π/2)
     if (Math.abs(finalAngle % (Math.PI / 2)) < 0.1) {
@@ -65,7 +77,7 @@ export const generateCircularNodesData = ({
       status: node.data.status,
     });
 
-    const adjustedSize = nodeVisualsProperties.size + (boostAllRings ? 28 : 0);
+    const adjustedSize = nodeVisualsProperties.size + (boostAllRings ? 28 : 15);
 
     const circularNode: CircularSkillNode = {
       id: node.id,

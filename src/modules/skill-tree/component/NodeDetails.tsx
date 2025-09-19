@@ -143,7 +143,7 @@ export const RenderNodeDetails = ({ selectedNodeData, minimalistView }: RenderNo
                   type="button"
                   variant="ghost"
                   onClick={() => setIsQuestModalOpen(true)}
-                  className="cursor-pointer rounded-full border border-slate-700 bg-slate-800/60 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-slate-200 transition hover:border-slate-600 hover:bg-slate-800"
+                  className="cursor-pointer rounded-full border border-slate-700 bg-slate-800/60 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-slate-200 transition hover:text-white hover:border-slate-600 hover:bg-slate-800"
                 >
                   Voir les détails de la quête
                 </Button>
