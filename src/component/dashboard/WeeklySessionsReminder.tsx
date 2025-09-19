@@ -152,17 +152,17 @@ export const WeeklySessionsReminder = ({ className = "" }: WeeklySessionsReminde
   }
 
   return (
-    <div className={`bg-slate-800/30 rounded-xl border border-slate-600/30 p-6 ${className}`}>
+    <div className={`bg-slate-800/30 rounded-xl border border-slate-600/30 p-3 ${className}`}>
       {/* En-tête */}
-      <div className="flex items-center gap-3 mb-4">
-        <div className="p-2 rounded-lg bg-blue-500/20 border border-blue-400/30">
-          <Calendar className="w-5 h-5 text-blue-400" />
+      <div className="flex items-center gap-2 mb-3">
+        <div className="p-1.5 rounded-lg bg-blue-500/20 border border-blue-400/30">
+          <Calendar className="w-4 h-4 text-blue-400" />
         </div>
-        <h3 className="text-lg font-semibold text-white">Sessions de la semaine</h3>
+        <h3 className="text-sm font-semibold text-white">Sessions de la semaine</h3>
       </div>
 
       {/* Liste des sessions */}
-      <div className="space-y-2">
+      <div className="space-y-1">
         {weeklySessions.map((session) => {
           const status = getSessionStatus(session);
           const isPast = status === "past";
@@ -170,7 +170,7 @@ export const WeeklySessionsReminder = ({ className = "" }: WeeklySessionsReminde
           return (
             <div
               key={session.id}
-              className={`group p-2 rounded-md border transition-all duration-200 ${
+              className={`group p-1.5 rounded-md border transition-all duration-200 ${
                 isPast
                   ? "bg-slate-700/20 border-slate-600/20 opacity-60"
                   : "bg-slate-700/30 border-slate-600/20 hover:bg-slate-700/50 hover:border-slate-500/30"
@@ -179,11 +179,11 @@ export const WeeklySessionsReminder = ({ className = "" }: WeeklySessionsReminde
               <div className="flex items-start justify-between">
                 {/* Informations principales */}
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
+                  <div className="flex items-center gap-1.5 mb-1">
                     <h4 className={`text-xs font-medium truncate ${isPast ? "text-slate-400" : "text-white"}`}>
                       {session.title}
                     </h4>
-                    <span className={`px-1.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(status)}`}>
+                    <span className={`px-1 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(status)}`}>
                       {getStatusLabel(status)}
                     </span>
                   </div>

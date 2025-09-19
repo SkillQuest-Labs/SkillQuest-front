@@ -104,39 +104,39 @@ export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsCo
   }
 
   return (
-    <div className={`bg-slate-800/30 rounded-xl border border-slate-600/30 p-6 ${className}`}>
+    <div className={`bg-slate-800/30 rounded-xl border border-slate-600/30 p-3 ${className}`}>
       {/* En-tête */}
-      <div className="flex items-center gap-3 mb-4">
-        <div className="p-2 rounded-lg bg-blue-500/20 border border-blue-400/30">
-          <BookOpen className="w-5 h-5 text-blue-400" />
+      <div className="flex items-center gap-2 mb-3">
+        <div className="p-1.5 rounded-lg bg-blue-500/20 border border-blue-400/30">
+          <BookOpen className="w-4 h-4 text-blue-400" />
         </div>
-        <h3 className="text-lg font-semibold text-white">Derniers skills</h3>
+        <h3 className="text-sm font-semibold text-white">Derniers skills</h3>
       </div>
 
       {/* Liste des skills */}
-      <div className="space-y-1.5">
+      <div className="space-y-1">
         {recentSkills.map((skill, index) => (
           <div
             key={skill.id || index}
-            className="group p-2 rounded-md bg-slate-700/30 border border-slate-600/20 hover:bg-slate-700/50 hover:border-slate-500/30 transition-all duration-200 cursor-pointer"
+            className="group p-1.5 rounded-md bg-slate-700/30 border border-slate-600/20 hover:bg-slate-700/50 hover:border-slate-500/30 transition-all duration-200 cursor-pointer"
             onClick={() => navigate(routes.skillDetail.path.replace(":skillId", skill.id || ""))}
           >
             <div className="flex items-start justify-between">
               {/* Informations principales */}
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
+                <div className="flex items-center gap-1.5 mb-1">
                   <h4 className="text-xs font-medium text-white truncate">{skill.title}</h4>
                 </div>
 
                 {/* Badges de statut et difficulté */}
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1">
                   <span
-                    className={`px-1.5 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(skill.status)}`}
+                    className={`px-1 py-0.5 rounded-full text-xs font-medium border ${getStatusColor(skill.status)}`}
                   >
                     {getStatusLabel(skill.status)}
                   </span>
                   <span
-                    className={`px-1.5 py-0.5 rounded-full text-xs font-medium border ${getDifficultyColor(skill.difficulty)}`}
+                    className={`px-1 py-0.5 rounded-full text-xs font-medium border ${getDifficultyColor(skill.difficulty)}`}
                   >
                     {getDifficultyLabel(skill.difficulty)}
                   </span>
@@ -145,8 +145,8 @@ export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsCo
             </div>
 
             {/* Informations supplémentaires */}
-            <div className="flex items-center justify-between mt-1.5 pt-1.5 border-t border-slate-600/20">
-              <div className="flex items-center gap-3 text-xs text-slate-400">
+            <div className="flex items-center justify-between mt-1 pt-1 border-t border-slate-600/20">
+              <div className="flex items-center gap-2 text-xs text-slate-400">
                 <div className="flex items-center gap-1">
                   <BookOpen className="w-3 h-3" />
                   {skill.completedQuests || 0}/{skill.totalQuests || 0} quêtes

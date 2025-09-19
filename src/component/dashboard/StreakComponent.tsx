@@ -13,17 +13,17 @@ export const StreakComponent = ({ currentStreak, maxStreak = 7, className = "" }
 
   return (
     <div
-      className={`bg-slate-800/50 rounded-xl p-3 border border-slate-600/30 backdrop-blur-sm flex items-center justify-start w-fit ${className}`}
+      className={`bg-slate-800/50 rounded-xl p-3 border border-slate-600/30 backdrop-blur-sm flex items-center justify-start w-fit h-16 ${className}`}
     >
       {/* Description à gauche */}
       <div className="flex items-center gap-3">
         <div className="flex flex-col items-center">
           <p className="text-slate-400 text-xs">Streak</p>
           <p className="text-slate-200 text-sm font-semibold">
-            {currentStreak} jour{currentStreak > 1 ? 's' : ''}
+            {currentStreak} jour{currentStreak > 1 ? "s" : ""}
           </p>
         </div>
-        
+ 
         {/* Barre avec les cercles et les jours */}
         <div className="flex items-center gap-0.5">
           {streakData.map((day, index) => (
