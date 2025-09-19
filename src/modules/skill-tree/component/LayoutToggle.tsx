@@ -20,16 +20,16 @@ type LayoutToggleProps = {
 
 export const LayoutToggle = ({ layoutType, onLayoutChange }: LayoutToggleProps) => {
   return (
-    <div className="absolute  top-4 right-4 z-10 flex gap-2 bg-slate-800/70 backdrop-blur-sm border border-slate-600/60 rounded-xl p-1 shadow-lg">
+    <div className="absolute right-4 top-6 z-20 flex gap-1 rounded-full border border-slate-700/60 bg-slate-900/70 p-1 shadow-[0_25px_60px_-25px_rgba(99,102,241,0.45)] backdrop-blur md:right-12 md:top-10">
       {LAYOUTS.map(({ value, label, icon }) => (
         <Button
           key={value}
-          variant={layoutType === value ? "default" : "ghost"}
+          variant="ghost"
           size="sm"
-          className={`flex items-center gap-2 cursor-pointer text-xs font-medium transition-all duration-200 ${
+          className={`flex cursor-pointer items-center gap-2 rounded-full px-3 text-xs font-semibold transition-all duration-200 ${
             layoutType === value
-              ? "bg-cyan-500/80 hover:bg-cyan-500 text-white shadow-md"
-              : "text-slate-300 hover:bg-slate-700/70"
+              ? "bg-gradient-to-r from-sky-500/80 to-cyan-400/80 text-white shadow-[0_12px_35px_-18px_rgba(14,165,233,0.6)]"
+              : "text-slate-300 hover:bg-slate-800/70 hover:text-white"
           }`}
           onClick={() => onLayoutChange(value)}
           title={`Afficher le layout ${label}`}
