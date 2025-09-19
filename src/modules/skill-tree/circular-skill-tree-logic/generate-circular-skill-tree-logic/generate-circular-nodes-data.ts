@@ -67,7 +67,7 @@ export const generateCircularNodesData = ({
     const circularNode: CircularSkillNode = {
       id: node.id,
       title: node.data.title,
-      description: "",
+      description: node.data.description || "",
       position: { x, y },
       size: adjustedSize,
       shape: nodeVisualsProperties.shape,
@@ -79,6 +79,11 @@ export const generateCircularNodesData = ({
       ring: level,
       angle: finalAngle,
       icon: nodeVisualsProperties.icon,
+      questDetails: {
+        type: node.data.questType,
+        number: node.data.questNumber,
+        isStarting: node.data.isStarting,
+      },
     };
 
     circularSkillNodes.push(circularNode);
