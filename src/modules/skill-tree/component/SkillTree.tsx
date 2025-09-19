@@ -216,11 +216,11 @@ export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreePro
 
       <div className="relative z-10 flex w-full flex-col items-center gap-12 px-6 pb-20 pt-4">
         <div className="relative flex w-full flex-col gap-6 lg:flex-row lg:items-start">
-          <div className="relative mt-20 pl-4  flex w-full max-w-sm flex-col gap-3 rounded-3xl border border-white/5 bg-slate-900/35 p-5 shadow-[0_30px_90px_-50px_rgba(14,23,42,0.85)] backdrop-blur-xl lg:flex-[0_0_10%] lg:max-w-[260px]">
+          <div className="relative mt-20 pl-4  flex w-full  flex-col gap-3 rounded-3xl border border-white/5 bg-slate-900/35 p-5 shadow-[0_30px_90px_-50px_rgba(14,23,42,0.85)] backdrop-blur-xl lg:flex-[0_0_10%] ">
             <div className="pointer-events-none absolute inset-0 rounded-[inherit] border border-white/10 opacity-25" />
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
 
-            <div className="grid grid-cols-1 gap-3">
+            <div className="grid grid-cols-0 gap-3">
               {[
                 { label: "Quêtes", value: stats.total, accent: "from-cyan-400/25 to-sky-500/20" },
                 { label: "En cours", value: stats.inProgress, accent: "from-amber-400/25 to-orange-500/20" },
