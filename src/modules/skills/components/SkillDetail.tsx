@@ -347,44 +347,7 @@ export const SkillDetail = () => {
         </div>
 
         <div className="relative flex w-full flex-col gap-6 lg:flex-row lg:items-start">
-          <div className="flex w-[18%] flex-col gap-6">
-            {progressValue !== null && (
-              <div className="rounded-3xl border border-white/5 bg-slate-900/40 p-5 shadow-[0_20px_60px_-50px_rgba(15,23,42,0.85)] backdrop-blur-xl">
-                <div className="flex items-center justify-between text-sm text-slate-300">
-                  <span>Progression</span>
-                  <span className="font-semibold text-slate-100">{progressValue}%</span>
-                </div>
-                <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-800">
-                  <div
-                    className="h-full rounded-full bg-gradient-to-r from-sky-400 to-cyan-500 transition-all duration-500"
-                    style={{ width: `${progressValue}%` }}
-                  />
-                </div>
-              </div>
-            )}
-
-            <div className="rounded-3xl border border-white/5 bg-slate-900/40 p-5 shadow-[0_20px_60px_-50px_rgba(15,23,42,0.85)] backdrop-blur-xl">
-              <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-300">Actions rapides</h3>
-              <div className="mt-4 space-y-6">
-                <Button
-                  onClick={() => navigate(`/canvas?skillId=${skillId}`)}
-                  className="w-full cursor-pointer rounded-xl border border-sky-500/40 bg-sky-500/10 text-sky-200 transition-all hover:-translate-y-0.5 hover:bg-sky-500/20"
-                >
-                  Ouvrir dans le Canvas
-                </Button>
-                <Button
-                  onClick={handleDelete}
-                  disabled={deleteLoading}
-                  variant="outline"
-                  className="w-full cursor-pointer rounded-xl border border-rose-500/40 bg-rose-500/10 text-rose-200 transition-all hover:-translate-y-0.5 hover:text-white hover:bg-rose-500/20 disabled:opacity-60"
-                >
-                  {deleteLoading ? "Suppression..." : "Supprimer le skill"}
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex-1 w-[80%] space-y-6">
+          <div className="flex-1 w-[75%] space-y-6">
             <div className="rounded-3xl border border-white/5 bg-slate-900/40 p-6 shadow-[0_25px_80px_-60px_rgba(15,23,42,0.85)] backdrop-blur-xl">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-slate-100">Description</h2>
@@ -452,8 +415,43 @@ export const SkillDetail = () => {
               </div>
             </div>
           </div>
-          <div className="w-[18%]">
+
+          <div className="flex w-[25%] flex-col gap-6">
             <SkillQuestStatsCard stats={questStats} />
+            {progressValue !== null && (
+              <div className="rounded-3xl border border-white/5 bg-slate-900/40 p-5 shadow-[0_20px_60px_-50px_rgba(15,23,42,0.85)] backdrop-blur-xl">
+                <div className="flex items-center justify-between text-sm text-slate-300">
+                  <span>Progression</span>
+                  <span className="font-semibold text-slate-100">{progressValue}%</span>
+                </div>
+                <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-800">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-sky-400 to-cyan-500 transition-all duration-500"
+                    style={{ width: `${progressValue}%` }}
+                  />
+                </div>
+              </div>
+            )}
+
+            <div className="rounded-3xl border border-white/5 bg-slate-900/40 p-5 shadow-[0_20px_60px_-50px_rgba(15,23,42,0.85)] backdrop-blur-xl">
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-300">Actions rapides</h3>
+              <div className="mt-4 space-y-6">
+                <Button
+                  onClick={() => navigate(`/canvas?skillId=${skillId}`)}
+                  className="w-full cursor-pointer rounded-xl border border-sky-500/40 bg-sky-500/10 text-sky-200 transition-all hover:-translate-y-0.5 hover:bg-sky-500/20"
+                >
+                  Ouvrir dans le Canvas
+                </Button>
+                <Button
+                  onClick={handleDelete}
+                  disabled={deleteLoading}
+                  variant="outline"
+                  className="w-full cursor-pointer rounded-xl border border-rose-500/40 bg-rose-500/10 text-rose-200 transition-all hover:-translate-y-0.5 hover:text-white hover:bg-rose-500/20 disabled:opacity-60"
+                >
+                  {deleteLoading ? "Suppression..." : "Supprimer le skill"}
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
