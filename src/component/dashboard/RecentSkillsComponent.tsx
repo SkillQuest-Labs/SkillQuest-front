@@ -104,17 +104,17 @@ export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsCo
   }
 
   return (
-    <div className={`bg-slate-800/30 rounded-xl border border-slate-600/30 p-3 ${className}`}>
+    <div className={`bg-slate-800/30 rounded-xl border border-slate-600/30 p-3 flex flex-col h-full ${className}`}>
       {/* En-tête */}
-      <div className="flex items-center gap-2 mb-3">
+      <div className="flex items-center gap-2 mb-3 flex-shrink-0">
         <div className="p-1.5 rounded-lg bg-blue-500/20 border border-blue-400/30">
           <BookOpen className="w-4 h-4 text-blue-400" />
         </div>
         <h3 className="text-sm font-semibold text-white">Derniers skills</h3>
       </div>
 
-      {/* Liste des skills */}
-      <div className="space-y-1">
+      {/* Liste des skills - Prend l'espace disponible */}
+      <div className="space-y-1 flex-1 min-h-0 overflow-y-auto">
         {recentSkills.map((skill, index) => (
           <div
             key={skill.id || index}
@@ -174,7 +174,7 @@ export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsCo
       </div>
 
       {/* Lien vers tous les skills */}
-      <div className="mt-4 pt-4 border-t border-slate-600/20">
+      <div className="mt-3 pt-3 border-t border-slate-600/20 flex-shrink-0">
         <button
           className="w-full flex items-center justify-center gap-2 text-sm text-blue-400 hover:text-blue-300 transition-colors"
           onClick={() => navigate(routes.skills.path)}
