@@ -1,4 +1,5 @@
 import { useUser } from "@clerk/clerk-react";
+import { Target, Award, TrendingUp } from "lucide-react";
 import ProfileHud from "@/component/ProfileHud";
 import WorkSessionChart from "@/modules/stats/components/chart/work-session-chart/WorkSessionChart";
 import { useGetSkills } from "@/shared/services/skill/api-skill";
@@ -43,19 +44,7 @@ export const DashboardUser = () => {
                   {/* XP Total */}
                   <div className="bg-slate-800/50 rounded-xl p-2 sm:p-3 border border-slate-600/30 backdrop-blur-sm flex items-center gap-2 sm:gap-3 w-full h-full">
                     <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-slate-600/50 border border-slate-500/30 flex items-center justify-center flex-shrink-0">
-                      <svg
-                        className="w-5 h-5 sm:w-6 sm:h-6 text-slate-300"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                        />
-                      </svg>
+                      <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-slate-300" />
                     </div>
 
                     <div className="flex flex-col min-w-0">
@@ -67,19 +56,7 @@ export const DashboardUser = () => {
                   {/* Skills Completed */}
                   <div className="bg-slate-800/50 rounded-xl p-2 sm:p-3 border border-slate-600/30 backdrop-blur-sm flex items-center gap-2 sm:gap-3 w-full h-full">
                     <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-slate-600/50 border border-slate-500/30 flex items-center justify-center flex-shrink-0">
-                      <svg
-                        className="w-5 h-5 sm:w-6 sm:h-6 text-slate-300"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
+                      <Target className="w-5 h-5 sm:w-6 sm:h-6 text-slate-300" />
                     </div>
 
                     <div className="flex flex-col min-w-0">
@@ -93,19 +70,7 @@ export const DashboardUser = () => {
                   {/* Quests Completed */}
                   <div className="bg-slate-800/50 rounded-xl p-2 sm:p-3 border border-slate-600/30 backdrop-blur-sm flex items-center gap-2 sm:gap-3 w-full h-full">
                     <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-slate-600/50 border border-slate-500/30 flex items-center justify-center flex-shrink-0">
-                      <svg
-                        className="w-5 h-5 sm:w-6 sm:h-6 text-slate-300"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
-                        />
-                      </svg>
+                      <Award className="w-5 h-5 sm:w-6 sm:h-6 text-slate-300" />
                     </div>
 
                     <div className="flex flex-col min-w-0">
