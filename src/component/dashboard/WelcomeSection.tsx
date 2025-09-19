@@ -93,13 +93,16 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
     }, 1000); // Délai de 1 seconde après le chargement
 
     // Timer pour faire disparaître la citation après 10 minutes
-    const quoteFadeTimer = setTimeout(() => {
-      setIsQuoteFading(true);
-      // Après l'animation de disparition, masquer complètement la citation
-      setTimeout(() => {
-        setIsQuoteVisible(false);
-      }, 1000); // Durée de l'animation de disparition
-    }, 10 * 60 * 1000); // 10 minutes
+    const quoteFadeTimer = setTimeout(
+      () => {
+        setIsQuoteFading(true);
+        // Après l'animation de disparition, masquer complètement la citation
+        setTimeout(() => {
+          setIsQuoteVisible(false);
+        }, 1000); // Durée de l'animation de disparition
+      },
+      10 * 60 * 1000,
+    ); // 10 minutes
 
     // Fonction de mise à jour du greeting
     const updateGreeting = () => {
@@ -209,11 +212,11 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
         <div className="absolute bottom-4 left-4 right-4 flex justify-center">
           <div
             className={`bg-slate-900/70 backdrop-blur-sm border border-blue-500/30 rounded-xl p-3 transition-all duration-1000 ease-out transform ${
-              isQuoteVisible && !isQuoteFading 
-                ? "translate-y-0 opacity-100" 
-                : isQuoteFading 
-                ? "translate-y-full opacity-0" 
-                : "translate-y-full opacity-0"
+              isQuoteVisible && !isQuoteFading
+                ? "translate-y-0 opacity-100"
+                : isQuoteFading
+                  ? "translate-y-full opacity-0"
+                  : "translate-y-full opacity-0"
             }`}
           >
             <div className="flex items-start gap-2">

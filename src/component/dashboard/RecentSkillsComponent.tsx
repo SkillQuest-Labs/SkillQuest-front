@@ -82,7 +82,7 @@ export const RecentSkillsComponent = ({ skills, className = "" }: RecentSkillsCo
         }
         return 0; // Garder l'ordre original si pas de dates
       })
-      .slice(0, 2); // Prendre les 2 plus récents
+      .slice(0, 5); // Prendre les 5 plus récents
   }, [skills]);
 
   if (recentSkills.length === 0) {

@@ -174,14 +174,14 @@ export const WeeklySessionsReminder = ({ className = "" }: WeeklySessionsReminde
               <div className="flex items-center justify-between">
                 {/* Statut de completion et contenu principal */}
                 <div className="flex items-center gap-2 flex-1 min-w-0">
-                  {/* Icône de statut */}
+                  {/* Point de notification */}
                   <div className="flex-shrink-0">
                     {isCompleted ? (
-                      <div className="w-4 h-4 rounded-full bg-green-500/20 border border-green-400/30 flex items-center justify-center">
-                        <Check className="w-2.5 h-2.5 text-green-400" />
+                      <div className="w-3 h-3 rounded-full bg-slate-500/50 flex items-center justify-center">
+                        <Check className="w-2 h-2 text-slate-300" />
                       </div>
                     ) : (
-                      <div className="w-4 h-4 rounded-full border border-slate-400/50"></div>
+                      <div className="w-3 h-3 rounded-full border border-blue-400"></div>
                     )}
                   </div>
 
