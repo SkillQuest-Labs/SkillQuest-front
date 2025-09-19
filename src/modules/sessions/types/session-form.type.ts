@@ -41,4 +41,5 @@ export type SessionFilterValue = {
   skillTitle: string;
   questTitle: string;
   date: string;
+  includeValidated: boolean;
 };

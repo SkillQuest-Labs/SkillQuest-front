@@ -101,13 +101,14 @@ export const getDateToTime = (date: string) => {
 };
 
 export const buildSessionQueryParams = (params: SessionsQuery): URLSearchParams => {
-  const { skill = "", quest = "", date = "", page = 1, limit = 20 } = params;
+  const { skill = "", quest = "", date = "", page = 1, limit = 20, includeValidated = false } = params;
 
   const search = new URLSearchParams();
 
   if (skill) search.set("skill", skill);
   if (quest) search.set("quest", quest);
   if (date) search.set("date", date);
+  if (includeValidated) search.set("includeValidated", "true");
   search.set("page", String(page));
   search.set("limit", String(limit));
 

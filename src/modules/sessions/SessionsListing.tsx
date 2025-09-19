@@ -15,6 +15,7 @@ const SESSION_FILTER_INIT: SessionFilterValue = {
   skillTitle: "",
   questTitle: "",
   date: "",
+  includeValidated: false,
 };
 
 export const SessionsListing = () => {
@@ -37,11 +38,12 @@ export const SessionsListing = () => {
     date: filters.date,
     limit: pageSize,
     page: currentPage,
+    includeValidated: filters.includeValidated,
   });
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [filters.skillTitle, filters.questTitle, filters.date]);
+  }, [filters.skillTitle, filters.questTitle, filters.date, filters.includeValidated]);
 
   const handleFilterChange = (next: SessionFilterValue) => {
     setFilters(next);
@@ -50,6 +52,11 @@ export const SessionsListing = () => {
 
   const handleResetFilters = () => {
     setFilters(SESSION_FILTER_INIT);
+    setCurrentPage(1);
+  };
+
+  const handleToggleValidated = (include: boolean) => {
+    setFilters({ ...filters, includeValidated: include });
     setCurrentPage(1);
   };
 
@@ -76,7 +83,14 @@ export const SessionsListing = () => {
         </div>
       </div>
 
-      <SessionFilter value={filters} onChange={handleFilterChange} onReset={handleResetFilters} resultsCount={total} />
+      <SessionFilter
+        value={filters}
+        onChange={handleFilterChange}
+        onReset={handleResetFilters}
+        resultsCount={total}
+        includeValidated={filters.includeValidated}
+        onToggleValidated={handleToggleValidated}
+      />
 
       <div className="mt-6">
         {loading ? (

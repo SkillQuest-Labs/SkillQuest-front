@@ -46,6 +46,7 @@ export type Session = {
     workSessionId: string;
     quest: {
       title: string;
+      status: string;
     };
   }[];
 };
@@ -58,6 +59,7 @@ export type SessionsQuery = {
   date?: string;
   limit?: number;
   page?: number;
+  includeValidated?: boolean;
 };
 
 export type ListSessionsResponse = {

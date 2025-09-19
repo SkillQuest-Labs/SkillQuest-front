@@ -7,10 +7,19 @@ type SessionFilterProps = {
   onChange: (next: SessionFilterValue) => void;
   onReset: () => void;
   resultsCount: number;
+  includeValidated: boolean;
+  onToggleValidated: (include: boolean) => void;
 };
 
-export const SessionFilter = ({ value, onChange, onReset, resultsCount }: SessionFilterProps) => {
-  const hasActiveFilters = !!(value.skillTitle || value.questTitle || value.date);
+export const SessionFilter = ({
+  value,
+  onChange,
+  onReset,
+  resultsCount,
+  includeValidated,
+  onToggleValidated,
+}: SessionFilterProps) => {
+  const hasActiveFilters = !!(value.skillTitle || value.questTitle || value.date || includeValidated);
 
   return (
     <div className="mt-2 rounded-2xl border border-slate-700/60 bg-slate-900/50 p-4">
@@ -71,6 +80,28 @@ export const SessionFilter = ({ value, onChange, onReset, resultsCount }: Sessio
               <X className="h-4 w-4" />
             </button>
           )}
+        </div>
+      </div>
+
+      {/* Toggle pour inclure les sessions validées */}
+      <div className="mt-4 flex items-center gap-4 p-4">
+        <button
+          type="button"
+          onClick={() => onToggleValidated(!includeValidated)}
+          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 ${
+            includeValidated ? "bg-blue-600" : "bg-slate-600"
+          }`}
+        >
+          <span
+            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+              includeValidated ? "translate-x-6" : "translate-x-1"
+            }`}
+          />
+        </button>
+
+        <div>
+          <div className="text-sm font-medium text-slate-200">Inclure les sessions validées</div>
+          <div className="text-xs text-slate-400">Afficher également les sessions validées</div>
         </div>
       </div>
 
