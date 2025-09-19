@@ -1,7 +1,7 @@
 ﻿import { SkillTreeLoader } from "@/component/SkillTreeLoader";
 import type { QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
 import type { Edge, Node } from "@xyflow/react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { generateCircularSkillTreeData } from "../circular-skill-tree-logic/generate-circular-skill-tree-logic";
 import type { DependencyGraph } from "../circular-skill-tree-logic/generate-circular-skill-tree-logic/dependency-graph";
 import { useContainerSize } from "../hooks/useContainerSize";
@@ -173,27 +173,8 @@ export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreePro
 
   const selectedNodeData = circularSkillNodes.find((n) => n.id === selectedNode);
 
-  const stats = useMemo(
-    () =>
-      circularSkillNodes.reduce(
-        (acc, node) => {
-          if (node.nodeType === "mastery") return acc;
-
-          acc.total += 1;
-          if (node.status === "COMPLETED") acc.completed += 1;
-          if (node.status === "UNLOCKED") acc.available += 1;
-          if (node.status === "IN_PROGRESS") acc.inProgress += 1;
-          if (node.isLocked) acc.locked += 1;
-
-          return acc;
-        },
-        { total: 0, completed: 0, inProgress: 0, available: 0, locked: 0 },
-      ),
-    [circularSkillNodes],
-  );
-
   return (
-    <div className="relative flex min-h-screen w-full overflow-hidden  bg-slate-900 text-slate-100">
+    <div className="relative flex min-h-screen w-full overflow-hidden bg-slate-900 text-slate-100">
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.07] mix-blend-soft-light"
         style={{
@@ -212,91 +193,64 @@ export const SkillTree = ({ nodes, edges, onBack, minimalistView }: SkillTreePro
 
       <LayoutToggle layoutType={layoutType} onLayoutChange={handleLayoutChange} />
 
-      <div className="relative z-10 flex w-full flex-col items-center gap-12 px-6 pb-20 pt-4">
-        <div className="relative flex w-full flex-col gap-6 lg:flex-row lg:items-start">
-          <div className="relative mt-20 pl-4  flex w-full  flex-col gap-3 rounded-3xl border border-white/5 bg-slate-900/35 p-5 shadow-[0_30px_90px_-50px_rgba(14,23,42,0.85)] backdrop-blur-xl lg:flex-[0_0_10%] ">
-            <div className="pointer-events-none absolute inset-0 rounded-[inherit] border border-white/10 opacity-25" />
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
-
-            <div className="grid grid-cols-0 gap-3">
-              {[
-                { label: "Quêtes", value: stats.total, accent: "from-cyan-400/25 to-sky-500/20" },
-                { label: "En cours", value: stats.inProgress, accent: "from-amber-400/25 to-orange-500/20" },
-                { label: "Terminées", value: stats.completed, accent: "from-emerald-400/25 to-emerald-500/20" },
-                { label: "Disponibles", value: stats.available, accent: "from-blue-400/20 to-indigo-500/20" },
-                { label: "Verrouillées", value: stats.locked, accent: "from-rose-500/20 to-rose-600/20" },
-              ].map(({ label, value, accent }) => (
-                <div
-                  key={label}
-                  className={`flex min-h-[78px] flex-col justify-center rounded-2xl border border-white/5 bg-gradient-to-br ${accent} px-4 py-3 text-xs text-slate-200 shadow-[0_18px_40px_-28px_rgba(15,23,42,0.8)] backdrop-blur`}
-                >
-                  <span className="font-semibold uppercase tracking-wide text-slate-300">{label}</span>
-                  <span className="text-lg font-bold text-white">{value}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="relative w-full overflow-hidden  backdrop-blur-xl lg:flex-[0_0_90%] ">
+      <div className="relative z-10 flex w-full flex-1 items-center justify-center px-6 pb-16 pt-10">
+        <div
+          ref={skillTreeContainerRef}
+          className="relative h-[70vh] w-full max-w-6xl cursor-grab active:cursor-grabbing"
+          style={{ overflow: "visible" }}
+          onClick={handleSkillTreeCanvasClick}
+          onWheel={handleWheel}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+        >
+          {isLoading ? (
+            <SkillTreeLoader
+              title="Génération de l'arbre de compétences"
+              description="Calcul des positions et des connexions..."
+            />
+          ) : (
             <div
-              ref={skillTreeContainerRef}
-              className="relative h-screen  w-full cursor-grab active:cursor-grabbing"
-              style={{ overflow: "visible" }}
-              onClick={handleSkillTreeCanvasClick}
-              onWheel={handleWheel}
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
+              className="h-full w-full animate-in fade-in-0 duration-700"
+              style={{
+                transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+                transformOrigin: "center center",
+                position: "relative",
+              }}
             >
-              {isLoading ? (
-                <SkillTreeLoader
-                  title="Génération de l'arbre de compétences"
-                  description="Calcul des positions et des connexions..."
-                />
-              ) : (
-                <div
-                  className="h-full w-full animate-in fade-in-0 duration-700"
-                  style={{
-                    transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
-                    transformOrigin: "center center",
-                    position: "relative",
-                  }}
-                >
-                  <RenderConcentricCircles
-                    skillnodes={circularSkillNodes}
-                    centerX={centerX}
-                    centerY={centerY}
-                    options={{ animationEnabled }}
-                    containerWidth={containerSize.width}
-                    containerHeight={containerSize.height}
-                  />
+              <RenderConcentricCircles
+                skillnodes={circularSkillNodes}
+                centerX={centerX}
+                centerY={centerY}
+                options={{ animationEnabled }}
+                containerWidth={containerSize.width}
+                containerHeight={containerSize.height}
+              />
 
-                  <div className="animate-in slide-in-from-bottom-4 duration-1000 delay-300">
-                    {circularSkillNodes.map((node, index) => (
-                      <div
-                        key={node.id}
-                        className="animate-in zoom-in-0 fade-in-0 duration-500"
-                        style={{
-                          animationDelay: `${400 + index * 100}ms`,
-                          animationFillMode: "both",
-                        }}
-                      >
-                        {renderNode(node)}
-                      </div>
-                    ))}
+              <div className="animate-in slide-in-from-bottom-4 duration-1000 delay-300">
+                {circularSkillNodes.map((node, index) => (
+                  <div
+                    key={node.id}
+                    className="animate-in zoom-in-0 fade-in-0 duration-500"
+                    style={{
+                      animationDelay: `${400 + index * 100}ms`,
+                      animationFillMode: "both",
+                    }}
+                  >
+                    {renderNode(node)}
                   </div>
+                ))}
+              </div>
 
-                  <ConnectionsRenderer
-                    nodes={circularSkillNodes}
-                    hoveredNode={hoveredNode}
-                    activeNodePath={activeNodePath}
-                    highlightedPathNodes={highlightedPathNodes}
-                  />
-                </div>
-              )}
+              <ConnectionsRenderer
+                nodes={circularSkillNodes}
+                hoveredNode={hoveredNode}
+                activeNodePath={activeNodePath}
+                highlightedPathNodes={highlightedPathNodes}
+              />
             </div>
-          </div>
+          )}
         </div>
       </div>
 
