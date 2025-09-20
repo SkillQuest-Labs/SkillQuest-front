@@ -6,7 +6,7 @@ import type { Session } from "@/shared/services/session/api-session.type";
 import { Check, Play, Trash2 } from "lucide-react";
 import { QuestIndicator } from "./QuestIndicator";
 import { useState } from "react";
-import { getDateToTime } from "../utils/session.utils";
+import { getDateToTime, isSessionFullyCompleted } from "../utils/session.utils";
 import { SessionValidationModal } from "./SessionValidationModal";
 
 type SessionCardProps = {
@@ -72,6 +72,9 @@ export const SessionCard = ({ session }: SessionCardProps) => {
     }
   };
 
+  // Vérifier s'il y a des quêtes non validées dans une session validée
+  const hasUnvalidatedQuests = session.isValidated && !isSessionFullyCompleted(session);
+
   return (
     <>
       <div className="flex h-full flex-col">
@@ -118,16 +121,18 @@ export const SessionCard = ({ session }: SessionCardProps) => {
         </div>
 
         {session.isValidated ? (
-          <div className="mt-5 grid grid-cols-[1fr] overflow-hidden rounded-lg border border-slate-700/60">
-            <Button
-              onClick={handleValidate}
-              aria-label="Compléter la session"
-              className="btn-action btn-validate h-full w-full rounded-none bg-transparent text-slate-200 hover:text-blue-400 cursor-pointer"
-            >
-              <Check className="h-4 w-4" />
-              <span className="ml-2 hidden sm:inline">Compléter</span>
-            </Button>
-          </div>
+          hasUnvalidatedQuests && (
+            <div className="mt-5 grid grid-cols-[1fr] overflow-hidden rounded-lg border border-slate-700/60">
+              <Button
+                onClick={handleValidate}
+                aria-label="Compléter la session"
+                className="btn-action btn-validate h-full w-full rounded-none bg-transparent text-slate-200 hover:text-blue-400 cursor-pointer"
+              >
+                <Check className="h-4 w-4" />
+                <span className="ml-2 hidden sm:inline">Compléter</span>
+              </Button>
+            </div>
+          )
         ) : (
           <div className="mt-5 grid grid-cols-[1fr_1fr_1.25fr] overflow-hidden rounded-lg border border-slate-700/60">
             <Button

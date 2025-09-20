@@ -202,7 +202,7 @@ export const SessionValidationModal = ({
                 (sessionQuest) => sessionQuest.quest?.status !== "COMPLETED",
               );
               return unvalidatedQuests.length === 0 ? (
-                <Button onClick={handleClose} className="bg-green-600 hover:bg-green-700 text-white cursor-pointer">
+                <Button onClick={handleClose} className="bg-green-600 hover:bg-green-700 text-white">
                   Fermer
                 </Button>
               ) : (
@@ -210,14 +210,14 @@ export const SessionValidationModal = ({
                   <Button
                     variant="outline"
                     onClick={handleClose}
-                    className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white bg-slate-700/50 cursor-pointer"
+                    className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white bg-slate-700/50"
                   >
                     Annuler
                   </Button>
                   <Button
                     onClick={handleValidateSession}
                     disabled={validationLoading || validatedQuests.length === 0}
-                    className="bg-green-600 hover:bg-green-700 text-white disabled:bg-slate-600 disabled:cursor-not-allowed cursor-pointer"
+                    className="bg-green-600 hover:bg-green-700 text-white disabled:bg-slate-600 disabled:cursor-not-allowed"
                   >
                     {validationLoading ? (
                       "Validation..."
@@ -236,14 +236,14 @@ export const SessionValidationModal = ({
               <Button
                 variant="outline"
                 onClick={handleClose}
-                className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white bg-slate-700/50 cursor-pointer"
+                className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white bg-slate-700/50"
               >
                 Annuler
               </Button>
               <Button
                 onClick={handleValidateSession}
                 disabled={validationLoading || validatedQuests.length === 0}
-                className="bg-blue-600 hover:bg-blue-700 text-white disabled:bg-slate-600 disabled:cursor-not-allowed cursor-pointer"
+                className="bg-blue-600 hover:bg-blue-700 text-white disabled:bg-slate-600 disabled:cursor-not-allowed"
               >
                 {validationLoading ? (
                   "Validation..."

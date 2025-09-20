@@ -42,4 +42,5 @@ export type SessionFilterValue = {
   questTitle: string;
   date: string;
   includeValidated: boolean;
+  includeIncomplete: boolean;
 };

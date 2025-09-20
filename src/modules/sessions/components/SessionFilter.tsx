@@ -1,25 +1,34 @@
 import { Search, X, Calendar as CalendarIcon } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
+import { Switch } from "@/shared/components/ui/switch";
 import type { SessionFilterValue } from "../types/session-form.type";
 
 type SessionFilterProps = {
   value: SessionFilterValue;
   onChange: (next: SessionFilterValue) => void;
   onReset: () => void;
-  resultsCount: number;
   includeValidated: boolean;
   onToggleValidated: (include: boolean) => void;
+  includeIncomplete: boolean;
+  onToggleIncomplete: (include: boolean) => void;
 };
 
 export const SessionFilter = ({
   value,
   onChange,
   onReset,
-  resultsCount,
   includeValidated,
   onToggleValidated,
+  includeIncomplete,
+  onToggleIncomplete,
 }: SessionFilterProps) => {
-  const hasActiveFilters = !!(value.skillTitle || value.questTitle || value.date || includeValidated);
+  const hasActiveFilters = !!(
+    value.skillTitle ||
+    value.questTitle ||
+    value.date ||
+    includeValidated ||
+    includeIncomplete
+  );
 
   return (
     <div className="mt-2 rounded-2xl border border-slate-700/60 bg-slate-900/50 p-4">
@@ -83,37 +92,40 @@ export const SessionFilter = ({
         </div>
       </div>
 
-      {/* Toggle pour inclure les sessions validées */}
-      <div className="mt-4 flex items-center gap-4 p-4">
-        <button
-          type="button"
-          onClick={() => onToggleValidated(!includeValidated)}
-          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 cursor-pointer ${
-            includeValidated ? "bg-blue-600" : "bg-slate-600"
-          }`}
-        >
-          <span
-            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-              includeValidated ? "translate-x-6" : "translate-x-1"
-            }`}
-          />
-        </button>
+      {/* Toggles pour les sessions validées et incomplètes */}
+      <div className="mt-4 flex items-center justify-between gap-8 p-4">
+        <div className="flex items-center gap-8">
+          {/* Toggle sessions validées */}
+          <div className="flex items-center gap-4">
+            <Switch checked={includeValidated} onCheckedChange={onToggleValidated} />
 
-        <div>
-          <div className="text-sm font-medium text-slate-200">Inclure les sessions validées</div>
-          <div className="text-xs text-slate-400">Afficher également les sessions validées</div>
+            <div>
+              <div className="text-sm font-medium text-slate-200">Inclure les sessions validées</div>
+              <div className="text-xs text-slate-400">Afficher également les sessions validées</div>
+            </div>
+          </div>
+
+          {/* Toggle sessions incomplètes */}
+          <div className="flex items-center gap-4">
+            <Switch checked={includeIncomplete} onCheckedChange={onToggleIncomplete} disabled={!includeValidated} />
+
+            <div>
+              <div className={`text-sm font-medium ${!includeValidated ? "text-slate-400" : "text-slate-200"}`}>
+                Sessions validées à compléter
+              </div>
+              <div className="text-xs text-slate-400">
+                Sessions validées avec des quests non complétées
+                {!includeValidated && " - Pour activer, inclure les sessions validées"}
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div className="text-sm text-slate-400">
-          {resultsCount} résultat{resultsCount > 1 ? "s" : ""} au total.
-        </div>
-
+        {/* Bouton Réinitialiser aligné à droite */}
         {hasActiveFilters && (
           <Button
             onClick={onReset}
-            className="self-start sm:self-auto rounded-lg bg-slate-800/70 text-slate-200 hover:bg-slate-700 cursor-pointer"
+            className="rounded-lg bg-slate-800/70 text-slate-200 hover:bg-slate-700 cursor-pointer"
           >
             Réinitialiser les filtres
           </Button>

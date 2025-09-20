@@ -119,3 +119,15 @@ export const buildSessionQueryUrl = (baseUrl: string, params: SessionsQuery): st
   const queryParams = buildSessionQueryParams(params);
   return `${baseUrl}/sessions/filter?${queryParams.toString()}`;
 };
+
+export const isSessionFullyCompleted = (session: any): boolean => {
+  if (!session.quests || session.quests.length === 0) return false;
+  return session.quests.every((quest: any) => quest.quest?.status === "COMPLETED");
+};
+
+export const isSessionPartiallyCompleted = (session: any): boolean => {
+  if (!session.quests || session.quests.length === 0) return false;
+  const hasCompletedQuests = session.quests.some((quest: any) => quest.quest?.status === "COMPLETED");
+  const hasIncompleteQuests = session.quests.some((quest: any) => quest.quest?.status !== "COMPLETED");
+  return hasCompletedQuests && hasIncompleteQuests;
+};

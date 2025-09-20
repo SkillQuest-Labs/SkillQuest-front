@@ -10,12 +10,14 @@ import { useListSessions } from "@/shared/services/session/api-session";
 import { SessionFilter } from "./components/SessionFilter";
 import { Pagination } from "./components/SessionPagination";
 import type { SessionFilterValue } from "./types/session-form.type";
+import { isSessionFullyCompleted } from "./utils/session.utils";
 
 const SESSION_FILTER_INIT: SessionFilterValue = {
   skillTitle: "",
   questTitle: "",
   date: "",
   includeValidated: false,
+  includeIncomplete: false,
 };
 
 export const SessionsListing = () => {
@@ -27,8 +29,8 @@ export const SessionsListing = () => {
   const pageSize = 8;
 
   const {
-    sessions,
-    total,
+    sessions: allSessions,
+    total: allTotal,
     pageCount: totalPages,
     loading,
     limit: effectivePageSize,
@@ -43,7 +45,7 @@ export const SessionsListing = () => {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [filters.skillTitle, filters.questTitle, filters.date, filters.includeValidated]);
+  }, [filters.skillTitle, filters.questTitle, filters.date, filters.includeValidated, filters.includeIncomplete]);
 
   const handleFilterChange = (next: SessionFilterValue) => {
     setFilters(next);
@@ -56,9 +58,30 @@ export const SessionsListing = () => {
   };
 
   const handleToggleValidated = (include: boolean) => {
-    setFilters({ ...filters, includeValidated: include });
+    const newFilters = { ...filters, includeValidated: include };
+
+    // Si on désactive le premier toggle et que le deuxième est activé, on désactive le deuxième
+    if (!include && filters.includeIncomplete) {
+      newFilters.includeIncomplete = false;
+    }
+
+    setFilters(newFilters);
     setCurrentPage(1);
   };
+
+  const handleToggleIncomplete = (include: boolean) => {
+    setFilters({ ...filters, includeIncomplete: include });
+    setCurrentPage(1);
+  };
+
+  // Filtrer les sessions côté frontend selon le statut de complétion
+  const sessions = filters.includeIncomplete
+    ? allSessions.filter((session) => !isSessionFullyCompleted(session))
+    : allSessions;
+
+  const total = filters.includeIncomplete
+    ? allTotal - allSessions.filter((session) => isSessionFullyCompleted(session)).length
+    : allTotal;
 
   const computedTotalPages = totalPages || Math.max(1, Math.ceil((total || 0) / (effectivePageSize || pageSize)));
 
@@ -87,9 +110,10 @@ export const SessionsListing = () => {
         value={filters}
         onChange={handleFilterChange}
         onReset={handleResetFilters}
-        resultsCount={total}
         includeValidated={filters.includeValidated}
         onToggleValidated={handleToggleValidated}
+        includeIncomplete={filters.includeIncomplete}
+        onToggleIncomplete={handleToggleIncomplete}
       />
 
       <div className="mt-6">

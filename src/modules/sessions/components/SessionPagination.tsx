@@ -37,7 +37,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange, className = 
       <Button
         type="button"
         aria-label="Page précédente"
-        className={`pager__btn pager__btn--icon ${isPrevDisabled ? "is-disabled" : "cursor-pointer"}`}
+        className={`pager__btn pager__btn--icon ${isPrevDisabled ? "is-disabled" : ""}`}
         disabled={isPrevDisabled}
         onClick={() => !isPrevDisabled && onPageChange(currentPage - 1)}
       >
@@ -54,7 +54,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange, className = 
             key={pageItem}
             type="button"
             aria-current={pageItem === currentPage ? "page" : undefined}
-            className={`pager__btn cursor-pointer ${pageItem === currentPage ? "is-active" : ""}`}
+            className={`pager__btn ${pageItem === currentPage ? "is-active" : ""}`}
             onClick={() => onPageChange(pageItem as number)}
           >
             {pageItem}
@@ -65,7 +65,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange, className = 
       <Button
         type="button"
         aria-label="Page suivante"
-        className={`pager__btn pager__btn--icon ${isNextDisabled ? "is-disabled" : "cursor-pointer"}`}
+        className={`pager__btn pager__btn--icon ${isNextDisabled ? "is-disabled" : ""}`}
         disabled={isNextDisabled}
         onClick={() => !isNextDisabled && onPageChange(currentPage + 1)}
       >
