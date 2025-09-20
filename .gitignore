@@ -24,4 +24,5 @@ dist-ssr
 *.sw?
 .gitattributes
 .env
+.env.prod
 agent.md
