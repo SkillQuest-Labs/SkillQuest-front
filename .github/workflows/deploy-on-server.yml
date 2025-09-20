@@ -1,18 +1,15 @@
 name: Deploy to server
 
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
       - preprod
-#   pull_request:
-#     types: [opened, synchronize, reopened]
-#     branches:
-#       - preprod
-#       - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
