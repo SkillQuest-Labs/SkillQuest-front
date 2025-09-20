@@ -2,9 +2,12 @@ name: CI
 
 on:
   push:
-    branches: [develop]
+    branches: [develop, main, preprod]
   pull_request:
-    branches: [develop]
+    branches:
+      - develop
+      - main
+      - preprod
 
 env:
   NODE_VERSION: "20.x"
