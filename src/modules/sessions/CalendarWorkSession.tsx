@@ -41,6 +41,7 @@ export const CalendarWorkSession = () => {
   const calendarRef = useRef<FullCalendar | null>(null);
 
   const [workSessions, setWorkSessions] = useState<CalendarEvent[]>([]);
+  const [allSessions, setAllSessions] = useState<CalendarEvent[]>([]);
   const [currentView, setCurrentView] = useState<string>("dayGridMonth");
   const [headerTitle, setHeaderTitle] = useState<string>("");
   const [sessionForm, setSessionForm] = useState<SessionFormType>(INITIAL_SESSION_FORM);
@@ -48,6 +49,7 @@ export const CalendarWorkSession = () => {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [showCompletedSessions, setShowCompletedSessions] = useState<boolean>(true);
 
   const editingSessionId = editingIndex !== null ? workSessions[editingIndex]?.id : "";
 
@@ -61,9 +63,17 @@ export const CalendarWorkSession = () => {
     if (!sessions || !Array.isArray(sessions)) {
       return;
     }
-    const events = convertSessionsToEvents(sessions);
+
+    // Toujours garder toutes les sessions pour la vérification des conflits
+    const allEvents = convertSessionsToEvents(sessions);
+    setAllSessions(allEvents);
+
+    // Filtrer les sessions selon la préférence d'affichage
+    const filteredSessions = showCompletedSessions ? sessions : sessions.filter((session) => !session.isValidated);
+
+    const events = convertSessionsToEvents(filteredSessions);
     setWorkSessions(events);
-  }, [sessions]);
+  }, [sessions, showCompletedSessions]);
 
   useEffect(() => {
     const api = calendarRef.current?.getApi();
@@ -241,6 +251,8 @@ export const CalendarWorkSession = () => {
               setSessionForm(INITIAL_SESSION_FORM);
               setIsDialogOpen(true);
             }}
+            showCompletedSessions={showCompletedSessions}
+            setShowCompletedSessions={setShowCompletedSessions}
           />
 
           <div className="rounded-2xl border border-slate-700 overflow-hidden bg-slate-900/60">
@@ -284,7 +296,7 @@ export const CalendarWorkSession = () => {
           setFormSession={setSessionForm}
           onSave={handleSave}
           isEditing={editingIndex !== null}
-          sessionSlots={convertCalendarEventsToDialogSessions(workSessions, sessionForm.startDate, editingIndex)}
+          sessionSlots={convertCalendarEventsToDialogSessions(allSessions, sessionForm.startDate, editingIndex)}
           editingSessionId={editingSessionId}
           setIsDeleteDialogOpen={setIsDeleteDialogOpen}
           isDeleting={isDeleting}
