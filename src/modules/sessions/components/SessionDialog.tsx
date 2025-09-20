@@ -4,9 +4,9 @@ import { useGetSkills } from "@/shared/services/skill/api-skill";
 import type { SessionFormType } from "../types/session-form.type";
 import { SessionForm } from "./SessionForm";
 import { convertToMinutes, isTimeSlotConflict } from "../utils/session.utils";
-import { CircleAlert } from "lucide-react";
 import { SessionDialogActions } from "./SessionDialogActions";
 import { useUser } from "@clerk/clerk-react";
+import { CircleAlert } from "lucide-react";
 
 interface SessionDialogProps {
   open: boolean;
@@ -19,6 +19,7 @@ interface SessionDialogProps {
   editingSessionId?: string | null;
   setIsDeleteDialogOpen: (open: boolean) => void;
   isDeleting?: boolean;
+  isSessionValidated?: boolean;
 }
 
 export const SessionDialog = ({
@@ -32,6 +33,7 @@ export const SessionDialog = ({
   editingSessionId,
   setIsDeleteDialogOpen,
   isDeleting = false,
+  isSessionValidated = false,
 }: SessionDialogProps) => {
   const isFormValid =
     formSession.startDate &&
@@ -59,10 +61,22 @@ export const SessionDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-slate-900 text-white max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-slate-900 text-white max-h-[95vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{isEditing ? "Modifier la session" : "Nouvelle session"}</DialogTitle>
-          <DialogDescription>{isEditing ? "Modifiez votre session" : "Ajoutez une nouvelle session"}</DialogDescription>
+          <DialogTitle>
+            {isSessionValidated
+              ? "Détails de la session validée"
+              : isEditing
+                ? "Modifier la session"
+                : "Nouvelle session"}
+          </DialogTitle>
+          <DialogDescription>
+            {isSessionValidated
+              ? "Session validée et non modifiable. Vous pouvez encore valider les quêtes restantes depuis cette session dans le listing ou une nouvelle session."
+              : isEditing
+                ? "Modifiez votre session"
+                : "Ajoutez une nouvelle session"}
+          </DialogDescription>
         </DialogHeader>
 
         <SessionForm
@@ -72,6 +86,7 @@ export const SessionDialog = ({
           quests={quests ?? []}
           loadingSkills={loadingSkills}
           loadingQuests={loadingQuests}
+          disabled={isSessionValidated}
         />
 
         {hasTimeConflict && (
@@ -93,7 +108,8 @@ export const SessionDialog = ({
           isEditing={isEditing}
           editingSessionId={editingSessionId}
           isDeleting={isDeleting}
-          saveDisabled={!isFormValid || hasTimeConflict || hasSessionConflict}
+          saveDisabled={!isFormValid || hasTimeConflict || hasSessionConflict || isSessionValidated}
+          isSessionValidated={isSessionValidated}
         />
       </DialogContent>
     </Dialog>

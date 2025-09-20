@@ -72,11 +72,11 @@ export const SelectQuestField = ({ currentSession, setForm, quests, loading, dis
           type="button"
           onClick={() => setIsOpen(!isOpen)}
           disabled={disabled}
-          variant="outline"
           className="
-            w-full h-10 justify-between
-            bg-slate-800 text-white border-slate-600
-            hover:bg-slate-700 hover:text-slate-100
+            w-full justify-between px-3 py-2 h-auto text-left
+            bg-slate-800 border border-slate-600 rounded-md
+            hover:bg-slate-700 hover:border-slate-500
+            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
             disabled:bg-slate-700 disabled:text-slate-400
           "
         >
@@ -99,11 +99,13 @@ export const SelectQuestField = ({ currentSession, setForm, quests, loading, dis
                 type="button"
                 onClick={handleSelectAll}
                 variant="ghost"
-                className="
-                  w-full justify-start px-2 py-1 h-auto
-                  hover:bg-slate-700 hover:text-sky-200 text-sm
-                  text-sky-400 font-medium
-                "
+                disabled={disabled}
+                className={`
+                  w-full justify-start px-2 py-1 h-auto text-sm font-medium
+                  ${
+                    disabled ? "text-gray-500 cursor-not-allowed" : "hover:bg-slate-700 hover:text-sky-200 text-sky-400"
+                  }
+                `}
               >
                 {questCount === quests.length ? "Tout désélectionner" : "Tout sélectionner"}
               </Button>
@@ -127,6 +129,7 @@ export const SelectQuestField = ({ currentSession, setForm, quests, loading, dis
                     <Checkbox
                       checked={isSelected}
                       onCheckedChange={() => handleQuestToggle(quest.questId, quest.title)}
+                      disabled={disabled}
                       className="mr-3 data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500"
                     />
                     <span className="text-sm text-white truncate">{quest.title}</span>
@@ -146,20 +149,24 @@ export const SelectQuestField = ({ currentSession, setForm, quests, loading, dis
               <span
                 key={quest.id}
                 className="
-                  inline-flex items-center px-2 py-1 rounded-full
-                  bg-sky-500/20 text-sky-300 text-xs
-                  border border-sky-500/30
+                  inline-flex items-center gap-1 px-2 py-1
+                  bg-blue-500/20 text-blue-300 text-xs rounded
+                  border border-blue-400/40
                 "
               >
                 {quest.title}
                 <Button
                   type="button"
-                  onClick={() => handleQuestToggle(quest.id, quest.title)}
-                  variant="ghost"
-                  size="sm"
-                  className="ml-1 h-auto p-1 text-sky-400 hover:text-red-400"
+                  onClick={() => !disabled && handleQuestToggle(quest.id, quest.title)}
+                  disabled={disabled}
+                  className="
+                    h-4 w-4 p-0 ml-1
+                    bg-transparent
+                    hover:bg-red-500/20
+                    text-red-400 hover:text-red-300
+                  "
                 >
-                  <X className="w-3 h-3" />
+                  <X className="h-3 w-3" />
                 </Button>
               </span>
             ))}

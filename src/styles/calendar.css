@@ -39,6 +39,7 @@
 
 .fc-dayGridMonth-view .fc-daygrid-event:hover {
   filter: brightness(1.05);
+  cursor: pointer;
 }
 
 .fc-dayGridMonth-view .fc-daygrid-day-events .fc-daygrid-event-harness {
@@ -85,7 +86,10 @@
   font-weight: 600;
   color: #ffffff;
 }
-.fc .fc-timegrid-event:hover { filter: brightness(1.05); }
+.fc .fc-timegrid-event:hover { 
+  filter: brightness(1.05);
+  cursor: pointer;
+}
 
 .fc-timeGridWeek-view .fc-day-today .fc-timegrid-col-frame { background: transparent; }
 .fc-timeGridWeek-view .fc-day-today .fc-timegrid-col-bg {
@@ -109,3 +113,19 @@
 }
 
 .fc-timeGridDay-view { --fc-today-bg-color: transparent; }
+
+/* Styles pour les sessions validées */
+.validated-session {
+  opacity: 0.6 !important;
+  text-decoration: line-through !important;
+  background-color: rgba(16, 185, 129, 0.2) !important;
+  border-color: #10b981 !important;
+}
+
+.validated-session .fc-event-title {
+  text-decoration: line-through !important;
+}
+
+.validated-session .fc-event-time {
+  text-decoration: line-through !important;
+}
