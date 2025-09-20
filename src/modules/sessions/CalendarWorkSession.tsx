@@ -41,6 +41,7 @@ export const CalendarWorkSession = () => {
   const calendarRef = useRef<FullCalendar | null>(null);
 
   const [workSessions, setWorkSessions] = useState<CalendarEvent[]>([]);
+  const [allSessions, setAllSessions] = useState<CalendarEvent[]>([]);
   const [currentView, setCurrentView] = useState<string>("dayGridMonth");
   const [headerTitle, setHeaderTitle] = useState<string>("");
   const [sessionForm, setSessionForm] = useState<SessionFormType>(INITIAL_SESSION_FORM);
@@ -48,10 +49,11 @@ export const CalendarWorkSession = () => {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [showCompletedSessions, setShowCompletedSessions] = useState<boolean>(true);
 
   const editingSessionId = editingIndex !== null ? workSessions[editingIndex]?.id : "";
 
-  const { sessions } = useGetSessions(userId || "");
+  const { sessions } = useGetSessions(userId || "", true);
   const { updateSession } = useUpdateSession(editingSessionId);
   const { deleteSession } = useDeleteSession(editingSessionId || "");
 
@@ -61,9 +63,17 @@ export const CalendarWorkSession = () => {
     if (!sessions || !Array.isArray(sessions)) {
       return;
     }
-    const events = convertSessionsToEvents(sessions);
+
+    // Toujours garder toutes les sessions pour la vérification des conflits
+    const allEvents = convertSessionsToEvents(sessions);
+    setAllSessions(allEvents);
+
+    // Filtrer les sessions selon la préférence d'affichage
+    const filteredSessions = showCompletedSessions ? sessions : sessions.filter((session) => !session.isValidated);
+
+    const events = convertSessionsToEvents(filteredSessions);
     setWorkSessions(events);
-  }, [sessions]);
+  }, [sessions, showCompletedSessions]);
 
   useEffect(() => {
     const api = calendarRef.current?.getApi();
@@ -120,10 +130,10 @@ export const CalendarWorkSession = () => {
       if (index < 0) return;
 
       const selected = workSessions[index];
+
       setEditingIndex(index);
       setSessionForm({
         title: selected.title ?? "",
-        description: selected.description ?? "",
         startDate: selected.start?.slice(0, 10) ?? "",
         startTime: selected.start?.slice(11, 16) ?? "",
         endTime: selected.end?.slice(11, 16) ?? "",
@@ -224,7 +234,7 @@ export const CalendarWorkSession = () => {
           </h1>
           <Button
             onClick={() => navigate(routes.sessionsListing.path)}
-            className="px-3 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-500 text-sm"
+            className="px-3 py-1.5 rounded-lg bg-blue-600 text-white hover:bg-blue-500 text-sm cursor-pointer"
           >
             Afficher toutes vos sessions
           </Button>
@@ -241,6 +251,8 @@ export const CalendarWorkSession = () => {
               setSessionForm(INITIAL_SESSION_FORM);
               setIsDialogOpen(true);
             }}
+            showCompletedSessions={showCompletedSessions}
+            setShowCompletedSessions={setShowCompletedSessions}
           />
 
           <div className="rounded-2xl border border-slate-700 overflow-hidden bg-slate-900/60">
@@ -284,10 +296,11 @@ export const CalendarWorkSession = () => {
           setFormSession={setSessionForm}
           onSave={handleSave}
           isEditing={editingIndex !== null}
-          sessionSlots={convertCalendarEventsToDialogSessions(workSessions, sessionForm.startDate, editingIndex)}
+          sessionSlots={convertCalendarEventsToDialogSessions(allSessions, sessionForm.startDate, editingIndex)}
           editingSessionId={editingSessionId}
           setIsDeleteDialogOpen={setIsDeleteDialogOpen}
           isDeleting={isDeleting}
+          isSessionValidated={editingIndex !== null ? workSessions[editingIndex]?.extendedProps?.isValidated : false}
         />
 
         <ConfirmDeleteDialogue

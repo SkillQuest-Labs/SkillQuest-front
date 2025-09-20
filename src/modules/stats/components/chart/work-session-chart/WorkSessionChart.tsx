@@ -26,10 +26,10 @@ const formatDuration = (minutes: number): string => {
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-slate-800/95 backdrop-blur-sm border border-cyan-400/30 rounded-lg p-3 shadow-xl">
-        <p className="text-cyan-300 font-medium">{`Date: ${label}`}</p>
-        <p className="text-blue-300">{`Sessions: ${payload[0].value}`}</p>
-        <p className="text-violet-300">{`Durée: ${formatDuration(payload[0].payload.duration)}`}</p>
+      <div className="bg-slate-800/95 backdrop-blur-sm border border-orange-400/30 rounded-lg p-3 shadow-xl">
+        <p className="text-orange-300 font-medium">{`Date: ${label}`}</p>
+        <p className="text-yellow-300">{`Sessions: ${payload[0].value}`}</p>
+        <p className="text-red-300">{`Durée: ${formatDuration(payload[0].payload.duration)}`}</p>
       </div>
     );
   }
@@ -116,11 +116,9 @@ const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) =
   if (isPending) {
     return (
       <div
-        className={`bg-gradient-to-br from-slate-900/50 to-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-6 shadow-2xl ${className}`}
+        className={`bg-gradient-to-br from-slate-900/50 to-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4 shadow-2xl h-full flex items-center justify-center ${className}`}
       >
-        <div className="flex items-center justify-center h-64">
-          <div className="text-slate-400">Chargement des données...</div>
-        </div>
+        <div className="text-slate-400">Chargement...</div>
       </div>
     );
   }
@@ -128,11 +126,9 @@ const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) =
   if (error) {
     return (
       <div
-        className={`bg-gradient-to-br from-slate-900/50 to-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-6 shadow-2xl ${className}`}
+        className={`bg-gradient-to-br from-slate-900/50 to-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4 shadow-2xl h-full flex items-center justify-center ${className}`}
       >
-        <div className="flex items-center justify-center h-64">
-          <div className="text-red-400">Erreur lors du chargement des données</div>
-        </div>
+        <div className="text-red-400">Erreur de chargement</div>
       </div>
     );
   }
@@ -140,75 +136,72 @@ const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) =
   if (!sessions || sessions.length === 0) {
     return (
       <div
-        className={`bg-gradient-to-br from-slate-900/50 to-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-6 shadow-2xl ${className}`}
+        className={`bg-gradient-to-br from-slate-900/50 to-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4 shadow-2xl h-full flex items-center justify-center ${className}`}
       >
-        <div className="flex items-center justify-center h-64">
-          <div className="text-slate-400">Aucune session trouvée</div>
-        </div>
+        <div className="text-slate-400">Aucune session</div>
       </div>
     );
   }
   return (
     <div
-      className={`rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-md border border-slate-700/50 shadow-2xl p-4 h-full flex flex-col ${className}`}
+      className={`rounded-2xl bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-md border border-slate-700/60 shadow-2xl p-6 h-full flex flex-col ${className}`}
     >
-      <div className="flex items-center justify-between mb-3 flex-shrink-0">
+      {/* En-tête amélioré */}
+      <div className="flex items-center justify-between mb-4 flex-shrink-0">
         <div>
-          <h2 className="text-xl font-bold bg-gradient-to-r from-blue-400 via-violet-400 to-cyan-400 bg-clip-text text-transparent mb-2">
-            📊 Sessions de Travail
+          <h2 className="text-xl font-bold bg-gradient-to-r from-orange-400 via-red-400 to-yellow-400 bg-clip-text text-transparent">
+            Sessions de Travail
           </h2>
-          <p className="text-slate-400 text-xs">Évolution de vos sessions de travail</p>
+          <p className="text-slate-400 text-sm">Évolution de votre progression</p>
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500"></div>
-            <span className="text-slate-300 text-xs">Sessions</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-gradient-to-r from-violet-400 to-purple-500"></div>
-            <span className="text-slate-300 text-xs">Durée (min)</span>
+            <div className="w-3 h-3 rounded-full bg-yellow-400 shadow-lg"></div>
+            <span className="text-slate-300 text-sm font-medium">Sessions</span>
           </div>
         </div>
       </div>
 
-      <div className="h-48 mb-4 flex-1 min-h-0">
+      {/* Graphique étendu */}
+      <div className="mb-4 flex-1 min-h-0">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+          <AreaChart data={chartData} margin={{ top: 10, right: 20, left: 10, bottom: 10 }}>
             <defs>
               <linearGradient id="sessionsGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.05} />
+                <stop offset="5%" stopColor="#eab308" stopOpacity={0.5} />
+                <stop offset="95%" stopColor="#eab308" stopOpacity={0.1} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#334155" strokeOpacity={0.3} />
-            <XAxis dataKey="date" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
-            <YAxis stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} allowDecimals={false} />
+            <XAxis dataKey="date" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
+            <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
             <Tooltip content={<CustomTooltip />} />
             <Area
               type="monotone"
               dataKey="sessions"
-              stroke="#06b6d4"
+              stroke="#eab308"
               strokeWidth={3}
               fill="url(#sessionsGradient)"
-              dot={{ fill: "#06b6d4", strokeWidth: 2, r: 4 }}
-              activeDot={{ r: 6, stroke: "#06b6d4", strokeWidth: 2, fill: "#0891b2" }}
+              dot={{ fill: "#eab308", strokeWidth: 2, r: 3 }}
+              activeDot={{ r: 5, stroke: "#eab308", strokeWidth: 2, fill: "#ca8a04" }}
             />
           </AreaChart>
         </ResponsiveContainer>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 flex-shrink-0">
-        <div className="text-center p-3 rounded-xl bg-gradient-to-br from-blue-500/20 to-violet-500/20 border border-blue-400/30">
-          <div className="text-xl font-bold text-blue-400 mb-1">{stats.totalSessions}</div>
-          <div className="text-xs text-slate-400">Sessions totales</div>
+      {/* Statistiques améliorées */}
+      <div className="flex justify-between items-center text-sm text-slate-400 flex-shrink-0 bg-slate-800/50 rounded-lg p-3">
+        <div className="flex items-center gap-1">
+          <span className="text-slate-500">Total:</span>
+          <span className="text-orange-400 font-bold text-base">{stats.totalSessions}</span>
         </div>
-        <div className="text-center p-3 rounded-xl bg-gradient-to-br from-violet-500/20 to-cyan-500/20 border border-violet-400/30">
-          <div className="text-xl font-bold text-violet-400 mb-1">{formatDuration(stats.averageDuration)}</div>
-          <div className="text-xs text-slate-400">Durée moyenne</div>
+        <div className="flex items-center gap-1">
+          <span className="text-slate-500">Moyenne:</span>
+          <span className="text-red-400 font-bold text-base">{formatDuration(stats.averageDuration)}</span>
         </div>
-        <div className="text-center p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-400/30">
-          <div className="text-xl font-bold text-cyan-400 mb-1">{stats.bestStreak}</div>
-          <div className="text-xs text-slate-400">Meilleure série</div>
+        <div className="flex items-center gap-1">
+          <span className="text-slate-500">Série:</span>
+          <span className="text-yellow-400 font-bold text-base">{stats.bestStreak}</span>
         </div>
       </div>
     </div>

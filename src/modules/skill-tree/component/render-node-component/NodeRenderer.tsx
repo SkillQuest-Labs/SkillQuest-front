@@ -12,6 +12,7 @@ type NodeRendererProps = {
   highlightedPathNodes: string[];
   handleNodeClick: (e: React.MouseEvent<Element, MouseEvent>, nodeId: string) => void;
   setHoveredNode: (value: React.SetStateAction<string | null>) => void;
+  totalQuestCount?: number;
 };
 export const NodeRenderer = ({
   node,
@@ -21,6 +22,7 @@ export const NodeRenderer = ({
   highlightedPathNodes,
   handleNodeClick,
   setHoveredNode,
+  totalQuestCount = 0,
 }: NodeRendererProps) => {
   const color = getNodeColor(node, activeNodePath, hoveredNode);
   const borderColor = getNodeBorderColor(node, activeNodePath, selectedNode);
@@ -34,6 +36,7 @@ export const NodeRenderer = ({
     isPathHighlighted,
     isActive,
     isSelected: selectedNode === node.id,
+    totalQuestCount,
   });
 
   const shapeStyle = nodeShapeStyle(node.shape);

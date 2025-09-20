@@ -23,9 +23,9 @@ export const Stats = () => {
         <div className="flex-shrink-0 mb-4">
           <div className="flex items-center gap-3">
             <div>
-              <h1 className="text-2xl lg:text-3xl font-bold text-white">Statistiques d'Expérience</h1>
+              <h1 className="text-2xl lg:text-3xl font-bold text-white">Statistiques</h1>
               <p className="text-gray-400 mt-1 text-sm lg:text-base">
-                Suivez votre progression et analysez vos performances
+                Mesurez votre progression et analysez vos performances
               </p>
             </div>
           </div>
@@ -34,7 +34,7 @@ export const Stats = () => {
         <div className="flex-1 flex flex-col lg:flex-row gap-4 min-h-0">
           <div className="flex-1 flex flex-col w-[80%] min-h-0">
             {/* Stats Cards sections */}
-            <div className="flex-shrink-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+            <div className="flex-shrink-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
               <StatsCard
                 title="XP Total"
                 value={totalXp}
@@ -72,7 +72,7 @@ export const Stats = () => {
               />
             </div>
 
-            <div className="flex-1 min-h-0">
+            <div className="flex-1 min-h-0 ">
               <StatsCharts defaultActiveTab="skill-experience" />
             </div>
           </div>

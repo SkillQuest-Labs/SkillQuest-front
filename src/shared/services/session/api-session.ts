@@ -35,10 +35,10 @@ export const useCreateSession = () => {
   };
 };
 
-export const useGetSessions = (userId: string) => {
+export const useGetSessions = (userId: string, getAllSessions: boolean = false) => {
   const options = {
     method: "GET",
-    url: `${Constants.API_BASE_URL}/sessions/user/${userId}`,
+    url: `${Constants.API_BASE_URL}/sessions/user/${userId}?getAllSessions=${getAllSessions}`,
     headers: {
       "Content-Type": "application/json; charset=UTF-8",
     },
@@ -97,7 +97,7 @@ export const useListSessions = (params: SessionsQuery) => {
     error,
   } = useApi<ListSessionsResponse>(
     { method: "GET", url, headers: { "Content-Type": "application/json; charset=UTF-8" } },
-    ["sessions"],
+    ["sessions", params],
   );
 
   return {

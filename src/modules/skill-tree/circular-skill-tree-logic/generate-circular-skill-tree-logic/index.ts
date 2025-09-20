@@ -5,15 +5,23 @@ import { buildDependencyGraph } from "../init/build-dependency-graph";
 import { computeNodeLevels } from "./compute-node-levels";
 import { findRootQuestIds } from "./find-root-quest-ids";
 import { generateCircularNodesData } from "./generate-circular-nodes-data";
+import { generateSpiralNodesData } from "./generate-spiral-nodes-data";
 
 type GenerateCircularNodesDataProps = {
   nodes: Node<QuestNodeData | SkillNodeData>[];
   edges: Edge[];
   centerX: number;
   centerY: number;
+  forceLayoutType?: "spiral" | "concentric";
 };
 
-export const generateCircularSkillTreeData = ({ nodes, edges, centerX, centerY }: GenerateCircularNodesDataProps) => {
+export const generateCircularSkillTreeData = ({
+  nodes,
+  edges,
+  centerX,
+  centerY,
+  forceLayoutType = "spiral",
+}: GenerateCircularNodesDataProps) => {
   const graph = buildDependencyGraph(nodes, edges);
   const rootQuestIds = findRootQuestIds(nodes, edges, graph);
 
@@ -59,10 +67,29 @@ export const generateCircularSkillTreeData = ({ nodes, edges, centerX, centerY }
 
   const { visitedLevels, maxLevel } = computeNodeLevels({ graph, rootQuestIds });
 
-  //  Radii for rings 0 to maxLevel
-  const ringRadii = Array.from({ length: maxLevel + 1 }, (_, i) => i * 100);
+  // Compter le nombre total de quêtes (exclure le nœud de compétence)
+  const questNodes = nodes.filter((node) => !isSkillNode(node));
+  const totalQuestCount = questNodes.length;
 
-  const circularSkillNodes = generateCircularNodesData({ nodes, visitedLevels, graph, ringRadii, centerX, centerY });
+  // Logique de sélection du layout basée sur la préférence utilisateur
+  let circularSkillNodes: any[];
+
+  if (forceLayoutType === "spiral") {
+    // Utiliser le layout en spirale
+    circularSkillNodes = generateSpiralNodesData({ nodes, visitedLevels, graph, centerX, centerY });
+  } else {
+    // Utiliser le layout en cercles concentriques
+    const ringRadii = Array.from({ length: maxLevel + 1 }, (_, i) => i * 100);
+    circularSkillNodes = generateCircularNodesData({
+      nodes,
+      visitedLevels,
+      graph,
+      ringRadii,
+      centerX,
+      centerY,
+      totalQuestCount,
+    });
+  }
 
   // Now that all nodes are in the graph with their prerequisites, determine if each node is locked
   const skillNodeId = skillNode?.id;

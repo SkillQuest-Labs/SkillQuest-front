@@ -1,4 +1,16 @@
+import { useMemo, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import type { Components } from "react-markdown";
 import clsx from "clsx";
+import { Button } from "@/shared/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/shared/components/ui/dialog";
 import type { CircularSkillNode } from "../skill-tree.type";
 
 type RenderNodeDetailsProps = {
@@ -6,71 +18,198 @@ type RenderNodeDetailsProps = {
   minimalistView?: boolean;
 };
 
-export const RenderNodeDetails = ({ selectedNodeData, minimalistView }: RenderNodeDetailsProps) => (
-  <div
-    key={selectedNodeData.id}
-    className={clsx(
-      "absolute bottom-6 right-8 z-50 bg-gradient-to-br from-black/90 via-blue-950/90 to-cyan-900/90 shadow-2xl backdrop-blur-lg rounded-xl p-5 border border-cyan-400/40 max-w-sm transition-all duration-300 ease-out scale-100 opacity-100 animate-fade-in",
-      !minimalistView && "bottom-16",
-    )}
-  >
-    <div className="text-white">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-12 h-12 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center text-2xl shadow-lg border-2 border-cyan-300/40 animate-pop">
-          {selectedNodeData.icon || "⚡"}
-        </div>
-        <div>
-          <h3 className="font-extrabold text-xm bg-gradient-to-r from-cyan-300 via-blue-400 to-cyan-400 bg-clip-text text-transparent drop-shadow-md">
-            {selectedNodeData.title}
-          </h3>
-          <p className="text-xs text-cyan-300 uppercase tracking-widest font-semibold mt-1">
-            {selectedNodeData.nodeType} • Ring {selectedNodeData.ring}
-          </p>
-        </div>
-      </div>
+type MetaEntry = {
+  label: string;
+  value: string;
+};
 
-      <p className="text-sm text-cyan-100 mb-4 leading-relaxed font-medium border-l-4 border-cyan-400/40 pl-3 bg-cyan-900/20">
-        {selectedNodeData.description}
-      </p>
+const formatLabel = (value?: string | null) => {
+  if (!value) return undefined;
+  return value
+    .replace(/_/g, " ")
+    .toLowerCase()
+    .replace(/(^|\s)\w/g, (match) => match.toUpperCase());
+};
 
-      <div className="grid grid-cols-2 gap-3 mb-2 text-xs">
-        <div className="bg-gradient-to-br from-blue-900/60 to-cyan-900/60 rounded-md p-2 border border-cyan-400/20 shadow-inner">
-          <div className="text-cyan-300 font-semibold mb-1">Status</div>
-          <div
-            className={`font-bold text-base ${
-              selectedNodeData.status === "COMPLETED"
-                ? "text-green-400"
-                : selectedNodeData.isLocked
-                  ? "text-red-400"
-                  : "text-yellow-300"
-            }`}
-          >
-            {selectedNodeData.isLocked ? "Locked" : selectedNodeData.status.replace("-", " ")}
+const markdownComponents: Components = {
+  a: ({ href, children }) => (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-blue-400 hover:text-blue-300 underline transition-colors"
+    >
+      {children}
+    </a>
+  ),
+  p: ({ children }) => <p className="mb-4 text-base leading-relaxed text-slate-200 last:mb-0">{children}</p>,
+  h2: ({ children }) => <h2 className="mb-3 mt-6 text-xl font-semibold text-slate-100 first:mt-0">{children}</h2>,
+  h3: ({ children }) => <h3 className="mb-2 mt-5 text-lg font-semibold text-slate-100 first:mt-0">{children}</h3>,
+  ul: ({ children }) => <ul className="mb-4 list-disc space-y-1 pl-5 text-slate-200">{children}</ul>,
+  ol: ({ children }) => <ol className="mb-4 list-decimal space-y-1 pl-5 text-slate-200">{children}</ol>,
+  li: ({ children }) => <li className="text-slate-200">{children}</li>,
+  blockquote: ({ children }) => (
+    <blockquote className="mb-4 border-l-4 border-slate-700 pl-4 italic text-slate-300">{children}</blockquote>
+  ),
+  code: ({ children }) => <code className="rounded bg-slate-800 px-1.5 py-0.5 text-sm text-slate-100">{children}</code>,
+};
+
+export const RenderNodeDetails = ({ selectedNodeData, minimalistView }: RenderNodeDetailsProps) => {
+  const questDetails = selectedNodeData.questDetails;
+  const statusLabel = selectedNodeData.isLocked
+    ? "Verrouillé"
+    : (formatLabel(String(selectedNodeData.status)) ?? "Inconnu");
+
+  const badges = [
+    questDetails?.number ? `Quête ${questDetails.number}` : null,
+    questDetails?.type ? formatLabel(questDetails.type) : null,
+  ].filter(Boolean) as string[];
+
+  const meta: MetaEntry[] = [
+    { label: "Statut", value: statusLabel },
+    // { label: "Type", value: formatLabel(selectedNodeData.nodeType) ?? "Standard" },
+    { label: "Anneau", value: `Niveau ${selectedNodeData.ring}` },
+    {
+      label: "Pré-requis",
+      value: selectedNodeData.prerequisites.length ? `${selectedNodeData.prerequisites.length}` : "Aucun",
+    },
+  ];
+
+  if (selectedNodeData.connections.length) {
+    meta.push({ label: "Connexions", value: `${selectedNodeData.connections.length}` });
+  }
+
+  if (questDetails?.isStarting) {
+    meta.push({ label: "Point de départ", value: "Oui" });
+  }
+
+  const [isQuestModalOpen, setIsQuestModalOpen] = useState(false);
+
+  const description = selectedNodeData.description?.trim();
+
+  const preview = useMemo(() => {
+    if (!description) {
+      return "";
+    }
+
+    const normalized = description.replace(/\s+/g, " ").trim();
+    if (normalized.length <= 220) {
+      return normalized;
+    }
+
+    return `${normalized.slice(0, 200).trimEnd()}…`;
+  }, [description]);
+
+  return (
+    <>
+      <aside
+        key={selectedNodeData.id}
+        className={clsx(
+          "absolute inset-x-4 bottom-4 z-50 w-auto max-w-md rounded-2xl border border-slate-800/70 bg-slate-950/90 px-6 py-5 text-slate-50 shadow-[0_25px_70px_-20px_rgba(2,6,23,0.9)] backdrop-blur-xl transition-all duration-300 animate-in fade-in-0 slide-in-from-right-4 sm:inset-auto sm:right-6 sm:w-80 md:right-10",
+          !minimalistView && "md:bottom-24",
+        )}
+      >
+        <div className="flex items-start gap-4">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-slate-800 bg-slate-900 text-2xl">
+            {selectedNodeData.icon || "🧭"}
+          </div>
+          <div className="flex-1">
+            <h3 className="text-lg font-semibold text-slate-100">{selectedNodeData.title}</h3>
+            <div className="mt-2 flex flex-wrap gap-2 text-xs text-slate-400">
+              {badges.length ? (
+                badges.map((badge) => (
+                  <span
+                    key={badge}
+                    className="rounded-full border border-slate-700/80 bg-slate-900/70 px-2.5 py-1 font-medium"
+                  >
+                    {badge}
+                  </span>
+                ))
+              ) : (
+                <span className="rounded-full border border-slate-800/60 bg-slate-900/70 px-2.5 py-1 font-medium">
+                  {formatLabel(selectedNodeData.nodeType) ?? "Nœud"}
+                </span>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div className="absolute -inset-1 rounded-xl pointer-events-none border-2 border-cyan-400/20 blur-lg opacity-60 animate-glow" />
-    <style>
-      {`
-        @keyframes fade-in {
-          from { opacity: 0; transform: translateY(-12px) scale(0.97);}
-          to { opacity: 1; transform: translateY(0) scale(1);}
-        }
-        .animate-fade-in { animation: fade-in 0.7s cubic-bezier(.4,0,.2,1) both; }
-        @keyframes pop {
-          0% { transform: scale(0.85);}
-          80% { transform: scale(1.06);}
-          100% { transform: scale(1);}
-        }
-        .animate-pop { animation: pop 0.5s cubic-bezier(.4,0,.2,1) both;}
-        @keyframes glow {
-          0%,100% { box-shadow: 0 0 18px 6px #22d3ee44, 0 0 0 0 #3b82f644;}
-          50% { box-shadow: 0 0 36px 12px #22d3ee88, 0 0 0 0 #3b82f688;}
-        }
-        .animate-glow { animation: glow 2.5s ease-in-out infinite;}
-      `}
-    </style>
-  </div>
-);
+        <div className="mt-5 rounded-xl border border-slate-800/60 bg-slate-900/60 p-4">
+          {description ? (
+            <>
+              <p className="text-sm leading-relaxed text-slate-300">{preview}</p>
+              <div className="mt-4 flex justify-end">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => setIsQuestModalOpen(true)}
+                  className="cursor-pointer rounded-full border border-slate-700 bg-slate-800/60 px-4 py-2 text-xs font-semibold uppercase tracking-wide text-slate-200 transition hover:text-white hover:border-slate-600 hover:bg-slate-800"
+                >
+                  Voir les détails de la quête
+                </Button>
+              </div>
+            </>
+          ) : (
+            <p className="text-sm leading-relaxed text-slate-400">
+              Aucune description disponible pour ce nœud pour le moment.
+            </p>
+          )}
+        </div>
+
+        <div className="mt-5 grid grid-cols-2 gap-3 text-sm text-slate-200">
+          {meta.map((item) => (
+            <div
+              key={`${item.label}-${item.value}`}
+              className="rounded-lg border border-slate-800/60 bg-slate-900/60 p-3"
+            >
+              <span className="block text-xs font-medium uppercase tracking-wide text-slate-500">{item.label}</span>
+              <span className="mt-1 block text-sm font-semibold text-slate-100">{item.value}</span>
+            </div>
+          ))}
+        </div>
+      </aside>
+
+      {description && (
+        <Dialog open={isQuestModalOpen} onOpenChange={setIsQuestModalOpen}>
+          <DialogContent className="max-w-3xl border-slate-800/70 bg-slate-950/95 text-slate-100">
+            <DialogHeader className="text-left">
+              <DialogTitle className="text-2xl font-semibold text-slate-100">{selectedNodeData.title}</DialogTitle>
+              <DialogDescription className="text-slate-400">Détails complets de la quête</DialogDescription>
+            </DialogHeader>
+
+            <div className="mt-4 flex flex-wrap gap-2 text-xs text-slate-400">
+              {badges.map((badge) => (
+                <span
+                  key={`modal-${badge}`}
+                  className="rounded-full border border-slate-700/80 bg-slate-900/70 px-3 py-1 font-medium"
+                >
+                  {badge}
+                </span>
+              ))}
+              {questDetails?.isStarting && !badges.includes("Point de départ") && (
+                <span className="rounded-full border border-emerald-700/60 bg-emerald-900/40 px-3 py-1 font-medium text-emerald-200">
+                  Point de départ
+                </span>
+              )}
+            </div>
+
+            <div className="mt-6 max-h-[60vh] overflow-y-auto rounded-2xl border border-slate-800/60 bg-slate-900/60 p-6">
+              <ReactMarkdown components={markdownComponents}>{description}</ReactMarkdown>
+            </div>
+
+            <DialogFooter className="mt-6 justify-end">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setIsQuestModalOpen(false)}
+                className="cursor-pointer rounded-full border border-slate-700 bg-slate-800/60 px-5 py-2 text-sm font-semibold uppercase tracking-wide text-slate-200 transition hover:border-slate-600 hover:bg-slate-800"
+              >
+                Fermer
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+    </>
+  );
+};

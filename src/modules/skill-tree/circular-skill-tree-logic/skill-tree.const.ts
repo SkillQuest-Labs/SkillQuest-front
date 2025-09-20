@@ -16,7 +16,11 @@ export const sortQuestNodesByLevel = ({ nodes, visitedLevels }: SortNodesPerLeve
   return nodes.filter(isQuestNode).sort((a, b) => {
     const levelA = visitedLevels[a.id] || 1;
     const levelB = visitedLevels[b.id] || 1;
-    return levelA - levelB;
+    if (levelA !== levelB) {
+      return levelA - levelB;
+    }
+
+    return a.id.localeCompare(b.id);
   });
 };
 

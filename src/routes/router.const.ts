@@ -13,6 +13,7 @@ export interface IRoutes {
   workSession: IRoute;
   stats: IRoute;
   sessionsListing: IRoute;
+  dojo: IRoute;
   notfound: IRoute;
   signIn: IRoute;
   signUp: IRoute;
@@ -63,6 +64,10 @@ export const routes: IRoutes = {
   sessionsListing: {
     path: "/dashboard/listing-sessions",
     display: "Listing Sessions",
+  },
+  dojo: {
+    path: "/dashboard/dojo",
+    display: "Dojo",
   },
   notfound: {
     path: "*",

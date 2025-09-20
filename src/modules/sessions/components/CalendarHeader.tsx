@@ -1,7 +1,9 @@
-import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, CheckCircle } from "lucide-react";
 import type { CalendarApi } from "@fullcalendar/core";
 import { useCallback } from "react";
 import { Button } from "@/shared/components/ui/button";
+import { Switch } from "@/shared/components/ui/switch";
+import { Label } from "@/shared/components/ui/label";
 
 type CalendarHeaderProps = {
   calendarApi: CalendarApi | null;
@@ -10,6 +12,8 @@ type CalendarHeaderProps = {
   setCurrentView: (view: string) => void;
   updateHeaderTitle: () => void;
   onAddSession: () => void;
+  showCompletedSessions: boolean;
+  setShowCompletedSessions: (show: boolean) => void;
 };
 
 export const CalendarHeader = ({
@@ -19,6 +23,8 @@ export const CalendarHeader = ({
   setCurrentView,
   updateHeaderTitle,
   onAddSession,
+  showCompletedSessions,
+  setShowCompletedSessions,
 }: CalendarHeaderProps) => {
   const handleViewChange = useCallback(
     (viewName: string) => {
@@ -50,7 +56,7 @@ export const CalendarHeader = ({
         <div className="flex items-center gap-2">
           <Button
             onClick={handleToday}
-            className="px-3 py-1.5 rounded-lg bg-slate-700 text-white hover:bg-slate-600 text-sm"
+            className="px-3 py-1.5 rounded-lg bg-slate-700 text-white hover:bg-slate-600 text-sm cursor-pointer"
           >
             Aujourd&apos;hui
           </Button>
@@ -58,14 +64,14 @@ export const CalendarHeader = ({
           <Button
             onClick={handlePrev}
             aria-label="Période précédente"
-            className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-100"
+            className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-100 cursor-pointer"
           >
             <ChevronLeft className="h-5 w-5" />
           </Button>
           <Button
             onClick={handleNext}
             aria-label="Période suivante"
-            className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-100"
+            className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-slate-100 cursor-pointer"
           >
             <ChevronRight className="h-5 w-5" />
           </Button>
@@ -74,11 +80,23 @@ export const CalendarHeader = ({
         </div>
 
         <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5">
+            <CheckCircle className="h-4 w-4 text-slate-300" />
+            <Label htmlFor="show-completed-sessions" className="text-slate-100 text-sm whitespace-nowrap">
+              Sessions terminées
+            </Label>
+            <Switch
+              id="show-completed-sessions"
+              checked={showCompletedSessions}
+              onCheckedChange={setShowCompletedSessions}
+            />
+          </div>
+
           <select
             aria-label="Changer la vue du calendrier"
             value={currentView}
             onChange={(e) => handleViewChange(e.target.value)}
-            className="bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500"
+            className="bg-slate-800 border border-slate-700 text-slate-100 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-slate-500 cursor-pointer"
           >
             <option value="timeGridDay">Jour</option>
             <option value="timeGridWeek">Semaine</option>
@@ -87,7 +105,7 @@ export const CalendarHeader = ({
 
           <Button
             onClick={onAddSession}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white text-black hover:bg-gray-200 text-sm"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white text-black hover:bg-gray-200 text-sm cursor-pointer"
           >
             <Plus className="h-4 w-4 text-black" />
             <span className="hidden sm:inline">Nouvelle session</span>
