@@ -126,7 +126,7 @@ export const SessionsListing = () => {
             {sessions.map((session) => (
               <div
                 key={session.id}
-                className="session-card h-full rounded-2xl border border-slate-700 bg-slate-900/60 p-5 transition-all cursor-pointer"
+                className="session-card h-full rounded-2xl border border-slate-700 bg-slate-900/60 p-5 transition-all"
               >
                 <SessionCard session={session} />
               </div>

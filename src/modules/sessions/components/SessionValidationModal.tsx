@@ -154,36 +154,88 @@ export const SessionValidationModal = ({
                   })()}
                 </div>
               ) : (
-                <div className="space-y-2 max-h-60 overflow-y-auto">
-                  {session.quests.map((sessionQuest) => {
-                    const isQuestValidated = validatedQuests.includes(sessionQuest.id);
-                    return (
-                      <div
-                        key={sessionQuest.id}
-                        className={`flex items-center space-x-3 p-3 rounded-lg border transition-colors ${
-                          isQuestValidated
-                            ? "bg-green-900/20 border-green-600/50"
-                            : "bg-slate-700/30 border-slate-600/50"
-                        }`}
-                      >
-                        <Checkbox
-                          id={sessionQuest.id}
-                          checked={isQuestValidated}
-                          onCheckedChange={() => handleQuestToggle(sessionQuest.id)}
-                          className="data-[state=checked]:bg-green-600 data-[state=checked]:border-green-600"
-                        />
-                        <label
-                          htmlFor={sessionQuest.id}
-                          className={`flex-1 text-sm cursor-pointer transition-colors ${
-                            isQuestValidated ? "text-green-100" : "text-slate-200"
-                          }`}
-                        >
-                          {sessionQuest.quest?.title || sessionQuest.title}
-                        </label>
-                        {isQuestValidated && <Check className="h-4 w-4 text-green-400" />}
-                      </div>
+                <div className="space-y-2">
+                  {(() => {
+                    const completedQuests = session.quests.filter(
+                      (sessionQuest) => sessionQuest.quest?.status === "COMPLETED",
                     );
-                  })}
+                    const unvalidatedQuests = session.quests.filter(
+                      (sessionQuest) => sessionQuest.quest?.status !== "COMPLETED",
+                    );
+
+                    return (
+                      <>
+                        {completedQuests.length > 0 && (
+                          <div className="space-y-2">
+                            <div className="text-sm font-medium text-green-300 bg-green-900/20 px-3 py-2 rounded-lg">
+                              Quêtes validées ({completedQuests.length})
+                            </div>
+                            <div className="space-y-2 max-h-40 overflow-y-auto">
+                              {completedQuests.map((sessionQuest) => (
+                                <div
+                                  key={`validated-${sessionQuest.id}`}
+                                  className="flex items-center space-x-3 p-3 rounded-lg border bg-slate-800/50 border-slate-600/50"
+                                >
+                                  <Checkbox
+                                    id={`validated-${sessionQuest.id}`}
+                                    checked={true}
+                                    disabled={true}
+                                    className="data-[state=checked]:bg-green-600 data-[state=checked]:border-green-600"
+                                  />
+                                  <label
+                                    htmlFor={`validated-${sessionQuest.id}`}
+                                    className="flex-1 text-sm text-green-300 line-through cursor-not-allowed"
+                                  >
+                                    {sessionQuest.quest?.title || sessionQuest.title}
+                                  </label>
+                                  <Check className="h-4 w-4 text-green-400" />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {unvalidatedQuests.length > 0 && (
+                          <div className="space-y-2">
+                            <div className="text-sm font-medium text-slate-300 bg-slate-700/50 px-3 py-2 rounded-lg">
+                              Quêtes à valider ({unvalidatedQuests.length})
+                            </div>
+                            <div className="space-y-2 max-h-40 overflow-y-auto">
+                              {unvalidatedQuests.map((sessionQuest) => {
+                                const isQuestSelected = validatedQuests.includes(sessionQuest.id);
+                                return (
+                                  <div
+                                    key={`unvalidated-${sessionQuest.id}`}
+                                    className={`flex items-center space-x-3 p-3 rounded-lg border transition-colors ${
+                                      isQuestSelected
+                                        ? "bg-green-900/20 border-green-600/50"
+                                        : "bg-slate-700/30 border-slate-600/50"
+                                    }`}
+                                  >
+                                    <Checkbox
+                                      id={`unvalidated-${sessionQuest.id}`}
+                                      checked={isQuestSelected}
+                                      onCheckedChange={() => handleQuestToggle(sessionQuest.id)}
+                                      className="data-[state=checked]:bg-green-600 data-[state=checked]:border-green-600"
+                                    />
+                                    <label
+                                      htmlFor={`unvalidated-${sessionQuest.id}`}
+                                      className={`flex-1 text-sm cursor-pointer transition-colors ${
+                                        isQuestSelected ? "text-green-100" : "text-slate-200"
+                                      }`}
+                                    >
+                                      {sessionQuest.quest?.title || sessionQuest.title}
+                                    </label>
+                                    {isQuestSelected && <Check className="h-4 w-4 text-green-400" />}
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    );
+                  })()}
                 </div>
               )}
             </div>

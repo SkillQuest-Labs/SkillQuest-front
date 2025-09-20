@@ -61,7 +61,7 @@ export const SessionDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-slate-900 text-white max-h-[90vh] overflow-y-auto">
+      <DialogContent className="bg-slate-900 text-white max-h-[95vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             {isSessionValidated
