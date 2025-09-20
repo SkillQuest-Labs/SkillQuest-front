@@ -72,3 +72,57 @@ export const getDifficultyLabel = (difficulty: FilterSkillDifficulty) => {
   if (difficulty === "ALL") return difficulty;
   return difficultyDetailLabels[difficulty as keyof typeof difficultyDetailLabels] || difficulty;
 };
+
+// Fonction pour obtenir une image par défaut aléatoire
+export const getRandomDefaultImage = (skillId?: string): string => {
+  if (!skillId) return DEFAULT_IMAGES[0];
+
+  // Utiliser l'ID du skill pour générer un index déterministe
+  const hash = skillId.split("").reduce((a, b) => {
+    a = (a << 5) - a + b.charCodeAt(0);
+    return a & a;
+  }, 0);
+
+  const index = Math.abs(hash) % DEFAULT_IMAGES.length;
+  return DEFAULT_IMAGES[index];
+};
+
+// Import des images par défaut
+import forestImage from "../../assets/skills/forest.webp";
+import forest2Image from "../../assets/skills/forest2.png";
+import forest3Image from "../../assets/skills/forest3.png";
+import forest4Image from "../../assets/skills/forest4.png";
+
+// Images par défaut disponibles
+export const DEFAULT_IMAGES = [forestImage, forest2Image, forest3Image, forest4Image] as const;
+
+// Constantes pour SkillCard
+export const SKILL_CARD_CONSTANTS = {
+  DEFAULT_IMAGE: forestImage, // Image par défaut principale
+  PROGRESS_BAR_HEIGHT: "h-2",
+  CARD_BORDER_RADIUS: "rounded-2xl",
+  BUTTON_HEIGHT: "h-full",
+  OVERLAY_GRADIENT: "from-slate-900/30 via-slate-900/50 to-slate-900/90",
+  PROGRESS_GRADIENT: "from-blue-400 via-sky-400 to-cyan-400",
+  BACKDROP_BLUR: "backdrop-blur-sm",
+  BORDER_OPACITY: "border-white/20",
+  TEXT_SHADOW: "drop-shadow-lg",
+  LINE_CLAMP: "line-clamp-2",
+} as const;
+
+// CSS classes for card actions
+export const SKILL_CARD_ACTIONS = {
+  CONTAINER: "mt-5 grid grid-cols-2 overflow-hidden rounded-lg border border-white/20 bg-black/40 backdrop-blur-sm",
+  EDIT_BUTTON:
+    "cursor-pointer btn-action btn-edit h-full w-full rounded-l-lg rounded-r-none bg-transparent text-white hover:text-white hover:bg-white/10 transition-colors",
+  DELETE_BUTTON:
+    "cursor-pointer btn-action btn-delete h-full w-full rounded-r-lg rounded-l-none bg-transparent text-white hover:text-white hover:bg-red-500/20 disabled:opacity-50 transition-colors",
+  LOADING_SPINNER: "w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin",
+} as const;
+
+// CSS classes for progress elements
+export const SKILL_CARD_PROGRESS = {
+  CONTAINER: "rounded-full bg-black/40 backdrop-blur-sm px-3 py-1 border border-white/20",
+  BAR_CONTAINER: "w-full h-2 bg-black/30 rounded-full overflow-hidden border border-white/10",
+  BAR_FILL: "h-full bg-gradient-to-r from-blue-400 via-sky-400 to-cyan-400 transition-all duration-700 ease-out",
+} as const;

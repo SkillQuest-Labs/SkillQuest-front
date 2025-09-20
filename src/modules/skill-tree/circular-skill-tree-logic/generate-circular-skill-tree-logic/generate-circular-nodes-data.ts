@@ -1,4 +1,4 @@
-import type { QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
+﻿import type { QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
 import { type Node } from "@xyflow/react";
 import type { CircularSkillNode } from "../../skill-tree.type";
 import { calculateNodePosition, countNodesPerLevel, sortQuestNodesByLevel } from "../skill-tree.const";
@@ -12,6 +12,20 @@ type GenerateCircularNodesDataProps = {
   ringRadii: number[];
   centerX: number;
   centerY: number;
+  totalQuestCount?: number;
+};
+
+const getDeterministicJitter = (seed: string, angleStep: number) => {
+  if (!angleStep) return 0;
+
+  let hash = 0;
+  for (let i = 0; i < seed.length; i += 1) {
+    hash = (hash << 5) - hash + seed.charCodeAt(i);
+    hash |= 0; // Convert to 32bit integer
+  }
+
+  const normalized = ((Math.sin(hash) + 1) / 2 - 0.5) * 0.5; // Range approx [-0.25, 0.25]
+  return normalized * angleStep;
 };
 
 export const generateCircularNodesData = ({
@@ -21,10 +35,15 @@ export const generateCircularNodesData = ({
   ringRadii,
   centerX,
   centerY,
+  totalQuestCount = 0,
 }: GenerateCircularNodesDataProps) => {
   const circularSkillNodes: CircularSkillNode[] = [];
   const nodesPerLevel = countNodesPerLevel({ nodes, visitedLevels });
   const sortedQuestNodes = sortQuestNodesByLevel({ nodes, visitedLevels });
+
+  // When the layout has an outer radius of ~600 and 6+ nodes,
+  // each concentric ring carries a single node – upscale them globally.
+  const boostAllRings = totalQuestCount >= 6 && ringRadii.some((radius) => radius >= 600);
 
   const placedNodesCount: Record<number, number> = {};
   Object.keys(nodesPerLevel).forEach((level) => {
@@ -40,9 +59,8 @@ export const generateCircularNodesData = ({
     const angleStep = (2 * Math.PI) / totalCountPerLevel;
     let finalAngle = currentCountPerLevel * angleStep;
 
-    // Add a slight random jitter to the angle to avoid perfect alignment
-    const jitter = (Math.random() - 0.5) * (angleStep / 2); // Jitter is half the angle step
-    finalAngle += jitter;
+    // Add a deterministic jitter per node to avoid perfect alignment while keeping positions stable
+    finalAngle += getDeterministicJitter(node.id, angleStep / 2);
 
     // Avoid angles that are multiples of 90 degrees (0, π/2, π, 3π/2)
     if (Math.abs(finalAngle % (Math.PI / 2)) < 0.1) {
@@ -59,12 +77,14 @@ export const generateCircularNodesData = ({
       status: node.data.status,
     });
 
+    const adjustedSize = nodeVisualsProperties.size + (boostAllRings ? 28 : 15);
+
     const circularNode: CircularSkillNode = {
       id: node.id,
       title: node.data.title,
-      description: "",
+      description: node.data.description || "",
       position: { x, y },
-      size: nodeVisualsProperties.size,
+      size: adjustedSize,
       shape: nodeVisualsProperties.shape,
       nodeType: nodeVisualsProperties.nodeType,
       status: node.data.status,
@@ -74,6 +94,11 @@ export const generateCircularNodesData = ({
       ring: level,
       angle: finalAngle,
       icon: nodeVisualsProperties.icon,
+      questDetails: {
+        type: node.data.questType,
+        number: node.data.questNumber,
+        isStarting: node.data.isStarting,
+      },
     };
 
     circularSkillNodes.push(circularNode);

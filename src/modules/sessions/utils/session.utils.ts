@@ -1,4 +1,4 @@
-import type { CreateSessionInput, Sessions } from "@/shared/services/session/api-session.type";
+import type { CreateSessionInput, Sessions, SessionsQuery } from "@/shared/services/session/api-session.type";
 import type { SessionFormType, CalendarEvent } from "../types/session-form.type";
 
 export const convertToMinutes = (time: string): number => {
@@ -30,7 +30,6 @@ export const buildSessionPayload = (sessionForm: SessionFormType, userId: string
     userId: userId,
     questIds: (sessionForm.linkedQuests || []).map((quest) => quest.id),
     title: sessionForm.title,
-    description: sessionForm.description,
     color: sessionForm.color,
     linkedSkillId: sessionForm.linkedSkill,
   };
@@ -77,7 +76,6 @@ export const convertSessionsToEvents = (sessions: Sessions): CalendarEvent[] => 
   return sessions.map((session) => ({
     id: session.id,
     title: session.title,
-    description: session.description ?? "",
     start: session.startTime,
     end: session.endTime,
     color: session.color ?? "#3B82F6",
@@ -93,4 +91,28 @@ export const convertSessionsToEvents = (sessions: Sessions): CalendarEvent[] => 
         : [],
     },
   }));
+};
+
+export const getDateToTime = (date: string) => {
+  const dateTime = new Date(date);
+  return `${String(dateTime.getUTCHours()).padStart(2, "0")}:${String(dateTime.getUTCMinutes()).padStart(2, "0")}`;
+};
+
+export const buildSessionQueryParams = (params: SessionsQuery): URLSearchParams => {
+  const { skill = "", quest = "", date = "", page = 1, limit = 20 } = params;
+
+  const search = new URLSearchParams();
+
+  if (skill) search.set("skill", skill);
+  if (quest) search.set("quest", quest);
+  if (date) search.set("date", date);
+  search.set("page", String(page));
+  search.set("limit", String(limit));
+
+  return search;
+};
+
+export const buildSessionQueryUrl = (baseUrl: string, params: SessionsQuery): string => {
+  const queryParams = buildSessionQueryParams(params);
+  return `${baseUrl}/sessions/filter?${queryParams.toString()}`;
 };

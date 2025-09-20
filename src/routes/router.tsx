@@ -15,6 +15,7 @@ import { AuthLayout } from "@/component/AuthLayout";
 import { UnauthorizedPage } from "@/pages/Unauthorized";
 import { WorkSession } from "@/pages/dashboard/WorkSession";
 import { Stats } from "@/pages/dashboard/Stats";
+import { SessionsListingPage } from "@/pages/dashboard/SessionsListingPage";
 
 export const router = createBrowserRouter([
   // Public routes for authentication
@@ -83,6 +84,10 @@ export const router = createBrowserRouter([
           {
             path: routes.stats.path,
             element: <Stats />,
+          },
+          {
+            path: routes.sessionsListing.path,
+            element: <SessionsListingPage />,
           },
         ],
       },

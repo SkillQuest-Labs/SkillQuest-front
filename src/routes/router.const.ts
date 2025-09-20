@@ -12,6 +12,7 @@ export interface IRoutes {
   canvas: IRoute;
   workSession: IRoute;
   stats: IRoute;
+  sessionsListing: IRoute;
   notfound: IRoute;
   signIn: IRoute;
   signUp: IRoute;
@@ -58,6 +59,10 @@ export const routes: IRoutes = {
   stats: {
     path: "/dashboard/stats",
     display: "Statistiques",
+  },
+  sessionsListing: {
+    path: "/dashboard/listing-sessions",
+    display: "Listing Sessions",
   },
   notfound: {
     path: "*",

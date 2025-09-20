@@ -1,4 +1,4 @@
-import { type LucideIcon } from "lucide-react";
+﻿import { type LucideIcon } from "lucide-react";
 import { cn } from "@/shared/utils/helpers";
 
 export type UserLevelCardProps = {
@@ -20,111 +20,82 @@ export const UserLevelCard = ({
   className,
   onClick,
 }: UserLevelCardProps) => {
-  const progressPercentage = (currentXp / maxXp) * 100;
+  const safeCurrentXp = Math.max(currentXp, 0);
+  const safeMaxXp = Math.max(maxXp, 1);
+  const safeTotalXp = Math.max(totalXp, 0);
+  const progressPercentage = Math.min((safeCurrentXp / safeMaxXp) * 100, 100);
   const nextLevel = currentLevel + 1;
-  const xpToNextLevel = maxXp - currentXp;
+  const xpToNextLevel = Math.max(maxXp - currentXp, 0);
+  const showAsButton = Boolean(onClick);
 
   return (
     <div
       className={cn(
-        "relative group cursor-pointer transition-all duration-500 ease-out",
-        "hover:scale-105 hover:-translate-y-2",
+        "group relative transition-all duration-300 ease-out",
+        showAsButton ? "cursor-pointer hover:scale-[1.02]" : "cursor-default",
         className,
       )}
       onClick={onClick}
     >
-      {/* Glow effect soft & smooth */}
-      <div className="absolute inset-0 rounded-2xl blur-md opacity-10 group-hover:opacity-20 transition-opacity duration-500 bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500" />
+      <div className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-br from-cyan-500/5 via-indigo-500/5 to-purple-500/5 opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100" />
 
-      {/* Main card */}
       <div
         className={cn(
-          "relative bg-gradient-to-br from-gray-900/95 via-purple-900/20 to-gray-900/95",
-          "backdrop-blur-sm border-2 border-purple-500/40 rounded-2xl p-6",
-          "shadow-xl hover:shadow-purple-500/10 transition-all duration-500",
-          "flex flex-col justify-between",
+          "relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-600/40",
+          "bg-gradient-to-br from-slate-900/70 via-slate-900/40 to-slate-900/80",
+          "shadow-lg shadow-black/30",
         )}
       >
-        {/* Badge légendaire */}
-        <div className="absolute -top-3 -right-3 z-10">
-          <div className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-white text-xs px-3 py-1 rounded-full font-bold animate-pulse shadow-md">
-            NIVEAU {currentLevel}
+        <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent" />
+
+        <div className="flex items-start justify-between gap-4 p-6">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/30 bg-slate-900/60 px-3 py-1 text-xs font-medium uppercase tracking-wide text-cyan-200">
+              Niveau {currentLevel}
+            </div>
+            <div>
+              <p className="text-sm font-medium text-slate-300">Progression personnelle</p>
+              <div className="mt-1 flex items-baseline gap-3">
+                <span className="text-4xl font-semibold text-white">{currentLevel}</span>
+                <span className="text-sm text-slate-400">{safeTotalXp.toLocaleString()} XP total</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-3">
+            <div className="text-right">
+              <p className="text-xs uppercase tracking-wide text-slate-400">Prochain niveau</p>
+              <p className="text-sm font-medium text-cyan-200">Niveau {nextLevel}</p>
+            </div>
+            <div className="relative">
+              <div className="absolute inset-0 rounded-lg bg-cyan-500/25 blur" />
+              <div className="relative flex h-12 w-12 items-center justify-center rounded-lg border border-cyan-500/30 bg-gradient-to-br from-slate-900 to-slate-800">
+                <Icon className="h-6 w-6 text-cyan-200" />
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Header with special icon */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex-1">
-            <p className="text-sm font-medium text-purple-300 mb-2 tracking-wide uppercase">Niveau Actuel</p>
-            <div className="flex items-baseline gap-2">
-              <p className="text-5xl font-black text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-yellow-400 bg-clip-text">
-                {currentLevel}
-              </p>
-              <p className="text-lg text-white font-medium">/ ∞</p>
-            </div>
-            <p className="text-xs text-white mt-1">{totalXp.toLocaleString()} XP Total</p>
-          </div>
-
-          {/* Icon with special effects */}
-          <div className="relative">
-            <div className="absolute inset-0 rounded-xl blur-sm opacity-30 bg-gradient-to-r from-purple-500 to-pink-500" />
-            <div className="relative p-4 rounded-xl bg-gradient-to-br from-purple-500 via-pink-500 to-yellow-500 shadow-xl">
-              <Icon className="h-8 w-8 text-white drop-shadow" />
-            </div>
-
-            <div className="absolute inset-0 rounded-xl border-2 border-purple-400/10" />
-            <div className="absolute inset-0 rounded-xl border border-pink-400/10" style={{ animationDelay: "0.5s" }} />
-          </div>
-        </div>
-
-        {/* Advanced XP Progress Bar */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-purple-300 font-medium">Progression vers Niveau {nextLevel}</span>
-            <span className="text-gray-300 font-mono">
-              {currentXp.toLocaleString()} / {maxXp.toLocaleString()}
+        <div className="space-y-3 border-t border-slate-700/50 bg-slate-900/50 px-6 py-5">
+          <div className="flex items-center justify-between text-xs text-slate-300">
+            <span>Vers le niveau {nextLevel}</span>
+            <span>
+              {safeCurrentXp.toLocaleString()} / {safeMaxXp.toLocaleString()} XP
             </span>
           </div>
 
-          {/* Progress bar with effects */}
-          <div className="relative">
-            <div className="w-full bg-gray-800/60 rounded-full h-4 overflow-hidden border border-gray-700/50">
-              <div
-                className={cn(
-                  "h-full rounded-full transition-all duration-2000 ease-out relative overflow-hidden",
-                  "bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500",
-                  "shadow-md shadow-purple-500/20",
-                )}
-                style={{ width: `${progressPercentage}%` }}
-              >
-                {/* Moving shine effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white/20 to-transparent" />
-              </div>
-            </div>
-
-            {/* Progress indicator */}
+          <div className="relative h-2.5 overflow-hidden rounded-full bg-slate-800/70">
             <div
-              className="absolute top-0 h-4 w-1 bg-white/60 rounded-full transition-all duration-2000 ease-out shadow"
-              style={{ left: `${progressPercentage}%`, transform: "translateX(-50%)" }}
+              className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-cyan-400 via-indigo-400 to-purple-500 shadow-[0_0_12px_rgba(56,189,248,0.35)] transition-all duration-700 ease-out"
+              style={{ width: `${progressPercentage}%` }}
             />
           </div>
 
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-gray-400">{Math.round(progressPercentage)}% complété</span>
-            <span className="text-purple-300 font-medium">{xpToNextLevel.toLocaleString()} XP restants</span>
+          <div className="flex items-center justify-between text-xs text-slate-400">
+            <span>{Math.round(progressPercentage)}% complété</span>
+            <span>{xpToNextLevel > 0 ? `${xpToNextLevel.toLocaleString()} XP restants` : "Niveau atteint"}</span>
           </div>
         </div>
-
-        {/* Animated border effect */}
-        <div className="absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500">
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-yellow-500/10 p-[2px]">
-            <div className="w-full h-full bg-gray-900/90 rounded-2xl" />
-          </div>
-        </div>
-
-        {/* Inner glow effect */}
-        <div className="absolute inset-4 rounded-xl bg-gradient-to-r from-purple-500/2 via-pink-500/2 to-yellow-500/2 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       </div>
     </div>
   );

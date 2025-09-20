@@ -9,3 +9,12 @@ export type UserData = {
   username: string;
   role: UserRoleType;
 };
+
+export interface UserProgress {
+  totalXp: number;
+  totalQuestCompleted: number;
+  totalSkillCompleted: number;
+  userCurrentLevel: number;
+  xpThreshold: number;
+  xpToNextLevel: number;
+}

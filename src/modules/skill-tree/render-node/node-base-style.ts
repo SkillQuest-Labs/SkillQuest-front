@@ -8,6 +8,7 @@ type BaseNodeStyle = {
   isPathHighlighted: boolean;
   isActive: boolean;
   isSelected: boolean;
+  totalQuestCount?: number;
 };
 
 export const nodeBaseStyle = ({
@@ -17,6 +18,7 @@ export const nodeBaseStyle = ({
   isPathHighlighted,
   isActive,
   isSelected,
+  totalQuestCount = 0,
 }: BaseNodeStyle): CSSProperties => ({
   position: "absolute" as const,
   left: node.position.x - node.size / 2,
@@ -30,7 +32,7 @@ export const nodeBaseStyle = ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  fontSize: node.size > 30 ? "16px" : "12px",
+  fontSize: totalQuestCount >= 10 ? (node.size > 30 ? "22px" : "18px") : node.size > 30 ? "16px" : "12px",
   fontWeight: "bold",
   color: "white",
   boxShadow: isPathHighlighted

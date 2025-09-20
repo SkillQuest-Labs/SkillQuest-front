@@ -3,7 +3,6 @@ import type { Skill } from "@/shared/types/skill.type";
 
 export interface SessionFormType {
   title: string;
-  description: string;
   startDate: string;
   startTime: string;
   endTime: string;
@@ -24,14 +23,19 @@ export interface SessionFormProps {
 export type CalendarEvent = {
   id: string;
   title: string;
-  description?: string;
   color: string;
-  start: string; // ISO
-  end: string; // ISO
+  start: string;
+  end: string;
   backgroundColor: string;
   borderColor: string;
   extendedProps: {
     linkedSkill: string;
     linkedQuests: { id: string; title: string }[];
   };
+};
+
+export type SessionFilterValue = {
+  skillTitle: string;
+  questTitle: string;
+  date: string;
 };
