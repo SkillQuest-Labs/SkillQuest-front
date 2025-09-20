@@ -23,9 +23,9 @@ export const Stats = () => {
         <div className="flex-shrink-0 mb-4">
           <div className="flex items-center gap-3">
             <div>
-              <h1 className="text-2xl lg:text-3xl font-bold text-cyan-300">Statistiques d'Expérience</h1>
+              <h1 className="text-2xl lg:text-3xl font-bold text-white">Statistiques</h1>
               <p className="text-gray-400 mt-1 text-sm lg:text-base">
-                Suivez votre progression et analysez vos performances
+                Mesurez votre progression et analyser vos performances
               </p>
             </div>
           </div>
