@@ -16,21 +16,13 @@ export const SessionInfo: React.FC<SessionInfoProps> = ({ session }) => {
     });
   };
 
-  const formatTime = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString("fr-FR", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
   const getDuration = () => {
     const start = new Date(session.startTime);
     const end = new Date(session.endTime);
     const diffMs = end.getTime() - start.getTime();
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-    
+
     if (diffHours > 0) {
       return `${diffHours}h${diffMinutes > 0 ? ` ${diffMinutes}min` : ""}`;
     }
