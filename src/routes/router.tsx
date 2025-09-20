@@ -16,6 +16,7 @@ import { UnauthorizedPage } from "@/pages/Unauthorized";
 import { WorkSession } from "@/pages/dashboard/WorkSession";
 import { Stats } from "@/pages/dashboard/Stats";
 import { SessionsListingPage } from "@/pages/dashboard/SessionsListingPage";
+import { Dojo } from "@/pages/dashboard/Dojo";
 
 export const router = createBrowserRouter([
   // Public routes for authentication
@@ -88,6 +89,10 @@ export const router = createBrowserRouter([
           {
             path: routes.sessionsListing.path,
             element: <SessionsListingPage />,
+          },
+          {
+            path: routes.dojo.path,
+            element: <Dojo />,
           },
         ],
       },
