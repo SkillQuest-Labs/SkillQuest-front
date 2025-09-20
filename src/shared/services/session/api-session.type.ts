@@ -46,6 +46,7 @@ export type Session = {
     workSessionId: string;
     quest: {
       title: string;
+      description?: string;
       status: string;
     };
   }[];
