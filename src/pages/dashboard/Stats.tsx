@@ -25,7 +25,7 @@ export const Stats = () => {
             <div>
               <h1 className="text-2xl lg:text-3xl font-bold text-white">Statistiques</h1>
               <p className="text-gray-400 mt-1 text-sm lg:text-base">
-                Mesurez votre progression et analyser vos performances
+                Mesurez votre progression et analysez vos performances
               </p>
             </div>
           </div>
