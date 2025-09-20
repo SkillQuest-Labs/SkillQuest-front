@@ -13,8 +13,7 @@ import type { Skill } from "@/shared/types/skill.type";
 import { isQuestNode } from "../canvas.const";
 import { useSkillStore } from "@/stores/skill/skill-store";
 import { createQuestNode } from "@/shared/utils/quetes/quest-node";
-import { v4 as uuidv4 } from 'uuid';
-
+import { v4 as uuidv4 } from "uuid";
 
 // This hook manages the state of nodes and edges in the canvas graph.
 export const useCanvasGraph = () => {
