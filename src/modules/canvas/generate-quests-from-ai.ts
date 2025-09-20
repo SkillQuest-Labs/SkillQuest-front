@@ -1,8 +1,11 @@
 import { callGeminiApi } from "@/shared/lib/gemini-api";
-import type { GeminiContext, QuestAiType } from "@/shared/types/ai/ai.type";
+import { callOpenaiApi } from "@/shared/lib/openai-api";
+import type { AiContextType, QuestAiType } from "@/shared/types/ai/ai.type";
 
-export const generateQuestsFromAI = async (context: GeminiContext): Promise<QuestAiType[]> => {
-  if (!context || !context.instruction.trim()) return [];
+export const generateQuestsFromAI = async (context: AiContextType): Promise<QuestAiType[]> => {
+  if (!context || !context.instruction.trim()) {
+    return [];
+  }
 
   const prompt = `
     Instructions :
@@ -10,7 +13,8 @@ export const generateQuestsFromAI = async (context: GeminiContext): Promise<Ques
     `;
 
   try {
-    const rawResponse = await callGeminiApi(prompt);
+    const provider = context.aiProvider || "gemini";
+    const rawResponse = provider === "gemini" ? await callGeminiApi(prompt) : await callOpenaiApi(prompt);
 
     const jsonMatch = rawResponse?.match(/```json([\s\S]*?)```/i);
 
@@ -19,22 +23,14 @@ export const generateQuestsFromAI = async (context: GeminiContext): Promise<Ques
     const parsed = JSON.parse(jsonText) as unknown;
     if (!Array.isArray(parsed)) return [];
 
-    // Filtrage et typage
+    // Filtrage et typage des quêtes brutes
     return parsed
-      .filter(
-        (item: any) =>
-          item &&
-          typeof item.title === "string" &&
-          typeof item.description === "string" &&
-          typeof item.xp === "number" &&
-          ["EASY", "MEDIUM", "HARD"].includes(item.difficulty),
-      )
+      .filter((item: any) => item && typeof item.title === "string" && typeof item.description === "string")
       .map((item: any) => ({
         title: item.title,
         description: item.description,
-        xp: item.xp,
-        difficulty: item.difficulty,
         prerequisites: Array.isArray(item.prerequisites) ? item.prerequisites : [],
+        resources: Array.isArray(item.resources) ? item.resources : [],
       }));
   } catch {
     return [];

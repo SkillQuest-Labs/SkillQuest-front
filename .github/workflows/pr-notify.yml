@@ -6,6 +6,7 @@ on:
     branches:
       - develop
       - main
+      - preprod
 
 jobs:
   notify:

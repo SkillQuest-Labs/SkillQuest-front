@@ -1,4 +1,5 @@
-import clsx from "clsx";
+import { Button } from "@/shared/components/ui/button";
+import { useCanvasStore } from "@/stores/canvas/canvas-store";
 import {
   Background,
   Controls,
@@ -10,17 +11,18 @@ import {
   type OnEdgesChange,
   type OnNodesChange,
 } from "@xyflow/react";
+import clsx from "clsx";
+import { ChevronLeft } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import type { CursorModeType, QuestNodeData, SkillNodeData, ViewModeType } from "../canvas.type";
-import { SkillNode } from "./SkillNode";
-import { QuestNode } from "./QuestNode";
+import { AIQuestGenerationModal } from "./AIQuestGenerationModal";
 import { CustomEdge } from "./CustomEdge";
 import { FloatingToolbox } from "./floating-toolbox/FloatingToolbox";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/shared/components/ui/button";
-import { ChevronLeft } from "lucide-react";
-import { useCanvasStore } from "@/stores/canvas/canvas-store";
-import { useState } from "react";
-import { AIQuestGenerationModal } from "./AIQuestGenerationModal";
+import { QuestNode } from "./QuestNode";
+import { RoadmapButton } from "./RoadmapButton";
+import { SkillNode } from "./SkillNode";
+import { routes } from "@/routes/router.const";
 
 type CanvasViewProps = {
   nodes: Node<QuestNodeData | SkillNodeData>[];
@@ -32,7 +34,7 @@ type CanvasViewProps = {
   onConnect: (params: Connection) => void;
   cursorMode: CursorModeType;
   setCursorMode: (mode: CursorModeType) => void;
-  setViewMode: React.Dispatch<React.SetStateAction<ViewModeType>>;
+  setViewMode: (mode: ViewModeType) => void;
   className?: string;
   collapseAll: () => void;
   expandAll: () => void;
@@ -122,10 +124,10 @@ export const CanvasView = ({
         <Button
           variant="outline"
           size="sm"
-          aria-label="Retour au tableau de bord"
+          aria-label="Retour"
           onClick={() => {
             reset();
-            navigate("/dashboard");
+            navigate(routes.skills.path);
           }}
           className="bg-[#0C0821] hover:bg-gray-700 text-white hover:text-white px-4 py-2 rounded-lg shadow-lg transition-colors cursor-pointer duration-200 flex items-center gap-2"
         >
@@ -134,14 +136,17 @@ export const CanvasView = ({
         </Button>
       </div>
 
-      <FloatingToolbox
-        cursorMode={cursorMode}
-        setCursorMode={setCursorMode}
-        setViewMode={setViewMode}
-        collapseAll={collapseAll}
-        expandAll={expandAll}
-        setOpenAiModal={setOpenAiModal}
-      />
+      {/* Toolbox and RoadmapButton in a flex column, always together */}
+      <div className="absolute top-6 right-6 z-20 flex flex-col items-center gap-4">
+        <FloatingToolbox
+          cursorMode={cursorMode}
+          setCursorMode={setCursorMode}
+          collapseAll={collapseAll}
+          expandAll={expandAll}
+          setOpenAiModal={setOpenAiModal}
+        />
+        <RoadmapButton onClick={() => setViewMode("skillTree")} />
+      </div>
 
       {openAiModal && <AIQuestGenerationModal onGenerate={openAIGenerator} setOpenAiModal={setOpenAiModal} />}
 

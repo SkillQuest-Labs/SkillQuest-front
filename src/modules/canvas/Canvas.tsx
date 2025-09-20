@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import type { QuestNodeData, ViewModeType } from "./canvas.type";
+import type { QuestNodeData } from "./canvas.type";
 import { useReactFlow, type Node } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import "./../../styles/canvas.css";
@@ -16,11 +16,12 @@ import { CreateSkillModal } from "./components/CreateSkillModal";
 import type { Skill } from "@/shared/types/skill.type";
 import { initialNodes } from "./canvas.const";
 import { useAddAIQuests } from "./hooks/useAddAIQuest";
-import { QuestDetailsModal } from "./components/floating-toolbox/QuestDetailsModal";
+import { QuestDetailsModal } from "./components/quest-card-component/QuestDetailsModal";
+import { CanvasLoader } from "./components/CanvasLoader";
 
 export const Canvas = () => {
   const [connectionStart, setConnectionStart] = useState<string | null>(null);
-  const [, setViewMode] = useState<ViewModeType>("canvas");
+  const { setViewMode } = useCanvasStore();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ export const Canvas = () => {
   const { cursorMode, setCursorMode } = useCanvasStore();
   const { screenToFlowPosition } = useReactFlow();
 
-  useCanvasLoader();
+  const { loading } = useCanvasLoader();
 
   const { addGeneratedQuests: openAIGenerator } = useAddAIQuests();
 
@@ -99,28 +100,35 @@ export const Canvas = () => {
   }, [createSkillParam]);
 
   useEffect(() => {
-    if (nodes.length === 0) {
+    // Only set initial nodes if we're not loading data and no skillId is present
+    const skillId = searchParams.get("skillId");
+
+    if (nodes.length === 0 && !loading && !skillId) {
       setNodes(initialNodes);
     }
-  }, [nodes, setNodes]);
+  }, [nodes, setNodes, loading, searchParams]);
 
   return (
     <div className="h-screen bg-gray-50 relative ">
-      <CanvasView
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onPaneClick={onPaneClick}
-        onNodeClick={handleNodeClick}
-        onConnect={onConnect}
-        cursorMode={cursorMode}
-        setCursorMode={setCursorMode}
-        setViewMode={setViewMode}
-        collapseAll={collapseAll}
-        expandAll={expandAll}
-        openAIGenerator={openAIGenerator}
-      />
+      {loading ? (
+        <CanvasLoader />
+      ) : (
+        <CanvasView
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onPaneClick={onPaneClick}
+          onNodeClick={handleNodeClick}
+          onConnect={onConnect}
+          cursorMode={cursorMode}
+          setCursorMode={setCursorMode}
+          setViewMode={setViewMode}
+          collapseAll={collapseAll}
+          expandAll={expandAll}
+          openAIGenerator={openAIGenerator}
+        />
+      )}
 
       <CreateSkillModal
         open={isModalOpen}

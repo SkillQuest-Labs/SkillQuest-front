@@ -1,0 +1,72 @@
+import { nodeBaseStyle } from "../../render-node/node-base-style";
+import { nodeShapeStyle } from "../../render-node/node-shape-style";
+import { getNodeBorderColor, getNodeColor } from "../../render-node/render-node";
+import type { CircularSkillNode } from "../../skill-tree.type";
+import { nodeContent } from "./node-content";
+
+type NodeRendererProps = {
+  node: CircularSkillNode;
+  activeNodePath: string[];
+  hoveredNode: string | null;
+  selectedNode: string | null;
+  highlightedPathNodes: string[];
+  handleNodeClick: (e: React.MouseEvent<Element, MouseEvent>, nodeId: string) => void;
+  setHoveredNode: (value: React.SetStateAction<string | null>) => void;
+  totalQuestCount?: number;
+};
+export const NodeRenderer = ({
+  node,
+  activeNodePath,
+  hoveredNode,
+  selectedNode,
+  highlightedPathNodes,
+  handleNodeClick,
+  setHoveredNode,
+  totalQuestCount = 0,
+}: NodeRendererProps) => {
+  const color = getNodeColor(node, activeNodePath, hoveredNode);
+  const borderColor = getNodeBorderColor(node, activeNodePath, selectedNode);
+  const isActive = activeNodePath.includes(node.id);
+  const isPathHighlighted = highlightedPathNodes.includes(node.id); // Check if node is part of highlighted path
+
+  const baseStyle = nodeBaseStyle({
+    node,
+    color,
+    borderColor,
+    isPathHighlighted,
+    isActive,
+    isSelected: selectedNode === node.id,
+    totalQuestCount,
+  });
+
+  const shapeStyle = nodeShapeStyle(node.shape);
+
+  const content = nodeContent(node);
+
+  return (
+    <div
+      key={node.id}
+      data-node-id={node.id}
+      style={{ ...baseStyle, ...shapeStyle, position: "absolute" }}
+      onClick={(e) => handleNodeClick(e, node.id)}
+      onMouseEnter={() => setHoveredNode(node.id)}
+      onMouseLeave={() => setHoveredNode(null)}
+    >
+      {content}
+
+      {/* Pulsing effect for available quest */}
+      {node.status === "NOT_STARTED" && (
+        <div
+          style={{
+            position: "absolute",
+            inset: -4,
+            // backgroundColor: "#3b82f6",
+            opacity: 0.3,
+            borderRadius: shapeStyle.borderRadius || "50%",
+            animation: "pulse 2s infinite",
+          }}
+        />
+      )}
+    </div>
+  );
+};

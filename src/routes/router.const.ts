@@ -6,11 +6,17 @@ export interface IRoute {
 export interface IRoutes {
   dashboard: IRoute;
   skills: IRoute;
+  skillDetail: IRoute;
   profil: IRoute;
   store: IRoute;
   canvas: IRoute;
   workSession: IRoute;
+  stats: IRoute;
+  sessionsListing: IRoute;
   notfound: IRoute;
+  signIn: IRoute;
+  signUp: IRoute;
+  unauthorized: IRoute;
 }
 
 export const routes: IRoutes = {
@@ -21,6 +27,10 @@ export const routes: IRoutes = {
   skills: {
     path: "/dashboard/skills",
     display: "Skills",
+  },
+  skillDetail: {
+    path: "/dashboard/skills/:skillId",
+    display: "Skill Detail",
   },
   profil: {
     path: "/dashboard/profil",
@@ -34,12 +44,32 @@ export const routes: IRoutes = {
     path: "/canvas",
     display: "Canvas",
   },
+  signIn: {
+    path: "/sign-in/*",
+    display: "Sign In",
+  },
+  signUp: {
+    path: "/sign-up/*",
+    display: "Sign Up",
+  },
   workSession: {
     path: "/dashboard/work-session",
     display: "WorkSession",
   },
+  stats: {
+    path: "/dashboard/stats",
+    display: "Statistiques",
+  },
+  sessionsListing: {
+    path: "/dashboard/listing-sessions",
+    display: "Listing Sessions",
+  },
   notfound: {
     path: "*",
     display: "Not found",
+  },
+  unauthorized: {
+    path: "/unauthorized",
+    display: "Unauthorized",
   },
 };

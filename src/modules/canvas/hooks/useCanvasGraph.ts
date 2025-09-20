@@ -13,6 +13,8 @@ import type { Skill } from "@/shared/types/skill.type";
 import { isQuestNode } from "../canvas.const";
 import { useSkillStore } from "@/stores/skill/skill-store";
 import { createQuestNode } from "@/shared/utils/quetes/quest-node";
+import { v4 as uuidv4 } from 'uuid';
+
 
 // This hook manages the state of nodes and edges in the canvas graph.
 export const useCanvasGraph = () => {
@@ -56,16 +58,19 @@ export const useCanvasGraph = () => {
       changes.forEach((change) => {
         if (change.type === "remove" && change.id) {
           markDeleteEdge(change.id);
+          const edge = edges.find((e) => e.id === change.id);
+          if (edge?.source) markModifiedNode(edge.source);
+          if (edge?.target) markModifiedNode(edge.target);
         }
       });
       const updatedEdges = applyEdgeChanges(changes, edges);
       setEdges(updatedEdges);
     },
-    [edges, setEdges, markDeleteEdge],
+    [edges, setEdges, markDeleteEdge, markModifiedNode],
   );
 
   const addQuestNode = (position: XYPosition) => {
-    const id = `quest-${crypto.randomUUID()}`;
+    const id = `quest-${uuidv4()}`;
 
     const newNode = createQuestNode(id, position, removeNode, updateNodeData);
     addNode(newNode);
@@ -73,7 +78,7 @@ export const useCanvasGraph = () => {
   };
 
   const addSkillNode = (position: XYPosition, skill: Skill) => {
-    const id = `skill-${crypto.randomUUID()}`;
+    const id = `skill-${uuidv4()}`;
     const newNode: Node<SkillNodeData> = {
       id: id,
       type: "skill",
