@@ -3,12 +3,12 @@ name: Deploy to server
 on:
   push:
     branches:
-      - develop
-  pull_request:
-    types: [opened, synchronize, reopened]
-    branches:
-      - develop
-      - main
+      - preprod
+#   pull_request:
+#     types: [opened, synchronize, reopened]
+#     branches:
+#       - preprod
+#       - main
 
 jobs:
   deploy:
@@ -26,4 +26,4 @@ jobs:
 
       - name: Deploy with rsync
         run: |
-          rsync -avz --delete ./ johannes@51.15.229.53:/home/johannes/test/Skill-quest/
+          rsync -avz --delete ./ johannes@51.15.229.53:/home/johannes/test/skill-quest-front/

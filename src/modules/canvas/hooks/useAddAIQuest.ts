@@ -8,6 +8,7 @@ import { createQuestNode } from "@/shared/utils/quetes/quest-node";
 import { useQuestGenerationFormStore } from "@/stores/canvas/quest-generation-form-store";
 import { MarkerType, type Edge } from "@xyflow/react";
 import { calculateQuestGridLayout } from "@/shared/utils/canvas";
+import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Hook that generates quests via AI and adds them to the canvas.
@@ -59,7 +60,7 @@ export const useAddAIQuests = () => {
       const questIds: string[] = [];
 
       quests.forEach((quest, index) => {
-        const id = `quest-${crypto.randomUUID()}`;
+        const id = `quest-${uuidv4()}`;
         questIds.push(id);
 
         // Get position from calculated positions
