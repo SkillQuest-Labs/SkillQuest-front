@@ -75,6 +75,7 @@ export const SessionFilter = ({
         <div className="relative">
           <CalendarIcon className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
           <input
+            title="Filtrer par date"
             type="date"
             value={value.date}
             onChange={(e) => onChange({ ...value, date: e.target.value })}
@@ -107,15 +108,12 @@ export const SessionFilter = ({
 
           {/* Toggle sessions incomplètes */}
           <div className="flex items-center gap-4">
-            <Switch checked={includeIncomplete} onCheckedChange={onToggleIncomplete} disabled={!includeValidated} />
+            <Switch checked={includeIncomplete} onCheckedChange={onToggleIncomplete} />
 
             <div>
-              <div className={`text-sm font-medium ${!includeValidated ? "text-slate-400" : "text-slate-200"}`}>
-                Sessions validées à compléter
-              </div>
+              <div className="text-sm font-medium text-slate-200">Sessions validées à compléter</div>
               <div className="text-xs text-slate-400">
-                Sessions validées avec des quests non complétées
-                {!includeValidated && " - Activez 'Sessions validées uniquement' pour activer"}
+                Sessions validées avec des quests encore ouvertes, même si l''autre filtre reste désactivé.
               </div>
             </div>
           </div>

@@ -40,7 +40,7 @@ export const SessionsListing = () => {
     date: filters.date,
     limit: pageSize,
     page: currentPage,
-    includeValidated: filters.includeValidated,
+    includeValidated: filters.includeValidated || filters.includeIncomplete,
   });
 
   useEffect(() => {
@@ -58,15 +58,7 @@ export const SessionsListing = () => {
   };
 
   const handleToggleValidated = (include: boolean) => {
-    const newFilters = { ...filters, includeValidated: include };
-
-    // Si on désactive le toggle des sessions validées, on désactive aussi le toggle des sessions incomplètes
-    // car le deuxième dépend du premier
-    if (!include && filters.includeIncomplete) {
-      newFilters.includeIncomplete = false;
-    }
-
-    setFilters(newFilters);
+    setFilters({ ...filters, includeValidated: include });
     setCurrentPage(1);
   };
 
@@ -76,12 +68,14 @@ export const SessionsListing = () => {
   };
 
   // Filtrer les sessions côté frontend selon le statut de complétion
-  const sessions = filters.includeIncomplete
-    ? allSessions.filter((session) => !isSessionFullyCompleted(session))
-    : allSessions;
+  const filteredIncompleteSessions = allSessions.filter(
+    (session) => session.isValidated && !isSessionFullyCompleted(session),
+  );
+
+  const sessions = filters.includeIncomplete ? filteredIncompleteSessions : allSessions;
 
   const total = filters.includeIncomplete
-    ? allTotal - allSessions.filter((session) => isSessionFullyCompleted(session)).length
+    ? allTotal - allSessions.filter((session) => session.isValidated && isSessionFullyCompleted(session)).length
     : allTotal;
 
   const computedTotalPages = totalPages || Math.max(1, Math.ceil((total || 0) / (effectivePageSize || pageSize)));
