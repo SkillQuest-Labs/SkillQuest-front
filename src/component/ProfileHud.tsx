@@ -42,9 +42,9 @@ const getLevelIcon = (level: number): { icon: string; label: string } => {
 };
 
 const getBadgeForLevel = (level: number): { image: string; title: string } => {
-  if (level >= 30) return { image: badgeMentor, title: "Mentor" };
-  if (level >= 20) return { image: badgeExpert, title: "Expert" };
-  if (level >= 10) return { image: badgeIntermediaire, title: "Intermédiaire" };
+  if (level >= 30) return { image: badgeMentor, title: "Érudit" };
+  if (level >= 20) return { image: badgeExpert, title: "Prêtre" };
+  if (level >= 10) return { image: badgeIntermediaire, title: "Scribe" };
   return { image: badgeApprenti, title: "Apprenti" };
 };
 
