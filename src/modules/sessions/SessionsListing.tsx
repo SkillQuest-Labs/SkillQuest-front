@@ -60,7 +60,8 @@ export const SessionsListing = () => {
   const handleToggleValidated = (include: boolean) => {
     const newFilters = { ...filters, includeValidated: include };
 
-    // Si on désactive le premier toggle et que le deuxième est activé, on désactive le deuxième
+    // Si on désactive le toggle des sessions validées, on désactive aussi le toggle des sessions incomplètes
+    // car le deuxième dépend du premier
     if (!include && filters.includeIncomplete) {
       newFilters.includeIncomplete = false;
     }

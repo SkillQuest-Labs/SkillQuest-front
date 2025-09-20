@@ -100,8 +100,8 @@ export const SessionFilter = ({
             <Switch checked={includeValidated} onCheckedChange={onToggleValidated} />
 
             <div>
-              <div className="text-sm font-medium text-slate-200">Inclure les sessions validées</div>
-              <div className="text-xs text-slate-400">Afficher également les sessions validées</div>
+              <div className="text-sm font-medium text-slate-200">Sessions validées uniquement</div>
+              <div className="text-xs text-slate-400">Afficher uniquement les sessions validées</div>
             </div>
           </div>
 
@@ -115,7 +115,7 @@ export const SessionFilter = ({
               </div>
               <div className="text-xs text-slate-400">
                 Sessions validées avec des quests non complétées
-                {!includeValidated && " - Pour activer, inclure les sessions validées"}
+                {!includeValidated && " - Activez 'Sessions validées uniquement' pour activer"}
               </div>
             </div>
           </div>
