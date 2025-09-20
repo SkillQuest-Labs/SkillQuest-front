@@ -54,8 +54,8 @@ export const SessionValidationModal = ({
           </DialogTitle>
           <DialogDescription className="text-slate-300">
             {isSessionValidated
-              ? "Cette session est déjà validée. Sélectionnez les quêtes supplémentaires que vous avez accomplies."
-              : "Sélectionnez les quêtes que vous avez accomplies lors de cette session"}
+              ? "Cette session est déjà validée. Sélectionnez les quêtes supplémentaires que vous avez accomplies (optionnel)."
+              : "Sélectionnez les quêtes que vous avez accomplies lors de cette session (optionnel). Vous pouvez valider la session même sans sélectionner de quêtes."}
           </DialogDescription>
         </DialogHeader>
 
@@ -243,6 +243,7 @@ export const SessionValidationModal = ({
             <div className="text-center py-8 text-slate-400">
               <X className="h-12 w-12 mx-auto mb-2 opacity-50" />
               <p>Aucune quête associée à cette session</p>
+              <p className="text-sm mt-2 text-slate-500">Vous pouvez tout de même valider la session</p>
             </div>
           )}
         </div>
@@ -268,7 +269,7 @@ export const SessionValidationModal = ({
                   </Button>
                   <Button
                     onClick={handleValidateSession}
-                    disabled={validationLoading || validatedQuests.length === 0}
+                    disabled={validationLoading}
                     className="bg-green-600 hover:bg-green-700 text-white disabled:bg-slate-600 disabled:cursor-not-allowed"
                   >
                     {validationLoading ? (
@@ -294,7 +295,7 @@ export const SessionValidationModal = ({
               </Button>
               <Button
                 onClick={handleValidateSession}
-                disabled={validationLoading || validatedQuests.length === 0}
+                disabled={validationLoading}
                 className="bg-blue-600 hover:bg-blue-700 text-white disabled:bg-slate-600 disabled:cursor-not-allowed"
               >
                 {validationLoading ? (
