@@ -30,13 +30,13 @@ export const SessionFilter = ({
             value={value.skillTitle}
             onChange={(e) => onChange({ ...value, skillTitle: e.target.value })}
             placeholder="Filtrer par skill…"
-            className="w-full rounded-lg border border-slate-700 bg-slate-900/70 pl-10 pr-9 py-2 text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+            className="w-full rounded-lg border border-slate-700 bg-slate-900/70 pl-10 pr-9 py-2 text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 cursor-text"
           />
           {value.skillTitle && (
             <button
               aria-label="Effacer le filtre skill"
               onClick={() => onChange({ ...value, skillTitle: "" })}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-slate-400 hover:text-slate-200 hover:bg-slate-800/70"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-slate-400 hover:text-slate-200 hover:bg-slate-800/70 cursor-pointer"
             >
               <X className="h-4 w-4" />
             </button>
@@ -50,13 +50,13 @@ export const SessionFilter = ({
             value={value.questTitle}
             onChange={(e) => onChange({ ...value, questTitle: e.target.value })}
             placeholder="Filtrer par quête…"
-            className="w-full rounded-lg border border-slate-700 bg-slate-900/70 pl-10 pr-9 py-2 text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+            className="w-full rounded-lg border border-slate-700 bg-slate-900/70 pl-10 pr-9 py-2 text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 cursor-text"
           />
           {value.questTitle && (
             <button
               aria-label="Effacer le filtre quête"
               onClick={() => onChange({ ...value, questTitle: "" })}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-slate-400 hover:text-slate-200 hover:bg-slate-800/70"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-slate-400 hover:text-slate-200 hover:bg-slate-800/70 cursor-pointer"
             >
               <X className="h-4 w-4" />
             </button>
@@ -69,13 +69,13 @@ export const SessionFilter = ({
             type="date"
             value={value.date}
             onChange={(e) => onChange({ ...value, date: e.target.value })}
-            className="date-input w-full rounded-lg border border-slate-700 bg-slate-900/70 pl-10 pr-3 py-2 text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+            className="date-input w-full rounded-lg border border-slate-700 bg-slate-900/70 pl-10 pr-3 py-2 text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 cursor-pointer"
           />
           {value.date && (
             <button
               aria-label="Effacer le filtre date"
               onClick={() => onChange({ ...value, date: "" })}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-slate-400 hover:text-slate-200 hover:bg-slate-800/70"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-slate-400 hover:text-slate-200 hover:bg-slate-800/70 cursor-pointer"
             >
               <X className="h-4 w-4" />
             </button>
@@ -88,7 +88,7 @@ export const SessionFilter = ({
         <button
           type="button"
           onClick={() => onToggleValidated(!includeValidated)}
-          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 ${
+          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 cursor-pointer ${
             includeValidated ? "bg-blue-600" : "bg-slate-600"
           }`}
         >
@@ -113,7 +113,7 @@ export const SessionFilter = ({
         {hasActiveFilters && (
           <Button
             onClick={onReset}
-            className="self-start sm:self-auto rounded-lg bg-slate-800/70 text-slate-200 hover:bg-slate-700"
+            className="self-start sm:self-auto rounded-lg bg-slate-800/70 text-slate-200 hover:bg-slate-700 cursor-pointer"
           >
             Réinitialiser les filtres
           </Button>

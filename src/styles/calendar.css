@@ -39,6 +39,7 @@
 
 .fc-dayGridMonth-view .fc-daygrid-event:hover {
   filter: brightness(1.05);
+  cursor: pointer;
 }
 
 .fc-dayGridMonth-view .fc-daygrid-day-events .fc-daygrid-event-harness {
@@ -85,7 +86,10 @@
   font-weight: 600;
   color: #ffffff;
 }
-.fc .fc-timegrid-event:hover { filter: brightness(1.05); }
+.fc .fc-timegrid-event:hover { 
+  filter: brightness(1.05);
+  cursor: pointer;
+}
 
 .fc-timeGridWeek-view .fc-day-today .fc-timegrid-col-frame { background: transparent; }
 .fc-timeGridWeek-view .fc-day-today .fc-timegrid-col-bg {

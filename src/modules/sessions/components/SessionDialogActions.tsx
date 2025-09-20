@@ -28,20 +28,20 @@ export const SessionDialogActions = ({
           variant="destructive"
           onClick={() => setIsDeleteDialogOpen(true)}
           disabled={isDeleting}
-          className="mr-auto bg-red-600 hover:bg-red-700 text-white"
+          className="mr-auto bg-red-600 hover:bg-red-700 text-white cursor-pointer"
         >
           {isDeleting ? "Suppression..." : "Supprimer"}
         </Button>
       )}
 
       <div className="flex gap-2">
-        <Button variant="ghost" onClick={onClose}>
+        <Button variant="ghost" onClick={onClose} className="cursor-pointer">
           {isSessionValidated ? "Fermer" : "Annuler"}
         </Button>
         <Button
           onClick={onSave}
           disabled={saveDisabled || isSessionValidated}
-          className={`${!saveDisabled && !isSessionValidated ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-600 cursor-not-allowed"} text-white`}
+          className={`${!saveDisabled && !isSessionValidated ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-600 cursor-not-allowed"} text-white cursor-pointer`}
         >
           {isEditing ? "Mettre à jour" : "Enregistrer"}
         </Button>

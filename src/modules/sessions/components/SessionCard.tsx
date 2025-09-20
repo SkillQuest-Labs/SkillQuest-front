@@ -122,7 +122,7 @@ export const SessionCard = ({ session }: SessionCardProps) => {
             <Button
               onClick={handleValidate}
               aria-label="Compléter la session"
-              className="btn-action btn-validate h-full w-full rounded-none bg-transparent text-slate-200 hover:text-blue-400"
+              className="btn-action btn-validate h-full w-full rounded-none bg-transparent text-slate-200 hover:text-blue-400 cursor-pointer"
             >
               <Check className="h-4 w-4" />
               <span className="ml-2 hidden sm:inline">Compléter</span>
@@ -133,7 +133,7 @@ export const SessionCard = ({ session }: SessionCardProps) => {
             <Button
               onClick={handlePlay}
               aria-label="Démarrer la session"
-              className="btn-action btn-play h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white"
+              className="btn-action btn-play h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white cursor-pointer"
             >
               <Play className="h-4 w-4" />
               <span className="ml-2 hidden sm:inline">Lancer</span>
@@ -142,7 +142,7 @@ export const SessionCard = ({ session }: SessionCardProps) => {
             <Button
               onClick={handleValidate}
               aria-label="Valider la session"
-              className="btn-action btn-validate h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white"
+              className="btn-action btn-validate h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white cursor-pointer"
             >
               <Check className="h-4 w-4" />
               <span className="ml-2 hidden sm:inline">Valider</span>
@@ -151,7 +151,7 @@ export const SessionCard = ({ session }: SessionCardProps) => {
             <Button
               onClick={() => setIsDeleteDialogOpen(true)}
               aria-label="Supprimer la session"
-              className="btn-action btn-delete h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white"
+              className="btn-action btn-delete h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white cursor-pointer"
             >
               <Trash2 className="h-4 w-4" />
             </Button>

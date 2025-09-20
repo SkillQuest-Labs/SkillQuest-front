@@ -69,7 +69,7 @@ export const SessionsListing = () => {
           <Button
             onClick={() => navigate(routes.workSession.path)}
             aria-label="Retour au calendrier"
-            className="h-9 w-9 p-0 rounded-full bg-transparent text-slate-300 hover:text-white hover:bg-slate-800/60"
+            className="h-9 w-9 p-0 rounded-full bg-transparent text-slate-300 hover:text-white hover:bg-slate-800/60 cursor-pointer"
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
@@ -102,7 +102,7 @@ export const SessionsListing = () => {
             {sessions.map((session) => (
               <div
                 key={session.id}
-                className="session-card h-full rounded-2xl border border-slate-700 bg-slate-900/60 p-5 transition-all"
+                className="session-card h-full rounded-2xl border border-slate-700 bg-slate-900/60 p-5 transition-all cursor-pointer"
               >
                 <SessionCard session={session} />
               </div>
