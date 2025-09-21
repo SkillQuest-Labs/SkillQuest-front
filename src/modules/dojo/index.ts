@@ -1,7 +1,6 @@
 // Components
 export { DojoImmersive } from "./components/DojoImmersive";
 export { SessionsMode } from "./components/SessionsMode";
-export { EnvironmentSelector } from "./components/EnvironmentSelector";
 export { SessionQuestDisplay } from "./components/SessionQuestDisplay";
 export { SessionInfo } from "./components/SessionInfo";
 export { PomodoroTimer } from "./components/PomodoroTimer";
