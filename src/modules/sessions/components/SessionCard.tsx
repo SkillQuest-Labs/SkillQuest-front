@@ -6,8 +6,9 @@ import type { Session } from "@/shared/services/session/api-session.type";
 import { Check, Play, Trash2 } from "lucide-react";
 import { QuestIndicator } from "./QuestIndicator";
 import { useState } from "react";
-import { getDateToTime } from "../utils/session.utils";
+import { getDateToTime, isSessionFullyCompleted } from "../utils/session.utils";
 import { SessionValidationModal } from "./SessionValidationModal";
+import { useQueryClient } from "@tanstack/react-query";
 
 type SessionCardProps = {
   session: Session;
@@ -18,6 +19,7 @@ export const SessionCard = ({ session }: SessionCardProps) => {
   const { validateSession, loading: validationLoading } = useValidateSession();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isValidationModalOpen, setIsValidationModalOpen] = useState(false);
+  const queryClient = useQueryClient();
 
   const handlePlay = () => {};
 
@@ -39,11 +41,17 @@ export const SessionCard = ({ session }: SessionCardProps) => {
         completedQuests,
       });
 
-      showToast({
-        title: "Session validée !",
-        description: "Votre session a été validée avec succès",
-        status: "success",
-      });
+      // Invalider les caches pour mettre à jour les données
+      await queryClient.invalidateQueries({ queryKey: ["sessions"] });
+      await queryClient.invalidateQueries({ queryKey: ["skills"] });
+      await queryClient.invalidateQueries({ queryKey: ["user"] });
+
+      // Émettre un événement personnalisé pour signaler la validation
+      window.dispatchEvent(
+        new CustomEvent("sessionValidated", {
+          detail: { sessionId: session.id, completedQuests },
+        }),
+      );
 
       setIsValidationModalOpen(false);
     } catch {
@@ -72,10 +80,16 @@ export const SessionCard = ({ session }: SessionCardProps) => {
     }
   };
 
+  // Vérifier s'il y a des quêtes non validées dans une session validée
+  const hasUnvalidatedQuests = session.isValidated && !isSessionFullyCompleted(session);
+
+  // Le bouton Valider doit être affiché pour toutes les sessions non validées
+  const shouldShowValidateButton = !session.isValidated;
+
   return (
     <>
       <div className="flex h-full flex-col">
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
             <span
               aria-label="Couleur"
@@ -83,15 +97,25 @@ export const SessionCard = ({ session }: SessionCardProps) => {
               style={{ backgroundColor: session.color }}
               title={session.color}
             />
-            <div className="flex items-center gap-2 min-w-0">
-              <h3 className="truncate font-semibold text-slate-100 leading-tight">{session.linkedSkill.title}</h3>
-              <QuestIndicator session={session} />
-            </div>
+            <h3
+              className={`truncate font-semibold leading-tight ${session.isValidated ? "text-slate-100 line-through" : "text-slate-100"}`}
+            >
+              {session.linkedSkill.title}
+            </h3>
+            {session.isValidated && (
+              <div className="flex items-center gap-1 text-green-400">
+                <Check className="h-4 w-4" />
+                <span className="text-xs font-medium">Validée</span>
+              </div>
+            )}
           </div>
 
-          <span className="rounded-full bg-slate-800/60 px-3 py-1 text-xs text-slate-300">
-            {session.date.slice(0, 10)}
-          </span>
+          <div className="flex flex-col items-end gap-2">
+            <span className="rounded-full bg-slate-800/60 px-3 py-1 text-xs text-slate-300">
+              {session.date.slice(0, 10)}
+            </span>
+            <QuestIndicator session={session} />
+          </div>
         </div>
 
         <div className="mt-4 flex flex-wrap items-center gap-2 text-sm">
@@ -107,33 +131,52 @@ export const SessionCard = ({ session }: SessionCardProps) => {
           </div>
         </div>
 
-        <div className="mt-5 grid grid-cols-[1fr_1fr_1.25fr] overflow-hidden rounded-lg border border-slate-700/60">
-          <Button
-            onClick={handlePlay}
-            aria-label="Démarrer la session"
-            className="btn-action btn-play h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white"
+        {session.isValidated ? (
+          hasUnvalidatedQuests && (
+            <div className="mt-5 grid grid-cols-[1fr] overflow-hidden rounded-lg border border-slate-700/60">
+              <Button
+                onClick={handleValidate}
+                aria-label="Compléter la session"
+                className="btn-action btn-validate h-full w-full rounded-none bg-transparent text-slate-200 hover:text-blue-400 cursor-pointer"
+              >
+                <Check className="h-4 w-4" />
+                <span className="ml-2 hidden sm:inline">Compléter</span>
+              </Button>
+            </div>
+          )
+        ) : (
+          <div
+            className={`mt-5 grid ${shouldShowValidateButton ? "grid-cols-[1fr_1fr_1.25fr]" : "grid-cols-[1fr_1fr]"} overflow-hidden rounded-lg border border-slate-700/60`}
           >
-            <Play className="h-4 w-4" />
-            <span className="ml-2 hidden sm:inline">Lancer</span>
-          </Button>
+            <Button
+              onClick={handlePlay}
+              aria-label="Démarrer la session"
+              className="btn-action btn-play h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white cursor-pointer"
+            >
+              <Play className="h-4 w-4" />
+              <span className="ml-2 hidden sm:inline">Lancer</span>
+            </Button>
 
-          <Button
-            onClick={handleValidate}
-            aria-label="Valider la session"
-            className="btn-action btn-validate h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white"
-          >
-            <Check className="h-4 w-4" />
-            <span className="ml-2 hidden sm:inline">Valider</span>
-          </Button>
+            {shouldShowValidateButton && (
+              <Button
+                onClick={handleValidate}
+                aria-label="Valider la session"
+                className="btn-action btn-validate h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white cursor-pointer"
+              >
+                <Check className="h-4 w-4" />
+                <span className="ml-2 hidden sm:inline">Valider</span>
+              </Button>
+            )}
 
-          <Button
-            onClick={() => setIsDeleteDialogOpen(true)}
-            aria-label="Supprimer la session"
-            className="btn-action btn-delete h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white"
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        </div>
+            <Button
+              onClick={() => setIsDeleteDialogOpen(true)}
+              aria-label="Supprimer la session"
+              className="btn-action btn-delete h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white cursor-pointer"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
       </div>
 
       <ConfirmDeleteDialogue
@@ -149,6 +192,7 @@ export const SessionCard = ({ session }: SessionCardProps) => {
         session={session}
         onValidateSession={handleValidateSession}
         validationLoading={validationLoading}
+        isSessionValidated={session.isValidated}
       />
     </>
   );

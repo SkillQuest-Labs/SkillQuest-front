@@ -42,12 +42,14 @@ const markdownComponents: Components = {
       {children}
     </a>
   ),
-  p: ({ children }) => <p className="mb-4 text-base leading-relaxed text-slate-200 last:mb-0">{children}</p>,
+  p: ({ children }) => (
+    <p className="mb-4 break-words text-base leading-relaxed text-slate-200 last:mb-0">{children}</p>
+  ),
   h2: ({ children }) => <h2 className="mb-3 mt-6 text-xl font-semibold text-slate-100 first:mt-0">{children}</h2>,
   h3: ({ children }) => <h3 className="mb-2 mt-5 text-lg font-semibold text-slate-100 first:mt-0">{children}</h3>,
   ul: ({ children }) => <ul className="mb-4 list-disc space-y-1 pl-5 text-slate-200">{children}</ul>,
   ol: ({ children }) => <ol className="mb-4 list-decimal space-y-1 pl-5 text-slate-200">{children}</ol>,
-  li: ({ children }) => <li className="text-slate-200">{children}</li>,
+  li: ({ children }) => <li className="break-words text-slate-200">{children}</li>,
   blockquote: ({ children }) => (
     <blockquote className="mb-4 border-l-4 border-slate-700 pl-4 italic text-slate-300">{children}</blockquote>
   ),
@@ -137,7 +139,7 @@ export const RenderNodeDetails = ({ selectedNodeData, minimalistView }: RenderNo
         <div className="mt-5 rounded-xl border border-slate-800/60 bg-slate-900/60 p-4">
           {description ? (
             <>
-              <p className="text-sm leading-relaxed text-slate-300">{preview}</p>
+              <p className="line-clamp-4 break-words text-sm leading-relaxed text-slate-300">{preview}</p>
               <div className="mt-4 flex justify-end">
                 <Button
                   type="button"
@@ -194,7 +196,9 @@ export const RenderNodeDetails = ({ selectedNodeData, minimalistView }: RenderNo
             </div>
 
             <div className="mt-6 max-h-[60vh] overflow-y-auto rounded-2xl border border-slate-800/60 bg-slate-900/60 p-6">
-              <ReactMarkdown components={markdownComponents}>{description}</ReactMarkdown>
+              <div className="break-words">
+                <ReactMarkdown components={markdownComponents}>{description}</ReactMarkdown>
+              </div>
             </div>
 
             <DialogFooter className="mt-6 justify-end">

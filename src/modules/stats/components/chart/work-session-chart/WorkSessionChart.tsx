@@ -38,7 +38,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) => {
   const { user } = useUser();
-  const { sessions, isPending, error } = useGetSessions(user?.id || "");
+  const { sessions, isPending, error } = useGetSessions(user?.id || "", true);
 
   const chartData = useMemo(() => {
     if (!sessions || sessions.length === 0) return [];

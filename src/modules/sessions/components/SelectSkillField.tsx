@@ -6,9 +6,10 @@ interface SelectSkillProps {
   setForm: (form: SessionFormType) => void;
   skills: Skill[];
   loading: boolean;
+  disabled?: boolean;
 }
 
-export const SelectSkillField = ({ currentSession, setForm, skills, loading }: SelectSkillProps) => {
+export const SelectSkillField = ({ currentSession, setForm, skills, loading, disabled = false }: SelectSkillProps) => {
   const handleSkillChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedSkill = skills.find((skill) => skill.id === e.target.value);
     setForm({
@@ -35,6 +36,7 @@ export const SelectSkillField = ({ currentSession, setForm, skills, loading }: S
           focus:border-sky-400 focus:ring-sky-500/40
           disabled:bg-slate-700 disabled:text-slate-400 disabled:cursor-not-allowed
         "
+        disabled={loading || disabled}
       >
         <option value="">Aucune</option>
         {loading ? (

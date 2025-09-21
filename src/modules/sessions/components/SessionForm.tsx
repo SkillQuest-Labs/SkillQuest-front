@@ -11,6 +11,7 @@ export const SessionForm = ({
   quests,
   loadingSkills,
   loadingQuests,
+  disabled = false,
 }: SessionFormProps) => {
   return (
     <>
@@ -22,6 +23,7 @@ export const SessionForm = ({
             className="[color-scheme:dark]"
             value={currentSession.startDate}
             onChange={(e) => setForm({ ...currentSession, startDate: e.target.value })}
+            disabled={disabled}
           />
         </div>
         <div>
@@ -31,6 +33,7 @@ export const SessionForm = ({
             className="[color-scheme:dark]"
             value={currentSession.startTime}
             onChange={(e) => setForm({ ...currentSession, startTime: e.target.value })}
+            disabled={disabled}
           />
         </div>
         <div>
@@ -41,19 +44,26 @@ export const SessionForm = ({
             value={currentSession.endTime}
             onChange={(e) => setForm({ ...currentSession, endTime: e.target.value })}
             min={currentSession.startTime || undefined}
+            disabled={disabled}
           />
         </div>
       </div>
 
-      <SelectSkillField currentSession={currentSession} setForm={setForm} skills={skills} loading={loadingSkills} />
+      <SelectSkillField
+        currentSession={currentSession}
+        setForm={setForm}
+        skills={skills}
+        loading={loadingSkills}
+        disabled={disabled}
+      />
       <SelectQuestField
         currentSession={currentSession}
         setForm={setForm}
         quests={quests}
         loading={loadingQuests}
-        disabled={!currentSession.linkedSkill}
+        disabled={!currentSession.linkedSkill || disabled}
       />
-      <ColorPicker currentSession={currentSession} setForm={setForm} />
+      <ColorPicker currentSession={currentSession} setForm={setForm} disabled={disabled} />
     </>
   );
 };
