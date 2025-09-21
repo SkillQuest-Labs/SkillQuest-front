@@ -1,6 +1,18 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import type { DebugLog, LogLevel, DebugModalState, Position, Size } from "./debug-modal.types";
 
+/**
+ * Interface pour l'objet window étendu avec debugLogger
+ */
+interface WindowWithDebugLogger extends Window {
+  debugLogger?: {
+    info: (message: string, data?: unknown) => void;
+    warn: (message: string, data?: unknown) => void;
+    error: (message: string, data?: unknown) => void;
+    debug: (message: string, data?: unknown) => void;
+  };
+}
+
 const INITIAL_POSITION: Position = { x: 20, y: 20 };
 const INITIAL_SIZE: Size = { width: 400, height: 300 };
 const MIN_SIZE: Size = { width: 300, height: 200 };
@@ -19,7 +31,7 @@ export const useDebugModal = () => {
   const resizeStartRef = useRef<{ x: number; y: number; width: number; height: number } | null>(null);
 
   // Ajouter un log
-  const addLog = useCallback((level: LogLevel, message: string, data?: any) => {
+  const addLog = useCallback((level: LogLevel, message: string, data?: unknown) => {
     const newLog: DebugLog = {
       id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       level,
@@ -114,20 +126,20 @@ export const useDebugModal = () => {
   // Global API to add logs from anywhere
   useEffect(() => {
     const globalDebugLogger = {
-      error: (message: string, data?: any) => addLog("error", message, data),
-      warn: (message: string, data?: any) => addLog("warn", message, data),
-      info: (message: string, data?: any) => addLog("info", message, data),
-      debug: (message: string, data?: any) => addLog("debug", message, data),
+      error: (message: string, data?: unknown) => addLog("error", message, data),
+      warn: (message: string, data?: unknown) => addLog("warn", message, data),
+      info: (message: string, data?: unknown) => addLog("info", message, data),
+      debug: (message: string, data?: unknown) => addLog("debug", message, data),
     };
 
     // Exposer globalement en mode développement
     if (import.meta.env.DEV) {
-      (window as any).debugLogger = globalDebugLogger;
+      (window as WindowWithDebugLogger).debugLogger = globalDebugLogger;
     }
 
     return () => {
       if (import.meta.env.DEV) {
-        delete (window as any).debugLogger;
+        delete (window as WindowWithDebugLogger).debugLogger;
       }
     };
   }, [addLog]);

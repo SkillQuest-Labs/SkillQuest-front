@@ -8,6 +8,7 @@ import { DOJO_ANIMATIONS } from "../constants/dojo-environments";
 import { Button } from "@/shared/components/ui/button";
 import { X, Settings, Eye, EyeOff } from "lucide-react";
 import type { Session } from "@/shared/services/session/api-session.type";
+import { hasDescription } from "../types/session-quest.types";
 
 interface DojoImmersiveProps {
   environment: DojoEnvironment;
@@ -54,19 +55,29 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
 
   const questsToDisplay =
     mode === "sessions" && selectedSession
-      ? selectedSession.quests.map((sessionQuest, index) => ({
-          id: sessionQuest.questId || sessionQuest.id || `quest-${index}`,
-          title: sessionQuest.quest?.title || sessionQuest.title || `Quête ${index + 1}`,
-          description:
-            (sessionQuest.quest as any)?.description ||
-            (sessionQuest as any)?.description ||
-            `Description de la quête ${index + 1}`,
-          difficulty: "moyen" as const,
-          estimatedTime: 30,
-          xp: 50,
-          skills: [selectedSession.linkedSkill.title],
-          isCompleted: sessionQuest.quest?.status === "COMPLETED",
-        }))
+      ? selectedSession.quests.map((sessionQuest, index) => {
+          // Utilisation de type guards pour un accès sécurisé aux propriétés
+          const getDescription = (): string => {
+            if (hasDescription(sessionQuest.quest)) {
+              return sessionQuest.quest.description;
+            }
+            if (hasDescription(sessionQuest)) {
+              return sessionQuest.description;
+            }
+            return `Description de la quête ${index + 1}`;
+          };
+
+          return {
+            id: sessionQuest.questId || sessionQuest.id || `quest-${index}`,
+            title: sessionQuest.quest?.title || sessionQuest.title || `Quête ${index + 1}`,
+            description: getDescription(),
+            difficulty: "moyen" as const,
+            estimatedTime: 30,
+            xp: 50,
+            skills: [selectedSession.linkedSkill.title],
+            isCompleted: sessionQuest.quest?.status === "COMPLETED",
+          };
+        })
       : selectedQuests;
 
   return (
