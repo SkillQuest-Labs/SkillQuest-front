@@ -11,6 +11,7 @@ import { WeeklySessionsReminder } from "@/component/dashboard/WeeklySessionsRemi
 import { useComputeUserProgress } from "@/modules/stats/hooks/use-compute-user-progress";
 import { useGetUserStats } from "@/shared/services/user/api-user";
 import { AccueilStatCard } from "@/modules/stats/components/AccueilStatsCard";
+import { useLoginStreak } from "@/shared/hooks/useLoginStreak";
 import { Award, Target, TrendingUp } from "lucide-react";
 
 export const DashboardUser = () => {
@@ -36,6 +37,9 @@ export const DashboardUser = () => {
   const { userCurrentLevel, xpThreshold, xpToNextLevel, totalXp, totalQuestCompleted, totalSkillCompleted } =
     useComputeUserProgress({ skills, userStats });
 
+  // Hook pour gérer le streak basé sur les connexions Clerk
+  const { currentStreak, isLoading: isStreakLoading } = useLoginStreak();
+
   return (
     <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
       <div className="h-full w-full px-4 sm:px-6 lg:px-8 py-4">
@@ -49,7 +53,7 @@ export const DashboardUser = () => {
         <div className="h-full grid grid-rows-[auto_1fr] gap-4">
           {/* HEADER - Message de bienvenue (pleine largeur) */}
           <div>
-            <WelcomeSection userName={fallbackUsername} streak={7} />
+            <WelcomeSection userName={fallbackUsername} streak={currentStreak} />
           </div>
 
           {/* CONTENU PRINCIPAL - Stats + Sessions + Sidebar */}
@@ -60,7 +64,7 @@ export const DashboardUser = () => {
               <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.8fr] gap-4 items-center w-full">
                 {/* Streak Component */}
                 <div className="flex justify-center lg:justify-start">
-                  <StreakComponent currentStreak={7} maxStreak={7} />
+                  <StreakComponent currentStreak={isStreakLoading ? 0 : currentStreak} maxStreak={7} />
                 </div>
 
                 {/* Stats Cards - XP, Skills, Quêtes */}
@@ -102,7 +106,7 @@ export const DashboardUser = () => {
         >
           <ProfileHud
             userName={user?.username || user?.firstName || "Aventurier"}
-            title={(user?.unsafeMetadata?.role as string) || "Aventurier"}
+            title="Aventurier"
             level={userCurrentLevel}
             xp={xpThreshold - xpToNextLevel}
             xpToNext={xpThreshold}
