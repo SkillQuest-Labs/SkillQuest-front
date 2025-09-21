@@ -14,10 +14,10 @@ class SessionStorageService {
   // Sauvegarder les données de session
   saveSessionData(data: SessionData): void {
     this.sessionData = data;
-    
+
     // Sauvegarder dans le localStorage pour la persistance
     localStorage.setItem("currentSessionData", JSON.stringify(data));
-    
+
     console.log("Session data saved:", data);
   }
 
@@ -45,7 +45,7 @@ class SessionStorageService {
   // Calculer les statistiques de session
   calculateSessionStats(data: SessionData): SessionStats {
     const efficiency = data.duration > 0 ? (data.timeElapsed / data.duration) * 100 : 0;
-    
+
     return {
       totalTime: data.duration,
       effectiveTime: data.timeElapsed,

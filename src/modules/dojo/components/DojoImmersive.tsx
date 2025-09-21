@@ -48,7 +48,7 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
   // Décompte de la session
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    
+
     if (isSessionStarted && !isSessionPaused && sessionTimeLeft > 0 && !isSessionCompleted) {
       interval = setInterval(() => {
         setSessionTimeLeft((prev) => {
@@ -81,7 +81,7 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
       // État Pause : Reprendre la session
       if (pauseStartTime) {
         const pauseDuration = Date.now() - pauseStartTime;
-        setTotalPauseDuration(prev => prev + pauseDuration);
+        setTotalPauseDuration((prev) => prev + pauseDuration);
         setPauseStartTime(null);
       }
       setIsSessionPaused(false);
@@ -90,14 +90,14 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
       return;
     } else {
       // État en cours : Mettre en pause
-      setPausedCount(prev => prev + 1);
+      setPausedCount((prev) => prev + 1);
       setPauseStartTime(Date.now());
       setIsSessionPaused(true);
     }
   };
 
   const extendSession = () => {
-    setSessionTimeLeft(prev => prev + 15 * 60); // Ajouter 15 minutes
+    setSessionTimeLeft((prev) => prev + 15 * 60); // Ajouter 15 minutes
     setShowSessionCompleteModal(false);
     setIsSessionStarted(true);
     setIsSessionPaused(false);
@@ -106,9 +106,7 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
 
   const endSession = async () => {
     // Calculer la durée totale des pauses en secondes
-    const finalPauseDuration = pauseStartTime 
-      ? totalPauseDuration + (Date.now() - pauseStartTime)
-      : totalPauseDuration;
+    const finalPauseDuration = pauseStartTime ? totalPauseDuration + (Date.now() - pauseStartTime) : totalPauseDuration;
 
     // Enregistrer les données de session
     const sessionData: SessionData = {
@@ -122,20 +120,20 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
       pausedCount: pausedCount,
       pauseDuration: Math.floor(finalPauseDuration / 1000), // Convertir en secondes
     };
-    
+
     // Sauvegarder localement
     sessionStorageService.saveSessionData(sessionData);
-    
+
     // Calculer et afficher les statistiques
     const stats = sessionStorageService.calculateSessionStats(sessionData);
     console.log("Session completed with stats:", stats);
-    
+
     // Essayer d'envoyer au backend
     const sentToBackend = await sessionStorageService.sendToBackend(sessionData);
     if (!sentToBackend) {
       console.warn("Session data saved locally but could not be sent to backend");
     }
-    
+
     // Réinitialiser tous les états
     setIsSessionStarted(false);
     setIsSessionPaused(false);
@@ -147,7 +145,6 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
     setShowSessionCompleteModal(false);
     onExit();
   };
-
 
   useEffect(() => {
     const video = videoRef.current;
@@ -216,8 +213,8 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
           isUIHidden ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"
         }`}
       >
-        <SessionInfo 
-          session={selectedSession} 
+        <SessionInfo
+          session={selectedSession}
           sessionTimeLeft={sessionTimeLeft}
           isSessionActive={isSessionStarted && !isSessionPaused}
         />
@@ -285,10 +282,10 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
             isSessionCompleted
               ? "Session terminée"
               : !isSessionStarted
-              ? "Lancer la session"
-              : isSessionPaused
-              ? "Reprendre la session"
-              : "Mettre en pause"
+                ? "Lancer la session"
+                : isSessionPaused
+                  ? "Reprendre la session"
+                  : "Mettre en pause"
           }
         >
           {isSessionCompleted ? (
@@ -311,7 +308,10 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
             <h3 className="text-xl font-semibold text-white mb-2">Session terminée !</h3>
             <div className="text-gray-400 mb-4 space-y-1">
               <p>Durée prévue : {selectedSession.duration} minutes</p>
-              <p>Temps écoulé : {Math.floor(sessionTimeElapsed / 60)}:{(sessionTimeElapsed % 60).toString().padStart(2, "0")}</p>
+              <p>
+                Temps écoulé : {Math.floor(sessionTimeElapsed / 60)}:
+                {(sessionTimeElapsed % 60).toString().padStart(2, "0")}
+              </p>
               <p>Pauses : {pausedCount} fois</p>
               <p>Environnement : {environment.name}</p>
             </div>

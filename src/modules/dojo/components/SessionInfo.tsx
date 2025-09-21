@@ -24,7 +24,7 @@ export const SessionInfo: React.FC<SessionInfoProps> = ({ session, sessionTimeLe
       const seconds = sessionTimeLeft % 60;
       return `${minutes}:${seconds.toString().padStart(2, "0")}`;
     }
-    
+
     const start = new Date(session.startTime);
     const end = new Date(session.endTime);
     const diffMs = end.getTime() - start.getTime();
