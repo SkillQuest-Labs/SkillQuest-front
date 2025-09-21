@@ -14,6 +14,7 @@ export interface IRoutes {
   stats: IRoute;
   sessionsListing: IRoute;
   dojo: IRoute;
+  dojoImmersive: IRoute;
   notfound: IRoute;
   signIn: IRoute;
   signUp: IRoute;
@@ -68,6 +69,10 @@ export const routes: IRoutes = {
   dojo: {
     path: "/dashboard/dojo",
     display: "Dojo",
+  },
+  dojoImmersive: {
+    path: "/dojo/:sessionId",
+    display: "Dojo Immersif",
   },
   notfound: {
     path: "*",

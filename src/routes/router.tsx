@@ -17,6 +17,7 @@ import { WorkSession } from "@/pages/dashboard/WorkSession";
 import { Stats } from "@/pages/dashboard/Stats";
 import { SessionsListingPage } from "@/pages/dashboard/SessionsListingPage";
 import { Dojo } from "@/pages/dashboard/Dojo";
+import { DojoImmersivePage } from "@/pages/dojo/DojoImmersivePage";
 
 export const router = createBrowserRouter([
   // Public routes for authentication
@@ -99,6 +100,10 @@ export const router = createBrowserRouter([
       {
         path: routes.canvas.path,
         element: <CanvasPage />,
+      },
+      {
+        path: routes.dojoImmersive.path,
+        element: <DojoImmersivePage />,
       },
     ],
   },

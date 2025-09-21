@@ -1,31 +1,26 @@
 import { useState } from "react";
-import { DojoImmersive } from "@/modules/dojo/components/DojoImmersive";
 import { useDojoMedia } from "@/modules/dojo/hooks/useDojoMedia";
 import { useDojoSessions } from "@/modules/dojo/hooks/useDojoSessions";
 import { SessionsMode } from "@/modules/dojo/components/SessionsMode";
 import { EnvironmentSelector } from "@/modules/dojo/components/EnvironmentSelector";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Button } from "@/shared/components/ui/button";
-import { Portal } from "@/shared/components/ui/portal";
 import { Play, Clock, Target, Settings, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { routes } from "@/routes/router.const";
 import type { Session } from "@/shared/services/session/api-session.type";
 
 export const Dojo = () => {
-  const [isImmersiveMode, setIsImmersiveMode] = useState(false);
   const [selectedSession, setSelectedSession] = useState<Session | null>(null);
   const navigate = useNavigate();
 
-  const { currentEnvironment, isBackgroundVisible, environments } = useDojoMedia();
+  const { currentEnvironment, environments } = useDojoMedia();
   const { sessions, loading: sessionsLoading } = useDojoSessions();
 
   const handleLaunchImmersive = () => {
-    setIsImmersiveMode(true);
-  };
-
-  const handleExitImmersive = () => {
-    setIsImmersiveMode(false);
+    if (selectedSession) {
+      navigate(`${routes.dojoImmersive.path.replace(':sessionId', selectedSession.id)}`);
+    }
   };
 
   const handleSelectSession = (session: Session) => {
@@ -37,19 +32,6 @@ export const Dojo = () => {
   };
 
   const canLaunchDojo = selectedSession !== null;
-
-  if (isImmersiveMode && selectedSession) {
-    return (
-      <Portal>
-        <DojoImmersive
-          environment={currentEnvironment}
-          isBackgroundVisible={isBackgroundVisible}
-          onExit={handleExitImmersive}
-          selectedSession={selectedSession}
-        />
-      </Portal>
-    );
-  }
 
   return (
     <div className="p-6 space-y-6">
