@@ -15,7 +15,7 @@ export const Dojo = () => {
   const { sessions, loading: sessionsLoading } = useDojoSessions();
 
   const handleLaunchImmersive = (session: Session) => {
-    navigate(`${routes.dojoImmersive.path}/${session.id}`);
+    navigate(`${routes.dojoImmersive.path}/${session.id}?environment=${currentEnvironment.id}`);
   };
 
   const handleSelectEnvironment = (environmentId: string) => {
@@ -57,11 +57,7 @@ export const Dojo = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-0 flex-1 min-h-0">
-              <SessionsMode
-                sessions={sessions}
-                loading={sessionsLoading}
-                onLaunchSession={handleLaunchImmersive}
-              />
+              <SessionsMode sessions={sessions} loading={sessionsLoading} onLaunchSession={handleLaunchImmersive} />
             </CardContent>
           </Card>
         </div>

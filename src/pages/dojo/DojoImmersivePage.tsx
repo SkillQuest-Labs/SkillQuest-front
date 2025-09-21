@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { DojoImmersive } from "@/modules/dojo/components/DojoImmersive";
 import { useDojoMedia } from "@/modules/dojo/hooks/useDojoMedia";
 import { useDojoSessions } from "@/modules/dojo/hooks/useDojoSessions";
@@ -12,12 +12,21 @@ import type { Session } from "@/shared/services/session/api-session.type";
 export const DojoImmersivePage: React.FC = () => {
   const { sessionId } = useParams<{ sessionId: string }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [selectedSession, setSelectedSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const { currentEnvironment, environments, isBackgroundVisible, changeEnvironment } = useDojoMedia();
+  const { currentEnvironment, isBackgroundVisible, changeEnvironment } = useDojoMedia();
   const { sessions, loading: sessionsLoading } = useDojoSessions();
+
+  // Changer l'environnement basé sur l'URL
+  useEffect(() => {
+    const environmentId = searchParams.get("environment");
+    if (environmentId && environmentId !== currentEnvironment.id) {
+      changeEnvironment(environmentId);
+    }
+  }, [searchParams, currentEnvironment.id, changeEnvironment]);
 
   // Charger la session correspondante
   useEffect(() => {
@@ -82,10 +91,8 @@ export const DojoImmersivePage: React.FC = () => {
   return (
     <DojoImmersive
       environment={currentEnvironment}
-      environments={environments}
       isBackgroundVisible={isBackgroundVisible}
       onExit={handleExit}
-      onEnvironmentChange={changeEnvironment}
       selectedSession={selectedSession}
     />
   );
