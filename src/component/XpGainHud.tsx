@@ -9,6 +9,7 @@ type XpGainHudProps = {
   avatarUrl?: string;
   className?: string;
   previousXp?: number; // Nouvelle prop pour l'XP précédent
+  isVisible?: boolean; // Nouvelle prop pour contrôler la visibilité
 };
 
 const XpGainHud = ({
@@ -19,14 +20,31 @@ const XpGainHud = ({
   xpToNext,
   className = "",
   previousXp,
+  isVisible = true,
 }: XpGainHudProps) => {
   const [animatedXp, setAnimatedXp] = useState(previousXp || xp);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [shouldRender, setShouldRender] = useState(isVisible);
+  const [showXpNotification, setShowXpNotification] = useState(false);
+
+  // Animation d'entrée et de sortie du composant
+  useEffect(() => {
+    if (isVisible) {
+      setShouldRender(true);
+    } else {
+      // Délai pour permettre l'animation de sortie
+      const timer = setTimeout(() => {
+        setShouldRender(false);
+      }, 300); // Durée de l'animation de sortie
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible]);
 
   // Animation manuelle de l'XP
   useEffect(() => {
     if (previousXp && previousXp !== xp) {
       setIsAnimating(true);
+      setShowXpNotification(true);
       const startXp = previousXp;
       const endXp = xp;
       const gain = endXp - startXp;
@@ -48,6 +66,11 @@ const XpGainHud = ({
         } else {
           setAnimatedXp(endXp);
           setIsAnimating(false);
+
+          // Masquer la notification XP après l'animation avec un délai
+          setTimeout(() => {
+            setShowXpNotification(false);
+          }, 500);
         }
       };
 
@@ -58,17 +81,38 @@ const XpGainHud = ({
   const pct = useMemo(() => Math.min((animatedXp / xpToNext) * 100, 100), [animatedXp, xpToNext]);
   const xpGain = previousXp && previousXp !== xp ? xp - previousXp : 0;
 
+  // Ne pas rendre le composant s'il ne doit pas être visible
+  if (!shouldRender) {
+    return null;
+  }
+
   return (
-    <div className={`relative ${className}`}>
-      {/* Notification XP au-dessus du HUD */}
-      {isAnimating && xpGain > 0 && (
-        <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 bg-slate-700/95 text-slate-200 px-4 py-2 rounded-lg text-sm font-medium border border-slate-600/50 shadow-lg backdrop-blur-sm z-10">
+    <div
+      className={`relative ${className} ${
+        isVisible ? "animate-[slideInScale_0.4s_ease-out_forwards]" : "animate-[slideOutScale_0.3s_ease-in_forwards]"
+      }`}
+      style={{
+        transformOrigin: "top center",
+        animationFillMode: "forwards",
+      }}
+    >
+      {/* Notification XP au-dessus du HUD avec animations d'arrivée et de sortie */}
+      {showXpNotification && xpGain > 0 && (
+        <div
+          className={`absolute -top-16 left-1/2 transform -translate-x-1/2 bg-slate-700/95 text-slate-200 px-4 py-2 rounded-lg text-sm font-medium border border-slate-600/50 shadow-lg backdrop-blur-sm z-10 ${
+            isAnimating ? "animate-[bounceIn_0.6s_ease-out_forwards]" : "animate-[fadeOutUp_0.5s_ease-in_forwards]"
+          }`}
+        >
           +{xpGain} XP
         </div>
       )}
 
-      {/* HUD principal */}
-      <div className="flex flex-col gap-3 p-4 rounded-2xl bg-gradient-to-r from-slate-900/95 to-slate-800/95 backdrop-blur-md shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-slate-600/30 min-w-[280px]">
+      {/* HUD principal avec animation de glow lors du gain XP */}
+      <div
+        className={`flex flex-col gap-3 p-4 rounded-2xl bg-gradient-to-r from-slate-900/95 to-slate-800/95 backdrop-blur-md shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-slate-600/30 min-w-[280px] transition-all duration-500 ${
+          isAnimating ? "animate-[glowPulse_2s_ease-in-out_infinite] shadow-[0_20px_50px_rgba(251,191,36,0.3)]" : ""
+        }`}
+      >
         {/* Titre et niveau */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">

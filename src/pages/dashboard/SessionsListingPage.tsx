@@ -71,19 +71,18 @@ export const SessionsListingPage = () => {
       <SessionsListing />
 
       {/* XpGainHud en bas à droite - affiché uniquement lors de la validation */}
-      {showHud && (
-        <div className="fixed bottom-4 right-4 z-50">
-          <XpGainHud
-            userName={fallbackUsername}
-            title={role}
-            level={userCurrentLevel}
-            xp={xpThreshold - xpToNextLevel}
-            xpToNext={xpThreshold}
-            avatarUrl={user?.imageUrl || "/profile.jpg"}
-            previousXp={previousXp}
-          />
-        </div>
-      )}
+      <div className="fixed bottom-4 right-4 z-50">
+        <XpGainHud
+          userName={fallbackUsername}
+          title={role}
+          level={userCurrentLevel}
+          xp={xpThreshold - xpToNextLevel}
+          xpToNext={xpThreshold}
+          avatarUrl={user?.imageUrl || "/profile.jpg"}
+          previousXp={previousXp}
+          isVisible={showHud}
+        />
+      </div>
     </div>
   );
 };
