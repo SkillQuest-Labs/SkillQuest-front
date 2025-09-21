@@ -19,7 +19,7 @@ export const Dojo = () => {
 
   const handleLaunchImmersive = () => {
     if (selectedSession) {
-      navigate(`${routes.dojoImmersive.path.replace(':sessionId', selectedSession.id)}`);
+      navigate(`${routes.dojoImmersive.path.replace(":sessionId", selectedSession.id)}`);
     }
   };
 
