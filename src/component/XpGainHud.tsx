@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 
 type XpGainHudProps = {
   userName: string;
@@ -8,8 +8,8 @@ type XpGainHudProps = {
   xpToNext: number;
   avatarUrl?: string;
   className?: string;
-  previousXp?: number; // Nouvelle prop pour l'XP précédent
-  isVisible?: boolean; // Nouvelle prop pour contrôler la visibilité
+  previousXp?: number;
+  isVisible?: boolean;
 };
 
 const XpGainHud = ({
@@ -22,25 +22,24 @@ const XpGainHud = ({
   previousXp,
   isVisible = true,
 }: XpGainHudProps) => {
-  const [animatedXp, setAnimatedXp] = useState(previousXp || xp);
+  const [animatedXp, setAnimatedXp] = useState(() => previousXp || xp);
   const [isAnimating, setIsAnimating] = useState(false);
   const [shouldRender, setShouldRender] = useState(isVisible);
   const [showXpNotification, setShowXpNotification] = useState(false);
 
-  // Animation d'entrée et de sortie du composant
   useEffect(() => {
     if (isVisible) {
       setShouldRender(true);
     } else {
-      // Délai pour permettre l'animation de sortie
       const timer = setTimeout(() => {
         setShouldRender(false);
-      }, 300); // Durée de l'animation de sortie
+      }, 300);
       return () => clearTimeout(timer);
     }
   }, [isVisible]);
 
-  // Animation manuelle de l'XP
+  const animationRef = useRef<number | null>(null);
+
   useEffect(() => {
     if (previousXp && previousXp !== xp) {
       setIsAnimating(true);
@@ -48,40 +47,60 @@ const XpGainHud = ({
       const startXp = previousXp;
       const endXp = xp;
       const gain = endXp - startXp;
-      const duration = 2000; // 2 secondes
+      const duration = 3500;
       const startTime = performance.now();
 
       const animate = (currentTime: DOMHighResTimeStamp) => {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
 
-        // Easing function (easeOutCubic)
         const easedProgress = 1 - Math.pow(1 - progress, 3);
 
         const newXp = startXp + gain * easedProgress;
         setAnimatedXp(newXp);
 
         if (progress < 1) {
-          requestAnimationFrame(animate);
+          animationRef.current = requestAnimationFrame(animate);
         } else {
           setAnimatedXp(endXp);
           setIsAnimating(false);
+          animationRef.current = null;
 
-          // Masquer la notification XP après l'animation avec un délai
           setTimeout(() => {
             setShowXpNotification(false);
-          }, 500);
+          }, 1000);
         }
       };
 
-      requestAnimationFrame(animate);
+      animationRef.current = requestAnimationFrame(animate);
     }
-  }, [previousXp, xp, xpToNext]);
 
-  const pct = useMemo(() => Math.min((animatedXp / xpToNext) * 100, 100), [animatedXp, xpToNext]);
-  const xpGain = previousXp && previousXp !== xp ? xp - previousXp : 0;
+    return () => {
+      if (animationRef.current !== null) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
+      }
+    };
+  }, [previousXp, xp]);
 
-  // Ne pas rendre le composant s'il ne doit pas être visible
+  useEffect(() => {
+    if (!isAnimating && !previousXp) {
+      setAnimatedXp(xp);
+    }
+  }, [xp, isAnimating, previousXp]);
+
+  const pct = useMemo(() => {
+    if (xpToNext <= 0 || !isFinite(xpToNext) || !isFinite(animatedXp)) {
+      return 0;
+    }
+    return Math.min((animatedXp / xpToNext) * 100, 100);
+  }, [animatedXp, xpToNext]);
+
+  const xpGain = useMemo(() => {
+    if (!previousXp || previousXp === xp) return 0;
+    return xp - previousXp;
+  }, [previousXp, xp]);
+
   if (!shouldRender) {
     return null;
   }
@@ -96,7 +115,6 @@ const XpGainHud = ({
         animationFillMode: "forwards",
       }}
     >
-      {/* Notification XP au-dessus du HUD avec animations d'arrivée et de sortie */}
       {showXpNotification && xpGain > 0 && (
         <div
           className={`absolute -top-16 left-1/2 transform -translate-x-1/2 bg-slate-700/95 text-slate-200 px-4 py-2 rounded-lg text-sm font-medium border border-slate-600/50 shadow-lg backdrop-blur-sm z-10 ${
@@ -107,13 +125,11 @@ const XpGainHud = ({
         </div>
       )}
 
-      {/* HUD principal avec animation de glow lors du gain XP */}
       <div
         className={`flex flex-col gap-3 p-4 rounded-2xl bg-gradient-to-r from-slate-900/95 to-slate-800/95 backdrop-blur-md shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-slate-600/30 min-w-[280px] transition-all duration-500 ${
-          isAnimating ? "animate-[glowPulse_2s_ease-in-out_infinite] shadow-[0_20px_50px_rgba(251,191,36,0.3)]" : ""
+          isAnimating ? "animate-[glowPulse_3.5s_ease-in-out_infinite] shadow-[0_20px_50px_rgba(251,191,36,0.3)]" : ""
         }`}
       >
-        {/* Titre et niveau */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <h3 className="text-lg font-bold text-white">{userName}</h3>
@@ -124,7 +140,6 @@ const XpGainHud = ({
           </div>
         </div>
 
-        {/* Barre de progression avec gradient orange-rouge */}
         <div className="relative">
           <div className="w-full h-3 bg-slate-700/60 rounded-full overflow-hidden border border-slate-600/40">
             <div
@@ -134,7 +149,6 @@ const XpGainHud = ({
           </div>
         </div>
 
-        {/* Indicateurs XP */}
         <div className="flex justify-between items-center text-xs font-medium text-slate-300">
           <span>LVL {level}</span>
           <span>
