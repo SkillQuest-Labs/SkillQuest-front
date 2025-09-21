@@ -83,12 +83,8 @@ export const SessionCard = ({ session }: SessionCardProps) => {
   // Vérifier s'il y a des quêtes non validées dans une session validée
   const hasUnvalidatedQuests = session.isValidated && !isSessionFullyCompleted(session);
 
-  // Vérifier s'il y a des quêtes non validées dans une session non validée
-  const hasUnvalidatedQuestsInUnvalidatedSession =
-    !session.isValidated &&
-    session.quests &&
-    session.quests.length > 0 &&
-    session.quests.some((quest: any) => quest.quest?.status !== "COMPLETED");
+  // Le bouton Valider doit être affiché pour toutes les sessions non validées
+  const shouldShowValidateButton = !session.isValidated;
 
   return (
     <>
@@ -150,7 +146,7 @@ export const SessionCard = ({ session }: SessionCardProps) => {
           )
         ) : (
           <div
-            className={`mt-5 grid ${hasUnvalidatedQuestsInUnvalidatedSession ? "grid-cols-[1fr_1fr_1.25fr]" : "grid-cols-[1fr_1fr]"} overflow-hidden rounded-lg border border-slate-700/60`}
+            className={`mt-5 grid ${shouldShowValidateButton ? "grid-cols-[1fr_1fr_1.25fr]" : "grid-cols-[1fr_1fr]"} overflow-hidden rounded-lg border border-slate-700/60`}
           >
             <Button
               onClick={handlePlay}
@@ -161,7 +157,7 @@ export const SessionCard = ({ session }: SessionCardProps) => {
               <span className="ml-2 hidden sm:inline">Lancer</span>
             </Button>
 
-            {hasUnvalidatedQuestsInUnvalidatedSession && (
+            {shouldShowValidateButton && (
               <Button
                 onClick={handleValidate}
                 aria-label="Valider la session"

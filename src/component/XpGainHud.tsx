@@ -1,4 +1,20 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
+
+type ParticleConfig = {
+  id: string;
+  offsetX: number;
+  delay: number;
+  size: number;
+};
+
+const XP_PARTICLES_TEMPLATE: Array<Omit<ParticleConfig, "id">> = [
+  { offsetX: -76, delay: 0, size: 12 },
+  { offsetX: -42, delay: 90, size: 14 },
+  { offsetX: -8, delay: 160, size: 16 },
+  { offsetX: 28, delay: 230, size: 13 },
+  { offsetX: 62, delay: 300, size: 15 },
+  { offsetX: 96, delay: 360, size: 12 },
+];
 
 type XpGainHudProps = {
   userName: string;
@@ -8,8 +24,8 @@ type XpGainHudProps = {
   xpToNext: number;
   avatarUrl?: string;
   className?: string;
-  previousXp?: number; // Nouvelle prop pour l'XP précédent
-  isVisible?: boolean; // Nouvelle prop pour contrôler la visibilité
+  previousXp?: number;
+  isVisible?: boolean;
 };
 
 const XpGainHud = ({
@@ -22,66 +38,94 @@ const XpGainHud = ({
   previousXp,
   isVisible = true,
 }: XpGainHudProps) => {
-  const [animatedXp, setAnimatedXp] = useState(previousXp || xp);
+  const [animatedXp, setAnimatedXp] = useState(() => previousXp || xp);
   const [isAnimating, setIsAnimating] = useState(false);
   const [shouldRender, setShouldRender] = useState(isVisible);
-  const [showXpNotification, setShowXpNotification] = useState(false);
+  const [burstActive, setBurstActive] = useState(false);
+  const [particles, setParticles] = useState<ParticleConfig[]>([]);
 
-  // Animation d'entrée et de sortie du composant
   useEffect(() => {
     if (isVisible) {
       setShouldRender(true);
     } else {
-      // Délai pour permettre l'animation de sortie
       const timer = setTimeout(() => {
         setShouldRender(false);
-      }, 300); // Durée de l'animation de sortie
+      }, 1500); // Attendre que l'animation de disparition se termine (1.5s)
       return () => clearTimeout(timer);
     }
   }, [isVisible]);
 
-  // Animation manuelle de l'XP
+  const animationRef = useRef<number | null>(null);
+  const burstTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
     if (previousXp && previousXp !== xp) {
       setIsAnimating(true);
-      setShowXpNotification(true);
+      setBurstActive(true);
+      setParticles(
+        XP_PARTICLES_TEMPLATE.map((particle, index) => ({
+          ...particle,
+          id: `${Date.now()}-${index}`,
+        })),
+      );
+      if (burstTimeoutRef.current) {
+        clearTimeout(burstTimeoutRef.current);
+      }
+      burstTimeoutRef.current = setTimeout(() => {
+        setBurstActive(false);
+      }, 1200);
       const startXp = previousXp;
       const endXp = xp;
       const gain = endXp - startXp;
-      const duration = 2000; // 2 secondes
+      const duration = 3500;
       const startTime = performance.now();
 
       const animate = (currentTime: DOMHighResTimeStamp) => {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
 
-        // Easing function (easeOutCubic)
         const easedProgress = 1 - Math.pow(1 - progress, 3);
 
         const newXp = startXp + gain * easedProgress;
         setAnimatedXp(newXp);
 
         if (progress < 1) {
-          requestAnimationFrame(animate);
+          animationRef.current = requestAnimationFrame(animate);
         } else {
           setAnimatedXp(endXp);
           setIsAnimating(false);
-
-          // Masquer la notification XP après l'animation avec un délai
-          setTimeout(() => {
-            setShowXpNotification(false);
-          }, 500);
+          animationRef.current = null;
         }
       };
 
-      requestAnimationFrame(animate);
+      animationRef.current = requestAnimationFrame(animate);
     }
-  }, [previousXp, xp, xpToNext]);
 
-  const pct = useMemo(() => Math.min((animatedXp / xpToNext) * 100, 100), [animatedXp, xpToNext]);
-  const xpGain = previousXp && previousXp !== xp ? xp - previousXp : 0;
+    return () => {
+      if (animationRef.current !== null) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
+      }
+      if (burstTimeoutRef.current) {
+        clearTimeout(burstTimeoutRef.current);
+        burstTimeoutRef.current = null;
+      }
+    };
+  }, [previousXp, xp]);
 
-  // Ne pas rendre le composant s'il ne doit pas être visible
+  useEffect(() => {
+    if (!isAnimating && !previousXp) {
+      setAnimatedXp(xp);
+    }
+  }, [xp, isAnimating, previousXp]);
+
+  const pct = useMemo(() => {
+    if (xpToNext <= 0 || !isFinite(xpToNext) || !isFinite(animatedXp)) {
+      return 0;
+    }
+    return Math.min((animatedXp / xpToNext) * 100, 100);
+  }, [animatedXp, xpToNext]);
+
   if (!shouldRender) {
     return null;
   }
@@ -89,31 +133,47 @@ const XpGainHud = ({
   return (
     <div
       className={`relative ${className} ${
-        isVisible ? "animate-[slideInScale_0.4s_ease-out_forwards]" : "animate-[slideOutScale_0.3s_ease-in_forwards]"
+        isVisible
+          ? "animate-[slideInFromBottom_0.6s_ease-out_forwards]"
+          : "animate-[slideOutToBottom_1.5s_ease-in_forwards]"
       }`}
       style={{
-        transformOrigin: "top center",
+        transformOrigin: "center center",
         animationFillMode: "forwards",
       }}
     >
-      {/* Notification XP au-dessus du HUD avec animations d'arrivée et de sortie */}
-      {showXpNotification && xpGain > 0 && (
-        <div
-          className={`absolute -top-16 left-1/2 transform -translate-x-1/2 bg-slate-700/95 text-slate-200 px-4 py-2 rounded-lg text-sm font-medium border border-slate-600/50 shadow-lg backdrop-blur-sm z-10 ${
-            isAnimating ? "animate-[bounceIn_0.6s_ease-out_forwards]" : "animate-[fadeOutUp_0.5s_ease-in_forwards]"
-          }`}
-        >
-          +{xpGain} XP
+      {burstActive && (
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <div className="relative h-40 w-40">
+            <div className="absolute inset-0 rounded-full border border-amber-300/40 bg-amber-200/10 blur-md" />
+            <div className="absolute inset-0 -m-8 rounded-full bg-gradient-to-r from-amber-500/35 via-pink-500/20 to-violet-500/30 blur-2xl opacity-70 animate-[xpAura_1.2s_ease-out_forwards]" />
+            <div className="absolute inset-0 rounded-full border border-amber-400/60 opacity-80 animate-[xpRing_1s_ease-out_forwards]" />
+            <div
+              className="absolute inset-4 rounded-full border border-amber-200/40 opacity-60 animate-[xpRing_1s_ease-out_forwards]"
+              style={{ animationDelay: "120ms" }}
+            />
+          </div>
         </div>
       )}
 
-      {/* HUD principal avec animation de glow lors du gain XP */}
+      {particles.map((particle) => (
+        <span
+          key={particle.id}
+          className="pointer-events-none absolute top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-amber-200 via-rose-200 to-indigo-300 shadow-[0_0_18px_rgba(251,191,36,0.65)] animate-[xpParticle_1.8s_ease-out_forwards]"
+          style={{
+            left: `calc(50% + ${particle.offsetX}px)`,
+            width: `${particle.size}px`,
+            height: `${particle.size}px`,
+            animationDelay: `${particle.delay}ms`,
+          }}
+        />
+      ))}
+
       <div
         className={`flex flex-col gap-3 p-4 rounded-2xl bg-gradient-to-r from-slate-900/95 to-slate-800/95 backdrop-blur-md shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-slate-600/30 min-w-[280px] transition-all duration-500 ${
-          isAnimating ? "animate-[glowPulse_2s_ease-in-out_infinite] shadow-[0_20px_50px_rgba(251,191,36,0.3)]" : ""
+          isAnimating ? "animate-[glowPulse_3.5s_ease-in-out_infinite] shadow-[0_20px_50px_rgba(251,191,36,0.3)]" : ""
         }`}
       >
-        {/* Titre et niveau */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <h3 className="text-lg font-bold text-white">{userName}</h3>
@@ -124,7 +184,6 @@ const XpGainHud = ({
           </div>
         </div>
 
-        {/* Barre de progression avec gradient orange-rouge */}
         <div className="relative">
           <div className="w-full h-3 bg-slate-700/60 rounded-full overflow-hidden border border-slate-600/40">
             <div
@@ -134,7 +193,6 @@ const XpGainHud = ({
           </div>
         </div>
 
-        {/* Indicateurs XP */}
         <div className="flex justify-between items-center text-xs font-medium text-slate-300">
           <span>LVL {level}</span>
           <span>
