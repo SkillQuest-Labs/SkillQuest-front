@@ -6,7 +6,7 @@ import { Target, Play } from "lucide-react";
 interface SessionsModeProps {
   sessions: Session[];
   loading: boolean;
-  onSelectSession: (session: Session) => void;
+  onLaunchSession: (session: Session) => void;
 }
 
 interface SessionGroup {
@@ -14,7 +14,7 @@ interface SessionGroup {
   sessions: Session[];
 }
 
-export const SessionsMode: React.FC<SessionsModeProps> = ({ sessions, loading, onSelectSession }) => {
+export const SessionsMode: React.FC<SessionsModeProps> = ({ sessions, loading, onLaunchSession }) => {
   // Fonction pour organiser les sessions par sections temporelles
   const organizeSessionsByTime = (sessions: Session[]): SessionGroup[] => {
     const now = new Date();
@@ -41,7 +41,7 @@ export const SessionsMode: React.FC<SessionsModeProps> = ({ sessions, loading, o
 
     // Trier chaque groupe par date (plus récente en premier)
     const sortByDate = (a: Session, b: Session) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime();
-    
+
     todaySessions.sort(sortByDate);
     weekSessions.sort(sortByDate);
     laterSessions.sort(sortByDate);
@@ -51,21 +51,21 @@ export const SessionsMode: React.FC<SessionsModeProps> = ({ sessions, loading, o
     if (todaySessions.length > 0) {
       groups.push({
         title: "Aujourd'hui",
-        sessions: todaySessions
+        sessions: todaySessions,
       });
     }
 
     if (weekSessions.length > 0) {
       groups.push({
         title: "Cette semaine",
-        sessions: weekSessions
+        sessions: weekSessions,
       });
     }
 
     if (laterSessions.length > 0) {
       groups.push({
         title: "Plus tard",
-        sessions: laterSessions
+        sessions: laterSessions,
       });
     }
 
@@ -113,7 +113,7 @@ export const SessionsMode: React.FC<SessionsModeProps> = ({ sessions, loading, o
                 <div
                   key={session.id}
                   className="bg-slate-700/30 border border-slate-600/50 rounded-lg p-3 hover:bg-slate-600/30 transition-colors cursor-pointer"
-                  onClick={() => onSelectSession(session)}
+                  onClick={() => onLaunchSession(session)}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3 flex-1 min-w-0">
@@ -123,15 +123,19 @@ export const SessionsMode: React.FC<SessionsModeProps> = ({ sessions, loading, o
                         <p className="text-gray-400 text-xs truncate">{session.title}</p>
                         <div className="flex items-center space-x-2 text-xs text-gray-500">
                           <span>
-                            {new Date(session.startTime).toLocaleDateString('fr-FR', {
-                              day: 'numeric',
-                              month: 'short',
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            }).replace(',', '')}
+                            {new Date(session.startTime)
+                              .toLocaleDateString("fr-FR", {
+                                day: "numeric",
+                                month: "short",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })
+                              .replace(",", "")}
                           </span>
                           <span>•</span>
-                          <span>{session.quests.length} quête{session.quests.length > 1 ? 's' : ''}</span>
+                          <span>
+                            {session.quests.length} quête{session.quests.length > 1 ? "s" : ""}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -140,7 +144,7 @@ export const SessionsMode: React.FC<SessionsModeProps> = ({ sessions, loading, o
                       <Button
                         onClick={(e) => {
                           e.stopPropagation();
-                          onSelectSession(session);
+                          onLaunchSession(session);
                         }}
                         size="sm"
                         className="bg-orange-500/20 text-orange-400 border-orange-500/30 hover:bg-orange-500/30 h-7 px-2"
@@ -158,3 +162,4 @@ export const SessionsMode: React.FC<SessionsModeProps> = ({ sessions, loading, o
     </div>
   );
 };
+

@@ -1,29 +1,21 @@
-import { useState } from "react";
 import { useDojoMedia } from "@/modules/dojo/hooks/useDojoMedia";
 import { useDojoSessions } from "@/modules/dojo/hooks/useDojoSessions";
 import { SessionsMode } from "@/modules/dojo/components/SessionsMode";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Button } from "@/shared/components/ui/button";
-import { Play, Settings, ArrowLeft } from "lucide-react";
+import { Settings, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { routes } from "@/routes/router.const";
 import type { Session } from "@/shared/services/session/api-session.type";
 
 export const Dojo = () => {
-  const [selectedSession, setSelectedSession] = useState<Session | null>(null);
   const navigate = useNavigate();
 
   const { currentEnvironment, environments, changeEnvironment } = useDojoMedia();
   const { sessions, loading: sessionsLoading } = useDojoSessions();
 
-  const handleLaunchImmersive = () => {
-    if (selectedSession) {
-      navigate(`${routes.dojoImmersive.path.replace(":sessionId", selectedSession.id)}`);
-    }
-  };
-
-  const handleSelectSession = (session: Session) => {
-    setSelectedSession(session);
+  const handleLaunchImmersive = (session: Session) => {
+    navigate(`${routes.dojoImmersive.path.replace(":sessionId", session.id)}`);
   };
 
   const handleSelectEnvironment = (environmentId: string) => {
@@ -33,8 +25,6 @@ export const Dojo = () => {
   const handleGoToSessions = () => {
     navigate(routes.sessionsListing.path);
   };
-
-  const canLaunchDojo = selectedSession !== null;
 
   return (
     <div className="p-6 space-y-6">
@@ -64,45 +54,19 @@ export const Dojo = () => {
         <div className="space-y-4">
           <Card className="bg-slate-800 border-slate-700 h-[80vh] flex flex-col">
             <CardHeader className="pb-3 flex-shrink-0">
-              <CardTitle className="text-white text-lg">
-                Sessions Planifiées
-              </CardTitle>
+              <CardTitle className="text-white text-lg">Sessions Planifiées</CardTitle>
               <CardDescription className="text-gray-400 text-sm">
                 Sélectionnez une session pour commencer
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-0 flex-1 overflow-hidden">
-              <SessionsMode sessions={sessions} loading={sessionsLoading} onSelectSession={handleSelectSession} />
+              <SessionsMode 
+                sessions={sessions} 
+                loading={sessionsLoading} 
+                onLaunchSession={handleLaunchImmersive}
+              />
             </CardContent>
           </Card>
-
-          {/* Résumé de la sélection */}
-          {canLaunchDojo && selectedSession && (
-            <Card className="bg-green-900/20 border-green-500/30">
-              <CardContent className="p-4">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Play className="w-4 h-4 text-green-400" />
-                    <h3 className="text-green-400 font-medium">Prêt à lancer</h3>
-                  </div>
-                  <div>
-                    <h4 className="text-white font-medium">{selectedSession.linkedSkill.title}</h4>
-                    <p className="text-gray-400 text-sm">
-                      {selectedSession.quests.length} quêtes • {selectedSession.duration} min
-                    </p>
-                  </div>
-                  <Button
-                    onClick={handleLaunchImmersive}
-                    size="sm"
-                    className="w-full bg-green-500/20 text-green-400 border-green-500/30 hover:bg-green-500/30"
-                  >
-                    <Play className="w-4 h-4 mr-2" />
-                    Lancer le Dojo
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          )}
         </div>
 
         {/* Colonne droite - Environnements immersifs */}
