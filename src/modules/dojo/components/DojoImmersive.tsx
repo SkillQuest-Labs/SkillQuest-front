@@ -5,8 +5,7 @@ import { SessionQuestDisplay } from "./SessionQuestDisplay";
 import { SessionInfo } from "./SessionInfo";
 import { usePomodoro } from "../hooks/usePomodoro";
 import { DOJO_ANIMATIONS } from "../constants/dojo-environments";
-import { Button } from "@/shared/components/ui/button";
-import { X, Settings, Eye, EyeOff } from "lucide-react";
+import { X, Eye, EyeOff } from "lucide-react";
 import type { Session } from "@/shared/services/session/api-session.type";
 import { hasDescription } from "../types/session-quest.types";
 
@@ -14,7 +13,6 @@ interface DojoImmersiveProps {
   environment: DojoEnvironment;
   isBackgroundVisible: boolean;
   onExit: () => void;
-  onSettings?: () => void;
   selectedSession: Session;
 }
 
@@ -22,7 +20,6 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
   environment,
   isBackgroundVisible,
   onExit,
-  onSettings,
   selectedSession,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -141,22 +138,6 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
           {isUIHidden ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
         </button>
 
-        {onSettings && (
-          <div
-            className={`transition-all duration-500 ease-in-out ${
-              isUIHidden ? "translate-x-full opacity-0" : "translate-x-0 opacity-100"
-            }`}
-          >
-            <Button
-              onClick={onSettings}
-              variant="outline"
-              size="sm"
-              className="bg-black/60 backdrop-blur-sm border-white/20 text-white hover:bg-white/10"
-            >
-              <Settings className="w-4 h-4" />
-            </Button>
-          </div>
-        )}
 
         <button
           onClick={onExit}

@@ -51,10 +51,6 @@ export const DojoImmersivePage: React.FC = () => {
     navigate(routes.dojo.path);
   };
 
-  const handleSettings = () => {
-    // TODO: Implémenter les paramètres du dojo
-    console.log("Paramètres du dojo");
-  };
 
   // États de chargement et d'erreur
   if (isLoading || sessionsLoading) {
@@ -89,7 +85,6 @@ export const DojoImmersivePage: React.FC = () => {
       environment={currentEnvironment}
       isBackgroundVisible={isBackgroundVisible}
       onExit={handleExit}
-      onSettings={handleSettings}
       selectedSession={selectedSession}
     />
   );
