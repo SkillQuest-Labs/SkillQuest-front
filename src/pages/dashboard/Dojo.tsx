@@ -4,7 +4,7 @@ import { useDojoSessions } from "@/modules/dojo/hooks/useDojoSessions";
 import { SessionsMode } from "@/modules/dojo/components/SessionsMode";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Button } from "@/shared/components/ui/button";
-import { Play, Target, Settings, ArrowLeft } from "lucide-react";
+import { Play, Settings, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { routes } from "@/routes/router.const";
 import type { Session } from "@/shared/services/session/api-session.type";
@@ -62,17 +62,16 @@ export const Dojo = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Colonne gauche - Sessions planifiées */}
         <div className="space-y-4">
-          <Card className="bg-slate-800 border-slate-700">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-white flex items-center gap-2 text-lg">
-                <Target className="w-5 h-5" />
+          <Card className="bg-slate-800 border-slate-700 h-[80vh] flex flex-col">
+            <CardHeader className="pb-3 flex-shrink-0">
+              <CardTitle className="text-white text-lg">
                 Sessions Planifiées
               </CardTitle>
               <CardDescription className="text-gray-400 text-sm">
                 Sélectionnez une session pour commencer
               </CardDescription>
             </CardHeader>
-            <CardContent className="pt-0">
+            <CardContent className="pt-0 flex-1 overflow-hidden">
               <SessionsMode sessions={sessions} loading={sessionsLoading} onSelectSession={handleSelectSession} />
             </CardContent>
           </Card>
