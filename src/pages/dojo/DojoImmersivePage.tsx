@@ -51,7 +51,6 @@ export const DojoImmersivePage: React.FC = () => {
     navigate(routes.dojo.path);
   };
 
-
   // États de chargement et d'erreur
   if (isLoading || sessionsLoading) {
     return (

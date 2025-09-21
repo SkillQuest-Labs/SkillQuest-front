@@ -1,10 +1,7 @@
 import React from "react";
 import type { Session } from "@/shared/services/session/api-session.type";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Button } from "@/shared/components/ui/button";
-import { Badge } from "@/shared/components/ui/badge";
-import { Clock, Target, Play } from "lucide-react";
-import { getDateToTime } from "@/modules/sessions/utils/session.utils";
+import { Target, Play } from "lucide-react";
 
 interface SessionsModeProps {
   sessions: Session[];
@@ -35,70 +32,39 @@ export const SessionsMode: React.FC<SessionsModeProps> = ({ sessions, loading, o
   }
 
   return (
-    <div className="space-y-4">
-      <div className="text-center mb-6">
-        <h2 className="text-xl font-semibold text-white mb-2">Sessions Planifiées</h2>
-        <p className="text-gray-400 text-sm">Choisissez une session de travail à lancer dans le Dojo</p>
-      </div>
-
-      <div className="grid gap-4">
+    <div className="space-y-3">
+      <div className="space-y-2">
         {sessions.map((session) => (
-          <Card
+          <div
             key={session.id}
-            className="bg-slate-800/50 border-slate-700/50 hover:bg-slate-700/50 transition-colors cursor-pointer"
+            className="bg-slate-700/30 border border-slate-600/50 rounded-lg p-3 hover:bg-slate-600/30 transition-colors cursor-pointer"
             onClick={() => onSelectSession(session)}
           >
-            <CardHeader className="pb-3">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="w-4 h-4 rounded-full" style={{ backgroundColor: session.color }} />
-                  <div>
-                    <CardTitle className="text-white text-lg">{session.linkedSkill.title}</CardTitle>
-                    <CardDescription className="text-gray-400">{session.title}</CardDescription>
-                  </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3 flex-1 min-w-0">
+                <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: session.color }} />
+                <div className="flex-1 min-w-0">
+                  <h4 className="text-white font-medium text-sm truncate">{session.linkedSkill.title}</h4>
+                  <p className="text-gray-400 text-xs truncate">{session.title}</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2 flex-shrink-0">
+                <div className="text-xs text-gray-400">
+                  {session.duration}min
                 </div>
                 <Button
                   onClick={(e) => {
                     e.stopPropagation();
                     onSelectSession(session);
                   }}
-                  className="bg-orange-500/20 text-orange-400 border-orange-500/30 hover:bg-orange-500/30"
+                  size="sm"
+                  className="bg-orange-500/20 text-orange-400 border-orange-500/30 hover:bg-orange-500/30 h-7 px-2"
                 >
-                  <Play className="w-4 h-4 mr-2" />
-                  Lancer
+                  <Play className="w-3 h-3" />
                 </Button>
               </div>
-            </CardHeader>
-
-            <CardContent className="pt-0">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4 text-sm text-gray-400">
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
-                    <span>
-                      {getDateToTime(session.startTime)} - {getDateToTime(session.endTime)}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
-                    <span>{session.duration} min</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Target className="w-4 h-4" />
-                    <span>{session.quests.length} quêtes</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  {session.quests.map((quest, index) => (
-                    <Badge key={quest.id || index} className="bg-blue-500/20 text-blue-400 border-blue-500/30">
-                      {quest.quest?.title || quest.title}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         ))}
       </div>
     </div>

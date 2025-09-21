@@ -2,10 +2,9 @@ import { useState } from "react";
 import { useDojoMedia } from "@/modules/dojo/hooks/useDojoMedia";
 import { useDojoSessions } from "@/modules/dojo/hooks/useDojoSessions";
 import { SessionsMode } from "@/modules/dojo/components/SessionsMode";
-import { EnvironmentSelector } from "@/modules/dojo/components/EnvironmentSelector";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Button } from "@/shared/components/ui/button";
-import { Play, Clock, Target, Settings, ArrowLeft } from "lucide-react";
+import { Play, Target, Settings, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { routes } from "@/routes/router.const";
 import type { Session } from "@/shared/services/session/api-session.type";
@@ -14,7 +13,7 @@ export const Dojo = () => {
   const [selectedSession, setSelectedSession] = useState<Session | null>(null);
   const navigate = useNavigate();
 
-  const { currentEnvironment, environments } = useDojoMedia();
+  const { currentEnvironment, environments, changeEnvironment } = useDojoMedia();
   const { sessions, loading: sessionsLoading } = useDojoSessions();
 
   const handleLaunchImmersive = () => {
@@ -25,6 +24,10 @@ export const Dojo = () => {
 
   const handleSelectSession = (session: Session) => {
     setSelectedSession(session);
+  };
+
+  const handleSelectEnvironment = (environmentId: string) => {
+    changeEnvironment(environmentId);
   };
 
   const handleGoToSessions = () => {
@@ -56,71 +59,118 @@ export const Dojo = () => {
         </div>
       </div>
 
-      <div className="grid gap-6">
-        {/* Sélection de session */}
-        <Card className="bg-slate-800 border-slate-700">
-          <CardHeader>
-            <CardTitle className="text-white flex items-center gap-2">
-              <Target className="w-6 h-6" />
-              Sessions Planifiées
-            </CardTitle>
-            <CardDescription className="text-gray-400">
-              Sélectionnez une session pour commencer votre entraînement
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <SessionsMode sessions={sessions} loading={sessionsLoading} onSelectSession={handleSelectSession} />
-          </CardContent>
-        </Card>
-
-        {/* Sélection de l'environnement */}
-        <Card className="bg-slate-800 border-slate-700">
-          <EnvironmentSelector
-            environments={environments}
-            selectedEnvironment={currentEnvironment}
-            onSelectEnvironment={() => {}} // TODO: Implémenter la sélection d'environnement
-            onLaunchDojo={handleLaunchImmersive}
-            canLaunch={canLaunchDojo}
-          />
-        </Card>
-
-        {/* Résumé de la sélection */}
-        {canLaunchDojo && selectedSession && (
-          <Card className="bg-green-900/20 border-green-500/30">
-            <CardHeader>
-              <CardTitle className="text-green-400 flex items-center gap-2">
-                <Play className="w-5 h-5" />
-                Prêt à lancer
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Colonne gauche - Sessions planifiées */}
+        <div className="space-y-4">
+          <Card className="bg-slate-800 border-slate-700">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-white flex items-center gap-2 text-lg">
+                <Target className="w-5 h-5" />
+                Sessions Planifiées
               </CardTitle>
+              <CardDescription className="text-gray-400 text-sm">
+                Sélectionnez une session pour commencer
+              </CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div>
-                  <h3 className="text-white font-medium">Session: {selectedSession.linkedSkill.title}</h3>
-                  <p className="text-gray-400 text-sm">
-                    {selectedSession.quests.length} quêtes • {selectedSession.duration} minutes
-                  </p>
-                </div>
+            <CardContent className="pt-0">
+              <SessionsMode sessions={sessions} loading={sessionsLoading} onSelectSession={handleSelectSession} />
+            </CardContent>
+          </Card>
 
-                <div className="flex items-center gap-4 text-sm text-gray-400">
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
-                    <span>Environnement: {currentEnvironment.name}</span>
+          {/* Résumé de la sélection */}
+          {canLaunchDojo && selectedSession && (
+            <Card className="bg-green-900/20 border-green-500/30">
+              <CardContent className="p-4">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Play className="w-4 h-4 text-green-400" />
+                    <h3 className="text-green-400 font-medium">Prêt à lancer</h3>
                   </div>
+                  <div>
+                    <h4 className="text-white font-medium">{selectedSession.linkedSkill.title}</h4>
+                    <p className="text-gray-400 text-sm">
+                      {selectedSession.quests.length} quêtes • {selectedSession.duration} min
+                    </p>
+                  </div>
+                  <Button
+                    onClick={handleLaunchImmersive}
+                    size="sm"
+                    className="w-full bg-green-500/20 text-green-400 border-green-500/30 hover:bg-green-500/30"
+                  >
+                    <Play className="w-4 h-4 mr-2" />
+                    Lancer le Dojo
+                  </Button>
                 </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
 
-                <Button
-                  onClick={handleLaunchImmersive}
-                  size="lg"
-                  className="bg-green-500/20 text-green-400 border-green-500/30 hover:bg-green-500/30 w-full"
-                >
-                  <Play className="w-5 h-5 mr-2" />
-                  Lancer le Dojo Immersif
-                </Button>
+        {/* Colonne droite - Environnements immersifs */}
+        <div className="space-y-4">
+          <Card className="bg-slate-800 border-slate-700">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-white flex items-center gap-2 text-lg">
+                <Settings className="w-5 h-5" />
+                Environnements Immersifs
+              </CardTitle>
+              <CardDescription className="text-gray-400 text-sm">
+                Choisissez l'ambiance de votre apprentissage
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="grid grid-cols-2 gap-3">
+                {environments.map((environment) => (
+                  <Card
+                    key={environment.id}
+                    className={`bg-slate-700/50 border-slate-600/50 transition-all cursor-pointer hover:bg-slate-600/50 ${
+                      currentEnvironment.id === environment.id
+                        ? "ring-2 ring-blue-500/50 bg-blue-900/20"
+                        : ""
+                    }`}
+                    onClick={() => handleSelectEnvironment(environment.id)}
+                  >
+                    <CardContent className="p-4">
+                      <div className="space-y-3">
+                        {/* Image/Video miniature */}
+                        <div className="aspect-square rounded-lg overflow-hidden bg-slate-600/50 flex items-center justify-center">
+                          {environment.videoUrl.endsWith(".mp4") ? (
+                            <video 
+                              src={environment.videoUrl} 
+                              className="w-full h-full object-cover" 
+                              muted 
+                              loop 
+                              playsInline 
+                            />
+                          ) : (
+                            <img 
+                              src={environment.videoUrl} 
+                              alt={environment.name} 
+                              className="w-full h-full object-cover" 
+                            />
+                          )}
+                        </div>
+                        
+                        {/* Titre et description */}
+                        <div>
+                          <h4 className="text-white font-medium text-sm mb-1">{environment.name}</h4>
+                          <p className="text-gray-400 text-xs line-clamp-2">{environment.description}</p>
+                        </div>
+
+                        {/* Indicateur de sélection */}
+                        {currentEnvironment.id === environment.id && (
+                          <div className="flex items-center justify-center">
+                            <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </CardContent>
           </Card>
-        )}
+        </div>
       </div>
     </div>
   );

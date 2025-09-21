@@ -138,7 +138,6 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
           {isUIHidden ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
         </button>
 
-
         <button
           onClick={onExit}
           className="bg-black/20 backdrop-blur-sm border border-white/30 text-white hover:bg-black/30 rounded-lg px-3 py-2 transition-colors"
