@@ -124,9 +124,7 @@ export const Dojo = () => {
                   <Card
                     key={environment.id}
                     className={`bg-slate-700/50 border-slate-600/50 transition-all cursor-pointer hover:bg-slate-600/50 ${
-                      currentEnvironment.id === environment.id
-                        ? "ring-2 ring-blue-500/50 bg-blue-900/20"
-                        : ""
+                      currentEnvironment.id === environment.id ? "ring-2 ring-blue-500/50 bg-blue-900/20" : ""
                     }`}
                     onClick={() => handleSelectEnvironment(environment.id)}
                   >
@@ -135,22 +133,22 @@ export const Dojo = () => {
                         {/* Image/Video miniature */}
                         <div className="aspect-square rounded-lg overflow-hidden bg-slate-600/50 flex items-center justify-center">
                           {environment.videoUrl.endsWith(".mp4") ? (
-                            <video 
-                              src={environment.videoUrl} 
-                              className="w-full h-full object-cover" 
-                              muted 
-                              loop 
-                              playsInline 
+                            <video
+                              src={environment.videoUrl}
+                              className="w-full h-full object-cover"
+                              muted
+                              loop
+                              playsInline
                             />
                           ) : (
-                            <img 
-                              src={environment.videoUrl} 
-                              alt={environment.name} 
-                              className="w-full h-full object-cover" 
+                            <img
+                              src={environment.videoUrl}
+                              alt={environment.name}
+                              className="w-full h-full object-cover"
                             />
                           )}
                         </div>
-                        
+
                         {/* Titre et description */}
                         <div>
                           <h4 className="text-white font-medium text-sm mb-1">{environment.name}</h4>
