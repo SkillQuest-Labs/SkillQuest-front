@@ -26,22 +26,48 @@ export const defineNodeProperties = ({
       icon: "👑",
       cost: 3,
     };
-  } else if (nodeKind === "quest" && status === "LOCKED") {
-    return {
-      nodeType: "large",
-      size: 35,
-      shape: "hexagon",
-      icon: "🔒",
-      cost: 2,
-    };
-  } else if (nodeKind === "quest" && status === "UNLOCKED") {
-    return {
-      nodeType: "medium",
-      size: 30,
-      shape: "square",
-      icon: "✨",
-      cost: 1,
-    };
+  }
+
+  if (nodeKind === "quest") {
+    if (status === "LOCKED") {
+      return {
+        nodeType: "large",
+        size: 35,
+        shape: "hexagon",
+        icon: "🔒",
+        cost: 2,
+      };
+    }
+
+    if (status === "COMPLETED") {
+      return {
+        nodeType: "medium",
+        size: 32,
+        shape: "hexagon",
+        icon: "🏁",
+        cost: 1,
+      };
+    }
+
+    if (status === "IN_PROGRESS") {
+      return {
+        nodeType: "medium",
+        size: 30,
+        shape: "hexagon",
+        icon: "⏳",
+        cost: 1,
+      };
+    }
+
+    if (status === "UNLOCKED" || status === "NOT_STARTED") {
+      return {
+        nodeType: "medium",
+        size: 30,
+        shape: "hexagon",
+        icon: "✨",
+        cost: 1,
+      };
+    }
   }
 
   return {

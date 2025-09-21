@@ -11,6 +11,8 @@ const getLevelColors = (level: number) => {
 export const getNodeColor = (node: CircularSkillNode, activeNodePath: string[], hoveredNode: string | null) => {
   if (node.isLocked) return "#1a202c"; // Dark slate for locked
   if (node.status === "COMPLETED") return "#34d399"; // Emerald-400 (completed stays green)
+  if (node.status === "IN_PROGRESS") return "#d97706"; // Amber-700 for in progress
+  if (node.status === "NOT_STARTED") return "#60a5fa"; // Blue-400 for available
   if (activeNodePath.includes(node.id)) return "#22d3ee"; // Cyan-400 (active path)
   if (hoveredNode === node.id) return "#60a5fa"; // Blue-400
 
@@ -23,6 +25,8 @@ export const getNodeBorderColor = (node: CircularSkillNode, activeNodePath: stri
   if (node.isLocked) return "#dc2626"; // Red-600 for locked border
   if (activeNodePath.includes(node.id)) return "#67e8f9"; // Cyan-300
   if (node.status === "COMPLETED") return "#6ee7b7"; // Emerald-300
+  if (node.status === "IN_PROGRESS") return "#fcd34d"; // Amber-300
+  if (node.status === "NOT_STARTED") return "#93c5fd"; // Blue-300
 
   const { border: levelBorderColor } = getLevelColors(node.ring);
   return levelBorderColor; // Use level border color
