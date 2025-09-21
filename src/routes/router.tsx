@@ -83,16 +83,16 @@ export const router = createBrowserRouter([
             element: <WorkSession />,
           },
           {
+            path: routes.dojo.path,
+            element: <Dojo />,
+          },
+          {
             path: routes.stats.path,
             element: <Stats />,
           },
           {
             path: routes.sessionsListing.path,
             element: <SessionsListingPage />,
-          },
-          {
-            path: routes.dojo.path,
-            element: <Dojo />,
           },
         ],
       },

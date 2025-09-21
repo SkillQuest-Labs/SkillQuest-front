@@ -56,21 +56,6 @@ export const SidebarBody = () => {
         </li>
         <li>
           <NavLink
-            to="/dashboard/stats"
-            className={({ isActive }) =>
-              `px-4 py-2 flex items-center transition-all duration-300 ease-in-out transform hover:scale-96 ${
-                isCollapsed ? "justify-center" : "gap-3"
-              } hover:bg-gray-700 hover:shadow-lg ${
-                isActive ? "bg-gradient-to-r from-[#334155] to-[#141e32] rounded-l-xl shadow-md" : ""
-              }`
-            }
-          >
-            <BarChart3 size={20} />
-            {!isCollapsed && <span className="text-sm font-medium">Statistiques</span>}
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
             to="/dashboard/dojo"
             className={({ isActive }) =>
               `px-4 py-2 flex items-center transition-all duration-300 ease-in-out transform hover:scale-96 ${
@@ -82,6 +67,21 @@ export const SidebarBody = () => {
           >
             <Swords size={20} />
             {!isCollapsed && <span className="text-sm font-medium">Dojo</span>}
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/dashboard/stats"
+            className={({ isActive }) =>
+              `px-4 py-2 flex items-center transition-all duration-300 ease-in-out transform hover:scale-96 ${
+                isCollapsed ? "justify-center" : "gap-3"
+              } hover:bg-gray-700 hover:shadow-lg ${
+                isActive ? "bg-gradient-to-r from-[#334155] to-[#141e32] rounded-l-xl shadow-md" : ""
+              }`
+            }
+          >
+            <BarChart3 size={20} />
+            {!isCollapsed && <span className="text-sm font-medium">Statistiques</span>}
           </NavLink>
         </li>
         <li>
