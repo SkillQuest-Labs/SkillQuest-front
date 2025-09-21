@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import type { DojoEnvironment, Quest } from "../types/dojo.types";
+import type { DojoEnvironment } from "../types/dojo.types";
 import { PomodoroTimer } from "./PomodoroTimer";
 import { SessionQuestDisplay } from "./SessionQuestDisplay";
 import { SessionInfo } from "./SessionInfo";
@@ -15,9 +15,7 @@ interface DojoImmersiveProps {
   isBackgroundVisible: boolean;
   onExit: () => void;
   onSettings?: () => void;
-  selectedSession?: Session | null;
-  selectedQuests?: Quest[];
-  mode: "sessions" | "free";
+  selectedSession: Session;
 }
 
 export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
@@ -26,8 +24,6 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
   onExit,
   onSettings,
   selectedSession,
-  selectedQuests = [],
-  mode,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPomodoroCollapsed, setIsPomodoroCollapsed] = useState(true);
@@ -53,32 +49,29 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
 
   const isVideo = environment.videoUrl.endsWith(".mp4");
 
-  const questsToDisplay =
-    mode === "sessions" && selectedSession
-      ? selectedSession.quests.map((sessionQuest, index) => {
-          // Utilisation de type guards pour un accès sécurisé aux propriétés
-          const getDescription = (): string => {
-            if (hasDescription(sessionQuest.quest)) {
-              return sessionQuest.quest.description;
-            }
-            if (hasDescription(sessionQuest)) {
-              return sessionQuest.description;
-            }
-            return `Description de la quête ${index + 1}`;
-          };
+  const questsToDisplay = selectedSession.quests.map((sessionQuest, index) => {
+    // Utilisation de type guards pour un accès sécurisé aux propriétés
+    const getDescription = (): string => {
+      if (hasDescription(sessionQuest.quest)) {
+        return sessionQuest.quest.description;
+      }
+      if (hasDescription(sessionQuest)) {
+        return sessionQuest.description;
+      }
+      return `Description de la quête ${index + 1}`;
+    };
 
-          return {
-            id: sessionQuest.questId || sessionQuest.id || `quest-${index}`,
-            title: sessionQuest.quest?.title || sessionQuest.title || `Quête ${index + 1}`,
-            description: getDescription(),
-            difficulty: "moyen" as const,
-            estimatedTime: 30,
-            xp: 50,
-            skills: [selectedSession.linkedSkill.title],
-            isCompleted: sessionQuest.quest?.status === "COMPLETED",
-          };
-        })
-      : selectedQuests;
+    return {
+      id: sessionQuest.questId || sessionQuest.id || `quest-${index}`,
+      title: sessionQuest.quest?.title || sessionQuest.title || `Quête ${index + 1}`,
+      description: getDescription(),
+      difficulty: "moyen" as const,
+      estimatedTime: 30,
+      xp: 50,
+      skills: [selectedSession.linkedSkill.title],
+      isCompleted: sessionQuest.quest?.status === "COMPLETED",
+    };
+  });
 
   return (
     <div className="fixed inset-0 w-screen h-screen overflow-hidden z-[9999] bg-black">
@@ -100,16 +93,14 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
         <div className="absolute inset-0 bg-black/20" />
       </div>
 
-      {/* Session Info - seulement en mode sessions */}
-      {mode === "sessions" && selectedSession && (
-        <div
-          className={`absolute top-4 left-1/2 -translate-x-1/2 z-40 transition-all duration-500 ease-in-out ${
-            isUIHidden ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"
-          }`}
-        >
-          <SessionInfo session={selectedSession} />
-        </div>
-      )}
+      {/* Session Info */}
+      <div
+        className={`absolute top-4 left-1/2 -translate-x-1/2 z-40 transition-all duration-500 ease-in-out ${
+          isUIHidden ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"
+        }`}
+      >
+        <SessionInfo session={selectedSession} />
+      </div>
 
       {/* Pomodoro Timer */}
       <div
