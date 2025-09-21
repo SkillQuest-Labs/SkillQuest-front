@@ -1,29 +1,21 @@
-import { useState } from "react";
 import { useDojoMedia } from "@/modules/dojo/hooks/useDojoMedia";
 import { useDojoSessions } from "@/modules/dojo/hooks/useDojoSessions";
 import { SessionsMode } from "@/modules/dojo/components/SessionsMode";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Button } from "@/shared/components/ui/button";
-import { Play, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { routes } from "@/routes/router.const";
 import type { Session } from "@/shared/services/session/api-session.type";
 
 export const Dojo = () => {
-  const [selectedSession, setSelectedSession] = useState<Session | null>(null);
   const navigate = useNavigate();
 
   const { currentEnvironment, environments, changeEnvironment } = useDojoMedia();
   const { sessions, loading: sessionsLoading } = useDojoSessions();
 
-  const handleLaunchImmersive = () => {
-    if (selectedSession) {
-      navigate(`${routes.dojoImmersive.path}/${selectedSession.id}`);
-    }
-  };
-
-  const handleSelectSession = (session: Session) => {
-    setSelectedSession(session);
+  const handleLaunchImmersive = (session: Session) => {
+    navigate(`${routes.dojoImmersive.path}/${session.id}`);
   };
 
   const handleSelectEnvironment = (environmentId: string) => {
@@ -33,8 +25,6 @@ export const Dojo = () => {
   const handleGoToSessions = () => {
     navigate(routes.sessionsListing.path);
   };
-
-  const canLaunchDojo = selectedSession !== null;
 
   return (
     <div className="h-screen flex flex-col p-6">
@@ -71,38 +61,9 @@ export const Dojo = () => {
                 sessions={sessions}
                 loading={sessionsLoading}
                 onLaunchSession={handleLaunchImmersive}
-                onSelectSession={handleSelectSession}
               />
             </CardContent>
           </Card>
-
-          {/* Résumé de la sélection */}
-          {canLaunchDojo && selectedSession && (
-            <Card className="bg-green-900/20 border-green-500/30 flex-shrink-0">
-              <CardContent className="p-3">
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <Play className="w-4 h-4 text-green-400" />
-                    <h3 className="text-green-400 font-medium text-sm">Prêt à lancer</h3>
-                  </div>
-                  <div>
-                    <h4 className="text-white font-medium text-sm">{selectedSession.linkedSkill.title}</h4>
-                    <p className="text-gray-400 text-xs">
-                      {selectedSession.quests.length} quêtes • {selectedSession.duration} min
-                    </p>
-                  </div>
-                  <Button
-                    onClick={handleLaunchImmersive}
-                    size="sm"
-                    className="w-full bg-green-500/20 text-green-400 border-green-500/30 hover:bg-green-500/30 h-8"
-                  >
-                    <Play className="w-3 h-3 mr-2" />
-                    Lancer le Dojo
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          )}
         </div>
 
         {/* Colonne droite - Biomes immersifs */}
