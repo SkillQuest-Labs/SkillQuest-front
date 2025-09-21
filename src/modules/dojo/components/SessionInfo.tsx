@@ -4,9 +4,11 @@ import type { Session } from "@/shared/services/session/api-session.type";
 
 interface SessionInfoProps {
   session: Session;
+  sessionTimeLeft?: number;
+  isSessionActive?: boolean;
 }
 
-export const SessionInfo: React.FC<SessionInfoProps> = ({ session }) => {
+export const SessionInfo: React.FC<SessionInfoProps> = ({ session, sessionTimeLeft, isSessionActive }) => {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("fr-FR", {
@@ -17,6 +19,12 @@ export const SessionInfo: React.FC<SessionInfoProps> = ({ session }) => {
   };
 
   const getDuration = () => {
+    if (isSessionActive && sessionTimeLeft !== undefined) {
+      const minutes = Math.floor(sessionTimeLeft / 60);
+      const seconds = sessionTimeLeft % 60;
+      return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+    }
+    
     const start = new Date(session.startTime);
     const end = new Date(session.endTime);
     const diffMs = end.getTime() - start.getTime();

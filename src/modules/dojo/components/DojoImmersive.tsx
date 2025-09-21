@@ -5,9 +5,11 @@ import { SessionQuestDisplay } from "./SessionQuestDisplay";
 import { SessionInfo } from "./SessionInfo";
 import { usePomodoro } from "../hooks/usePomodoro";
 import { DOJO_ANIMATIONS } from "../constants/dojo-environments";
-import { X, Eye, EyeOff } from "lucide-react";
+import { X, Eye, EyeOff, Play, Pause, CheckCircle, Square } from "lucide-react";
 import type { Session } from "@/shared/services/session/api-session.type";
 import { hasDescription } from "../types/session-quest.types";
+import { sessionStorageService } from "../services/session-storage.service";
+import type { SessionData } from "../types/session-data.type";
 
 interface DojoImmersiveProps {
   environment: DojoEnvironment;
@@ -25,9 +27,127 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPomodoroCollapsed, setIsPomodoroCollapsed] = useState(true);
   const [isUIHidden, setIsUIHidden] = useState(false);
+  const [isSessionStarted, setIsSessionStarted] = useState(false);
+  const [isSessionPaused, setIsSessionPaused] = useState(false);
+  const [isSessionCompleted, setIsSessionCompleted] = useState(false);
+  const [sessionTimeLeft, setSessionTimeLeft] = useState(0);
+  const [sessionTimeElapsed, setSessionTimeElapsed] = useState(0);
+  const [pausedCount, setPausedCount] = useState(0);
+  const [pauseStartTime, setPauseStartTime] = useState<number | null>(null);
+  const [totalPauseDuration, setTotalPauseDuration] = useState(0);
+  const [showSessionCompleteModal, setShowSessionCompleteModal] = useState(false);
 
   const { pomodoro, startPomodoro, pausePomodoro, resetPomodoro, updateDurations, formatTime, getPhaseLabel } =
     usePomodoro();
+
+  // Initialiser le temps de session
+  useEffect(() => {
+    setSessionTimeLeft(selectedSession.duration * 60); // Convertir en secondes
+  }, [selectedSession.duration]);
+
+  // Décompte de la session
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    
+    if (isSessionStarted && !isSessionPaused && sessionTimeLeft > 0 && !isSessionCompleted) {
+      interval = setInterval(() => {
+        setSessionTimeLeft((prev) => {
+          if (prev <= 1) {
+            setIsSessionStarted(false);
+            setIsSessionPaused(false);
+            setIsSessionCompleted(true);
+            setShowSessionCompleteModal(true);
+            return 0;
+          }
+          return prev - 1;
+        });
+        setSessionTimeElapsed((prev) => prev + 1);
+      }, 1000);
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isSessionStarted, isSessionPaused, sessionTimeLeft, isSessionCompleted]);
+
+  // Fonctions de gestion de session
+  const toggleSession = () => {
+    if (!isSessionStarted) {
+      // État Play : Lancer la session
+      setIsSessionStarted(true);
+      setIsSessionPaused(false);
+      setIsSessionCompleted(false);
+    } else if (isSessionPaused) {
+      // État Pause : Reprendre la session
+      if (pauseStartTime) {
+        const pauseDuration = Date.now() - pauseStartTime;
+        setTotalPauseDuration(prev => prev + pauseDuration);
+        setPauseStartTime(null);
+      }
+      setIsSessionPaused(false);
+    } else if (isSessionCompleted) {
+      // État Terminé : Ne rien faire (bouton désactivé)
+      return;
+    } else {
+      // État en cours : Mettre en pause
+      setPausedCount(prev => prev + 1);
+      setPauseStartTime(Date.now());
+      setIsSessionPaused(true);
+    }
+  };
+
+  const extendSession = () => {
+    setSessionTimeLeft(prev => prev + 15 * 60); // Ajouter 15 minutes
+    setShowSessionCompleteModal(false);
+    setIsSessionStarted(true);
+    setIsSessionPaused(false);
+    setIsSessionCompleted(false);
+  };
+
+  const endSession = async () => {
+    // Calculer la durée totale des pauses en secondes
+    const finalPauseDuration = pauseStartTime 
+      ? totalPauseDuration + (Date.now() - pauseStartTime)
+      : totalPauseDuration;
+
+    // Enregistrer les données de session
+    const sessionData: SessionData = {
+      sessionId: selectedSession.id,
+      duration: selectedSession.duration * 60, // Durée prévue en secondes
+      timeElapsed: sessionTimeElapsed, // Temps réellement écoulé
+      timeLeft: sessionTimeLeft, // Temps restant
+      completed: isSessionCompleted,
+      environment: environment.id,
+      completedAt: new Date().toISOString(),
+      pausedCount: pausedCount,
+      pauseDuration: Math.floor(finalPauseDuration / 1000), // Convertir en secondes
+    };
+    
+    // Sauvegarder localement
+    sessionStorageService.saveSessionData(sessionData);
+    
+    // Calculer et afficher les statistiques
+    const stats = sessionStorageService.calculateSessionStats(sessionData);
+    console.log("Session completed with stats:", stats);
+    
+    // Essayer d'envoyer au backend
+    const sentToBackend = await sessionStorageService.sendToBackend(sessionData);
+    if (!sentToBackend) {
+      console.warn("Session data saved locally but could not be sent to backend");
+    }
+    
+    // Réinitialiser tous les états
+    setIsSessionStarted(false);
+    setIsSessionPaused(false);
+    setIsSessionCompleted(false);
+    setSessionTimeElapsed(0);
+    setPausedCount(0);
+    setPauseStartTime(null);
+    setTotalPauseDuration(0);
+    setShowSessionCompleteModal(false);
+    onExit();
+  };
+
 
   useEffect(() => {
     const video = videoRef.current;
@@ -96,7 +216,11 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
           isUIHidden ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100"
         }`}
       >
-        <SessionInfo session={selectedSession} />
+        <SessionInfo 
+          session={selectedSession} 
+          sessionTimeLeft={sessionTimeLeft}
+          isSessionActive={isSessionStarted && !isSessionPaused}
+        />
       </div>
 
       {/* Pomodoro Timer */}
@@ -146,6 +270,70 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
           <X className="w-4 h-4" />
         </button>
       </div>
+
+      {/* Bouton de session en bas à droite */}
+      <div className="absolute bottom-4 right-4 z-50">
+        <button
+          onClick={toggleSession}
+          disabled={isSessionCompleted}
+          className={`backdrop-blur-sm border rounded-lg px-3 py-2 transition-all duration-200 ${
+            isSessionCompleted
+              ? "bg-gray-500/20 border-gray-500/30 text-gray-400 cursor-not-allowed"
+              : "bg-black/20 border-white/30 text-white hover:bg-black/30 hover:scale-105"
+          }`}
+          title={
+            isSessionCompleted
+              ? "Session terminée"
+              : !isSessionStarted
+              ? "Lancer la session"
+              : isSessionPaused
+              ? "Reprendre la session"
+              : "Mettre en pause"
+          }
+        >
+          {isSessionCompleted ? (
+            <Square className="w-4 h-4" />
+          ) : !isSessionStarted ? (
+            <Play className="w-4 h-4" />
+          ) : isSessionPaused ? (
+            <Play className="w-4 h-4" />
+          ) : (
+            <Pause className="w-4 h-4" />
+          )}
+        </button>
+      </div>
+
+      {/* Modal de fin de session */}
+      {showSessionCompleteModal && (
+        <div className="absolute inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center">
+          <div className="bg-slate-800 border border-slate-600 rounded-lg p-6 max-w-md w-full mx-4 text-center">
+            <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-white mb-2">Session terminée !</h3>
+            <div className="text-gray-400 mb-4 space-y-1">
+              <p>Durée prévue : {selectedSession.duration} minutes</p>
+              <p>Temps écoulé : {Math.floor(sessionTimeElapsed / 60)}:{(sessionTimeElapsed % 60).toString().padStart(2, "0")}</p>
+              <p>Pauses : {pausedCount} fois</p>
+              <p>Environnement : {environment.name}</p>
+            </div>
+            <p className="text-gray-300 mb-6">Que souhaitez-vous faire ?</p>
+
+            <div className="flex space-x-3">
+              <button
+                onClick={extendSession}
+                className="flex-1 bg-blue-500/20 text-blue-400 border border-blue-500/30 hover:bg-blue-500/30 rounded-lg px-4 py-2 transition-colors"
+              >
+                Prolonger (+15min)
+              </button>
+              <button
+                onClick={endSession}
+                className="flex-1 bg-green-500/20 text-green-400 border border-green-500/30 hover:bg-green-500/30 rounded-lg px-4 py-2 transition-colors"
+              >
+                Terminer & Enregistrer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
