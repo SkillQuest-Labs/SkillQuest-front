@@ -115,9 +115,8 @@ export const Dojo = () => {
         <div className="space-y-4">
           <Card className="bg-slate-800 border-slate-700">
             <CardHeader className="pb-3">
-              <CardTitle className="text-white flex items-center gap-2 text-lg">
-                <Settings className="w-5 h-5" />
-                Environnements Immersifs
+              <CardTitle className="text-white text-lg">
+                Biomes Immersifs
               </CardTitle>
               <CardDescription className="text-gray-400 text-sm">
                 Choisissez l'ambiance de votre apprentissage
@@ -159,13 +158,6 @@ export const Dojo = () => {
                           <h4 className="text-white font-medium text-sm mb-1">{environment.name}</h4>
                           <p className="text-gray-400 text-xs line-clamp-2">{environment.description}</p>
                         </div>
-
-                        {/* Indicateur de sélection */}
-                        {currentEnvironment.id === environment.id && (
-                          <div className="flex items-center justify-center">
-                            <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                          </div>
-                        )}
                       </div>
                     </CardContent>
                   </Card>

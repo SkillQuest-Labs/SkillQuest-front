@@ -2,7 +2,6 @@ import React from "react";
 import type { DojoEnvironment } from "../types/dojo.types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { Button } from "@/shared/components/ui/button";
-import { Badge } from "@/shared/components/ui/badge";
 import { Play, Clock, Star } from "lucide-react";
 
 interface EnvironmentSelectorProps {
@@ -23,7 +22,7 @@ export const EnvironmentSelector: React.FC<EnvironmentSelectorProps> = ({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-xl font-semibold text-white mb-2">Environnements Immersifs</h2>
+        <h2 className="text-xl font-semibold text-white mb-2">Biomes Immersifs</h2>
         <p className="text-gray-400 text-sm">Choisissez l'environnement dans lequel vous souhaitez travailler</p>
       </div>
 
@@ -53,9 +52,6 @@ export const EnvironmentSelector: React.FC<EnvironmentSelectorProps> = ({
                     <CardDescription className="text-gray-400">{environment.description}</CardDescription>
                   </div>
                 </div>
-                {selectedEnvironment.id === environment.id && (
-                  <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">Sélectionné</Badge>
-                )}
               </div>
             </CardHeader>
 
