@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import type { PomodoroState } from "../types/dojo.types";
 import { POMODORO_DEFAULTS } from "../constants/dojo-environments";
 
@@ -37,7 +37,7 @@ export const usePomodoro = () => {
     completedPomodoros: 0,
   });
 
-  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const startPomodoro = useCallback(() => {
     setPomodoro((prev) => ({ ...prev, isRunning: true }));
@@ -89,30 +89,6 @@ export const usePomodoro = () => {
     }));
   }, []);
 
-  const switchPhase = useCallback(() => {
-    setPomodoro((prev) => {
-      if (prev.currentPhase === "work") {
-        const nextPhase =
-          (prev.completedPomodoros + 1) % POMODORO_DEFAULTS.longBreakInterval === 0 ? "longBreak" : "shortBreak";
-
-        return {
-          ...prev,
-          currentPhase: nextPhase,
-          timeLeft: nextPhase === "longBreak" ? prev.longBreakDuration * 60 : prev.shortBreakDuration * 60,
-          completedPomodoros: prev.completedPomodoros + 1,
-          isRunning: false,
-        };
-      } else {
-        return {
-          ...prev,
-          currentPhase: "work",
-          timeLeft: prev.workDuration * 60,
-          isRunning: false,
-        };
-      }
-    });
-  }, []);
-
   const formatTime = useCallback((seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -134,17 +110,35 @@ export const usePomodoro = () => {
 
   // Timer effect
   useEffect(() => {
-    if (pomodoro.isRunning && pomodoro.timeLeft > 0) {
-      const id = setInterval(() => {
+    if (pomodoro.isRunning) {
+      intervalRef.current = setInterval(() => {
         setPomodoro((prev) => {
           if (prev.timeLeft <= 1) {
-            // Appeler switchPhase et retourner le nouvel état
-            const newState = {
-              ...prev,
-              timeLeft: 0,
-            };
-            // La logique de switchPhase sera gérée dans un autre useEffect
-            return newState;
+            // Arrêter le timer et changer de phase
+            if (intervalRef.current) {
+              clearInterval(intervalRef.current);
+              intervalRef.current = null;
+            }
+
+            // Changer de phase
+            if (prev.currentPhase === "work") {
+              const nextPhase =
+                (prev.completedPomodoros + 1) % POMODORO_DEFAULTS.longBreakInterval === 0 ? "longBreak" : "shortBreak";
+              return {
+                ...prev,
+                currentPhase: nextPhase,
+                timeLeft: nextPhase === "longBreak" ? prev.longBreakDuration * 60 : prev.shortBreakDuration * 60,
+                completedPomodoros: prev.completedPomodoros + 1,
+                isRunning: false,
+              };
+            } else {
+              return {
+                ...prev,
+                currentPhase: "work",
+                timeLeft: prev.workDuration * 60,
+                isRunning: false,
+              };
+            }
           }
           return {
             ...prev,
@@ -152,26 +146,20 @@ export const usePomodoro = () => {
           };
         });
       }, 1000);
-
-      setIntervalId(id);
-    } else if (intervalId) {
-      clearInterval(intervalId);
-      setIntervalId(null);
+    } else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
     }
 
     return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
       }
     };
-  }, [pomodoro.isRunning, pomodoro.timeLeft, intervalId]);
-
-  // Effect pour gérer le changement de phase quand le timer atteint 0
-  useEffect(() => {
-    if (pomodoro.timeLeft === 0 && pomodoro.isRunning) {
-      switchPhase();
-    }
-  }, [pomodoro.timeLeft, pomodoro.isRunning, switchPhase]);
+  }, [pomodoro.isRunning]);
 
   return {
     pomodoro,
