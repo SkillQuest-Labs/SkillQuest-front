@@ -5,7 +5,6 @@ import { useDeleteSession, useValidateSession } from "@/shared/services/session/
 import type { Session } from "@/shared/services/session/api-session.type";
 import { Check, Play, Trash2 } from "lucide-react";
 import { QuestIndicator } from "./QuestIndicator";
-import { QuestIndicator } from "./QuestIndicator";
 import { useState } from "react";
 import { getDateToTime, isSessionFullyCompleted } from "../utils/session.utils";
 import { SessionValidationModal } from "./SessionValidationModal";

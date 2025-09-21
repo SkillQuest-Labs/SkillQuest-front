@@ -104,7 +104,7 @@ export const Dojo = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs value={currentMode} onValueChange={(value) => setCurrentMode(value as DojoMode)}>
+            <Tabs value={currentMode} onValueChange={(value: string) => setCurrentMode(value as DojoMode)}>
               <TabsList className="grid w-full grid-cols-2 bg-slate-700/50">
                 <TabsTrigger
                   value="sessions"

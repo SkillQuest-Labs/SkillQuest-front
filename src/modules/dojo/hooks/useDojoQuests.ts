@@ -18,9 +18,9 @@ export const useDojoQuests = () => {
         title: quest.title,
         description: quest.description || `Description de la quête ${quest.title}`,
         difficulty: (quest.difficulty?.toLowerCase() as "facile" | "moyen" | "difficile") || "moyen",
-        estimatedTime: quest.estimatedTime || 30,
+        estimatedTime: 30, // Valeur par défaut car l'API ne fournit pas cette info
         xp: quest.xp || 50,
-        skills: quest.skills?.map((skill) => skill.title) || [],
+        skills: [], // L'API ne fournit pas cette info pour l'instant
         isCompleted: quest.status === "COMPLETED",
       }),
     );

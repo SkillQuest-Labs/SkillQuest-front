@@ -4,10 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import { ChevronDown, ChevronUp, X } from "lucide-react";
 import { Button } from "@/shared/components/ui/button";
 import { Checkbox } from "@/shared/components/ui/checkbox";
-import { useState, useEffect, useRef } from "react";
-import { ChevronDown, ChevronUp, X } from "lucide-react";
-import { Button } from "@/shared/components/ui/button";
-import { Checkbox } from "@/shared/components/ui/checkbox";
 
 interface SelectQuestProps {
   currentSession: SessionFormType;
@@ -18,56 +14,6 @@ interface SelectQuestProps {
 }
 
 export const SelectQuestField = ({ currentSession, setForm, quests, loading, disabled = false }: SelectQuestProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const questCount = currentSession.linkedQuests.length;
-  const questText =
-    questCount === 0
-      ? "Aucune quête sélectionnée"
-      : `${questCount} quête${questCount > 1 ? "s" : ""} sélectionnée${questCount > 1 ? "s" : ""}`;
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isOpen, setIsOpen]);
-
-  const handleQuestToggle = (questId: string, questTitle: string) => {
-    const isSelected = currentSession.linkedQuests.some((quest) => quest.id === questId);
-
-    if (isSelected) {
-      setForm({
-        ...currentSession,
-        linkedQuests: currentSession.linkedQuests.filter((quest) => quest.id !== questId),
-      });
-      return;
-    }
-
-    setForm({
-      ...currentSession,
-      linkedQuests: [...currentSession.linkedQuests, { id: questId, title: questTitle }],
-    });
-  };
-
-  const handleSelectAll = () => {
-    const allQuestsSelected = currentSession.linkedQuests.length === quests.length;
-    setForm({
-      ...currentSession,
-      linkedQuests: allQuestsSelected ? [] : quests.map((quest) => ({ id: quest.questId, title: quest.title })),
-    });
-  };
-
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 

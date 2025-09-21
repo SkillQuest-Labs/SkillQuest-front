@@ -6,7 +6,7 @@ export const useDojoSessions = () => {
   const { user } = useUser();
   const userId = user?.id;
 
-  const { sessions, loading } = useGetSessions(userId || "", true);
+  const { sessions, isPending: loading } = useGetSessions(userId || "", true);
 
   // Filtrer les sessions non validées (disponibles pour le Dojo)
   const availableSessions = useMemo(() => {
