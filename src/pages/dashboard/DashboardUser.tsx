@@ -17,8 +17,15 @@ export const DashboardUser = () => {
   const { user } = useUser();
 
   const fallbackUsername = user?.username ?? user?.firstName ?? "Aventurier";
+  const lastLogin = user?.lastSignInAt ? new Date(user.lastSignInAt) : null;
 
   const [, setUserData] = useState<UserData | null>(null);
+   const today = new Date();
+  const isToday = lastLogin && 
+    lastLogin.toDateString() === today.toDateString();
+
+  const currentStreak = isToday ? 1 : 0;
+
 
   useEffect(() => {
     if (!user) return;
@@ -60,7 +67,7 @@ export const DashboardUser = () => {
               <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.8fr] gap-4 items-center w-full">
                 {/* Streak Component */}
                 <div className="flex justify-center lg:justify-start">
-                  <StreakComponent currentStreak={7} maxStreak={7} />
+                  <StreakComponent currentStreak={currentStreak} maxStreak={7} />
                 </div>
 
                 {/* Stats Cards - XP, Skills, Quêtes */}
