@@ -47,26 +47,22 @@ export const useLoginStreak = () => {
     let streak = 0;
 
     // Trier les dates par ordre décroissant
-    const sortedDates = loginHistory
-      .map(date => new Date(date))
-      .sort((a, b) => b.getTime() - a.getTime());
+    const sortedDates = loginHistory.map((date) => new Date(date)).sort((a, b) => b.getTime() - a.getTime());
 
     // Vérifier les 7 derniers jours
     for (let i = 0; i < 7; i++) {
       const checkDate = new Date(today);
       checkDate.setDate(today.getDate() - i);
-      
+
       // Normaliser les dates (ignorer l'heure)
       const checkDateStr = checkDate.toDateString();
-      
-      const hasLoginOnDate = sortedDates.some(loginDate => 
-        loginDate.toDateString() === checkDateStr
-      );
+
+      const hasLoginOnDate = sortedDates.some((loginDate) => loginDate.toDateString() === checkDateStr);
 
       if (hasLoginOnDate) {
         streak++;
       } else {
-        // Si c'est le premier jour et qu'il n'y a pas de connexion, 
+        // Si c'est le premier jour et qu'il n'y a pas de connexion,
         // on ne casse pas le streak si on est dans la même journée
         if (i === 0) {
           const todayStr = today.toDateString();
@@ -87,9 +83,9 @@ export const useLoginStreak = () => {
   const updateLoginStreak = useCallback(() => {
     if (!user || !isLoaded) return;
 
-    const today = new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
-    
-    setStreakData(prevData => {
+    const today = new Date().toISOString().split("T")[0]; // Format YYYY-MM-DD
+
+    setStreakData((prevData) => {
       // Vérifier si l'utilisateur s'est déjà connecté aujourd'hui
       if (prevData.lastLoginDate === today) {
         return prevData; // Pas de mise à jour nécessaire
@@ -104,9 +100,7 @@ export const useLoginStreak = () => {
       // Garder seulement les 30 derniers jours pour éviter un localStorage trop lourd
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-      const filteredHistory = newLoginHistory.filter(date => 
-        new Date(date) >= thirtyDaysAgo
-      );
+      const filteredHistory = newLoginHistory.filter((date) => new Date(date) >= thirtyDaysAgo);
 
       // Calculer le nouveau streak
       const newStreak = calculateStreak(filteredHistory);
