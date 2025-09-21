@@ -19,13 +19,13 @@ export const RenderSpiralLayout = ({
   containerHeight,
 }: RenderSpiralLayoutProps) => {
   // Calculer les propriétés de la spirale basées sur les nœuds
-  const spiralNodes = skillnodes.filter(node => node.spiralRadius !== undefined);
+  const spiralNodes = skillnodes.filter((node) => node.spiralRadius !== undefined);
   const maxRadius = spiralNodes.reduce((max, node) => Math.max(max, node.spiralRadius || 0), 0);
-  
+
   // Créer les points de la spirale pour le tracé
   const spiralPoints = spiralNodes
     .sort((a, b) => (a.spiralIndex || 0) - (b.spiralIndex || 0))
-    .map(node => ({
+    .map((node) => ({
       x: node.position.x,
       y: node.position.y,
       radius: node.spiralRadius || 0,

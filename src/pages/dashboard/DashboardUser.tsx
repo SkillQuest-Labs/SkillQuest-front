@@ -13,9 +13,12 @@ import { BarChart3, Target, TrendingUp } from "lucide-react";
 import { useComputeUserProgress } from "@/modules/stats/hooks/use-compute-user-progress";
 import { useGetUserStats } from "@/shared/services/user/api-user";
 
+// 🔹 intro robot
+import IntroRobotOverlay from "@/component/intro/IntroRobotOverlay";
+import { ROBOT_INTRO_LINES } from "@/shared/constants/voiceLines";
+
 export const DashboardUser = () => {
   const { user } = useUser();
-
   const fallbackUsername = user?.username ?? user?.firstName ?? "Aventurier";
 
   const [, setUserData] = useState<UserData | null>(null);
@@ -30,23 +33,46 @@ export const DashboardUser = () => {
   }, [user, fallbackUsername]);
 
   const { skills } = useGetSkills(user?.id || "");
-
   const { userStats } = useGetUserStats(user?.id || "");
 
   const { totalXp, totalQuestCompleted, totalSkillCompleted, userCurrentLevel, xpThreshold, xpToNextLevel } =
     useComputeUserProgress({ skills, userStats });
 
-    console.log(totalXp, totalQuestCompleted, totalSkillCompleted, userCurrentLevel, xpThreshold, xpToNextLevel)
+  // 🔹 gestion relecture intro
+  const [introKey, setIntroKey] = useState("intro_robot_v1");
+  const handleReplayIntro = () => {
+    localStorage.removeItem("intro_robot_v1");
+    setIntroKey(introKey + "_replay"); // force un remount
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative">
+      {/* Intro robot */}
+      <IntroRobotOverlay
+        key={introKey}
+        splineUrl="https://prod.spline.design/91E4RJArwH81QjTV/scene.splinecode"
+        lines={ROBOT_INTRO_LINES}
+        storageKey="intro_robot_v1"
+        height="40vh"
+      />
+
+      {/* Bouton pour rejouer l’intro */}
+      <div className="absolute top-4 right-4 z-20">
+        <button
+          onClick={handleReplayIntro}
+          className="px-3 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-black shadow"
+        >
+          Revoir l’intro
+        </button>
+      </div>
+
       <div className="max-w-8xl mx-auto px-3 sm:px-5 lg:px-7 py-6">
         <div className="space-y-8">
-          {/* Section de bienvenue - Hero Section */}
+          {/* Section de bienvenue */}
           <div className="space-y-6">
             <WelcomeSection userName={fallbackUsername} streak={7} />
 
-            {/* Cartes statistiques - Section de métriques */}
+            {/* Cartes statistiques */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 lg:gap-4">
               <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} />
               <AccueilStatCard title="Quêtes terminées" value={totalQuestCompleted} icon={BarChart3} />
@@ -54,25 +80,18 @@ export const DashboardUser = () => {
             </div>
           </div>
 
-          {/* Zone principale de contenu */}
+          {/* Zone principale */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {/* Composant principal - WorkSessionChart */}
+            {/* Colonne gauche */}
             <div className="lg:col-span-2 space-y-6">
-              {/* Composant de streak */}
               <StreakComponent currentStreak={7} maxStreak={7} />
-
               <WorkSessionChart />
             </div>
 
-            {/* Sidebar pour composants futurs */}
+            {/* Sidebar */}
             <div className="space-y-4">
-              {/* Composant des dernières compétences */}
               <RecentSkillsComponent skills={skills} />
-
-              {/* Rappels des sessions de la semaine */}
               <WeeklySessionsReminder />
-
-              {/* ProfileHud aligné sous le composant 2 */}
               <ProfileHud
                 userName={user?.username || user?.firstName || "Aventurier"}
                 title={(user?.unsafeMetadata?.role as string) || "Aventurier"}
