@@ -8,8 +8,6 @@ import { DOJO_ANIMATIONS } from "../constants/dojo-environments";
 import { X, Eye, EyeOff, Play, Pause, CheckCircle, Square } from "lucide-react";
 import type { Session } from "@/shared/services/session/api-session.type";
 import { hasDescription } from "../types/session-quest.types";
-import { sessionStorageService } from "../services/session-storage.service";
-import type { SessionData } from "../types/session-data.type";
 
 interface DojoImmersiveProps {
   environment: DojoEnvironment;
@@ -32,9 +30,6 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
   const [isSessionCompleted, setIsSessionCompleted] = useState(false);
   const [sessionTimeLeft, setSessionTimeLeft] = useState(0);
   const [sessionTimeElapsed, setSessionTimeElapsed] = useState(0);
-  const [pausedCount, setPausedCount] = useState(0);
-  const [pauseStartTime, setPauseStartTime] = useState<number | null>(null);
-  const [totalPauseDuration, setTotalPauseDuration] = useState(0);
   const [showSessionCompleteModal, setShowSessionCompleteModal] = useState(false);
 
   const { pomodoro, startPomodoro, pausePomodoro, resetPomodoro, updateDurations, formatTime, getPhaseLabel } =
@@ -79,19 +74,12 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
       setIsSessionCompleted(false);
     } else if (isSessionPaused) {
       // État Pause : Reprendre la session
-      if (pauseStartTime) {
-        const pauseDuration = Date.now() - pauseStartTime;
-        setTotalPauseDuration((prev) => prev + pauseDuration);
-        setPauseStartTime(null);
-      }
       setIsSessionPaused(false);
     } else if (isSessionCompleted) {
       // État Terminé : Ne rien faire (bouton désactivé)
       return;
     } else {
       // État en cours : Mettre en pause
-      setPausedCount((prev) => prev + 1);
-      setPauseStartTime(Date.now());
       setIsSessionPaused(true);
     }
   };
@@ -105,43 +93,13 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
   };
 
   const endSession = async () => {
-    // Calculer la durée totale des pauses en secondes
-    const finalPauseDuration = pauseStartTime ? totalPauseDuration + (Date.now() - pauseStartTime) : totalPauseDuration;
-
-    // Enregistrer les données de session
-    const sessionData: SessionData = {
-      sessionId: selectedSession.id,
-      duration: selectedSession.duration * 60, // Durée prévue en secondes
-      timeElapsed: sessionTimeElapsed, // Temps réellement écoulé
-      timeLeft: sessionTimeLeft, // Temps restant
-      completed: isSessionCompleted,
-      environment: environment.id,
-      completedAt: new Date().toISOString(),
-      pausedCount: pausedCount,
-      pauseDuration: Math.floor(finalPauseDuration / 1000), // Convertir en secondes
-    };
-
-    // Sauvegarder localement
-    sessionStorageService.saveSessionData(sessionData);
-
-    // Calculer et afficher les statistiques
-    const stats = sessionStorageService.calculateSessionStats(sessionData);
-    console.log("Session completed with stats:", stats);
-
-    // Essayer d'envoyer au backend
-    const sentToBackend = await sessionStorageService.sendToBackend(sessionData);
-    if (!sentToBackend) {
-      console.warn("Session data saved locally but could not be sent to backend");
-    }
+    // Marquer la session comme terminée
+    setIsSessionCompleted(true);
 
     // Réinitialiser tous les états
     setIsSessionStarted(false);
     setIsSessionPaused(false);
-    setIsSessionCompleted(false);
     setSessionTimeElapsed(0);
-    setPausedCount(0);
-    setPauseStartTime(null);
-    setTotalPauseDuration(0);
     setShowSessionCompleteModal(false);
     onExit();
   };
@@ -217,6 +175,7 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
           session={selectedSession}
           sessionTimeLeft={sessionTimeLeft}
           isSessionActive={isSessionStarted && !isSessionPaused}
+          isSessionPaused={isSessionPaused}
         />
       </div>
 
@@ -268,15 +227,22 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
         </button>
       </div>
 
-      {/* Bouton de session en bas à droite */}
-      <div className="absolute bottom-4 right-4 z-50">
+      {/* Boutons de session en bas à droite */}
+      <div
+        className={`absolute bottom-4 right-4 z-50 flex space-x-2 transition-all duration-500 ease-in-out ${
+          isUIHidden ? "translate-x-full opacity-0" : "translate-x-0 opacity-100"
+        }`}
+      >
+        {/* Bouton play/pause */}
         <button
           onClick={toggleSession}
           disabled={isSessionCompleted}
-          className={`backdrop-blur-sm border rounded-lg px-3 py-2 transition-all duration-200 ${
+          className={`backdrop-blur-sm border rounded-lg transition-all duration-200 group ${
             isSessionCompleted
-              ? "bg-gray-500/20 border-gray-500/30 text-gray-400 cursor-not-allowed"
-              : "bg-black/20 border-white/30 text-white hover:bg-black/30 hover:scale-105"
+              ? "bg-gray-500/20 border-gray-500/30 text-gray-400 cursor-not-allowed px-3 py-2"
+              : isSessionStarted
+                ? "bg-black/20 border-white/30 text-white hover:bg-black/30 hover:scale-105 px-3 py-2 hover:px-4 hover:py-2"
+                : "bg-black/20 border-white/30 text-white hover:bg-black/30 hover:scale-105 px-4 py-2 text-sm font-medium"
           }`}
           title={
             isSessionCompleted
@@ -291,20 +257,54 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
           {isSessionCompleted ? (
             <Square className="w-4 h-4" />
           ) : !isSessionStarted ? (
-            <Play className="w-4 h-4" />
+            "Lancer la session"
           ) : isSessionPaused ? (
-            <Play className="w-4 h-4" />
+            <div className="flex items-center justify-center">
+              <Play className="w-4 h-4" />
+              <span className="group-hover:inline hidden ml-2">Reprendre</span>
+            </div>
           ) : (
-            <Pause className="w-4 h-4" />
+            <div className="flex items-center justify-center">
+              <Pause className="w-4 h-4" />
+              <span className="group-hover:inline hidden ml-2">Pause</span>
+            </div>
           )}
         </button>
+
+        {/* Bouton terminer la session */}
+        {isSessionStarted && !isSessionCompleted && (
+          <button
+            onClick={() => {
+              setShowSessionCompleteModal(true);
+            }}
+            className="bg-black/20 backdrop-blur-sm border border-white/30 text-white hover:bg-blue-500/30 hover:border-blue-500/30 hover:text-blue-400 rounded-lg px-4 py-2 transition-all duration-200 hover:scale-105 text-sm font-medium"
+            title="Terminer la session maintenant"
+          >
+            Terminer la session
+          </button>
+        )}
       </div>
 
       {/* Modal de fin de session */}
       {showSessionCompleteModal && (
-        <div className="absolute inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center">
-          <div className="bg-slate-800 border border-slate-600 rounded-lg p-6 max-w-md w-full mx-4 text-center">
-            <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
+        <div className="absolute inset-0 z-[100] bg-black/60 backdrop-blur-md flex items-center justify-center">
+          <div className="bg-black/20 backdrop-blur-sm border border-white/30 rounded-lg p-6 max-w-md w-full mx-4 text-center relative">
+            {/* Bouton fermer */}
+            <button
+              onClick={() => {
+                setShowSessionCompleteModal(false);
+                // Si la session était terminée automatiquement, la remettre en état actif
+                if (isSessionCompleted) {
+                  setIsSessionCompleted(false);
+                }
+              }}
+              className="absolute top-4 right-4 bg-black/20 backdrop-blur-sm border border-white/30 text-white hover:bg-black/30 rounded-lg p-2 transition-colors"
+              title="Fermer la modale"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            <CheckCircle className="w-12 h-12 text-green-400 mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-white mb-2">Session terminée !</h3>
             <div className="text-gray-400 mb-4 space-y-1">
               <p>Durée prévue : {selectedSession.duration} minutes</p>
@@ -312,7 +312,6 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
                 Temps écoulé : {Math.floor(sessionTimeElapsed / 60)}:
                 {(sessionTimeElapsed % 60).toString().padStart(2, "0")}
               </p>
-              <p>Pauses : {pausedCount} fois</p>
               <p>Environnement : {environment.name}</p>
             </div>
             <p className="text-gray-300 mb-6">Que souhaitez-vous faire ?</p>
@@ -328,7 +327,7 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
                 onClick={endSession}
                 className="flex-1 bg-green-500/20 text-green-400 border border-green-500/30 hover:bg-green-500/30 rounded-lg px-4 py-2 transition-colors"
               >
-                Terminer & Enregistrer
+                Terminer
               </button>
             </div>
           </div>

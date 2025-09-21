@@ -6,9 +6,15 @@ interface SessionInfoProps {
   session: Session;
   sessionTimeLeft?: number;
   isSessionActive?: boolean;
+  isSessionPaused?: boolean;
 }
 
-export const SessionInfo: React.FC<SessionInfoProps> = ({ session, sessionTimeLeft, isSessionActive }) => {
+export const SessionInfo: React.FC<SessionInfoProps> = ({
+  session,
+  sessionTimeLeft,
+  isSessionActive,
+  isSessionPaused,
+}) => {
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("fr-FR", {
@@ -19,7 +25,7 @@ export const SessionInfo: React.FC<SessionInfoProps> = ({ session, sessionTimeLe
   };
 
   const getDuration = () => {
-    if (isSessionActive && sessionTimeLeft !== undefined) {
+    if ((isSessionActive || isSessionPaused) && sessionTimeLeft !== undefined) {
       const minutes = Math.floor(sessionTimeLeft / 60);
       const seconds = sessionTimeLeft % 60;
       return `${minutes}:${seconds.toString().padStart(2, "0")}`;

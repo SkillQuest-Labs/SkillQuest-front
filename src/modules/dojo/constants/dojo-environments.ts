@@ -31,7 +31,7 @@ export const DOJO_ENVIRONMENTS: DojoEnvironment[] = [
   },
   {
     id: "purple sunset",
-    name: "Forêt Dense",
+    name: "Purple-sunset",
     videoUrl: "https://res.cloudinary.com/duunq6iio/video/upload/v1758479796/purple-sunset.mp4",
     description: "Les hauteur de la ville",
     isActive: true,
