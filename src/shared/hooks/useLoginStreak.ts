@@ -59,7 +59,8 @@ export const useLoginStreak = () => {
 
       // Vérifier si l'utilisateur s'est connecté ce jour
       // Pour le premier jour (i === 0), vérifier aussi si la dernière connexion était aujourd'hui
-      const hasLoginOnDate = sortedDates.some((loginDate) => loginDate.toDateString() === checkDateStr) ||
+      const hasLoginOnDate =
+        sortedDates.some((loginDate) => loginDate.toDateString() === checkDateStr) ||
         (i === 0 && sortedDates[0]?.toDateString() === today.toDateString());
 
       if (hasLoginOnDate) {
