@@ -57,21 +57,14 @@ export const useLoginStreak = () => {
       // Normaliser les dates (ignorer l'heure)
       const checkDateStr = checkDate.toDateString();
 
-      const hasLoginOnDate = sortedDates.some((loginDate) => loginDate.toDateString() === checkDateStr);
+      // Vérifier si l'utilisateur s'est connecté ce jour
+      // Pour le premier jour (i === 0), vérifier aussi si la dernière connexion était aujourd'hui
+      const hasLoginOnDate = sortedDates.some((loginDate) => loginDate.toDateString() === checkDateStr) ||
+        (i === 0 && sortedDates[0]?.toDateString() === today.toDateString());
 
       if (hasLoginOnDate) {
         streak++;
       } else {
-        // Si c'est le premier jour et qu'il n'y a pas de connexion,
-        // on ne casse pas le streak si on est dans la même journée
-        if (i === 0) {
-          const todayStr = today.toDateString();
-          const lastLoginStr = sortedDates[0]?.toDateString();
-          if (lastLoginStr === todayStr) {
-            streak++;
-            continue;
-          }
-        }
         break;
       }
     }
