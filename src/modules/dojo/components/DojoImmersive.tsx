@@ -8,6 +8,7 @@ import { DOJO_ANIMATIONS } from "../constants/dojo-environments";
 import { X, Eye, EyeOff, Play, Pause, CheckCircle, Square } from "lucide-react";
 import type { Session } from "@/shared/services/session/api-session.type";
 import { hasDescription } from "../types/session-quest.types";
+import { useValidateSession } from "@/shared/services/session/api-session";
 
 interface DojoImmersiveProps {
   environment: DojoEnvironment;
@@ -31,9 +32,11 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
   const [sessionTimeLeft, setSessionTimeLeft] = useState(0);
   const [sessionTimeElapsed, setSessionTimeElapsed] = useState(0);
   const [showSessionCompleteModal, setShowSessionCompleteModal] = useState(false);
+  const [completedQuests, setCompletedQuests] = useState<Set<string>>(new Set());
 
   const { pomodoro, startPomodoro, pausePomodoro, resetPomodoro, updateDurations, formatTime, getPhaseLabel } =
     usePomodoro();
+  const { validateSession } = useValidateSession();
 
   // Initialiser le temps de session
   useEffect(() => {
@@ -92,16 +95,51 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
     setIsSessionCompleted(false);
   };
 
-  const endSession = async () => {
-    // Marquer la session comme terminée
-    setIsSessionCompleted(true);
+  const handleQuestToggle = (questId: string, isCompleted: boolean) => {
+    setCompletedQuests((prev) => {
+      const newSet = new Set(prev);
+      if (isCompleted) {
+        newSet.add(questId);
+      } else {
+        newSet.delete(questId);
+      }
+      return newSet;
+    });
+  };
 
-    // Réinitialiser tous les états
-    setIsSessionStarted(false);
-    setIsSessionPaused(false);
-    setSessionTimeElapsed(0);
-    setShowSessionCompleteModal(false);
-    onExit();
+  const endSession = async () => {
+    try {
+      // Formater les quêtes complétées selon le DTO backend
+      const completedQuestsArray = Array.from(completedQuests).map((questId) => {
+        const sessionQuest = selectedSession.quests.find((q) => q.id === questId);
+        return {
+          id: sessionQuest?.questId || sessionQuest?.id || questId,
+          title: sessionQuest?.quest?.title || sessionQuest?.title || `Quête ${questId}`,
+        };
+      });
+
+      // Validation automatique de la session avec les quêtes complétées
+      await validateSession({
+        sessionId: selectedSession.id,
+        completedQuests: completedQuestsArray,
+      });
+
+      // Marquer la session comme terminée et sortir
+      setIsSessionCompleted(true);
+      setIsSessionStarted(false);
+      setIsSessionPaused(false);
+      setSessionTimeElapsed(0);
+      setShowSessionCompleteModal(false);
+      onExit();
+    } catch {
+      // En cas d'erreur, terminer quand même la session
+      setIsSessionCompleted(true);
+      setIsSessionStarted(false);
+      setIsSessionPaused(false);
+      setSessionTimeElapsed(0);
+      setShowSessionCompleteModal(false);
+      onExit();
+    }
   };
 
   useEffect(() => {
@@ -204,7 +242,7 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
           isUIHidden ? "-translate-x-full opacity-0" : "translate-x-0 opacity-100"
         }`}
       >
-        <SessionQuestDisplay quests={questsToDisplay} />
+        <SessionQuestDisplay quests={questsToDisplay} onQuestToggle={handleQuestToggle} />
       </div>
 
       {/* Contrôles en haut */}
