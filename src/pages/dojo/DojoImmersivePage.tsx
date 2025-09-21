@@ -16,7 +16,7 @@ export const DojoImmersivePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const { currentEnvironment, isBackgroundVisible } = useDojoMedia();
+  const { currentEnvironment, environments, isBackgroundVisible, changeEnvironment } = useDojoMedia();
   const { sessions, loading: sessionsLoading } = useDojoSessions();
 
   // Charger la session correspondante
@@ -82,8 +82,10 @@ export const DojoImmersivePage: React.FC = () => {
   return (
     <DojoImmersive
       environment={currentEnvironment}
+      environments={environments}
       isBackgroundVisible={isBackgroundVisible}
       onExit={handleExit}
+      onEnvironmentChange={changeEnvironment}
       selectedSession={selectedSession}
     />
   );

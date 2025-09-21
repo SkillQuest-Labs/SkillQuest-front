@@ -11,15 +11,19 @@ import { hasDescription } from "../types/session-quest.types";
 
 interface DojoImmersiveProps {
   environment: DojoEnvironment;
+  environments: DojoEnvironment[];
   isBackgroundVisible: boolean;
   onExit: () => void;
+  onEnvironmentChange: (environmentId: string) => void;
   selectedSession: Session;
 }
 
 export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
   environment,
+  environments,
   isBackgroundVisible,
   onExit,
+  onEnvironmentChange,
   selectedSession,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -128,23 +132,47 @@ export const DojoImmersive: React.FC<DojoImmersiveProps> = ({
       </div>
 
       {/* Contrôles en haut */}
-      <div className="absolute top-4 right-4 z-50 flex space-x-2">
-        {/* Bouton pour masquer/afficher l'UI */}
-        <button
-          onClick={() => setIsUIHidden(!isUIHidden)}
-          className="bg-black/20 backdrop-blur-sm border border-white/30 text-white hover:bg-black/30 rounded-lg px-3 py-2 transition-colors"
-          title={isUIHidden ? "Afficher l'interface" : "Masquer l'interface"}
-        >
-          {isUIHidden ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-        </button>
+      <div className="absolute top-4 right-4 z-50 flex flex-col space-y-2">
+        {/* Sélecteur d'environnement */}
+        <div className="bg-black/20 backdrop-blur-sm border border-white/30 rounded-lg p-2">
+          <div className="text-xs text-white/80 mb-2 text-center">Environnement</div>
+          <div className="grid grid-cols-3 gap-1">
+            {environments.map((env) => (
+              <button
+                key={env.id}
+                onClick={() => onEnvironmentChange(env.id)}
+                className={`p-1 rounded text-xs transition-colors ${
+                  environment.id === env.id
+                    ? "bg-blue-500/30 text-blue-300 border border-blue-500/50"
+                    : "text-white/70 hover:bg-white/10 hover:text-white"
+                }`}
+                title={env.name}
+              >
+                {env.name.length > 8 ? env.name.substring(0, 8) + "..." : env.name}
+              </button>
+            ))}
+          </div>
+        </div>
 
-        <button
-          onClick={onExit}
-          className="bg-black/20 backdrop-blur-sm border border-white/30 text-white hover:bg-black/30 rounded-lg px-3 py-2 transition-colors"
-          title="Fermer le dojo"
-        >
-          <X className="w-4 h-4" />
-        </button>
+        {/* Boutons de contrôle */}
+        <div className="flex space-x-2">
+          {/* Bouton pour masquer/afficher l'UI */}
+          <button
+            onClick={() => setIsUIHidden(!isUIHidden)}
+            className="bg-black/20 backdrop-blur-sm border border-white/30 text-white hover:bg-black/30 rounded-lg px-3 py-2 transition-colors"
+            title={isUIHidden ? "Afficher l'interface" : "Masquer l'interface"}
+          >
+            {isUIHidden ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+          </button>
+
+          <button
+            onClick={onExit}
+            className="bg-black/20 backdrop-blur-sm border border-white/30 text-white hover:bg-black/30 rounded-lg px-3 py-2 transition-colors"
+            title="Fermer le dojo"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
       </div>
     </div>
   );
