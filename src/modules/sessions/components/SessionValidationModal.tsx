@@ -55,7 +55,7 @@ export const SessionValidationModal = ({
           <DialogDescription className="text-slate-300">
             {isSessionValidated
               ? "Cette session est déjà validée. Sélectionnez les quêtes supplémentaires que vous avez accomplies (optionnel)."
-              : "Sélectionnez les quêtes que vous avez accomplies lors de cette session (optionnel). Vous pouvez valider la session même sans sélectionner de quêtes."}
+              : "Sélectionnez les quêtes que vous avez accomplies lors de cette session (optionnel)."}
           </DialogDescription>
         </DialogHeader>
 
@@ -269,7 +269,7 @@ export const SessionValidationModal = ({
                   </Button>
                   <Button
                     onClick={handleValidateSession}
-                    disabled={validationLoading}
+                    disabled={validationLoading || validatedQuests.length === 0}
                     className="bg-green-600 hover:bg-green-700 text-white disabled:bg-slate-600 disabled:cursor-not-allowed"
                   >
                     {validationLoading ? (

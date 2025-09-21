@@ -83,6 +83,13 @@ export const SessionCard = ({ session }: SessionCardProps) => {
   // Vérifier s'il y a des quêtes non validées dans une session validée
   const hasUnvalidatedQuests = session.isValidated && !isSessionFullyCompleted(session);
 
+  // Vérifier s'il y a des quêtes non validées dans une session non validée
+  const hasUnvalidatedQuestsInUnvalidatedSession =
+    !session.isValidated &&
+    session.quests &&
+    session.quests.length > 0 &&
+    session.quests.some((quest: any) => quest.quest?.status !== "COMPLETED");
+
   return (
     <>
       <div className="flex h-full flex-col">
@@ -142,7 +149,9 @@ export const SessionCard = ({ session }: SessionCardProps) => {
             </div>
           )
         ) : (
-          <div className="mt-5 grid grid-cols-[1fr_1fr_1.25fr] overflow-hidden rounded-lg border border-slate-700/60">
+          <div
+            className={`mt-5 grid ${hasUnvalidatedQuestsInUnvalidatedSession ? "grid-cols-[1fr_1fr_1.25fr]" : "grid-cols-[1fr_1fr]"} overflow-hidden rounded-lg border border-slate-700/60`}
+          >
             <Button
               onClick={handlePlay}
               aria-label="Démarrer la session"
@@ -152,14 +161,16 @@ export const SessionCard = ({ session }: SessionCardProps) => {
               <span className="ml-2 hidden sm:inline">Lancer</span>
             </Button>
 
-            <Button
-              onClick={handleValidate}
-              aria-label="Valider la session"
-              className="btn-action btn-validate h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white cursor-pointer"
-            >
-              <Check className="h-4 w-4" />
-              <span className="ml-2 hidden sm:inline">Valider</span>
-            </Button>
+            {hasUnvalidatedQuestsInUnvalidatedSession && (
+              <Button
+                onClick={handleValidate}
+                aria-label="Valider la session"
+                className="btn-action btn-validate h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white cursor-pointer"
+              >
+                <Check className="h-4 w-4" />
+                <span className="ml-2 hidden sm:inline">Valider</span>
+              </Button>
+            )}
 
             <Button
               onClick={() => setIsDeleteDialogOpen(true)}
