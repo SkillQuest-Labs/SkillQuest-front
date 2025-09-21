@@ -102,7 +102,7 @@ export const router = createBrowserRouter([
         element: <CanvasPage />,
       },
       {
-        path: routes.dojoImmersive.path,
+        path: `${routes.dojoImmersive.path}/:sessionId`,
         element: <DojoImmersivePage />,
       },
     ],

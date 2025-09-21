@@ -71,7 +71,7 @@ export const routes: IRoutes = {
     display: "Dojo",
   },
   dojoImmersive: {
-    path: "/dojo/:sessionId",
+    path: "/dojo",
     display: "Dojo Immersif",
   },
   notfound: {
