@@ -2,6 +2,16 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import type { PomodoroState } from "../types/dojo.types";
 import { POMODORO_DEFAULTS } from "../constants/dojo-environments";
 
+/**
+ * Détermine la phase suivante après une session de travail
+ * @param completedPomodoros - Nombre de pomodoros complétés
+ * @param longBreakInterval - Intervalle pour la pause longue
+ * @returns La phase suivante : "longBreak" ou "shortBreak"
+ */
+const getNextPhaseAfterWork = (completedPomodoros: number, longBreakInterval: number): "longBreak" | "shortBreak" => {
+  return (completedPomodoros + 1) % longBreakInterval === 0 ? "longBreak" : "shortBreak";
+};
+
 export const usePomodoro = () => {
   // Charger les paramètres sauvegardés ou utiliser les valeurs par défaut
   const loadSavedSettings = () => {
@@ -122,8 +132,7 @@ export const usePomodoro = () => {
 
             // Changer de phase
             if (prev.currentPhase === "work") {
-              const nextPhase =
-                (prev.completedPomodoros + 1) % POMODORO_DEFAULTS.longBreakInterval === 0 ? "longBreak" : "shortBreak";
+              const nextPhase = getNextPhaseAfterWork(prev.completedPomodoros, POMODORO_DEFAULTS.longBreakInterval);
               return {
                 ...prev,
                 currentPhase: nextPhase,

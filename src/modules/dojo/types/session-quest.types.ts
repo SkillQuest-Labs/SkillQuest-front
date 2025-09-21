@@ -34,16 +34,18 @@ export interface ExtendedSessionQuest extends SessionQuest {
  * Type guard pour vérifier si un objet a une propriété description
  */
 export function hasDescription(obj: any): obj is { description: string } {
-  return obj && typeof obj === 'object' && typeof obj.description === 'string';
+  return obj && typeof obj === "object" && typeof obj.description === "string";
 }
 
 /**
  * Type guard pour vérifier si un objet est une SessionQuest valide
  */
 export function isSessionQuest(obj: any): obj is SessionQuest {
-  return obj && 
-    typeof obj === 'object' && 
-    typeof obj.id === 'string' && 
-    typeof obj.questId === 'string' && 
-    typeof obj.title === 'string';
+  return (
+    obj &&
+    typeof obj === "object" &&
+    typeof obj.id === "string" &&
+    typeof obj.questId === "string" &&
+    typeof obj.title === "string"
+  );
 }
