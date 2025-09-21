@@ -8,6 +8,7 @@ import { QuestIndicator } from "./QuestIndicator";
 import { useState } from "react";
 import { getDateToTime, isSessionFullyCompleted } from "../utils/session.utils";
 import { SessionValidationModal } from "./SessionValidationModal";
+import { useQueryClient } from "@tanstack/react-query";
 
 type SessionCardProps = {
   session: Session;
@@ -18,6 +19,7 @@ export const SessionCard = ({ session }: SessionCardProps) => {
   const { validateSession, loading: validationLoading } = useValidateSession();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isValidationModalOpen, setIsValidationModalOpen] = useState(false);
+  const queryClient = useQueryClient();
 
   const handlePlay = () => {};
 
@@ -39,11 +41,17 @@ export const SessionCard = ({ session }: SessionCardProps) => {
         completedQuests,
       });
 
-      showToast({
-        title: "Session validée !",
-        description: "Votre session a été validée avec succès",
-        status: "success",
-      });
+      // Invalider les caches pour mettre à jour les données
+      await queryClient.invalidateQueries({ queryKey: ["sessions"] });
+      await queryClient.invalidateQueries({ queryKey: ["skills"] });
+      await queryClient.invalidateQueries({ queryKey: ["user"] });
+
+      // Émettre un événement personnalisé pour signaler la validation
+      window.dispatchEvent(
+        new CustomEvent("sessionValidated", {
+          detail: { sessionId: session.id, completedQuests },
+        }),
+      );
 
       setIsValidationModalOpen(false);
     } catch {
@@ -74,6 +82,9 @@ export const SessionCard = ({ session }: SessionCardProps) => {
 
   // Vérifier s'il y a des quêtes non validées dans une session validée
   const hasUnvalidatedQuests = session.isValidated && !isSessionFullyCompleted(session);
+
+  // Le bouton Valider doit être affiché pour toutes les sessions non validées
+  const shouldShowValidateButton = !session.isValidated;
 
   return (
     <>
@@ -134,7 +145,9 @@ export const SessionCard = ({ session }: SessionCardProps) => {
             </div>
           )
         ) : (
-          <div className="mt-5 grid grid-cols-[1fr_1fr_1.25fr] overflow-hidden rounded-lg border border-slate-700/60">
+          <div
+            className={`mt-5 grid ${shouldShowValidateButton ? "grid-cols-[1fr_1fr_1.25fr]" : "grid-cols-[1fr_1fr]"} overflow-hidden rounded-lg border border-slate-700/60`}
+          >
             <Button
               onClick={handlePlay}
               aria-label="Démarrer la session"
@@ -144,14 +157,16 @@ export const SessionCard = ({ session }: SessionCardProps) => {
               <span className="ml-2 hidden sm:inline">Lancer</span>
             </Button>
 
-            <Button
-              onClick={handleValidate}
-              aria-label="Valider la session"
-              className="btn-action btn-validate h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white cursor-pointer"
-            >
-              <Check className="h-4 w-4" />
-              <span className="ml-2 hidden sm:inline">Valider</span>
-            </Button>
+            {shouldShowValidateButton && (
+              <Button
+                onClick={handleValidate}
+                aria-label="Valider la session"
+                className="btn-action btn-validate h-full w-full rounded-none bg-transparent text-slate-200 hover:text-white cursor-pointer"
+              >
+                <Check className="h-4 w-4" />
+                <span className="ml-2 hidden sm:inline">Valider</span>
+              </Button>
+            )}
 
             <Button
               onClick={() => setIsDeleteDialogOpen(true)}
