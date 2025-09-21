@@ -162,4 +162,3 @@ export const SessionsMode: React.FC<SessionsModeProps> = ({ sessions, loading, o
     </div>
   );
 };
-

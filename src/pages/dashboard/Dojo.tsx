@@ -60,11 +60,7 @@ export const Dojo = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-0 flex-1 overflow-hidden">
-              <SessionsMode 
-                sessions={sessions} 
-                loading={sessionsLoading} 
-                onLaunchSession={handleLaunchImmersive}
-              />
+              <SessionsMode sessions={sessions} loading={sessionsLoading} onLaunchSession={handleLaunchImmersive} />
             </CardContent>
           </Card>
         </div>
