@@ -1,6 +1,6 @@
 export type QuestDifficulty = "EASY" | "MEDIUM" | "HARD";
 
-export type QuestStatus = "LOCKED" | "UNLOCKED" | "COMPLETED";
+export type QuestStatus = "LOCKED" | "UNLOCKED" | "COMPLETED" | "IN_PROGRESS";
 
 export type QuestPosition = {
   x: number;
