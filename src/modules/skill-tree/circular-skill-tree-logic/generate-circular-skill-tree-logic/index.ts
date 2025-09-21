@@ -119,9 +119,9 @@ export const generateCircularSkillTreeData = ({
 
   const statusIconMap: Record<"LOCKED" | "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED", string> = {
     LOCKED: "🔒",
-    NOT_STARTED: "✨",
+    NOT_STARTED: "✦",
     IN_PROGRESS: "⏳",
-    COMPLETED: "🏁",
+    COMPLETED: "✔",
   };
 
   circularSkillNodes.forEach((node) => {

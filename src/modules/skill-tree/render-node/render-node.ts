@@ -1,5 +1,12 @@
 import { LEVEL_COLORS, type CircularSkillNode } from "../skill-tree.type";
 
+const STATUS_COLORS = {
+  LOCKED: { fill: "#0f172a", border: "#475569" },
+  NOT_STARTED: { fill: "#1e3a8a", border: "#60a5fa" },
+  IN_PROGRESS: { fill: "#7c2d12", border: "#fbbf24" },
+  COMPLETED: { fill: "#065f46", border: "#34d399" },
+} as const;
+
 const getLevelColors = (level: number) => {
   if (LEVEL_COLORS[level]) {
     return LEVEL_COLORS[level];
@@ -9,10 +16,10 @@ const getLevelColors = (level: number) => {
 };
 
 export const getNodeColor = (node: CircularSkillNode, activeNodePath: string[], hoveredNode: string | null) => {
-  if (node.isLocked) return "#1a202c"; // Dark slate for locked
-  if (node.status === "COMPLETED") return "#34d399"; // Emerald-400 (completed stays green)
-  if (node.status === "IN_PROGRESS") return "#d97706"; // Amber-700 for in progress
-  if (node.status === "NOT_STARTED") return "#60a5fa"; // Blue-400 for available
+  if (node.status && node.status in STATUS_COLORS) {
+    return STATUS_COLORS[node.status as keyof typeof STATUS_COLORS].fill;
+  }
+  if (node.isLocked) return STATUS_COLORS.LOCKED.fill;
   if (activeNodePath.includes(node.id)) return "#22d3ee"; // Cyan-400 (active path)
   if (hoveredNode === node.id) return "#60a5fa"; // Blue-400
 
@@ -22,11 +29,11 @@ export const getNodeColor = (node: CircularSkillNode, activeNodePath: string[], 
 
 export const getNodeBorderColor = (node: CircularSkillNode, activeNodePath: string[], selectedNode: string | null) => {
   if (selectedNode === node.id) return "#fbbf24"; // Amber-400 (selected)
-  if (node.isLocked) return "#dc2626"; // Red-600 for locked border
+  if (node.status && node.status in STATUS_COLORS) {
+    return STATUS_COLORS[node.status as keyof typeof STATUS_COLORS].border;
+  }
+  if (node.isLocked) return STATUS_COLORS.LOCKED.border;
   if (activeNodePath.includes(node.id)) return "#67e8f9"; // Cyan-300
-  if (node.status === "COMPLETED") return "#6ee7b7"; // Emerald-300
-  if (node.status === "IN_PROGRESS") return "#fcd34d"; // Amber-300
-  if (node.status === "NOT_STARTED") return "#93c5fd"; // Blue-300
 
   const { border: levelBorderColor } = getLevelColors(node.ring);
   return levelBorderColor; // Use level border color

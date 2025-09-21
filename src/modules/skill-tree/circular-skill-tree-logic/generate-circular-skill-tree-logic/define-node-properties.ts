@@ -44,7 +44,7 @@ export const defineNodeProperties = ({
         nodeType: "medium",
         size: 32,
         shape: "hexagon",
-        icon: "🏁",
+        icon: "✔",
         cost: 1,
       };
     }
@@ -64,7 +64,7 @@ export const defineNodeProperties = ({
         nodeType: "medium",
         size: 30,
         shape: "hexagon",
-        icon: "✨",
+        icon: "✦",
         cost: 1,
       };
     }

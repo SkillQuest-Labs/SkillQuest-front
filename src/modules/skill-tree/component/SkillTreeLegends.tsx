@@ -123,28 +123,40 @@ export const SkillTreeLegends = () => {
             <h3 className="text-lg font-semibold mb-3 text-green-300">États</h3>
             <div className="space-y-3">
               <div className="flex items-center">
-                <div className="w-5 h-5 rounded-full mr-3 bg-emerald-400 border-2 border-emerald-300"></div>
+                <div
+                  className="w-5 h-5 rounded-full mr-3"
+                  style={{ backgroundColor: "#065f46", border: "2px solid #34d399" }}
+                ></div>
                 <div>
                   <span className="text-sm font-medium">COMPLETED</span>
                   <p className="text-xs text-gray-400">Quête terminée</p>
                 </div>
               </div>
               <div className="flex items-center">
-                <div className="w-5 h-5 rounded-full mr-3 bg-yellow-400 border-2 border-yellow-300"></div>
+                <div
+                  className="w-5 h-5 rounded-full mr-3"
+                  style={{ backgroundColor: "#7c2d12", border: "2px solid #fbbf24" }}
+                ></div>
                 <div>
                   <span className="text-sm font-medium">IN_PROGRESS</span>
                   <p className="text-xs text-gray-400">Quête en cours</p>
                 </div>
               </div>
               <div className="flex items-center">
-                <div className="w-5 h-5 rounded-full mr-3 bg-gray-500 border-2 border-gray-400"></div>
+                <div
+                  className="w-5 h-5 rounded-full mr-3"
+                  style={{ backgroundColor: "#1e3a8a", border: "2px solid #60a5fa" }}
+                ></div>
                 <div>
                   <span className="text-sm font-medium">NOT_STARTED</span>
                   <p className="text-xs text-gray-400">Quête disponible</p>
                 </div>
               </div>
               <div className="flex items-center">
-                <div className="w-5 h-5 rounded-full mr-3 bg-slate-800 border-2 border-red-600"></div>
+                <div
+                  className="w-5 h-5 rounded-full mr-3"
+                  style={{ backgroundColor: "#0f172a", border: "2px solid #475569" }}
+                ></div>
                 <div>
                   <span className="text-sm font-medium">LOCKED</span>
                   <p className="text-xs text-gray-400">Prérequis manquants</p>
