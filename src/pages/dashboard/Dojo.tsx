@@ -73,7 +73,7 @@ export const Dojo = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-0">
-              <SessionsMode sessions={sessions} loading={sessionsLoading} onSelectSession={handleSelectSession} />
+              <SessionsMode sessions={sessions} loading={sessionsLoading} onLaunchSession={handleLaunchImmersive} onSelectSession={handleSelectSession} />
             </CardContent>
           </Card>
 

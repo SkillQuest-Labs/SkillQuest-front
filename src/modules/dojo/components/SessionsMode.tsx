@@ -7,6 +7,7 @@ interface SessionsModeProps {
   sessions: Session[];
   loading: boolean;
   onLaunchSession: (session: Session) => void;
+  onSelectSession?: (session: Session) => void;
 }
 
 interface SessionGroup {
@@ -14,7 +15,7 @@ interface SessionGroup {
   sessions: Session[];
 }
 
-export const SessionsMode: React.FC<SessionsModeProps> = ({ sessions, loading, onLaunchSession }) => {
+export const SessionsMode: React.FC<SessionsModeProps> = ({ sessions, loading, onLaunchSession, onSelectSession }) => {
   // Fonction pour organiser les sessions par sections temporelles
   const organizeSessionsByTime = (sessions: Session[]): SessionGroup[] => {
     const now = new Date();
@@ -113,7 +114,7 @@ export const SessionsMode: React.FC<SessionsModeProps> = ({ sessions, loading, o
                 <div
                   key={session.id}
                   className="bg-slate-700/30 border border-slate-600/50 rounded-lg p-3 hover:bg-slate-600/30 transition-colors cursor-pointer"
-                  onClick={() => onLaunchSession(session)}
+                  onClick={() => onSelectSession ? onSelectSession(session) : onLaunchSession(session)}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3 flex-1 min-w-0">
