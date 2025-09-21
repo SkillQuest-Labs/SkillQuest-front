@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/shared/components/ui/dialog";
-import { useGetQuests } from "@/shared/services/quest/api-quest";
+import { useGetQuestsForSessions } from "@/shared/services/quest/api-quest";
 import { useGetSkills } from "@/shared/services/skill/api-skill";
 import type { SessionFormType } from "../types/session-form.type";
 import { SessionForm } from "./SessionForm";
@@ -57,7 +57,7 @@ export const SessionDialog = ({
   const { user } = useUser();
   const userId = user?.id;
   const { skills, loading: loadingSkills } = useGetSkills(userId || "");
-  const { quests, loading: loadingQuests } = useGetQuests(formSession.linkedSkill);
+  const { quests, loading: loadingQuests } = useGetQuestsForSessions(formSession.linkedSkill);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

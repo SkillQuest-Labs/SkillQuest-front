@@ -67,7 +67,7 @@ const getSessionStatus = (session: Session): "upcoming" | "today" | "past" => {
 
 export const WeeklySessionsReminder = ({ className = "" }: WeeklySessionsReminderProps) => {
   const { user } = useUser();
-  const { sessions, isPending, error } = useGetSessions(user?.id || "");
+  const { sessions, isPending, error } = useGetSessions(user?.id || "", true);
   const navigate = useNavigate();
 
   const weeklySessions = useMemo(() => {
