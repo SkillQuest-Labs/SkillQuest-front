@@ -41,7 +41,7 @@ export const SelectQuestField = ({ currentSession, setForm, quests, loading, dis
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen]);
+  }, [isOpen, setIsOpen]);
 
   const handleQuestToggle = (questId: string, questTitle: string) => {
     const isSelected = currentSession.linkedQuests.some((quest) => quest.id === questId);
@@ -91,7 +91,7 @@ export const SelectQuestField = ({ currentSession, setForm, quests, loading, dis
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen]);
+  }, [isOpen, setIsOpen]);
 
   const handleQuestToggle = (questId: string, questTitle: string) => {
     const isSelected = currentSession.linkedQuests.some((quest) => quest.id === questId);
