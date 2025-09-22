@@ -48,9 +48,7 @@ export const DashboardUser = () => {
       return;
     }
 
-    const diffDays = Math.floor(
-      (today.getTime() - lastLogin.getTime()) / (1000 * 60 * 60 * 24)
-    );
+    const diffDays = Math.floor((today.getTime() - lastLogin.getTime()) / (1000 * 60 * 60 * 24));
 
     if (diffDays === 1) {
       // +1 jour consécutif
@@ -69,14 +67,8 @@ export const DashboardUser = () => {
   const { skills } = useGetSkills(user?.id || "");
   const { userStats } = useGetUserStats(user?.id || "");
 
-  const {
-    userCurrentLevel,
-    xpThreshold,
-    xpToNextLevel,
-    totalXp,
-    totalQuestCompleted,
-    totalSkillCompleted,
-  } = useComputeUserProgress({ skills, userStats });
+  const { userCurrentLevel, xpThreshold, xpToNextLevel, totalXp, totalQuestCompleted, totalSkillCompleted } =
+    useComputeUserProgress({ skills, userStats });
 
   return (
     <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
@@ -98,24 +90,9 @@ export const DashboardUser = () => {
                 </div>
 
                 <div className="grid grid-cols-3 gap-2 w-full">
-                  <AccueilStatCard
-                    title="XP Total"
-                    value={totalXp}
-                    icon={TrendingUp}
-                    className="w-full h-16"
-                  />
-                  <AccueilStatCard
-                    title="Skills"
-                    value={totalSkillCompleted}
-                    icon={Target}
-                    className="w-full h-16"
-                  />
-                  <AccueilStatCard
-                    title="Quêtes"
-                    value={totalQuestCompleted}
-                    icon={Award}
-                    className="w-full h-16"
-                  />
+                  <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} className="w-full h-16" />
+                  <AccueilStatCard title="Skills" value={totalSkillCompleted} icon={Target} className="w-full h-16" />
+                  <AccueilStatCard title="Quêtes" value={totalQuestCompleted} icon={Award} className="w-full h-16" />
                 </div>
               </div>
 
@@ -126,10 +103,7 @@ export const DashboardUser = () => {
             </div>
 
             {/* Sidebar */}
-            <div
-              className="grid grid-rows-[1fr_1fr] gap-4 min-h-0"
-              style={{ paddingBottom: "120px" }}
-            >
+            <div className="grid grid-rows-[1fr_1fr] gap-4 min-h-0" style={{ paddingBottom: "120px" }}>
               <div className="min-h-0">
                 <RecentSkillsComponent skills={skills} className="h-full" />
               </div>
