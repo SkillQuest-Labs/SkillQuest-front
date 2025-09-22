@@ -8,6 +8,8 @@ import { QuestIndicator } from "./QuestIndicator";
 import { useState } from "react";
 import { getDateToTime, isSessionFullyCompleted } from "../utils/session.utils";
 import { SessionValidationModal } from "./SessionValidationModal";
+import { useNavigate } from "react-router-dom";
+import { routes } from "@/routes/router.const";
 import { useQueryClient } from "@tanstack/react-query";
 
 type SessionCardProps = {
@@ -15,13 +17,16 @@ type SessionCardProps = {
 };
 
 export const SessionCard = ({ session }: SessionCardProps) => {
+  const navigate = useNavigate();
   const { deleteSession } = useDeleteSession(session.id);
   const { validateSession, loading: validationLoading } = useValidateSession();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isValidationModalOpen, setIsValidationModalOpen] = useState(false);
   const queryClient = useQueryClient();
 
-  const handlePlay = () => {};
+  const handlePlay = () => {
+    navigate(`${routes.dojoImmersive.path}/${session.id}`);
+  };
 
   const handleValidate = () => {
     setIsValidationModalOpen(true);
