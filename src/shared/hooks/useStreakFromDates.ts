@@ -11,9 +11,7 @@ export function useStreakFromDates(dates: string[] = [], maxStreak = 7) {
 
     for (let i = maxStreak - 1; i >= 0; i--) {
       const d = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
-      const key = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()))
-        .toISOString()
-        .slice(0, 10);
+      const key = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())).toISOString().slice(0, 10);
       const isToday = i === 0;
       days.push({
         dayIndex: maxStreak - i, // 1..maxStreak

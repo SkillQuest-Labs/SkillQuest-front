@@ -1,20 +1,17 @@
 // src/shared/utils/streak.ts
-const toYMD = (d: Date) =>
-  new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); // normalise à minuit UTC
+const toYMD = (d: Date) => new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); // normalise à minuit UTC
 
 export function computeStreakFromDates(
   isoDates: string[],
-  today: Date = new Date()
+  today: Date = new Date(),
 ): { currentStreak: number; activeDaySet: Set<string> } {
   // Normalise toutes les dates au format YYYY-MM-DD (UTC)
   const set = new Set(
-    isoDates
-      .filter(Boolean)
-      .map((s) => {
-        const d = new Date(s);
-        const n = toYMD(d);
-        return n.toISOString().slice(0, 10);
-      })
+    isoDates.filter(Boolean).map((s) => {
+      const d = new Date(s);
+      const n = toYMD(d);
+      return n.toISOString().slice(0, 10);
+    }),
   );
 
   // On remonte jour par jour à partir d’aujourd’hui

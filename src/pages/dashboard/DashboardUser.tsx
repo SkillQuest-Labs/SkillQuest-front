@@ -20,12 +20,10 @@ export const DashboardUser = () => {
   const lastLogin = user?.lastSignInAt ? new Date(user.lastSignInAt) : null;
 
   const [, setUserData] = useState<UserData | null>(null);
-   const today = new Date();
-  const isToday = lastLogin && 
-    lastLogin.toDateString() === today.toDateString();
+  const today = new Date();
+  const isToday = lastLogin && lastLogin.toDateString() === today.toDateString();
 
   const currentStreak = isToday ? 1 : 0;
-
 
   useEffect(() => {
     if (!user) return;
@@ -56,7 +54,7 @@ export const DashboardUser = () => {
         <div className="h-full grid grid-rows-[auto_1fr] gap-4">
           {/* HEADER - Message de bienvenue (pleine largeur) */}
           <div>
-            <WelcomeSection userName={fallbackUsername} streak={7} />
+            <WelcomeSection userName={fallbackUsername} streak={currentStreak} />
           </div>
 
           {/* CONTENU PRINCIPAL - Stats + Sessions + Sidebar */}

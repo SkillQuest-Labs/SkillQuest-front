@@ -29,15 +29,14 @@ export const StreakComponent = ({
 
   // Données pour la grille
   const streakCount = dynamic ? currentStreak : legacyCurrent;
-  const streakData: DayDot[] =
-    dynamic
-      ? days
-      : Array.from({ length: maxStreak }, (_, i) => ({
-          dayIndex: i + 1,
-          isActive: i < legacyCurrent,
-          isCurrent: i === legacyCurrent - 1,
-          label: "",
-        }));
+  const streakData: DayDot[] = dynamic
+    ? days
+    : Array.from({ length: maxStreak }, (_, i) => ({
+        dayIndex: i + 1,
+        isActive: i < legacyCurrent,
+        isCurrent: i === legacyCurrent - 1,
+        label: "",
+      }));
 
   return (
     <div
