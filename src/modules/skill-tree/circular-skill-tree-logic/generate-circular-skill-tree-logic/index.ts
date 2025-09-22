@@ -1,4 +1,4 @@
-import { isSkillNode } from "@/modules/canvas/canvas.const";
+import { isQuestNode, isSkillNode } from "@/modules/canvas/canvas.const";
 import type { QuestNodeData, SkillNodeData } from "@/modules/canvas/canvas.type";
 import { type Edge, type Node } from "@xyflow/react";
 import { buildDependencyGraph } from "../init/build-dependency-graph";
@@ -6,6 +6,8 @@ import { computeNodeLevels } from "./compute-node-levels";
 import { findRootQuestIds } from "./find-root-quest-ids";
 import { generateCircularNodesData } from "./generate-circular-nodes-data";
 import { generateSpiralNodesData } from "./generate-spiral-nodes-data";
+import type { QuestStatus } from "@/shared/types/quest.type";
+import type { SkillStatus } from "@/shared/types/skill.type";
 
 type GenerateCircularNodesDataProps = {
   nodes: Node<QuestNodeData | SkillNodeData>[];
@@ -93,12 +95,52 @@ export const generateCircularSkillTreeData = ({
 
   // Now that all nodes are in the graph with their prerequisites, determine if each node is locked
   const skillNodeId = skillNode?.id;
+  const questStatusMap = new Map<string, QuestStatus | SkillStatus>();
+  nodes.forEach((node) => {
+    if (isQuestNode(node)) {
+      questStatusMap.set(node.id, node.data.status);
+    }
+  });
+
+  const normalizeStatus = (status?: QuestStatus | SkillStatus | string) => {
+    switch (status) {
+      case "COMPLETED":
+        return "COMPLETED" as const;
+      case "IN_PROGRESS":
+        return "IN_PROGRESS" as const;
+      case "UNLOCKED":
+      case "NOT_STARTED":
+        return "NOT_STARTED" as const;
+      case "LOCKED":
+      default:
+        return "LOCKED" as const;
+    }
+  };
+
+  const statusIconMap: Record<"LOCKED" | "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED", string> = {
+    LOCKED: "🔒",
+    NOT_STARTED: "✦",
+    IN_PROGRESS: "⏳",
+    COMPLETED: "✔",
+  };
+
   circularSkillNodes.forEach((node) => {
-    if (node.id !== skillNodeId) {
-      const isConnectedToSkill = skillNodeId && node.prerequisites.includes(skillNodeId);
-      node.isLocked = !isConnectedToSkill;
-      node.status = isConnectedToSkill ? "UNLOCKED" : "LOCKED";
-      node.icon = isConnectedToSkill ? "🔓" : "🔒";
+    if (node.id === skillNodeId) {
+      return;
+    }
+
+    const normalizedStatus = normalizeStatus(questStatusMap.get(node.id));
+    const isLocked = normalizedStatus === "LOCKED";
+
+    node.isLocked = isLocked;
+    node.status = normalizedStatus;
+    node.icon = statusIconMap[normalizedStatus] ?? node.icon ?? (isLocked ? "🔒" : "✨");
+
+    const graphNode = graph.getNode(node.id);
+    if (graphNode) {
+      graphNode.status = normalizedStatus;
+      graphNode.isLocked = isLocked;
+      graphNode.icon = node.icon;
     }
   });
 

@@ -5,17 +5,17 @@ import ProfileHud from "@/component/ProfileHud";
 import WorkSessionChart from "@/modules/stats/components/chart/work-session-chart/WorkSessionChart";
 import { useGetSkills } from "@/shared/services/skill/api-skill";
 import { WelcomeSection } from "@/component/dashboard/WelcomeSection";
-import { AccueilStatCard } from "@/modules/stats/components/AccueilStatsCard";
 import { StreakComponent } from "@/component/dashboard/StreakComponent";
 import { RecentSkillsComponent } from "@/component/dashboard/RecentSkillsComponent";
 import { WeeklySessionsReminder } from "@/component/dashboard/WeeklySessionsReminder";
-import { BarChart3, Target, TrendingUp } from "lucide-react";
 import { useComputeUserProgress } from "@/modules/stats/hooks/use-compute-user-progress";
 import { useGetUserStats } from "@/shared/services/user/api-user";
 
 // 🔹 intro robot
 import IntroRobotOverlay from "@/component/intro/IntroRobotOverlay";
 import { ROBOT_INTRO_LINES } from "@/shared/constants/voiceLines";
+import { AccueilStatCard } from "@/modules/stats/components/AccueilStatsCard";
+import { Award, Target, TrendingUp } from "lucide-react";
 
 export const DashboardUser = () => {
   const { user } = useUser();
@@ -35,7 +35,7 @@ export const DashboardUser = () => {
   const { skills } = useGetSkills(user?.id || "");
   const { userStats } = useGetUserStats(user?.id || "");
 
-  const { totalXp, totalQuestCompleted, totalSkillCompleted, userCurrentLevel, xpThreshold, xpToNextLevel } =
+  const { userCurrentLevel, xpThreshold, xpToNextLevel, totalXp, totalQuestCompleted, totalSkillCompleted } =
     useComputeUserProgress({ skills, userStats });
 
   // 🔹 gestion relecture intro
@@ -71,38 +71,65 @@ export const DashboardUser = () => {
           {/* Section de bienvenue */}
           <div className="space-y-6">
             <WelcomeSection userName={fallbackUsername} streak={7} />
-
-            {/* Cartes statistiques */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 lg:gap-4">
-              <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} />
-              <AccueilStatCard title="Quêtes terminées" value={totalQuestCompleted} icon={BarChart3} />
-              <AccueilStatCard title="Compétences validées" value={totalSkillCompleted} icon={Target} />
-            </div>
           </div>
 
-          {/* Zone principale */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {/* Colonne gauche */}
-            <div className="lg:col-span-2 space-y-6">
-              <StreakComponent currentStreak={7} maxStreak={7} />
-              <WorkSessionChart />
+          {/* CONTENU PRINCIPAL - Stats + Sessions + Sidebar */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_360px] gap-4 min-h-0">
+            {/* ZONE PRINCIPALE - Stats + Sessions */}
+            <div className="grid grid-rows-[auto_1fr] gap-4 min-h-0">
+              {/* Section des statistiques - Streak + Stats Cards */}
+              <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.8fr] gap-4 items-center w-full">
+                {/* Streak Component */}
+                <div className="flex justify-center lg:justify-start">
+                  <StreakComponent currentStreak={7} maxStreak={7} />
+                </div>
+
+                {/* Stats Cards - XP, Skills, Quêtes */}
+                <div className="grid grid-cols-3 gap-2 w-full">
+                  <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} className="w-full h-16" />
+                  <AccueilStatCard title="Skills" value={totalSkillCompleted} icon={Target} className="w-full h-16" />
+                  <AccueilStatCard title="Quêtes" value={totalQuestCompleted} icon={Award} className="w-full h-16" />
+                </div>
+              </div>
+
+              {/* ZONE PRINCIPALE - Sessions (pleine hauteur disponible) */}
+              <div className="min-h-0">
+                <WorkSessionChart className="h-full w-full" />
+              </div>
             </div>
 
-            {/* Sidebar */}
-            <div className="space-y-4">
-              <RecentSkillsComponent skills={skills} />
-              <WeeklySessionsReminder />
-              <ProfileHud
-                userName={user?.username || user?.firstName || "Aventurier"}
-                title={(user?.unsafeMetadata?.role as string) || "Aventurier"}
-                level={userCurrentLevel}
-                xp={xpThreshold - xpToNextLevel}
-                xpToNext={xpThreshold}
-                isCollapsible={true}
-                defaultExpanded={false}
-              />
+            {/* SIDEBAR - Derniers skills + Sessions de la semaine (alignée avec les cartes de stats) */}
+            <div className="grid grid-rows-[1fr_1fr] gap-4 min-h-0" style={{ paddingBottom: "120px" }}>
+              {/* RecentSkillsComponent - Taille égale */}
+              <div className="min-h-0">
+                <RecentSkillsComponent skills={skills} className="h-full" />
+              </div>
+
+              {/* WeeklySessionsReminder - Taille égale */}
+              <div className="min-h-0">
+                <WeeklySessionsReminder className="h-full" />
+              </div>
             </div>
           </div>
+        </div>
+
+        {/* FOOTER - Avatar utilisateur (aligné avec la colonne de droite) */}
+        <div
+          className="fixed bottom-4 z-50"
+          style={{
+            right: "calc(1rem + 1rem)", // Aligné avec le padding de la sidebar
+            marginBottom: "env(safe-area-inset-bottom)",
+          }}
+        >
+          <ProfileHud
+            userName={user?.username || user?.firstName || "Aventurier"}
+            title={(user?.unsafeMetadata?.role as string) || "Aventurier"}
+            level={userCurrentLevel}
+            xp={xpThreshold - xpToNextLevel}
+            xpToNext={xpThreshold}
+            isCollapsible={true}
+            defaultExpanded={false}
+          />
         </div>
       </div>
     </div>

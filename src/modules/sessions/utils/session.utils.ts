@@ -30,7 +30,6 @@ export const buildSessionPayload = (sessionForm: SessionFormType, userId: string
     userId: userId,
     questIds: (sessionForm.linkedQuests || []).map((quest) => quest.id),
     title: sessionForm.title,
-    description: sessionForm.description,
     color: sessionForm.color,
     linkedSkillId: sessionForm.linkedSkill,
   };
@@ -77,14 +76,15 @@ export const convertSessionsToEvents = (sessions: Sessions): CalendarEvent[] => 
   return sessions.map((session) => ({
     id: session.id,
     title: session.title,
-    description: session.description ?? "",
     start: session.startTime,
     end: session.endTime,
     color: session.color ?? "#3B82F6",
     backgroundColor: session.color ?? "#3B82F6",
     borderColor: session.color ?? "#3B82F6",
+    className: session.isValidated ? "validated-session" : "",
     extendedProps: {
       linkedSkill: session.linkedSkillId ?? "",
+      isValidated: session.isValidated ?? false,
       linkedQuests: Array.isArray(session.quests)
         ? session.quests.map((sessionQuest) => ({
             id: sessionQuest.questId ?? sessionQuest.id,
@@ -101,13 +101,14 @@ export const getDateToTime = (date: string) => {
 };
 
 export const buildSessionQueryParams = (params: SessionsQuery): URLSearchParams => {
-  const { skill = "", quest = "", date = "", page = 1, limit = 20 } = params;
+  const { skill = "", quest = "", date = "", page = 1, limit = 20, includeValidated = false } = params;
 
   const search = new URLSearchParams();
 
   if (skill) search.set("skill", skill);
   if (quest) search.set("quest", quest);
   if (date) search.set("date", date);
+  if (includeValidated) search.set("includeValidated", "true");
   search.set("page", String(page));
   search.set("limit", String(limit));
 
@@ -117,4 +118,16 @@ export const buildSessionQueryParams = (params: SessionsQuery): URLSearchParams 
 export const buildSessionQueryUrl = (baseUrl: string, params: SessionsQuery): string => {
   const queryParams = buildSessionQueryParams(params);
   return `${baseUrl}/sessions/filter?${queryParams.toString()}`;
+};
+
+export const isSessionFullyCompleted = (session: any): boolean => {
+  if (!session.quests || session.quests.length === 0) return false;
+  return session.quests.every((quest: any) => quest.quest?.status === "COMPLETED");
+};
+
+export const isSessionPartiallyCompleted = (session: any): boolean => {
+  if (!session.quests || session.quests.length === 0) return false;
+  const hasCompletedQuests = session.quests.some((quest: any) => quest.quest?.status === "COMPLETED");
+  const hasIncompleteQuests = session.quests.some((quest: any) => quest.quest?.status !== "COMPLETED");
+  return hasCompletedQuests && hasIncompleteQuests;
 };

@@ -1,5 +1,4 @@
 import { Input } from "@/shared/components/ui/input";
-import { Textarea } from "@/shared/components/ui/textarea";
 import type { SessionFormProps } from "../types/session-form.type";
 import { SelectSkillField } from "./SelectSkillField";
 import { SelectQuestField } from "./SelectQuestField";
@@ -12,23 +11,10 @@ export const SessionForm = ({
   quests,
   loadingSkills,
   loadingQuests,
+  disabled = false,
 }: SessionFormProps) => {
   return (
     <>
-      <Input
-        placeholder="Titre"
-        value={currentSession.title}
-        onChange={(e) => setForm({ ...currentSession, title: e.target.value })}
-        className="mb-2"
-      />
-
-      <Textarea
-        placeholder="Description"
-        value={currentSession.description}
-        onChange={(e) => setForm({ ...currentSession, description: e.target.value })}
-        className="mb-4"
-      />
-
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <div className="sm:col-span-2">
           <label className="text-sm text-white mb-1 block">Date</label>
@@ -37,6 +23,7 @@ export const SessionForm = ({
             className="[color-scheme:dark]"
             value={currentSession.startDate}
             onChange={(e) => setForm({ ...currentSession, startDate: e.target.value })}
+            disabled={disabled}
           />
         </div>
         <div>
@@ -46,6 +33,7 @@ export const SessionForm = ({
             className="[color-scheme:dark]"
             value={currentSession.startTime}
             onChange={(e) => setForm({ ...currentSession, startTime: e.target.value })}
+            disabled={disabled}
           />
         </div>
         <div>
@@ -56,19 +44,26 @@ export const SessionForm = ({
             value={currentSession.endTime}
             onChange={(e) => setForm({ ...currentSession, endTime: e.target.value })}
             min={currentSession.startTime || undefined}
+            disabled={disabled}
           />
         </div>
       </div>
 
-      <SelectSkillField currentSession={currentSession} setForm={setForm} skills={skills} loading={loadingSkills} />
+      <SelectSkillField
+        currentSession={currentSession}
+        setForm={setForm}
+        skills={skills}
+        loading={loadingSkills}
+        disabled={disabled}
+      />
       <SelectQuestField
         currentSession={currentSession}
         setForm={setForm}
         quests={quests}
         loading={loadingQuests}
-        disabled={!currentSession.linkedSkill}
+        disabled={!currentSession.linkedSkill || disabled}
       />
-      <ColorPicker currentSession={currentSession} setForm={setForm} />
+      <ColorPicker currentSession={currentSession} setForm={setForm} disabled={disabled} />
     </>
   );
 };

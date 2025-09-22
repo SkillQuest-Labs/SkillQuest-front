@@ -48,6 +48,7 @@ export type QuestNodeData = {
   childCount?: number;
   onUpdate?: (field: string, value: any) => void;
   onDelete?: (id: string) => void;
+  onView?: (id: string) => void;
 };
 
 export type QuestCardProps = {

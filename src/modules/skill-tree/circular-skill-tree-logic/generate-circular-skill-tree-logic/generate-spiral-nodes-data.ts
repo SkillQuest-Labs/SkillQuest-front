@@ -110,7 +110,7 @@ export const generateSpiralNodesData = ({
     const circularNode: CircularSkillNode = {
       id: node.id,
       title: node.data.title,
-      description: "",
+      description: node.data.description || "",
       position: { x: spiralPosition.x, y: spiralPosition.y },
       size: nodeVisualsProperties.size,
       shape: nodeVisualsProperties.shape,
@@ -125,6 +125,11 @@ export const generateSpiralNodesData = ({
       // Propriétés spécifiques à la spirale
       spiralRadius: spiralPosition.radius,
       spiralIndex: index,
+      questDetails: {
+        type: node.data.questType,
+        number: node.data.questNumber,
+        isStarting: node.data.isStarting,
+      },
     };
 
     circularSkillNodes.push(circularNode);
