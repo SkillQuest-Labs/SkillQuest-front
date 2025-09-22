@@ -25,11 +25,33 @@ type ProfileHudProps = {
 };
 
 const DEFAULT_AVATARS: AvatarChoice[] = [
-  { id: "knight", url: "https://res.cloudinary.com/dozh5sfjt/image/upload/v1758494622/profile3_b8f3v8.jpg", label: "Chevalier" },
-  { id: "mage", url: "https://res.cloudinary.com/dozh5sfjt/image/upload/v1758483178/profile2_yqyogh.jpg", label: "Mage" },
-  { id: "archer", url: "https://res.cloudinary.com/dozh5sfjt/image/upload/v1758483177/profile1_gx2o4y.jpg", label: "Archer" },
-  { id: "robot", url: "https://res.cloudinary.com/dozh5sfjt/image/upload/v1758483177/profile4_tjjszp.jpg", label: "Robot" },
-  { id: "avatar", url: "https://res.cloudinary.com/dozh5sfjt/image/upload/v1758483177/profile_xtvhcy.jpg", label: "Avatar" },
+
+  {
+    id: "knight",
+    url: "https://res.cloudinary.com/dozh5sfjt/image/upload/v1758494622/profile3_b8f3v8.jpg",
+    label: "Chevalier",
+  },
+  {
+    id: "mage",
+    url: "https://res.cloudinary.com/dozh5sfjt/image/upload/v1758483178/profile2_yqyogh.jpg",
+    label: "Mage",
+  },
+  {
+    id: "archer",
+    url: "https://res.cloudinary.com/dozh5sfjt/image/upload/v1758483177/profile1_gx2o4y.jpg",
+    label: "Archer",
+  },
+  {
+    id: "robot",
+    url: "https://res.cloudinary.com/dozh5sfjt/image/upload/v1758483177/profile4_tjjszp.jpg",
+    label: "Robot",
+  },
+  {
+    id: "avatar",
+    url: "https://res.cloudinary.com/dozh5sfjt/image/upload/v1758483177/profile_xtvhcy.jpg",
+    label: "Avatar",
+  },
+
 ];
 
 const getLevelIcon = (level: number): { icon: string; label: string } => {

@@ -1,22 +1,25 @@
 import { useUser } from "@clerk/clerk-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import type { UserData, UserRoleType } from "@/shared/types/user.type";
 import ProfileHud from "@/component/ProfileHud";
 import WorkSessionChart from "@/modules/stats/components/chart/work-session-chart/WorkSessionChart";
 import { useGetSkills } from "@/shared/services/skill/api-skill";
 import { WelcomeSection } from "@/component/dashboard/WelcomeSection";
+import { AccueilStatCard } from "@/modules/stats/components/AccueilStatsCard";
 import { StreakComponent } from "@/component/dashboard/StreakComponent";
 import { RecentSkillsComponent } from "@/component/dashboard/RecentSkillsComponent";
 import { WeeklySessionsReminder } from "@/component/dashboard/WeeklySessionsReminder";
+import { Award, Target, TrendingUp } from "lucide-react";
 import { useComputeUserProgress } from "@/modules/stats/hooks/use-compute-user-progress";
 import { useGetUserStats } from "@/shared/services/user/api-user";
-import { AccueilStatCard } from "@/modules/stats/components/AccueilStatsCard";
-import { Award, Target, TrendingUp } from "lucide-react";
+
+// 🔹 intro robot
+import IntroRobotOverlay from "@/component/intro/IntroRobotOverlay";
+import { ROBOT_INTRO_LINES } from "@/shared/constants/voiceLines";
 
 export const DashboardUser = () => {
   const { user } = useUser();
   const [streak, setStreak] = useState(1);
-
   const fallbackUsername = user?.username ?? user?.firstName ?? "Aventurier";
 
   const [, setUserData] = useState<UserData | null>(null);
@@ -34,7 +37,6 @@ export const DashboardUser = () => {
     const lastLogin = user.lastSignInAt ? new Date(user.lastSignInAt) : null;
     const today = new Date();
     const todayKey = today.toDateString();
-
     const lastSeen = localStorage.getItem("lastSeenDate");
 
     if (!lastLogin) {
@@ -43,21 +45,13 @@ export const DashboardUser = () => {
       return;
     }
 
-    if (lastSeen === todayKey) {
-      // déjà compté aujourd’hui
-      return;
-    }
+    if (lastSeen === todayKey) return; // déjà compté aujourd’hui
 
     const diffDays = Math.floor((today.getTime() - lastLogin.getTime()) / (1000 * 60 * 60 * 24));
 
     if (diffDays === 1) {
-      // +1 jour consécutif
       setStreak((prev) => prev + 1);
-    } else if (diffDays > 1) {
-      // reset
-      setStreak(1);
     } else {
-      // première connexion
       setStreak(1);
     }
 
@@ -70,13 +64,37 @@ export const DashboardUser = () => {
   const { userCurrentLevel, xpThreshold, xpToNextLevel, totalXp, totalQuestCompleted, totalSkillCompleted } =
     useComputeUserProgress({ skills, userStats });
 
+  // 🔹 gestion relecture intro
+  const [introKey, setIntroKey] = useState("intro_robot_v1");
+  const handleReplayIntro = useCallback(() => {
+    localStorage.removeItem("intro_robot_v1");
+    setIntroKey((k) => `${k}_replay`); // force un remount de l’overlay
+  }, []);
+
+  useEffect(() => {
+    const handler = () => handleReplayIntro();
+    document.addEventListener("skq:replay-intro", handler);
+    return () => document.removeEventListener("skq:replay-intro", handler);
+  }, [handleReplayIntro]);
+
   return (
-    <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
-      <div className="h-full w-full px-4 sm:px-6 lg:px-8 py-4">
-        <div className="h-full grid grid-rows-[auto_1fr] gap-4">
-          {/* HEADER */}
-          <div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative">
+      {/* Intro robot */}
+      <IntroRobotOverlay
+        key={introKey}
+        splineUrl="https://prod.spline.design/91E4RJArwH81QjTV/scene.splinecode"
+        lines={ROBOT_INTRO_LINES}
+        storageKey="intro_robot_v1"
+        height="40vh"
+      />
+
+      <div className="max-w-8xl mx-auto px-3 sm:px-5 lg:px-7 py-6">
+        <div className="space-y-8">
+          {/* Section de bienvenue */}
+          <div className="space-y-6">
             <WelcomeSection userName={fallbackUsername} streak={streak} />
+
+            {/* Cartes statistiques */}
           </div>
 
           {/* CONTENU PRINCIPAL */}
