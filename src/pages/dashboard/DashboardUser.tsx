@@ -37,7 +37,6 @@ export const DashboardUser = () => {
     const lastLogin = user.lastSignInAt ? new Date(user.lastSignInAt) : null;
     const today = new Date();
     const todayKey = today.toDateString();
-
     const lastSeen = localStorage.getItem("lastSeenDate");
 
     if (!lastLogin) {
@@ -46,21 +45,13 @@ export const DashboardUser = () => {
       return;
     }
 
-    if (lastSeen === todayKey) {
-      // déjà compté aujourd’hui
-      return;
-    }
+    if (lastSeen === todayKey) return; // déjà compté aujourd’hui
 
     const diffDays = Math.floor((today.getTime() - lastLogin.getTime()) / (1000 * 60 * 60 * 24));
 
     if (diffDays === 1) {
-      // +1 jour consécutif
       setStreak((prev) => prev + 1);
-    } else if (diffDays > 1) {
-      // reset
-      setStreak(1);
     } else {
-      // première connexion
       setStreak(1);
     }
 
@@ -105,7 +96,7 @@ export const DashboardUser = () => {
         <div className="space-y-8">
           {/* Section de bienvenue */}
           <div className="space-y-6">
-            <WelcomeSection userName={fallbackUsername} streak={7} />
+            <WelcomeSection userName={fallbackUsername} streak={streak} />
 
             {/* Cartes statistiques */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 lg:gap-4">
