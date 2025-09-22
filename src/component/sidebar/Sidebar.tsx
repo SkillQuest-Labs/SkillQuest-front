@@ -1,5 +1,5 @@
 import { SidebarHeader } from "./SidebarHeader";
-import { SidebarBody } from "./SidebarBody";
+import SidebarBody from "./SidebarBody";
 import { useSidebarStore } from "@/stores/sidebar/sidebarStore";
 import { LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -29,13 +29,13 @@ export const Sidebar = () => {
       <div
         className={`${
           isCollapsed ? "w-20" : "w-65"
-        } h-screen bg-slate-900 text-white fixed transition-all duration-300 relative`}
+        } h-screen bg-slate-900 text-white fixed transition-all duration-300`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
         <SidebarHeader />
         <hr className="border-gray-700 mx-6 mb-4" />
-        <SidebarBody />
+        <SidebarBody isCollapsed={isCollapsed} />
 
         <div className="absolute bottom-0 left-0 right-0 p-4 flex justify-start">
           <Button
