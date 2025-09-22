@@ -15,6 +15,7 @@ import { Award, Target, TrendingUp } from "lucide-react";
 
 export const DashboardUser = () => {
   const { user } = useUser();
+  const [streak, setStreak] = useState(1);
 
   const fallbackUsername = user?.username ?? user?.firstName ?? "Aventurier";
 
@@ -22,69 +23,116 @@ export const DashboardUser = () => {
 
   useEffect(() => {
     if (!user) return;
+
     const role = (user.unsafeMetadata?.role as UserRoleType) ?? "apprenti";
     setUserData({
       username: fallbackUsername,
       role,
     });
+
+    // Gestion streak
+    const lastLogin = user.lastSignInAt ? new Date(user.lastSignInAt) : null;
+    const today = new Date();
+    const todayKey = today.toDateString();
+
+    const lastSeen = localStorage.getItem("lastSeenDate");
+
+    if (!lastLogin) {
+      setStreak(1);
+      localStorage.setItem("lastSeenDate", todayKey);
+      return;
+    }
+
+    if (lastSeen === todayKey) {
+      // déjà compté aujourd’hui
+      return;
+    }
+
+    const diffDays = Math.floor(
+      (today.getTime() - lastLogin.getTime()) / (1000 * 60 * 60 * 24)
+    );
+
+    if (diffDays === 1) {
+      // +1 jour consécutif
+      setStreak((prev) => prev + 1);
+    } else if (diffDays > 1) {
+      // reset
+      setStreak(1);
+    } else {
+      // première connexion
+      setStreak(1);
+    }
+
+    localStorage.setItem("lastSeenDate", todayKey);
   }, [user, fallbackUsername]);
 
   const { skills } = useGetSkills(user?.id || "");
-
   const { userStats } = useGetUserStats(user?.id || "");
 
-  const { userCurrentLevel, xpThreshold, xpToNextLevel, totalXp, totalQuestCompleted, totalSkillCompleted } =
-    useComputeUserProgress({ skills, userStats });
+  const {
+    userCurrentLevel,
+    xpThreshold,
+    xpToNextLevel,
+    totalXp,
+    totalQuestCompleted,
+    totalSkillCompleted,
+  } = useComputeUserProgress({ skills, userStats });
 
   return (
     <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
       <div className="h-full w-full px-4 sm:px-6 lg:px-8 py-4">
-        {/* Layout principal en CSS Grid - Structure responsive optimisée */}
-        {/* 
-          Breakpoints:
-          - Mobile (<768px): pile verticale (header → contenu → sidebar)
-          - Écran moyen (≥768px et <1280px): sidebar passe sous la zone principale
-          - Écran large (≥1280px): affichage en 2 colonnes (contenu gauche, sidebar droite)
-        */}
         <div className="h-full grid grid-rows-[auto_1fr] gap-4">
-          {/* HEADER - Message de bienvenue (pleine largeur) */}
+          {/* HEADER */}
           <div>
-            <WelcomeSection userName={fallbackUsername} streak={7} />
+            <WelcomeSection userName={fallbackUsername} streak={streak} />
           </div>
 
-          {/* CONTENU PRINCIPAL - Stats + Sessions + Sidebar */}
+          {/* CONTENU PRINCIPAL */}
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_360px] gap-4 min-h-0">
-            {/* ZONE PRINCIPALE - Stats + Sessions */}
+            {/* Colonne principale */}
             <div className="grid grid-rows-[auto_1fr] gap-4 min-h-0">
-              {/* Section des statistiques - Streak + Stats Cards */}
+              {/* Streak + Stats */}
               <div className="grid grid-cols-1 lg:grid-cols-[1fr_0.8fr] gap-4 items-center w-full">
-                {/* Streak Component */}
                 <div className="flex justify-center lg:justify-start">
-                  <StreakComponent currentStreak={7} maxStreak={7} />
+                  <StreakComponent currentStreak={streak} maxStreak={7} />
                 </div>
 
-                {/* Stats Cards - XP, Skills, Quêtes */}
                 <div className="grid grid-cols-3 gap-2 w-full">
-                  <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} className="w-full h-16" />
-                  <AccueilStatCard title="Skills" value={totalSkillCompleted} icon={Target} className="w-full h-16" />
-                  <AccueilStatCard title="Quêtes" value={totalQuestCompleted} icon={Award} className="w-full h-16" />
+                  <AccueilStatCard
+                    title="XP Total"
+                    value={totalXp}
+                    icon={TrendingUp}
+                    className="w-full h-16"
+                  />
+                  <AccueilStatCard
+                    title="Skills"
+                    value={totalSkillCompleted}
+                    icon={Target}
+                    className="w-full h-16"
+                  />
+                  <AccueilStatCard
+                    title="Quêtes"
+                    value={totalQuestCompleted}
+                    icon={Award}
+                    className="w-full h-16"
+                  />
                 </div>
               </div>
 
-              {/* ZONE PRINCIPALE - Sessions (pleine hauteur disponible) */}
+              {/* Graph sessions */}
               <div className="min-h-0">
                 <WorkSessionChart className="h-full w-full" />
               </div>
             </div>
 
-            {/* SIDEBAR - Derniers skills + Sessions de la semaine (alignée avec les cartes de stats) */}
-            <div className="grid grid-rows-[1fr_1fr] gap-4 min-h-0" style={{ paddingBottom: "120px" }}>
-              {/* RecentSkillsComponent - Taille égale */}
+            {/* Sidebar */}
+            <div
+              className="grid grid-rows-[1fr_1fr] gap-4 min-h-0"
+              style={{ paddingBottom: "120px" }}
+            >
               <div className="min-h-0">
                 <RecentSkillsComponent skills={skills} className="h-full" />
               </div>
-
-              {/* WeeklySessionsReminder - Taille égale */}
               <div className="min-h-0">
                 <WeeklySessionsReminder className="h-full" />
               </div>
@@ -92,11 +140,11 @@ export const DashboardUser = () => {
           </div>
         </div>
 
-        {/* FOOTER - Avatar utilisateur (aligné avec la colonne de droite) */}
+        {/* FOOTER HUD */}
         <div
           className="fixed bottom-4 z-50"
           style={{
-            right: "calc(1rem + 1rem)", // Aligné avec le padding de la sidebar
+            right: "calc(1rem + 1rem)",
             marginBottom: "env(safe-area-inset-bottom)",
           }}
         >
