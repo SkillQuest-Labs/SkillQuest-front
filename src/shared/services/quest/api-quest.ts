@@ -31,6 +31,24 @@ export const useGetQuests = (skillId: string) => {
   };
 };
 
+export const useGetQuestsForSessions = (skillId: string) => {
+  const enabled = Boolean(skillId && skillId.length > 0);
+  const options = {
+    method: "GET",
+    url: `${Constants.API_BASE_URL}/quests/${skillId}/sessions`,
+  };
+
+  const { data, isLoading: loading, error } = useApi<GetQuestsResponse>(options, ["quests-sessions", skillId], enabled);
+
+  return {
+    quests: data?.quests,
+    questRelations: data?.questRelations,
+    total: data?.total,
+    loading,
+    error: error,
+  };
+};
+
 export const useCreateQuests = () => {
   const options = {
     method: "POST",

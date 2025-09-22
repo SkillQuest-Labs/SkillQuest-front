@@ -6,23 +6,26 @@ interface SelectSkillProps {
   setForm: (form: SessionFormType) => void;
   skills: Skill[];
   loading: boolean;
+  disabled?: boolean;
 }
 
-export const SelectSkillField = ({ currentSession, setForm, skills, loading }: SelectSkillProps) => {
+export const SelectSkillField = ({ currentSession, setForm, skills, loading, disabled = false }: SelectSkillProps) => {
+  const handleSkillChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedSkill = skills.find((skill) => skill.id === e.target.value);
+    setForm({
+      ...currentSession,
+      linkedSkill: e.target.value,
+      title: selectedSkill?.title || "",
+      linkedQuests: [],
+    });
+  };
+
   return (
     <div className="mb-4 min-w-0">
-      {" "}
-      {/* min-w-0 pour autoriser la réduction dans un flex/grid */}
       <label className="text-sm text-white mb-1 block">Choisir un skill</label>
       <select
         value={currentSession.linkedSkill}
-        onChange={(e) =>
-          setForm({
-            ...currentSession,
-            linkedSkill: e.target.value,
-            linkedQuests: [],
-          })
-        }
+        onChange={handleSkillChange}
         className="
           block w-full h-10
           rounded-md bg-slate-800 text-white
@@ -33,6 +36,7 @@ export const SelectSkillField = ({ currentSession, setForm, skills, loading }: S
           focus:border-sky-400 focus:ring-sky-500/40
           disabled:bg-slate-700 disabled:text-slate-400 disabled:cursor-not-allowed
         "
+        disabled={loading || disabled}
       >
         <option value="">Aucune</option>
         {loading ? (

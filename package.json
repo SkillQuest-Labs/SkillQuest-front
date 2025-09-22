@@ -29,6 +29,8 @@
     "@radix-ui/react-popover": "^1.1.14",
     "@radix-ui/react-select": "^2.2.5",
     "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-switch": "^1.2.6",
+    "@radix-ui/react-tooltip": "^1.2.8",
     "@react-three/drei": "^10.7.4",
     "@react-three/fiber": "^9.3.0",
     "@tailwindcss/vite": "^4.1.10",

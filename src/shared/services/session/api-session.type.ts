@@ -5,7 +5,6 @@ export type CreateSessionInput = {
   userId: string;
   questIds: string[];
   title: string;
-  description?: string;
   color: string;
   linkedSkillId: string;
 };
@@ -28,7 +27,6 @@ export type UpdateSessionResponse = CreateSessionResponse;
 export type Session = {
   id: string;
   title: string;
-  description: string;
   color: string;
   date: string;
   startTime: string;
@@ -36,6 +34,8 @@ export type Session = {
   duration: number;
   userId: string;
   linkedSkillId: string;
+  totalXpEarned: number;
+  isValidated: boolean;
   linkedSkill: {
     title: string;
   };
@@ -46,6 +46,8 @@ export type Session = {
     workSessionId: string;
     quest: {
       title: string;
+      description?: string;
+      status: string;
     };
   }[];
 };
@@ -58,6 +60,7 @@ export type SessionsQuery = {
   date?: string;
   limit?: number;
   page?: number;
+  includeValidated?: boolean;
 };
 
 export type ListSessionsResponse = {

@@ -38,7 +38,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) => {
   const { user } = useUser();
-  const { sessions, isPending, error } = useGetSessions(user?.id || "");
+  const { sessions, isPending, error } = useGetSessions(user?.id || "", true);
 
   const chartData = useMemo(() => {
     if (!sessions || sessions.length === 0) return [];
@@ -116,11 +116,9 @@ const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) =
   if (isPending) {
     return (
       <div
-        className={`bg-gradient-to-br from-slate-900/50 to-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4 shadow-2xl ${className}`}
+        className={`bg-gradient-to-br from-slate-900/50 to-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4 shadow-2xl h-full flex items-center justify-center ${className}`}
       >
-        <div className="flex items-center justify-center h-48">
-          <div className="text-slate-400">Chargement...</div>
-        </div>
+        <div className="text-slate-400">Chargement...</div>
       </div>
     );
   }
@@ -128,11 +126,9 @@ const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) =
   if (error) {
     return (
       <div
-        className={`bg-gradient-to-br from-slate-900/50 to-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4 shadow-2xl ${className}`}
+        className={`bg-gradient-to-br from-slate-900/50 to-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4 shadow-2xl h-full flex items-center justify-center ${className}`}
       >
-        <div className="flex items-center justify-center h-48">
-          <div className="text-red-400">Erreur de chargement</div>
-        </div>
+        <div className="text-red-400">Erreur de chargement</div>
       </div>
     );
   }
@@ -140,72 +136,73 @@ const WorkSessionChart: React.FC<WorkSessionChartProps> = ({ className = "" }) =
   if (!sessions || sessions.length === 0) {
     return (
       <div
-        className={`bg-gradient-to-br from-slate-900/50 to-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4 shadow-2xl ${className}`}
+        className={`bg-gradient-to-br from-slate-900/50 to-slate-800/30 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4 shadow-2xl h-full flex items-center justify-center ${className}`}
       >
-        <div className="flex items-center justify-center h-48">
-          <div className="text-slate-400">Aucune session</div>
-        </div>
+        <div className="text-slate-400">Aucune session</div>
       </div>
     );
   }
   return (
     <div
-      className={`rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-md border border-slate-700/50 shadow-2xl p-4 h-176 flex flex-col ${className}`}
+      className={`rounded-2xl bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-md border border-slate-700/60 shadow-2xl p-6 h-full flex flex-col ${className}`}
     >
-      {/* En-tête compact */}
-      <div className="flex items-center justify-between mb-3 flex-shrink-0">
+      {/* En-tête amélioré */}
+      <div className="flex items-center justify-between mb-4 flex-shrink-0">
         <div>
-          <h2 className="text-lg font-bold bg-gradient-to-r from-orange-400 via-red-400 to-yellow-400 bg-clip-text text-transparent">
-            Sessions
+          <h2 className="text-xl font-bold bg-gradient-to-r from-orange-400 via-red-400 to-yellow-400 bg-clip-text text-transparent">
+            Sessions de Travail
           </h2>
-          <p className="text-slate-400 text-xs">Évolution des sessions</p>
+          <p className="text-slate-400 text-sm">Évolution de votre progression</p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
-            <span className="text-slate-300 text-xs">Sessions</span>
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-yellow-400 shadow-lg"></div>
+            <span className="text-slate-300 text-sm font-medium">Sessions</span>
           </div>
         </div>
       </div>
 
-      {/* Graphique compact */}
-      <div className="mb-3 flex-1 min-h-0" style={{ height: "50px" }}>
+      {/* Graphique étendu */}
+      <div className="mb-4 flex-1 min-h-0">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={chartData} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
+          <AreaChart data={chartData} margin={{ top: 10, right: 20, left: 10, bottom: 10 }}>
             <defs>
               <linearGradient id="sessionsGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#eab308" stopOpacity={0.4} />
+                <stop offset="5%" stopColor="#eab308" stopOpacity={0.5} />
                 <stop offset="95%" stopColor="#eab308" stopOpacity={0.1} />
               </linearGradient>
             </defs>
-            <CartesianGrid strokeDasharray="2 2" stroke="#334155" strokeOpacity={0.2} />
-            <XAxis dataKey="date" stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} />
-            <YAxis stroke="#94a3b8" fontSize={10} tickLine={false} axisLine={false} allowDecimals={false} />
+            <CartesianGrid strokeDasharray="3 3" stroke="#334155" strokeOpacity={0.3} />
+            <XAxis dataKey="date" stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
+            <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
             <Tooltip content={<CustomTooltip />} />
             <Area
               type="monotone"
               dataKey="sessions"
               stroke="#eab308"
-              strokeWidth={2}
+              strokeWidth={3}
               fill="url(#sessionsGradient)"
               dot={{ fill: "#eab308", strokeWidth: 2, r: 3 }}
-              activeDot={{ r: 4, stroke: "#eab308", strokeWidth: 2, fill: "#ca8a04" }}
+              activeDot={{ r: 5, stroke: "#eab308", strokeWidth: 2, fill: "#ca8a04" }}
             />
           </AreaChart>
         </ResponsiveContainer>
       </div>
 
-      {/* Statistiques simples */}
-      <div className="flex justify-between items-center text-sm text-slate-400 flex-shrink-0">
-        <span>
-          Total: <span className="text-orange-400 font-semibold">{stats.totalSessions}</span>
-        </span>
-        <span>
-          Moyenne: <span className="text-red-400 font-semibold">{formatDuration(stats.averageDuration)}</span>
-        </span>
-        <span>
-          Série: <span className="text-yellow-400 font-semibold">{stats.bestStreak}</span>
-        </span>
+      {/* Statistiques améliorées */}
+      <div className="flex justify-between items-center text-sm text-slate-400 flex-shrink-0 bg-slate-800/50 rounded-lg p-3">
+        <div className="flex items-center gap-1">
+          <span className="text-slate-500">Total:</span>
+          <span className="text-orange-400 font-bold text-base">{stats.totalSessions}</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <span className="text-slate-500">Moyenne:</span>
+          <span className="text-red-400 font-bold text-base">{formatDuration(stats.averageDuration)}</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <span className="text-slate-500">Série:</span>
+          <span className="text-yellow-400 font-bold text-base">{stats.bestStreak}</span>
+        </div>
       </div>
     </div>
   );

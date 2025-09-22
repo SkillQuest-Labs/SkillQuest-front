@@ -20,6 +20,7 @@ export function createQuestNode(
       isCollapsed: false,
       onDelete: (nid: string) => removeNode(nid),
       onUpdate: (field: string, value: any) => updateNodeData(id, field, value),
+      onView: questData?.onView,
     },
   };
 }
