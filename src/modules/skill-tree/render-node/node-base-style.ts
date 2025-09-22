@@ -32,7 +32,7 @@ export const nodeBaseStyle = ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  fontSize: totalQuestCount >= 10 ? (node.size > 30 ? "22px" : "18px") : (node.size > 30 ? "16px" : "12px"),
+  fontSize: totalQuestCount >= 10 ? (node.size > 30 ? "22px" : "18px") : node.size > 30 ? "16px" : "12px",
   fontWeight: "bold",
   color: "white",
   boxShadow: isPathHighlighted
