@@ -25,6 +25,7 @@ type ProfileHudProps = {
 };
 
 const DEFAULT_AVATARS: AvatarChoice[] = [
+
   {
     id: "knight",
     url: "https://res.cloudinary.com/dozh5sfjt/image/upload/v1758494622/profile3_b8f3v8.jpg",
@@ -50,6 +51,7 @@ const DEFAULT_AVATARS: AvatarChoice[] = [
     url: "https://res.cloudinary.com/dozh5sfjt/image/upload/v1758483177/profile_xtvhcy.jpg",
     label: "Avatar",
   },
+
 ];
 
 const getLevelIcon = (level: number): { icon: string; label: string } => {
