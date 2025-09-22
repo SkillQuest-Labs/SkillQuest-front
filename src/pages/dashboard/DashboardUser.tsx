@@ -1,5 +1,5 @@
 import { useUser } from "@clerk/clerk-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import type { UserData, UserRoleType } from "@/shared/types/user.type";
 import ProfileHud from "@/component/ProfileHud";
 import WorkSessionChart from "@/modules/stats/components/chart/work-session-chart/WorkSessionChart";
@@ -9,7 +9,7 @@ import { AccueilStatCard } from "@/modules/stats/components/AccueilStatsCard";
 import { StreakComponent } from "@/component/dashboard/StreakComponent";
 import { RecentSkillsComponent } from "@/component/dashboard/RecentSkillsComponent";
 import { WeeklySessionsReminder } from "@/component/dashboard/WeeklySessionsReminder";
-import { Award, BarChart3, Target, TrendingUp } from "lucide-react";
+import { Award, Target, TrendingUp } from "lucide-react";
 import { useComputeUserProgress } from "@/modules/stats/hooks/use-compute-user-progress";
 import { useGetUserStats } from "@/shared/services/user/api-user";
 
@@ -66,10 +66,16 @@ export const DashboardUser = () => {
 
   // 🔹 gestion relecture intro
   const [introKey, setIntroKey] = useState("intro_robot_v1");
-  const handleReplayIntro = () => {
+  const handleReplayIntro = useCallback(() => {
     localStorage.removeItem("intro_robot_v1");
-    setIntroKey(introKey + "_replay"); // force un remount
-  };
+    setIntroKey((k) => `${k}_replay`); // force un remount de l’overlay
+  }, []);
+
+  useEffect(() => {
+    const handler = () => handleReplayIntro();
+    document.addEventListener("skq:replay-intro", handler);
+    return () => document.removeEventListener("skq:replay-intro", handler);
+  }, [handleReplayIntro]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative">
@@ -82,16 +88,6 @@ export const DashboardUser = () => {
         height="40vh"
       />
 
-      {/* Bouton pour rejouer l’intro */}
-      <div className="absolute top-4 right-4 z-20">
-        <button
-          onClick={handleReplayIntro}
-          className="px-3 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-black shadow"
-        >
-          Revoir l’intro
-        </button>
-      </div>
-
       <div className="max-w-8xl mx-auto px-3 sm:px-5 lg:px-7 py-6">
         <div className="space-y-8">
           {/* Section de bienvenue */}
@@ -99,11 +95,6 @@ export const DashboardUser = () => {
             <WelcomeSection userName={fallbackUsername} streak={streak} />
 
             {/* Cartes statistiques */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 lg:gap-4">
-              <AccueilStatCard title="XP Total" value={totalXp} icon={TrendingUp} />
-              <AccueilStatCard title="Quêtes terminées" value={totalQuestCompleted} icon={BarChart3} />
-              <AccueilStatCard title="Compétences validées" value={totalSkillCompleted} icon={Target} />
-            </div>
           </div>
 
           {/* CONTENU PRINCIPAL */}
@@ -151,7 +142,7 @@ export const DashboardUser = () => {
         >
           <ProfileHud
             userName={user?.username || user?.firstName || "Aventurier"}
-            title={(user?.unsafeMetadata?.role as string) || "Aventurier"}
+            title="Aventurier"
             level={userCurrentLevel}
             xp={xpThreshold - xpToNextLevel}
             xpToNext={xpThreshold}

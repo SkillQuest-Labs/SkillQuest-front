@@ -38,7 +38,7 @@ export const CalendarWorkSession = () => {
   const { user } = useUser();
   const userId = user?.id;
 
-  const calendarRef = useRef<FullCalendar | null>(null);
+  const calendarRef = useRef<FullCalendar>(null);
 
   const [workSessions, setWorkSessions] = useState<CalendarEvent[]>([]);
   const [allSessions, setAllSessions] = useState<CalendarEvent[]>([]);
@@ -258,7 +258,7 @@ export const CalendarWorkSession = () => {
           <div className="rounded-2xl border border-slate-700 overflow-hidden bg-slate-900/60">
             <div className={currentView.startsWith("timeGrid") ? "h-[calc(100vh-220px)] overflow-auto" : ""}>
               <FullCalendar
-                ref={calendarRef as any}
+                ref={calendarRef}
                 plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
                 locales={[frLocale]}
                 locale="fr"
