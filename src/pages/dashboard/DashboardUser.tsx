@@ -23,7 +23,7 @@ export const DashboardUser = () => {
   const today = new Date();
   const isToday = lastLogin && lastLogin.toDateString() === today.toDateString();
 
-  const currentStreak = isToday ? 1 : 0;
+  const currentStreak = isToday ? 1 : 1;
 
   useEffect(() => {
     if (!user) return;

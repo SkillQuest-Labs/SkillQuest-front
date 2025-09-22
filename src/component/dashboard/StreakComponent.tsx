@@ -19,7 +19,7 @@ import { useStreakFromDates } from "@/shared/hooks/useStreakFromDates";
 
 export const StreakComponent = ({
   dates,
-  currentStreak: legacyCurrent = 0,
+  currentStreak: legacyCurrent = 1,
   maxStreak = 7,
   className = "",
 }: StreakComponentProps) => {
