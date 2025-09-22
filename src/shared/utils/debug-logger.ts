@@ -4,10 +4,17 @@
  */
 
 interface DebugLogger {
-  info: (message: string, data?: any) => void;
-  warn: (message: string, data?: any) => void;
-  error: (message: string, data?: any) => void;
-  debug: (message: string, data?: any) => void;
+  info: (message: string, data?: unknown) => void;
+  warn: (message: string, data?: unknown) => void;
+  error: (message: string, data?: unknown) => void;
+  debug: (message: string, data?: unknown) => void;
+}
+
+/**
+ * Interface pour l'objet window étendu avec debugLogger
+ */
+interface WindowWithDebugLogger extends Window {
+  debugLogger?: DebugLogger;
 }
 
 /**
@@ -29,10 +36,10 @@ const createDebugLogger = (): DebugLogger => {
   }
 
   // In development, try to use global debugLogger first, then fallback to console
-  const globalDebugLogger = (window as any)?.debugLogger;
+  const globalDebugLogger = (window as WindowWithDebugLogger)?.debugLogger;
 
   return {
-    info: (message: string, data?: any) => {
+    info: (message: string, data?: unknown) => {
       if (globalDebugLogger?.info) {
         globalDebugLogger.info(message, data);
       } else {
@@ -40,7 +47,7 @@ const createDebugLogger = (): DebugLogger => {
         console.info("[DEBUG] " + message, data || "");
       }
     },
-    warn: (message: string, data?: any) => {
+    warn: (message: string, data?: unknown) => {
       if (globalDebugLogger?.warn) {
         globalDebugLogger.warn(message, data);
       } else {
@@ -48,7 +55,7 @@ const createDebugLogger = (): DebugLogger => {
         console.warn("[DEBUG] " + message, data || "");
       }
     },
-    error: (message: string, data?: any) => {
+    error: (message: string, data?: unknown) => {
       if (globalDebugLogger?.error) {
         globalDebugLogger.error(message, data);
       } else {
@@ -56,7 +63,7 @@ const createDebugLogger = (): DebugLogger => {
         console.error("[DEBUG] " + message, data || "");
       }
     },
-    debug: (message: string, data?: any) => {
+    debug: (message: string, data?: unknown) => {
       if (globalDebugLogger?.debug) {
         globalDebugLogger.debug(message, data);
       } else {
