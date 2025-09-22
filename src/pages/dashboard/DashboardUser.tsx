@@ -89,8 +89,8 @@ export const DashboardUser = () => {
     totalQuestCompleted,
     totalSkillCompleted,
     userCurrentLevel,
-    xpThreshold,     // XP requis pour compléter le niveau courant
-    xpToNextLevel,   // XP restant pour passer au niveau suivant
+    xpThreshold, // XP requis pour compléter le niveau courant
+    xpToNextLevel, // XP restant pour passer au niveau suivant
   } = useComputeUserProgress({ skills, userStats });
 
   // XP acquis dans le niveau courant
