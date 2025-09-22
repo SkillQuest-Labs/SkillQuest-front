@@ -77,7 +77,7 @@ export default function IntroRobotOverlay({
           <div className="flex gap-4">
             <button
               onClick={handleStart}
-              className="px-6 py-3 bg-gradient-to-r from-amber-500 to-pink-500 text-black font-bold rounded-xl shadow-lg hover:scale-105 transition"
+              className="px-6 py-3 bg-gradient-to-r from-blue-400 to-pink-500 text-black font-bold rounded-xl shadow-lg hover:scale-105 transition"
             >
               🚀 Commencer
             </button>
@@ -87,6 +87,7 @@ export default function IntroRobotOverlay({
             >
               ⏭️ Passer
             </button>
+            <div className=""></div>
           </div>
         ) : (
           <p className="text-slate-200 text-sm mt-2 animate-pulse">
