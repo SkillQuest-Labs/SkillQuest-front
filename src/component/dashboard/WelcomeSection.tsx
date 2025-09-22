@@ -203,12 +203,9 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
 
             <div className="flex items-center gap-1.5 mt-1.5 pt-1.5 border-t border-slate-600/30">
               <Flame
-                className={`w-3 h-3 transition-all duration-300 ${streak >= 7
-                    ? "text-orange-500 drop-shadow-lg"
-                    : streak >= 3
-                      ? "text-orange-400"
-                      : "text-orange-300"
-                  }`}
+                className={`w-3 h-3 transition-all duration-300 ${
+                  streak >= 7 ? "text-orange-500 drop-shadow-lg" : streak >= 3 ? "text-orange-400" : "text-orange-300"
+                }`}
               />
               <span className="text-white/80 text-xs font-medium">x{streak}</span>
             </div>
@@ -218,12 +215,13 @@ export const WelcomeSection = ({ userName, streak = 0 }: WelcomeSectionProps) =>
         {/* Citation motivante en bas */}
         <div className="absolute bottom-4 left-4 right-4 flex justify-center">
           <div
-            className={`bg-slate-900/70 backdrop-blur-sm border border-blue-500/30 rounded-xl p-3 transition-all duration-1000 ease-out transform ${isQuoteVisible && !isQuoteFading
+            className={`bg-slate-900/70 backdrop-blur-sm border border-blue-500/30 rounded-xl p-3 transition-all duration-1000 ease-out transform ${
+              isQuoteVisible && !isQuoteFading
                 ? "translate-y-0 opacity-100"
                 : isQuoteFading
                   ? "translate-y-full opacity-0"
                   : "translate-y-full opacity-0"
-              }`}
+            }`}
           >
             <div className="flex items-start gap-2">
               <div className="text-lg">🎐</div>
